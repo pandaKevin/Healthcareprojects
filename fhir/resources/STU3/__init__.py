@@ -12,7 +12,6 @@ __fhir_version__ = "3.0.2"
 def construct_fhir_element(
     element_type: str, data: Union[Dict[str, Any], str, bytes, Path]
 ) -> FHIRAbstractModel:
-
     try:
         klass = get_fhir_model_class(element_type)
     except KeyError:
