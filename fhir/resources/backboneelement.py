@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/BackboneElement
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -23,10 +25,10 @@ class BackboneElement(element.Element):
     not those in a data type.
     """
 
-    resource_type = Field("BackboneElement", const=True)
+    __resource_type__ = "BackboneElement"
 
-    modifierExtension: typing.List[fhirtypes.ExtensionType] = Field(
-        None,
+    modifierExtension: typing.List[fhirtypes.ExtensionType] | None = Field(
+        default=None,
         alias="modifierExtension",
         title="Extensions that cannot be ignored even if unrecognized",
         description=(
@@ -35,8 +37,8 @@ class BackboneElement(element.Element):
             "understanding of the element in which it is contained and/or the "
             "understanding of the containing element's descendants. Usually "
             "modifier elements provide negation or qualification. To make the use "
-            "of extensions safe and manageable, there is a strict set of governance"
-            " applied to the definition and use of extensions. Though any "
+            "of extensions safe and managable, there is a strict set of governance "
+            "applied to the definition and use of extensions. Though any "
             "implementer can define an extension, there is a set of requirements "
             "that SHALL be met as part of the definition of the extension. "
             "Applications processing a resource are required to check for modifier "
@@ -44,14 +46,23 @@ class BackboneElement(element.Element):
             "elements on Resource or DomainResource (including cannot change the "
             "meaning of modifierExtension itself)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``BackboneElement`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``BackboneElement`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``BackboneElement`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

@@ -1,19 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Dosage
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
+from pydantic import Field
 
-from . import backboneelement, element, fhirtypes
+from . import backbonetype, element, fhirtypes
 
 
-class Dosage(backboneelement.BackboneElement):
+class Dosage(backbonetype.BackboneType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -23,10 +25,10 @@ class Dosage(backboneelement.BackboneElement):
     patient.
     """
 
-    resource_type = Field("Dosage", const=True)
+    __resource_type__ = "Dosage"
 
-    additionalInstruction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    additionalInstruction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="additionalInstruction",
         title=(
             'Supplemental instruction or warnings to the patient - e.g. "with '
@@ -39,163 +41,190 @@ class Dosage(backboneelement.BackboneElement):
             'drowsiness" or "avoid exposure of skin to direct sunlight or '
             'sunlamps").'
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    asNeededBoolean: bool = Field(
-        None,
-        alias="asNeededBoolean",
-        title='Take "as needed" (for x)',
+    asNeeded: bool | None = Field(
+        default=None,
+        alias="asNeeded",
+        title='Take "as needed"',
         description=(
             "Indicates whether the Medication is only taken when needed within a "
-            "specific dosing schedule (Boolean option), or it indicates the "
-            "precondition for taking the Medication (CodeableConcept)."
+            "specific dosing schedule (Boolean option)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e asNeeded[x]
-        one_of_many="asNeeded",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    asNeededBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_asNeededBoolean", title="Extension field for ``asNeededBoolean``."
+    asNeeded__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_asNeeded", title="Extension field for ``asNeeded``."
     )
 
-    asNeededCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
-        alias="asNeededCodeableConcept",
+    asNeededFor: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="asNeededFor",
         title='Take "as needed" (for x)',
         description=(
-            "Indicates whether the Medication is only taken when needed within a "
-            "specific dosing schedule (Boolean option), or it indicates the "
-            "precondition for taking the Medication (CodeableConcept)."
+            "Indicates whether the Medication is only taken based on a precondition"
+            " for taking the Medication (CodeableConcept)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e asNeeded[x]
-        one_of_many="asNeeded",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    doseAndRate: typing.List[fhirtypes.DosageDoseAndRateType] = Field(
-        None,
+    doseAndRate: typing.List[fhirtypes.DosageDoseAndRateType] | None = Field(
+        default=None,
         alias="doseAndRate",
-        title="Amount of medication administered",
-        description="The amount of medication administered.",
-        # if property is element of this resource.
-        element_property=True,
+        title=(
+            "Amount of medication administered, to be administered or typical "
+            "amount to be administered"
+        ),
+        description=(
+            "Depending on the resource,this is the amount of medication "
+            "administered, to  be administered or typical amount to be "
+            "administered."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    maxDosePerAdministration: fhirtypes.QuantityType = Field(
-        None,
+    maxDosePerAdministration: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="maxDosePerAdministration",
         title="Upper limit on medication per administration",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    maxDosePerLifetime: fhirtypes.QuantityType = Field(
-        None,
+    maxDosePerLifetime: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="maxDosePerLifetime",
         title="Upper limit on medication per lifetime of the patient",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    maxDosePerPeriod: fhirtypes.RatioType = Field(
-        None,
+    maxDosePerPeriod: typing.List[fhirtypes.RatioType] | None = Field(
+        default=None,
         alias="maxDosePerPeriod",
         title="Upper limit on medication per unit of time",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    method: fhirtypes.CodeableConceptType = Field(
-        None,
+    method: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="method",
         title="Technique for administering medication",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    patientInstruction: fhirtypes.String = Field(
-        None,
+    patientInstruction: fhirtypes.StringType | None = Field(
+        default=None,
         alias="patientInstruction",
         title="Patient or consumer oriented instructions",
         description="Instructions in terms that are understood by the patient or consumer.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    patientInstruction__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    patientInstruction__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_patientInstruction",
         title="Extension field for ``patientInstruction``.",
     )
 
-    route: fhirtypes.CodeableConceptType = Field(
-        None,
+    route: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="route",
         title="How drug should enter body",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    sequence: fhirtypes.Integer = Field(
-        None,
+    sequence: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="sequence",
         title="The order of the dosage instructions",
         description=(
             "Indicates the order in which the dosage instructions should be applied"
             " or interpreted."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    sequence__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_sequence", title="Extension field for ``sequence``."
+    sequence__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_sequence", title="Extension field for ``sequence``."
     )
 
-    site: fhirtypes.CodeableConceptType = Field(
-        None,
+    site: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="site",
         title="Body site to administer to",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    text: fhirtypes.String = Field(
-        None,
+    text: fhirtypes.StringType | None = Field(
+        default=None,
         alias="text",
         title="Free text dosage instructions e.g. SIG",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    text__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_text", title="Extension field for ``text``."
+    text__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_text", title="Extension field for ``text``."
     )
 
-    timing: fhirtypes.TimingType = Field(
-        None,
+    timing: fhirtypes.TimingType | None = Field(
+        default=None,
         alias="timing",
         title="When medication should be administered",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Dosage`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Dosage`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -206,8 +235,8 @@ class Dosage(backboneelement.BackboneElement):
             "additionalInstruction",
             "patientInstruction",
             "timing",
-            "asNeededBoolean",
-            "asNeededCodeableConcept",
+            "asNeeded",
+            "asNeededFor",
             "site",
             "route",
             "method",
@@ -217,45 +246,28 @@ class Dosage(backboneelement.BackboneElement):
             "maxDosePerLifetime",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_764(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
-        """https://www.hl7.org/fhir/formats.html#choice
-        A few elements have a choice of more than one data type for their content.
-        All such elements have a name that takes the form nnn[x].
-        The "nnn" part of the name is constant, and the "[x]" is replaced with
-        the title-cased name of the type that is actually used.
-        The table view shows each of these names explicitly.
-
-        Elements that have a choice of data type cannot repeat - they must have a
-        maximum cardinality of 1. When constructing an instance of an element with a
-        choice of types, the authoring system must create a single element with a
-        data type chosen from among the list of permitted data types.
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Dosage`` according to specification,
+        with preserving the original sequence order.
         """
-        one_of_many_fields = {
-            "asNeeded": ["asNeededBoolean", "asNeededCodeableConcept"]
-        }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return [
+            "modifierExtension",
+            "sequence",
+            "text",
+            "additionalInstruction",
+            "patientInstruction",
+            "timing",
+            "asNeeded",
+            "asNeededFor",
+            "site",
+            "route",
+            "method",
+            "doseAndRate",
+            "maxDosePerPeriod",
+            "maxDosePerAdministration",
+            "maxDosePerLifetime",
+        ]
 
 
 class DosageDoseAndRate(element.Element):
@@ -263,88 +275,102 @@ class DosageDoseAndRate(element.Element):
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
 
-    Amount of medication administered.
-    The amount of medication administered.
+    Amount of medication administered, to be administered or typical amount to
+    be administered.
+    Depending on the resource,this is the amount of medication administered, to
+    be administered or typical amount to be administered.
     """
 
-    resource_type = Field("DosageDoseAndRate", const=True)
+    __resource_type__ = "DosageDoseAndRate"
 
-    doseQuantity: fhirtypes.QuantityType = Field(
-        None,
+    doseQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="doseQuantity",
         title="Amount of medication per dose",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e dose[x]
-        one_of_many="dose",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e dose[x]
+            "one_of_many": "dose",
+            "one_of_many_required": False,
+        },
     )
 
-    doseRange: fhirtypes.RangeType = Field(
-        None,
+    doseRange: fhirtypes.RangeType | None = Field(
+        default=None,
         alias="doseRange",
         title="Amount of medication per dose",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e dose[x]
-        one_of_many="dose",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e dose[x]
+            "one_of_many": "dose",
+            "one_of_many_required": False,
+        },
     )
 
-    rateQuantity: fhirtypes.QuantityType = Field(
-        None,
+    rateQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="rateQuantity",
         title="Amount of medication per unit of time",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e rate[x]
-        one_of_many="rate",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e rate[x]
+            "one_of_many": "rate",
+            "one_of_many_required": False,
+        },
     )
 
-    rateRange: fhirtypes.RangeType = Field(
-        None,
+    rateRange: fhirtypes.RangeType | None = Field(
+        default=None,
         alias="rateRange",
         title="Amount of medication per unit of time",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e rate[x]
-        one_of_many="rate",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e rate[x]
+            "one_of_many": "rate",
+            "one_of_many_required": False,
+        },
     )
 
-    rateRatio: fhirtypes.RatioType = Field(
-        None,
+    rateRatio: fhirtypes.RatioType | None = Field(
+        default=None,
         alias="rateRatio",
         title="Amount of medication per unit of time",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e rate[x]
-        one_of_many="rate",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e rate[x]
+            "one_of_many": "rate",
+            "one_of_many_required": False,
+        },
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="The kind of dose or rate specified",
         description=(
             "The kind of dose or rate specified, for example, ordered or " "calculated."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DosageDoseAndRate`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DosageDoseAndRate`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -357,10 +383,21 @@ class DosageDoseAndRate(element.Element):
             "rateQuantity",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1830(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DosageDoseAndRate`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "type",
+            "doseRange",
+            "doseQuantity",
+            "rateRatio",
+            "rateRange",
+            "rateQuantity",
+        ]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -377,23 +414,4 @@ class DosageDoseAndRate(element.Element):
             "dose": ["doseQuantity", "doseRange"],
             "rate": ["rateQuantity", "rateRange", "rateRatio"],
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields

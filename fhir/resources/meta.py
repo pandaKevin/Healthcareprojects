@@ -1,19 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Meta
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
 
-from . import element, fhirtypes
+from . import datatype, fhirtypes
 
 
-class Meta(element.Element):
+class Meta(datatype.DataType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -24,22 +26,24 @@ class Meta(element.Element):
     be associated with version changes to the resource.
     """
 
-    resource_type = Field("Meta", const=True)
+    __resource_type__ = "Meta"
 
-    lastUpdated: fhirtypes.Instant = Field(
-        None,
+    lastUpdated: fhirtypes.InstantType | None = Field(
+        default=None,
         alias="lastUpdated",
         title="When the resource version last changed",
         description="When the resource last changed - e.g. when the version changed.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    lastUpdated__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_lastUpdated", title="Extension field for ``lastUpdated``."
+    lastUpdated__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_lastUpdated", title="Extension field for ``lastUpdated``."
     )
 
-    profile: typing.List[fhirtypes.Canonical] = Field(
-        None,
+    profile: typing.List[fhirtypes.CanonicalType | None] | None = Field(
+        default=None,
         alias="profile",
         title="Profiles this resource claims to conform to",
         description=(
@@ -49,29 +53,35 @@ class Meta(element.Element):
             "[StructureDefinition.url](structuredefinition-"
             "definitions.html#StructureDefinition.url)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["StructureDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["StructureDefinition"],
+        },
     )
     profile__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_profile", title="Extension field for ``profile``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_profile", title="Extension field for ``profile``."
+    )
 
-    security: typing.List[fhirtypes.CodingType] = Field(
-        None,
+    security: typing.List[fhirtypes.CodingType] | None = Field(
+        default=None,
         alias="security",
         title="Security Labels applied to this resource",
         description=(
             "Security labels applied to this resource. These tags connect specific "
             "resources to the overall security policy and infrastructure."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    source: fhirtypes.Uri = Field(
-        None,
+    source: fhirtypes.UriType | None = Field(
+        default=None,
         alias="source",
         title="Identifies where the resource comes from",
         description=(
@@ -81,15 +91,17 @@ class Meta(element.Element):
             " resource. The source may identify another FHIR server, document, "
             "message, database, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    source__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_source", title="Extension field for ``source``."
+    source__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_source", title="Extension field for ``source``."
     )
 
-    tag: typing.List[fhirtypes.CodingType] = Field(
-        None,
+    tag: typing.List[fhirtypes.CodingType] | None = Field(
+        default=None,
         alias="tag",
         title="Tags applied to this resource",
         description=(
@@ -98,12 +110,14 @@ class Meta(element.Element):
             "applications are not required to consider the tags when interpreting "
             "the meaning of a resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    versionId: fhirtypes.Id = Field(
-        None,
+    versionId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="versionId",
         title="Version specific identifier",
         description=(
@@ -111,18 +125,20 @@ class Meta(element.Element):
             "of the URL. This value changes when the resource is created, updated, "
             "or deleted."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    versionId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_versionId", title="Extension field for ``versionId``."
+    versionId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_versionId", title="Extension field for ``versionId``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Meta`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Meta`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -134,3 +150,10 @@ class Meta(element.Element):
             "security",
             "tag",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Meta`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["versionId", "lastUpdated", "source", "profile", "security", "tag"]

@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/OrganizationAffiliation
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -18,111 +20,140 @@ class OrganizationAffiliation(domainresource.DomainResource):
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
 
-    Defines an affiliation/assotiation/relationship between 2 distinct
-    oganizations, that is not a part-of relationship/sub-division relationship.
+    Defines an affiliation/association/relationship between 2 distinct
+    organizations, that is not a part-of relationship/sub-division relationship.
     """
 
-    resource_type = Field("OrganizationAffiliation", const=True)
+    __resource_type__ = "OrganizationAffiliation"
 
-    active: bool = Field(
-        None,
+    active: bool | None = Field(
+        default=None,
         alias="active",
         title="Whether this organization affiliation record is in active use",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    active__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_active", title="Extension field for ``active``."
+    active__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_active", title="Extension field for ``active``."
     )
 
-    code: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    code: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="code",
         title="Definition of the role the participatingOrganization plays",
         description=(
             "Definition of the role the participatingOrganization plays in the "
             "association."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    endpoint: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ExtendedContactDetailType] | None = Field(
+        default=None,
+        alias="contact",
+        title=(
+            "Official contact details at the participatingOrganization relevant to "
+            "this Affiliation"
+        ),
+        description=(
+            "The contact details of communication devices available at the "
+            "participatingOrganization relevant to this Affiliation."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    endpoint: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="endpoint",
         title=(
             "Technical endpoints providing access to services operated for this " "role"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Endpoint"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Endpoint"],
+        },
     )
 
-    healthcareService: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    healthcareService: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="healthcareService",
         title="Healthcare services provided through the role",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["HealthcareService"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["HealthcareService"],
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business identifiers that are specific to this role",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    location: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    location: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="location",
         title="The location(s) at which the role occurs",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    network: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    network: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="network",
         title=(
-            "Health insurance provider network in which the "
-            "participatingOrganization provides the role's services (if defined) at"
-            " the indicated locations (if defined)"
+            "The network in which the participatingOrganization provides the role's"
+            " services (if defined) at the indicated locations (if defined)"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    organization: fhirtypes.ReferenceType = Field(
-        None,
+    organization: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="organization",
         title="Organization where the role is available",
         description=(
             "Organization where the role is available (primary organization/has "
             "members)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    participatingOrganization: fhirtypes.ReferenceType = Field(
-        None,
+    participatingOrganization: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="participatingOrganization",
         title=(
             "Organization that provides/performs the role (e.g. providing services "
@@ -133,53 +164,47 @@ class OrganizationAffiliation(domainresource.DomainResource):
             "by the code to the Primary Organization (e.g. providing services or is"
             " a member of)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title=(
             "The period during which the participatingOrganization is affiliated "
             "with the primary organization"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    specialty: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    specialty: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="specialty",
         title=(
             "Specific specialty of the participatingOrganization in the context of "
             "the role"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    telecom: typing.List[fhirtypes.ContactPointType] = Field(
-        None,
-        alias="telecom",
-        title=(
-            "Contact details at the participatingOrganization relevant to this "
-            "Affiliation"
-        ),
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``OrganizationAffiliation`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OrganizationAffiliation`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -200,6 +225,27 @@ class OrganizationAffiliation(domainresource.DomainResource):
             "specialty",
             "location",
             "healthcareService",
-            "telecom",
+            "contact",
             "endpoint",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OrganizationAffiliation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "identifier",
+            "active",
+            "period",
+            "organization",
+            "participatingOrganization",
+            "network",
+            "code",
+            "specialty",
+            "location",
         ]

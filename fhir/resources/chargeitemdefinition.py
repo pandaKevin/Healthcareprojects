@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/ChargeItemDefinition
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -29,19 +29,22 @@ class ChargeItemDefinition(domainresource.DomainResource):
     system.
     """
 
-    resource_type = Field("ChargeItemDefinition", const=True)
+    __resource_type__ = "ChargeItemDefinition"
 
-    applicability: typing.List[fhirtypes.ChargeItemDefinitionApplicabilityType] = Field(
-        None,
+    applicability: typing.List[
+        fhirtypes.ChargeItemDefinitionApplicabilityType
+    ] | None = Field(
+        default=None,
         alias="applicability",
         title="Whether or not the billing code is applicable",
         description="Expressions that describe applicability criteria for the billing code.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    approvalDate: fhirtypes.Date = Field(
-        None,
+    approvalDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="approvalDate",
         title="When the charge item definition was approved by publisher",
         description=(
@@ -49,39 +52,46 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "Approval happens once when the content is officially approved for "
             "usage."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    approvalDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_approvalDate", title="Extension field for ``approvalDate``."
+    approvalDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_approvalDate",
+        title="Extension field for ``approvalDate``.",
     )
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
-        title="Billing codes or product types this definition applies to",
+        title="Billing code or product type this definition applies to",
         description=(
             "The defined billing details in this resource pertain to the given "
             "billing code."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    contact: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="contact",
         title="Contact details for the publisher",
         description=(
             "Contact details to assist a user in finding and communicating with the"
             " publisher."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    copyright: fhirtypes.Markdown = Field(
-        None,
+    copyright: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="copyright",
         title="Use and/or publishing restrictions",
         description=(
@@ -89,77 +99,94 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "its contents. Copyright statements are generally legal restrictions on"
             " the use and publishing of the charge item definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_copyright", title="Extension field for ``copyright``."
+    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_copyright", title="Extension field for ``copyright``."
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    copyrightLabel: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="copyrightLabel",
+        title="Copyright holder and year(s)",
+        description=(
+            "A short string (<50 characters), suitable for inclusion in a page "
+            "footer that identifies the copyright holder, effective period, and "
+            "optionally whether rights are resctricted. (e.g. 'All rights "
+            "reserved', 'Some rights reserved')."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    copyrightLabel__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_copyrightLabel",
+        title="Extension field for ``copyrightLabel``.",
+    )
+
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="Date last changed",
         description=(
             "The date  (and optionally time) when the charge item definition was "
-            "published. The date must change when the business version changes and "
-            "it must change if the status code changes. In addition, it should "
-            "change when the substantive content of the charge item definition "
-            "changes."
+            "last significantly changed. The date must change when the business "
+            "version changes and it must change if the status code changes. In "
+            "addition, it should change when the substantive content of the charge "
+            "item definition changes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    derivedFromUri: typing.List[fhirtypes.Uri] = Field(
-        None,
+    derivedFromUri: typing.List[fhirtypes.UriType | None] | None = Field(
+        default=None,
         alias="derivedFromUri",
         title="Underlying externally-defined charge item definition",
         description=(
             "The URL pointing to an externally-defined charge item definition that "
             "is adhered to in whole or in part by this definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
     derivedFromUri__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(
-        None, alias="_derivedFromUri", title="Extension field for ``derivedFromUri``."
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
+        alias="_derivedFromUri",
+        title="Extension field for ``derivedFromUri``.",
     )
 
-    description: fhirtypes.Markdown = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="description",
         title="Natural language description of the charge item definition",
         description=(
             "A free text natural language description of the charge item definition"
             " from a consumer's perspective."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
-    )
-
-    effectivePeriod: fhirtypes.PeriodType = Field(
-        None,
-        alias="effectivePeriod",
-        title="When the charge item definition is expected to be used",
-        description=(
-            "The period during which the charge item definition content was or is "
-            "planned to be in active use."
-        ),
-        # if property is element of this resource.
-        element_property=True,
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    experimental: bool = Field(
-        None,
+    experimental: bool | None = Field(
+        default=None,
         alias="experimental",
         title="For testing purposes, not real usage",
         description=(
@@ -167,15 +194,19 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "authored for testing purposes (or education/evaluation/marketing) and "
             "is not intended to be used for genuine usage."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_experimental", title="Extension field for ``experimental``."
+    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_experimental",
+        title="Extension field for ``experimental``.",
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Additional identifier for the charge item definition",
         description=(
@@ -183,71 +214,111 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "definition when it is represented in other formats, or referenced in a"
             " specification, model, design or an instance."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    instance: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    instance: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="instance",
         title="Instances this definition applies to",
         description=(
             "The defined billing details in this resource pertain to the given "
             "product instance(s)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Medication", "Substance", "Device"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Medication",
+                "Substance",
+                "Device",
+                "DeviceDefinition",
+                "ActivityDefinition",
+                "PlanDefinition",
+                "HealthcareService",
+            ],
+        },
     )
 
-    jurisdiction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    jurisdiction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="jurisdiction",
         title="Intended jurisdiction for charge item definition (if applicable)",
         description=(
             "A legal or geographic region in which the charge item definition is "
             "intended to be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    lastReviewDate: fhirtypes.Date = Field(
-        None,
+    lastReviewDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="lastReviewDate",
-        title="When the charge item definition was last reviewed",
+        title="When the charge item definition was last reviewed by the publisher",
         description=(
             "The date on which the resource content was last reviewed. Review "
             "happens periodically after approval but does not change the original "
             "approval date."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    lastReviewDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_lastReviewDate", title="Extension field for ``lastReviewDate``."
+    lastReviewDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_lastReviewDate",
+        title="Extension field for ``lastReviewDate``.",
     )
 
-    partOf: typing.List[fhirtypes.Canonical] = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="name",
+        title="Name for this charge item definition (computer friendly)",
+        description=(
+            "A natural language name identifying the ChargeItemDefinition. This "
+            "name should be usable as an identifier for the module by machine "
+            "processing applications such as code generation."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
+    )
+
+    partOf: typing.List[fhirtypes.CanonicalType | None] | None = Field(
+        default=None,
         alias="partOf",
         title=(
             "A larger definition of which this particular definition is a component"
             " or step"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ChargeItemDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ChargeItemDefinition"],
+        },
     )
     partOf__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_partOf", title="Extension field for ``partOf``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_partOf", title="Extension field for ``partOf``."
+    )
 
-    propertyGroup: typing.List[fhirtypes.ChargeItemDefinitionPropertyGroupType] = Field(
-        None,
+    propertyGroup: typing.List[
+        fhirtypes.ChargeItemDefinitionPropertyGroupType
+    ] | None = Field(
+        default=None,
         alias="propertyGroup",
         title="Group of properties which are applicable under the same conditions",
         description=(
@@ -255,27 +326,46 @@ class ChargeItemDefinition(domainresource.DomainResource):
             " no applicability rules are established for the group, then all "
             "properties always apply."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    publisher: fhirtypes.String = Field(
-        None,
+    publisher: fhirtypes.StringType | None = Field(
+        default=None,
         alias="publisher",
-        title="Name of the publisher (organization or individual)",
+        title="Name of the publisher/steward (organization or individual)",
         description=(
-            "The name of the organization or individual that published the charge "
-            "item definition."
+            "The name of the organization or individual responsible for the release"
+            " and ongoing maintenance of the charge item definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_publisher", title="Extension field for ``publisher``."
+    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_publisher", title="Extension field for ``publisher``."
     )
 
-    replaces: typing.List[fhirtypes.Canonical] = Field(
-        None,
+    purpose: fhirtypes.MarkdownType | None = Field(
+        default=None,
+        alias="purpose",
+        title="Why this charge item definition is defined",
+        description=(
+            "Explanation of why this charge item definition is needed and why it "
+            "has been designed as it has."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_purpose", title="Extension field for ``purpose``."
+    )
+
+    replaces: typing.List[fhirtypes.CanonicalType | None] | None = Field(
+        default=None,
         alias="replaces",
         title=(
             "Completed or terminated request(s) whose function is taken by this new"
@@ -285,48 +375,56 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "As new versions of a protocol or guideline are defined, allows "
             "identification of what versions are replaced by a new instance."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ChargeItemDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ChargeItemDefinition"],
+        },
     )
     replaces__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_replaces", title="Extension field for ``replaces``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_replaces", title="Extension field for ``replaces``."
+    )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | retired | unknown",
         description="The current state of the ChargeItemDefinition.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "active", "retired", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "active", "retired", "unknown"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Name for this charge item definition (human friendly)",
         description=(
             "A short, descriptive, user-friendly title for the charge item "
             "definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title=(
             "Canonical identifier for this charge item definition, represented as a"
@@ -336,22 +434,23 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "An absolute URI that is used to identify this charge item definition "
             "when it is referenced in a specification, model, design or an "
             "instance; also called its canonical identifier. This SHOULD be "
-            "globally unique and SHOULD be a literal address at which at which an "
+            "globally unique and SHOULD be a literal address at which an "
             "authoritative instance of this charge item definition is (or will be) "
             "published. This URL can be the target of a canonical reference. It "
             "SHALL remain the same when the charge item definition is stored on "
             "different servers."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
-    useContext: typing.List[fhirtypes.UsageContextType] = Field(
-        None,
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
         alias="useContext",
         title="The context that the content is intended to support",
         description=(
@@ -362,12 +461,14 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "indexing and searching for appropriate charge item definition "
             "instances."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    version: fhirtypes.String = Field(
-        None,
+    version: fhirtypes.StringType | None = Field(
+        default=None,
         alias="version",
         title="Business version of the charge item definition",
         description=(
@@ -383,18 +484,59 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "knowledge assets, refer to the Decision Support Service specification."
             " Note that a version is required for non-experimental active assets."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    version__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_version", title="Extension field for ``version``."
+    version__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
+    )
+
+    versionAlgorithmCoding: fhirtypes.CodingType | None = Field(
+        default=None,
+        alias="versionAlgorithmCoding",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+
+    versionAlgorithmString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="versionAlgorithmString",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+    versionAlgorithmString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_versionAlgorithmString",
+        title="Extension field for ``versionAlgorithmString``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ChargeItemDefinition`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ChargeItemDefinition`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -408,6 +550,9 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "url",
             "identifier",
             "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
+            "name",
             "title",
             "derivedFromUri",
             "partOf",
@@ -420,20 +565,49 @@ class ChargeItemDefinition(domainresource.DomainResource):
             "description",
             "useContext",
             "jurisdiction",
+            "purpose",
             "copyright",
+            "copyrightLabel",
             "approvalDate",
             "lastReviewDate",
-            "effectivePeriod",
             "code",
             "instance",
             "applicability",
             "propertyGroup",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2195(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ChargeItemDefinition`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "url",
+            "identifier",
+            "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
+            "name",
+            "title",
+            "derivedFromUri",
+            "partOf",
+            "replaces",
+            "status",
+            "experimental",
+            "date",
+            "publisher",
+            "contact",
+            "description",
+            "useContext",
+            "jurisdiction",
+            "code",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -441,53 +615,26 @@ class ChargeItemDefinition(domainresource.DomainResource):
         data type mandatory, it is possible to provide an extension that explains why
         the primitive value is not present.
         """
-        required_fields = [("status", "status__ext"), ("url", "url__ext")]
-        _missing = object()
+        required_fields = [("status", "status__ext")]
+        return required_fields
 
-        def _fallback():
-            return ""
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
 
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {
+            "versionAlgorithm": ["versionAlgorithmCoding", "versionAlgorithmString"]
+        }
+        return one_of_many_fields
 
 
 class ChargeItemDefinitionApplicability(backboneelement.BackboneElement):
@@ -499,26 +646,11 @@ class ChargeItemDefinitionApplicability(backboneelement.BackboneElement):
     Expressions that describe applicability criteria for the billing code.
     """
 
-    resource_type = Field("ChargeItemDefinitionApplicability", const=True)
+    __resource_type__ = "ChargeItemDefinitionApplicability"
 
-    description: fhirtypes.String = Field(
-        None,
-        alias="description",
-        title="Natural language description of the condition",
-        description=(
-            "A brief, natural language description of the condition that "
-            "effectively communicates the intended semantics."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
-    )
-
-    expression: fhirtypes.String = Field(
-        None,
-        alias="expression",
+    condition: fhirtypes.ExpressionType | None = Field(
+        default=None,
+        alias="condition",
         title="Boolean-valued expression",
         description=(
             "An expression that returns true or false, indicating whether the "
@@ -526,43 +658,59 @@ class ChargeItemDefinitionApplicability(backboneelement.BackboneElement):
             "environment variable must be replaced at runtime with the ChargeItem "
             "resource to which this definition is applied."
         ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    expression__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_expression", title="Extension field for ``expression``."
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    language: fhirtypes.String = Field(
-        None,
-        alias="language",
-        title="Language of the expression",
+    effectivePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="effectivePeriod",
+        title="When the charge item definition is expected to be used",
         description=(
-            'The media type of the language for the expression, e.g. "text/cql" for'
-            ' Clinical Query Language expressions or "text/fhirpath" for FHIRPath '
-            "expressions."
+            "The period during which the charge item definition content was or is "
+            "planned to be in active use."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    language__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_language", title="Extension field for ``language``."
+
+    relatedArtifact: fhirtypes.RelatedArtifactType | None = Field(
+        default=None,
+        alias="relatedArtifact",
+        title=(
+            "Reference to / quotation of the external source of the group of "
+            "properties"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ChargeItemDefinitionApplicability`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ChargeItemDefinitionApplicability`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
             "modifierExtension",
-            "description",
-            "language",
-            "expression",
+            "condition",
+            "effectivePeriod",
+            "relatedArtifact",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ChargeItemDefinitionApplicability`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "effectivePeriod"]
 
 
 class ChargeItemDefinitionPropertyGroup(backboneelement.BackboneElement):
@@ -576,24 +724,25 @@ class ChargeItemDefinitionPropertyGroup(backboneelement.BackboneElement):
     always apply.
     """
 
-    resource_type = Field("ChargeItemDefinitionPropertyGroup", const=True)
+    __resource_type__ = "ChargeItemDefinitionPropertyGroup"
 
-    applicability: typing.List[fhirtypes.ChargeItemDefinitionApplicabilityType] = Field(
-        None,
+    applicability: typing.List[
+        fhirtypes.ChargeItemDefinitionApplicabilityType
+    ] | None = Field(
+        default=None,
         alias="applicability",
         title="Conditions under which the priceComponent is applicable",
         description=(
             "Expressions that describe applicability criteria for the "
             "priceComponent."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    priceComponent: typing.List[
-        fhirtypes.ChargeItemDefinitionPropertyGroupPriceComponentType
-    ] = Field(
-        None,
+    priceComponent: typing.List[fhirtypes.MonetaryComponentType] | None = Field(
+        default=None,
         alias="priceComponent",
         title="Components of total line item price",
         description=(
@@ -605,15 +754,16 @@ class ChargeItemDefinitionPropertyGroup(backboneelement.BackboneElement):
             "transparency to the recipient of the Invoice of how the prices have "
             "been calculated."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ChargeItemDefinitionPropertyGroup`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ChargeItemDefinitionPropertyGroup`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -623,153 +773,9 @@ class ChargeItemDefinitionPropertyGroup(backboneelement.BackboneElement):
             "priceComponent",
         ]
 
-
-class ChargeItemDefinitionPropertyGroupPriceComponent(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    Components of total line item price.
-    The price for a ChargeItem may be calculated as a base price with
-    surcharges/deductions that apply in certain conditions. A
-    ChargeItemDefinition resource that defines the prices, factors and
-    conditions that apply to a billing code is currently under development. The
-    priceComponent element can be used to offer transparency to the recipient
-    of the Invoice of how the prices have been calculated.
-    """
-
-    resource_type = Field("ChargeItemDefinitionPropertyGroupPriceComponent", const=True)
-
-    amount: fhirtypes.MoneyType = Field(
-        None,
-        alias="amount",
-        title="Monetary amount associated with this component",
-        description="The amount calculated for this component.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
-        alias="code",
-        title="Code identifying the specific component",
-        description=(
-            "A code that identifies the component. Codes may be used to "
-            "differentiate between kinds of taxes, surcharges, discounts etc."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    factor: fhirtypes.Decimal = Field(
-        None,
-        alias="factor",
-        title="Factor used for calculating this component",
-        description=(
-            "The factor that has been applied on the base price for calculating "
-            "this component."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    factor__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_factor", title="Extension field for ``factor``."
-    )
-
-    type: fhirtypes.Code = Field(
-        None,
-        alias="type",
-        title="base | surcharge | deduction | discount | tax | informational",
-        description="This code identifies the type of the component.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "base",
-            "surcharge",
-            "deduction",
-            "discount",
-            "tax",
-            "informational",
-        ],
-    )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
-    )
-
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ChargeItemDefinitionPropertyGroupPriceComponent`` according specification,
-        with preserving original sequence order.
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ChargeItemDefinitionPropertyGroup`` according to specification,
+        with preserving the original sequence order.
         """
-        return [
-            "id",
-            "extension",
-            "modifierExtension",
-            "type",
-            "code",
-            "factor",
-            "amount",
-        ]
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_5041(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
-        """https://www.hl7.org/fhir/extensibility.html#Special-Case
-        In some cases, implementers might find that they do not have appropriate data for
-        an element with minimum cardinality = 1. In this case, the element must be present,
-        but unless the resource or a profile on it has made the actual value of the primitive
-        data type mandatory, it is possible to provide an extension that explains why
-        the primitive value is not present.
-        """
-        required_fields = [("type", "type__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return ["modifierExtension"]

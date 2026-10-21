@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/DeviceDefinition
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -25,243 +25,361 @@ class DeviceDefinition(domainresource.DomainResource):
     related component of a medical device.
     """
 
-    resource_type = Field("DeviceDefinition", const=True)
+    __resource_type__ = "DeviceDefinition"
 
-    capability: typing.List[fhirtypes.DeviceDefinitionCapabilityType] = Field(
-        None,
-        alias="capability",
-        title="Device capabilities",
+    chargeItem: typing.List[fhirtypes.DeviceDefinitionChargeItemType] | None = Field(
+        default=None,
+        alias="chargeItem",
+        title="Billing code or reference associated with the device",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    contact: typing.List[fhirtypes.ContactPointType] = Field(
-        None,
+    classification: typing.List[
+        fhirtypes.DeviceDefinitionClassificationType
+    ] | None = Field(
+        default=None,
+        alias="classification",
+        title="What kind of device or device system this is",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    conformsTo: typing.List[fhirtypes.DeviceDefinitionConformsToType] | None = Field(
+        default=None,
+        alias="conformsTo",
+        title=(
+            "Identifies the standards, specifications, or formal guidances for the "
+            "capabilities supported by the device"
+        ),
+        description=(
+            "Identifies the standards, specifications, or formal guidances for the "
+            "capabilities supported by the device. The device may be certified as "
+            "conformant to these specifications e.g., communication, performance, "
+            "process, measurement, or specialization standards."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    contact: typing.List[fhirtypes.ContactPointType] | None = Field(
+        default=None,
         alias="contact",
         title="Details for human/organization for support",
         description=(
             "Contact details for an organization or a particular human that is "
             "responsible for the device."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    deviceName: typing.List[fhirtypes.DeviceDefinitionDeviceNameType] = Field(
-        None,
-        alias="deviceName",
-        title="A name given to the device to identify it",
+    correctiveAction: fhirtypes.DeviceDefinitionCorrectiveActionType | None = Field(
+        default=None,
+        alias="correctiveAction",
+        title="Tracking of latest field safety corrective action",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
+        alias="description",
+        title="Additional information to describe the device",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
+    )
+
+    deviceName: typing.List[fhirtypes.DeviceDefinitionDeviceNameType] | None = Field(
+        default=None,
+        alias="deviceName",
+        title="The name or names of the device as given by the manufacturer",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    guideline: fhirtypes.DeviceDefinitionGuidelineType | None = Field(
+        default=None,
+        alias="guideline",
+        title=(
+            "Information aimed at providing directions for the usage of this model "
+            "of device"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    hasPart: typing.List[fhirtypes.DeviceDefinitionHasPartType] | None = Field(
+        default=None,
+        alias="hasPart",
+        title="A device, part of the current one",
+        description="A device that is part (for example a component) of the present device.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Instance identifier",
         description=(
             "Unique instance identifiers assigned to a device by the software, "
-            "manufacturers, other organizations or owners. For example: handle ID."
+            "manufacturers, other organizations or owners. For example: handle ID. "
+            "The identifier is typically valued if the udiDeviceIdentifier, "
+            "partNumber or modelNumber is not valued and represents a different "
+            "type of identifier.  However, it is permissible to still include those"
+            " identifiers in DeviceDefinition.identifier with the appropriate "
+            "identifier.type."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    languageCode: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    languageCode: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="languageCode",
         title=(
             "Language code for the human-readable text strings produced by the "
             "device (all supported)"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    manufacturerReference: fhirtypes.ReferenceType = Field(
-        None,
-        alias="manufacturerReference",
+    link: typing.List[fhirtypes.DeviceDefinitionLinkType] | None = Field(
+        default=None,
+        alias="link",
+        title=(
+            "An associated device, attached to, used with, communicating with or "
+            "linking a previous or new device model to the focal device"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    manufacturer: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="manufacturer",
         title="Name of device manufacturer",
-        description="A name of the manufacturer.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e manufacturer[x]
-        one_of_many="manufacturer",
-        one_of_many_required=False,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        description=(
+            "A name of the manufacturer  or legal representative e.g. labeler. "
+            "Whether this is the actual manufacturer or the labeler or responsible "
+            "depends on implementation and jurisdiction."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    manufacturerString: fhirtypes.String = Field(
-        None,
-        alias="manufacturerString",
-        title="Name of device manufacturer",
-        description="A name of the manufacturer.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e manufacturer[x]
-        one_of_many="manufacturer",
-        one_of_many_required=False,
-    )
-    manufacturerString__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
-        alias="_manufacturerString",
-        title="Extension field for ``manufacturerString``.",
-    )
-
-    material: typing.List[fhirtypes.DeviceDefinitionMaterialType] = Field(
-        None,
+    material: typing.List[fhirtypes.DeviceDefinitionMaterialType] | None = Field(
+        default=None,
         alias="material",
         title="A substance used to create the material(s) of which the device is made",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    modelNumber: fhirtypes.String = Field(
-        None,
+    modelNumber: fhirtypes.StringType | None = Field(
+        default=None,
         alias="modelNumber",
-        title="The model number for the device",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
+        title=(
+            "The catalog or model number for the device for example as defined by "
+            "the manufacturer"
+        ),
+        description=(
+            "The model number for the device for example as defined by the "
+            "manufacturer or labeler, or other agency."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    modelNumber__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_modelNumber", title="Extension field for ``modelNumber``."
+    modelNumber__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_modelNumber", title="Extension field for ``modelNumber``."
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Device notes and comments",
         description=(
             "Descriptive information, usage information or implantation information"
             " that is not captured in an existing element."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    onlineInformation: fhirtypes.Uri = Field(
-        None,
-        alias="onlineInformation",
-        title="Access to on-line information",
-        description="Access to on-line information about the device.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-    onlineInformation__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
-        alias="_onlineInformation",
-        title="Extension field for ``onlineInformation``.",
-    )
-
-    owner: fhirtypes.ReferenceType = Field(
-        None,
+    owner: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="owner",
         title="Organization responsible for device",
         description=(
             "An organization that is responsible for the provision and ongoing "
             "maintenance of the device."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    parentDevice: fhirtypes.ReferenceType = Field(
-        None,
-        alias="parentDevice",
-        title="The parent device it can be part of",
+    packaging: typing.List[fhirtypes.DeviceDefinitionPackagingType] | None = Field(
+        default=None,
+        alias="packaging",
+        title=(
+            "Information about the packaging of the device, i.e. how the device is "
+            "packaged"
+        ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["DeviceDefinition"],
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    physicalCharacteristics: fhirtypes.ProdCharacteristicType = Field(
-        None,
-        alias="physicalCharacteristics",
-        title="Dimensions, color etc.",
-        description="Dimensions, color etc.",
-        # if property is element of this resource.
-        element_property=True,
+    partNumber: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="partNumber",
+        title="The part number or catalog number of the device",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    partNumber__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_partNumber", title="Extension field for ``partNumber``."
     )
 
-    property: typing.List[fhirtypes.DeviceDefinitionPropertyType] = Field(
-        None,
+    productionIdentifierInUDI: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
+        alias="productionIdentifierInUDI",
+        title=(
+            "lot-number | manufactured-date | serial-number | expiration-date | "
+            "biological-source | software-version"
+        ),
+        description=(
+            "Indicates the production identifier(s) that are expected to appear in "
+            "the UDI carrier on the device label."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "lot-number",
+                "manufactured-date",
+                "serial-number",
+                "expiration-date",
+                "biological-source",
+                "software-version",
+            ],
+        },
+    )
+    productionIdentifierInUDI__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
+        alias="_productionIdentifierInUDI",
+        title="Extension field for ``productionIdentifierInUDI``.",
+    )
+
+    property: typing.List[fhirtypes.DeviceDefinitionPropertyType] | None = Field(
+        default=None,
         alias="property",
         title=(
-            "The actual configuration settings of a device as it actually operates,"
-            " e.g., regulation status, time properties"
+            "Inherent, essentially fixed, characteristics of this kind of device, "
+            "e.g., time properties, size, etc"
         ),
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
+        description=(
+            "Static or essentially fixed characteristics or features of this kind "
+            "of device that are otherwise not captured in more specific attributes,"
+            " e.g., time or timing attributes, resolution, accuracy, and physical "
+            "attributes."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    quantity: fhirtypes.QuantityType = Field(
-        None,
-        alias="quantity",
-        title=(
-            "The quantity of the device present in the packaging (e.g. the number "
-            "of devices present in a pack, or the number of devices in the same "
-            "package of the medicinal product)"
+    regulatoryIdentifier: typing.List[
+        fhirtypes.DeviceDefinitionRegulatoryIdentifierType
+    ] | None = Field(
+        default=None,
+        alias="regulatoryIdentifier",
+        title="Regulatory identifier(s) associated with this device",
+        description=(
+            "Identifier associated with the regulatory documentation (certificates,"
+            " technical documentation, post-market surveillance documentation and "
+            "reports) of a set of device models sharing the same intended purpose, "
+            "risk class and essential design and manufacturing characteristics. One"
+            " example is the Basic UDI-DI in Europe."
         ),
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    safety: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    safety: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="safety",
         title="Safety characteristics of the device",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    shelfLifeStorage: typing.List[fhirtypes.ProductShelfLifeType] = Field(
-        None,
+    shelfLifeStorage: typing.List[fhirtypes.ProductShelfLifeType] | None = Field(
+        default=None,
         alias="shelfLifeStorage",
         title="Shelf Life and storage information",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    specialization: typing.List[fhirtypes.DeviceDefinitionSpecializationType] = Field(
-        None,
-        alias="specialization",
-        title=(
-            "The capabilities supported on a  device, the standards to which the "
-            "device conforms for a particular purpose, and used for the "
-            "communication"
-        ),
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
-        alias="type",
-        title="What kind of device or device system this is",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     udiDeviceIdentifier: typing.List[
         fhirtypes.DeviceDefinitionUdiDeviceIdentifierType
-    ] = Field(
-        None,
+    ] | None = Field(
+        default=None,
         alias="udiDeviceIdentifier",
         title="Unique Device Identifier (UDI) Barcode string",
         description=(
@@ -270,39 +388,26 @@ class DeviceDefinition(domainresource.DomainResource):
             " include just the udiCarrier for the jurisdiction it is sold, or for "
             "multiple jurisdictions it could have been sold."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
-        alias="url",
-        title="Network address to contact device",
-        description="A network address on which the device may be contacted directly.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
-    )
-
-    version: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    version: typing.List[fhirtypes.DeviceDefinitionVersionType] | None = Field(
+        default=None,
         alias="version",
-        title="Available versions",
-        description="The available versions of the device, e.g., software versions.",
-        # if property is element of this resource.
-        element_property=True,
+        title="The version of the device or software",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    version__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_version", title="Extension field for ``version``.")
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceDefinition`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinition`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -313,35 +418,1095 @@ class DeviceDefinition(domainresource.DomainResource):
             "contained",
             "extension",
             "modifierExtension",
+            "description",
             "identifier",
             "udiDeviceIdentifier",
-            "manufacturerString",
-            "manufacturerReference",
+            "regulatoryIdentifier",
+            "partNumber",
+            "manufacturer",
             "deviceName",
             "modelNumber",
-            "type",
-            "specialization",
+            "classification",
+            "conformsTo",
+            "hasPart",
+            "packaging",
             "version",
             "safety",
             "shelfLifeStorage",
-            "physicalCharacteristics",
             "languageCode",
-            "capability",
             "property",
             "owner",
             "contact",
-            "url",
-            "onlineInformation",
+            "link",
             "note",
-            "quantity",
-            "parentDevice",
             "material",
+            "productionIdentifierInUDI",
+            "guideline",
+            "correctiveAction",
+            "chargeItem",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1803(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinition`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "identifier",
+            "manufacturer",
+            "deviceName",
+            "modelNumber",
+            "classification",
+            "conformsTo",
+            "hasPart",
+            "safety",
+        ]
+
+
+class DeviceDefinitionChargeItem(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Billing code or reference associated with the device.
+    """
+
+    __resource_type__ = "DeviceDefinitionChargeItem"
+
+    chargeItemCode: fhirtypes.CodeableReferenceType = Field(
+        default=...,
+        alias="chargeItemCode",
+        title="The code or reference for the charge item",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ChargeItemDefinition"],
+        },
+    )
+
+    count: fhirtypes.QuantityType = Field(
+        default=...,
+        alias="count",
+        title="Coefficient applicable to the billing code",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    effectivePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="effectivePeriod",
+        title="A specific time period in which this charge item applies",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
+        alias="useContext",
+        title="The context to which this charge item applies",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionChargeItem`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "chargeItemCode",
+            "count",
+            "effectivePeriod",
+            "useContext",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionChargeItem`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+
+class DeviceDefinitionClassification(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    What kind of device or device system this is.
+    """
+
+    __resource_type__ = "DeviceDefinitionClassification"
+
+    justification: typing.List[fhirtypes.RelatedArtifactType] | None = Field(
+        default=None,
+        alias="justification",
+        title="Further information qualifying this classification of the device model",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    type: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="type",
+        title="A classification or risk class of the device model",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionClassification`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "type", "justification"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionClassification`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "type"]
+
+
+class DeviceDefinitionConformsTo(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Identifies the standards, specifications, or formal guidances for the
+    capabilities supported by the device.
+    Identifies the standards, specifications, or formal guidances for the
+    capabilities supported by the device. The device may be certified as
+    conformant to these specifications e.g., communication, performance,
+    process, measurement, or specialization standards.
+    """
+
+    __resource_type__ = "DeviceDefinitionConformsTo"
+
+    category: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="category",
+        title=(
+            "Describes the common type of the standard, specification, or formal "
+            "guidance"
+        ),
+        description="Describes the type of the standard, specification, or formal guidance.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    source: typing.List[fhirtypes.RelatedArtifactType] | None = Field(
+        default=None,
+        alias="source",
+        title=(
+            "Standard, regulation, certification, or guidance website, document, or"
+            " other publication, or similar, supporting the conformance"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    specification: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="specification",
+        title=(
+            "Identifies the standard, specification, or formal guidance that the "
+            "device adheres to the Device Specification type"
+        ),
+        description=(
+            "Code that identifies the specific standard, specification, protocol, "
+            "formal guidance, regulation, legislation, or certification scheme to "
+            "which the device adheres."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    version: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
+        alias="version",
+        title=(
+            "The specific form or variant of the standard, specification or formal "
+            "guidance"
+        ),
+        description=(
+            "Identifies the specific form or variant of the standard, "
+            "specification, or formal guidance. This may be a 'version number', "
+            "release, document edition, publication year, or other label."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    version__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionConformsTo`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "category",
+            "specification",
+            "version",
+            "source",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionConformsTo`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "category", "specification", "version"]
+
+
+class DeviceDefinitionCorrectiveAction(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Tracking of latest field safety corrective action.
+    """
+
+    __resource_type__ = "DeviceDefinitionCorrectiveAction"
+
+    period: fhirtypes.PeriodType = Field(
+        default=...,
+        alias="period",
+        title="Start and end dates of the  corrective action",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    recall: bool | None = Field(
+        default=None,
+        alias="recall",
+        title="Whether the corrective action was a recall",
+        description="Whether the last corrective action known for this device was a recall.",
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
+    )
+    recall__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_recall", title="Extension field for ``recall``."
+    )
+
+    scope: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="scope",
+        title="model | lot-numbers | serial-numbers",
+        description=(
+            "The scope of the corrective action - whether the action targeted all "
+            "units of a given device model, or only a specific set of batches "
+            "identified by lot numbers, or individually identified devices "
+            "identified by the serial name."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["model", "lot-numbers", "serial-numbers"],
+        },
+    )
+    scope__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_scope", title="Extension field for ``scope``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionCorrectiveAction`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "recall", "scope", "period"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionCorrectiveAction`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("recall", "recall__ext")]
+        return required_fields
+
+
+class DeviceDefinitionDeviceName(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    The name or names of the device as given by the manufacturer.
+    """
+
+    __resource_type__ = "DeviceDefinitionDeviceName"
+
+    name: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="name",
+        title="A name that is used to refer to the device",
+        description=(
+            "A human-friendly name that is used to refer to the device - depending "
+            "on the type, it can be the brand name, the common name or alias, or "
+            "other."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
+    )
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
+    )
+
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="type",
+        title="registered-name | user-friendly-name | patient-reported-name",
+        description=(
+            "The type of deviceName. RegisteredName | UserFriendlyName | "
+            "PatientReportedName."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "registered-name",
+                "user-friendly-name",
+                "patient-reported-name",
+            ],
+        },
+    )
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionDeviceName`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "name", "type"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionDeviceName`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "name", "type"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("name", "name__ext"), ("type", "type__ext")]
+        return required_fields
+
+
+class DeviceDefinitionGuideline(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Information aimed at providing directions for the usage of this model of
+    device.
+    """
+
+    __resource_type__ = "DeviceDefinitionGuideline"
+
+    contraindication: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="contraindication",
+        title=(
+            "A specific situation when a device should not be used because it may "
+            "cause harm"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    indication: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="indication",
+        title="A clinical condition for which the device was designed to be used",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    intendedUse: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="intendedUse",
+        title=(
+            "A description of the general purpose or medical use of the device or "
+            "its function"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    intendedUse__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_intendedUse", title="Extension field for ``intendedUse``."
+    )
+
+    relatedArtifact: typing.List[fhirtypes.RelatedArtifactType] | None = Field(
+        default=None,
+        alias="relatedArtifact",
+        title="A source of information or reference for this guideline",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    usageInstruction: fhirtypes.MarkdownType | None = Field(
+        default=None,
+        alias="usageInstruction",
+        title=(
+            "Detailed written and visual directions for the user on how to use the "
+            "device"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    usageInstruction__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_usageInstruction",
+        title="Extension field for ``usageInstruction``.",
+    )
+
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
+        alias="useContext",
+        title="The circumstances that form the setting for using the device",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    warning: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="warning",
+        title=(
+            "Specific hazard alert information that a user needs to know before "
+            "using the device"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionGuideline`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "useContext",
+            "usageInstruction",
+            "relatedArtifact",
+            "indication",
+            "contraindication",
+            "warning",
+            "intendedUse",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionGuideline`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+
+class DeviceDefinitionHasPart(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    A device, part of the current one.
+    A device that is part (for example a component) of the present device.
+    """
+
+    __resource_type__ = "DeviceDefinitionHasPart"
+
+    count: fhirtypes.IntegerType | None = Field(
+        default=None,
+        alias="count",
+        title="Number of occurrences of the part",
+        description="Number of instances of the component device in the current device.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    count__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_count", title="Extension field for ``count``."
+    )
+
+    reference: fhirtypes.ReferenceType = Field(
+        default=...,
+        alias="reference",
+        title="Reference to the part",
+        description="Reference to the device that is part of the current device.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["DeviceDefinition"],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionHasPart`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "reference", "count"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionHasPart`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "reference"]
+
+
+class DeviceDefinitionLink(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    An associated device, attached to, used with, communicating with or linking
+    a previous or new device model to the focal device.
+    """
+
+    __resource_type__ = "DeviceDefinitionLink"
+
+    relatedDevice: fhirtypes.CodeableReferenceType = Field(
+        default=...,
+        alias="relatedDevice",
+        title="A reference to the linked device",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["DeviceDefinition"],
+        },
+    )
+
+    relation: fhirtypes.CodingType = Field(
+        default=...,
+        alias="relation",
+        title=(
+            "The type indicates the relationship of the related device to the "
+            "device instance"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionLink`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "relation", "relatedDevice"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionLink`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+
+class DeviceDefinitionMaterial(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    A substance used to create the material(s) of which the device is made.
+    """
+
+    __resource_type__ = "DeviceDefinitionMaterial"
+
+    allergenicIndicator: bool | None = Field(
+        default=None,
+        alias="allergenicIndicator",
+        title="Whether the substance is a known or suspected allergen",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    allergenicIndicator__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_allergenicIndicator",
+        title="Extension field for ``allergenicIndicator``.",
+    )
+
+    alternate: bool | None = Field(
+        default=None,
+        alias="alternate",
+        title="Indicates an alternative material of the device",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    alternate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_alternate", title="Extension field for ``alternate``."
+    )
+
+    substance: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="substance",
+        title=(
+            "A relevant substance that the device contains, may contain, or is made"
+            " of"
+        ),
+        description=(
+            "A substance that the device contains, may contain, or is made of - for"
+            " example latex - to be used to determine patient compatibility. This "
+            "is not intended to represent the composition of the device, only the "
+            "clinically relevant materials."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionMaterial`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "substance",
+            "alternate",
+            "allergenicIndicator",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionMaterial`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+
+class DeviceDefinitionPackaging(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Information about the packaging of the device, i.e. how the device is
+    packaged.
+    """
+
+    __resource_type__ = "DeviceDefinitionPackaging"
+
+    count: fhirtypes.IntegerType | None = Field(
+        default=None,
+        alias="count",
+        title="The number of items contained in the package (devices or sub-packages)",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    count__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_count", title="Extension field for ``count``."
+    )
+
+    distributor: typing.List[
+        fhirtypes.DeviceDefinitionPackagingDistributorType
+    ] | None = Field(
+        default=None,
+        alias="distributor",
+        title="An organization that distributes the packaged device",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    identifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
+        alias="identifier",
+        title="Business identifier of the packaged medication",
+        description="The business identifier of the packaged medication.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    packaging: typing.List[fhirtypes.DeviceDefinitionPackagingType] | None = Field(
+        default=None,
+        alias="packaging",
+        title="Allows packages within packages",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="type",
+        title="A code that defines the specific type of packaging",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    udiDeviceIdentifier: typing.List[
+        fhirtypes.DeviceDefinitionUdiDeviceIdentifierType
+    ] | None = Field(
+        default=None,
+        alias="udiDeviceIdentifier",
+        title="Unique Device Identifier (UDI) Barcode string on the packaging",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionPackaging`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "identifier",
+            "type",
+            "count",
+            "distributor",
+            "udiDeviceIdentifier",
+            "packaging",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionPackaging`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+
+class DeviceDefinitionPackagingDistributor(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    An organization that distributes the packaged device.
+    """
+
+    __resource_type__ = "DeviceDefinitionPackagingDistributor"
+
+    name: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="name",
+        title="Distributor's human-readable name",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
+    )
+
+    organizationReference: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="organizationReference",
+        title="Distributor as an Organization resource",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionPackagingDistributor`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "name", "organizationReference"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionPackagingDistributor`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+
+class DeviceDefinitionProperty(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Inherent, essentially fixed, characteristics of this kind of device, e.g.,
+    time properties, size, etc.
+    Static or essentially fixed characteristics or features of this kind of
+    device that are otherwise not captured in more specific attributes, e.g.,
+    time or timing attributes, resolution, accuracy, and physical attributes.
+    """
+
+    __resource_type__ = "DeviceDefinitionProperty"
+
+    type: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="type",
+        title="Code that specifies the property being represented",
+        description=(
+            "Code that specifies the property such as a resolution or color being "
+            "represented."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    valueAttachment: fhirtypes.AttachmentType | None = Field(
+        default=None,
+        alias="valueAttachment",
+        title="Value of the property",
+        description=(
+            "The value of the property specified by the associated property.type "
+            "code."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueBoolean: bool | None = Field(
+        default=None,
+        alias="valueBoolean",
+        title="Value of the property",
+        description=(
+            "The value of the property specified by the associated property.type "
+            "code."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueBoolean",
+        title="Extension field for ``valueBoolean``.",
+    )
+
+    valueCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="valueCodeableConcept",
+        title="Value of the property",
+        description=(
+            "The value of the property specified by the associated property.type "
+            "code."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueInteger: fhirtypes.IntegerType | None = Field(
+        default=None,
+        alias="valueInteger",
+        title="Value of the property",
+        description=(
+            "The value of the property specified by the associated property.type "
+            "code."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueInteger__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueInteger",
+        title="Extension field for ``valueInteger``.",
+    )
+
+    valueQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
+        alias="valueQuantity",
+        title="Value of the property",
+        description=(
+            "The value of the property specified by the associated property.type "
+            "code."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueRange: fhirtypes.RangeType | None = Field(
+        default=None,
+        alias="valueRange",
+        title="Value of the property",
+        description=(
+            "The value of the property specified by the associated property.type "
+            "code."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="valueString",
+        title="Value of the property",
+        description=(
+            "The value of the property specified by the associated property.type "
+            "code."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueString", title="Extension field for ``valueString``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionProperty`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "type",
+            "valueQuantity",
+            "valueCodeableConcept",
+            "valueString",
+            "valueBoolean",
+            "valueInteger",
+            "valueRange",
+            "valueAttachment",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionProperty`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -355,353 +1520,121 @@ class DeviceDefinition(domainresource.DomainResource):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {
-            "manufacturer": ["manufacturerReference", "manufacturerString"]
+            "value": [
+                "valueAttachment",
+                "valueBoolean",
+                "valueCodeableConcept",
+                "valueInteger",
+                "valueQuantity",
+                "valueRange",
+                "valueString",
+            ]
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
-class DeviceDefinitionCapability(backboneelement.BackboneElement):
+class DeviceDefinitionRegulatoryIdentifier(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
 
-    Device capabilities.
+    Regulatory identifier(s) associated with this device.
+    Identifier associated with the regulatory documentation (certificates,
+    technical documentation, post-market surveillance documentation and
+    reports) of a set of device models sharing the same intended purpose, risk
+    class and essential design and manufacturing characteristics. One example
+    is the Basic UDI-DI in Europe.
     """
 
-    resource_type = Field("DeviceDefinitionCapability", const=True)
+    __resource_type__ = "DeviceDefinitionRegulatoryIdentifier"
 
-    description: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
-        alias="description",
-        title="Description of capability",
+    deviceIdentifier: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="deviceIdentifier",
+        title="The identifier itself",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
+    )
+    deviceIdentifier__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_deviceIdentifier",
+        title="Extension field for ``deviceIdentifier``.",
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        ...,
+    issuer: fhirtypes.UriType | None = Field(
+        default=None,
+        alias="issuer",
+        title="The organization that issued this identifier",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
+    )
+    issuer__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_issuer", title="Extension field for ``issuer``."
+    )
+
+    jurisdiction: fhirtypes.UriType | None = Field(
+        default=None,
+        alias="jurisdiction",
+        title="The jurisdiction to which the deviceIdentifier applies",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
+    )
+    jurisdiction__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_jurisdiction",
+        title="Extension field for ``jurisdiction``.",
+    )
+
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
-        title="Type of capability",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
+        title="basic | master | license",
+        description="The type of identifier itself.",
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["basic", "master", "license"],
+        },
+    )
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceDefinitionCapability`` according specification,
-        with preserving original sequence order.
-        """
-        return ["id", "extension", "modifierExtension", "type", "description"]
-
-
-class DeviceDefinitionDeviceName(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    A name given to the device to identify it.
-    """
-
-    resource_type = Field("DeviceDefinitionDeviceName", const=True)
-
-    name: fhirtypes.String = Field(
-        None,
-        alias="name",
-        title="The name of the device",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-    )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
-    )
-
-    type: fhirtypes.Code = Field(
-        None,
-        alias="type",
-        title=(
-            "udi-label-name | user-friendly-name | patient-reported-name | "
-            "manufacturer-name | model-name | other"
-        ),
-        description=(
-            "The type of deviceName. UDILabelName | UserFriendlyName | "
-            "PatientReportedName | ManufactureDeviceName | ModelName."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "udi-label-name",
-            "user-friendly-name",
-            "patient-reported-name",
-            "manufacturer-name",
-            "model-name",
-            "other",
-        ],
-    )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
-    )
-
-    @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceDefinitionDeviceName`` according specification,
-        with preserving original sequence order.
-        """
-        return ["id", "extension", "modifierExtension", "name", "type"]
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2771(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
-        """https://www.hl7.org/fhir/extensibility.html#Special-Case
-        In some cases, implementers might find that they do not have appropriate data for
-        an element with minimum cardinality = 1. In this case, the element must be present,
-        but unless the resource or a profile on it has made the actual value of the primitive
-        data type mandatory, it is possible to provide an extension that explains why
-        the primitive value is not present.
-        """
-        required_fields = [("name", "name__ext"), ("type", "type__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-
-class DeviceDefinitionMaterial(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    A substance used to create the material(s) of which the device is made.
-    """
-
-    resource_type = Field("DeviceDefinitionMaterial", const=True)
-
-    allergenicIndicator: bool = Field(
-        None,
-        alias="allergenicIndicator",
-        title="Whether the substance is a known or suspected allergen",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-    allergenicIndicator__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
-        alias="_allergenicIndicator",
-        title="Extension field for ``allergenicIndicator``.",
-    )
-
-    alternate: bool = Field(
-        None,
-        alias="alternate",
-        title="Indicates an alternative material of the device",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-    alternate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_alternate", title="Extension field for ``alternate``."
-    )
-
-    substance: fhirtypes.CodeableConceptType = Field(
-        ...,
-        alias="substance",
-        title="The substance",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceDefinitionMaterial`` according specification,
-        with preserving original sequence order.
-        """
-        return [
-            "id",
-            "extension",
-            "modifierExtension",
-            "substance",
-            "alternate",
-            "allergenicIndicator",
-        ]
-
-
-class DeviceDefinitionProperty(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    The actual configuration settings of a device as it actually operates,
-    e.g., regulation status, time properties.
-    """
-
-    resource_type = Field("DeviceDefinitionProperty", const=True)
-
-    type: fhirtypes.CodeableConceptType = Field(
-        ...,
-        alias="type",
-        title=(
-            "Code that specifies the property DeviceDefinitionPropetyCode "
-            "(Extensible)"
-        ),
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    valueCode: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
-        alias="valueCode",
-        title="Property value as a code, e.g., NTP4 (synced to NTP)",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    valueQuantity: typing.List[fhirtypes.QuantityType] = Field(
-        None,
-        alias="valueQuantity",
-        title="Property value as a quantity",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceDefinitionProperty`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionRegulatoryIdentifier`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
             "modifierExtension",
             "type",
-            "valueQuantity",
-            "valueCode",
+            "deviceIdentifier",
+            "issuer",
+            "jurisdiction",
         ]
 
-
-class DeviceDefinitionSpecialization(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    The capabilities supported on a  device, the standards to which the device
-    conforms for a particular purpose, and used for the communication.
-    """
-
-    resource_type = Field("DeviceDefinitionSpecialization", const=True)
-
-    systemType: fhirtypes.String = Field(
-        None,
-        alias="systemType",
-        title="The standard that is used to operate and communicate",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-    )
-    systemType__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_systemType", title="Extension field for ``systemType``."
-    )
-
-    version: fhirtypes.String = Field(
-        None,
-        alias="version",
-        title="The version of the standard that is used to operate and communicate",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-    version__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_version", title="Extension field for ``version``."
-    )
-
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceDefinitionSpecialization`` according specification,
-        with preserving original sequence order.
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionRegulatoryIdentifier`` according to specification,
+        with preserving the original sequence order.
         """
-        return ["id", "extension", "modifierExtension", "systemType", "version"]
+        return ["modifierExtension"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3274(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -709,53 +1642,13 @@ class DeviceDefinitionSpecialization(backboneelement.BackboneElement):
         data type mandatory, it is possible to provide an extension that explains why
         the primitive value is not present.
         """
-        required_fields = [("systemType", "systemType__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        required_fields = [
+            ("deviceIdentifier", "deviceIdentifier__ext"),
+            ("issuer", "issuer__ext"),
+            ("jurisdiction", "jurisdiction__ext"),
+            ("type", "type__ext"),
+        ]
+        return required_fields
 
 
 class DeviceDefinitionUdiDeviceIdentifier(backboneelement.BackboneElement):
@@ -770,58 +1663,75 @@ class DeviceDefinitionUdiDeviceIdentifier(backboneelement.BackboneElement):
     jurisdictions it could have been sold.
     """
 
-    resource_type = Field("DeviceDefinitionUdiDeviceIdentifier", const=True)
+    __resource_type__ = "DeviceDefinitionUdiDeviceIdentifier"
 
-    deviceIdentifier: fhirtypes.String = Field(
-        None,
+    deviceIdentifier: fhirtypes.StringType | None = Field(
+        default=None,
         alias="deviceIdentifier",
         title=(
             "The identifier that is to be associated with every Device that "
-            "references this DeviceDefintiion for the issuer and jurisdication "
-            "porvided in the DeviceDefinition.udiDeviceIdentifier"
+            "references this DeviceDefintiion for the issuer and jurisdiction "
+            "provided in the DeviceDefinition.udiDeviceIdentifier"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    deviceIdentifier__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    deviceIdentifier__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_deviceIdentifier",
         title="Extension field for ``deviceIdentifier``.",
     )
 
-    issuer: fhirtypes.Uri = Field(
-        None,
+    issuer: fhirtypes.UriType | None = Field(
+        default=None,
         alias="issuer",
         title="The organization that assigns the identifier algorithm",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    issuer__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_issuer", title="Extension field for ``issuer``."
+    issuer__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_issuer", title="Extension field for ``issuer``."
     )
 
-    jurisdiction: fhirtypes.Uri = Field(
-        None,
+    jurisdiction: fhirtypes.UriType | None = Field(
+        default=None,
         alias="jurisdiction",
         title="The jurisdiction to which the deviceIdentifier applies",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    jurisdiction__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_jurisdiction", title="Extension field for ``jurisdiction``."
+    jurisdiction__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_jurisdiction",
+        title="Extension field for ``jurisdiction``.",
+    )
+
+    marketDistribution: typing.List[
+        fhirtypes.DeviceDefinitionUdiDeviceIdentifierMarketDistributionType
+    ] | None = Field(
+        default=None,
+        alias="marketDistribution",
+        title="Indicates whether and when the device is available on the market",
+        description="Indicates where and when the device is available on the market.",
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceDefinitionUdiDeviceIdentifier`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionUdiDeviceIdentifier`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -830,12 +1740,17 @@ class DeviceDefinitionUdiDeviceIdentifier(backboneelement.BackboneElement):
             "deviceIdentifier",
             "issuer",
             "jurisdiction",
+            "marketDistribution",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3716(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionUdiDeviceIdentifier`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -848,49 +1763,153 @@ class DeviceDefinitionUdiDeviceIdentifier(backboneelement.BackboneElement):
             ("issuer", "issuer__ext"),
             ("jurisdiction", "jurisdiction__ext"),
         ]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
 
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
+class DeviceDefinitionUdiDeviceIdentifierMarketDistribution(
+    backboneelement.BackboneElement
+):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
 
-        return values
+    Indicates whether and when the device is available on the market.
+    Indicates where and when the device is available on the market.
+    """
+
+    __resource_type__ = "DeviceDefinitionUdiDeviceIdentifierMarketDistribution"
+
+    marketPeriod: fhirtypes.PeriodType = Field(
+        default=...,
+        alias="marketPeriod",
+        title="Begin and end dates for the commercial distribution of the device",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    subJurisdiction: fhirtypes.UriType | None = Field(
+        default=None,
+        alias="subJurisdiction",
+        title="National state or territory where the device is commercialized",
+        description=(
+            "National state or territory to which the marketDistribution recers, "
+            "typically where the device is commercialized."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
+    )
+    subJurisdiction__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_subJurisdiction",
+        title="Extension field for ``subJurisdiction``.",
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionUdiDeviceIdentifierMarketDistribution`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "marketPeriod",
+            "subJurisdiction",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionUdiDeviceIdentifierMarketDistribution`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("subJurisdiction", "subJurisdiction__ext")]
+        return required_fields
+
+
+class DeviceDefinitionVersion(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    The version of the device or software.
+    """
+
+    __resource_type__ = "DeviceDefinitionVersion"
+
+    component: fhirtypes.IdentifierType | None = Field(
+        default=None,
+        alias="component",
+        title=(
+            "The hardware or software module of the device to which the version "
+            "applies"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="type",
+        title="The type of the device version, e.g. manufacturer, approved, internal",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    value: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="value",
+        title="The version text",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
+    )
+    value__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_value", title="Extension field for ``value``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceDefinitionVersion`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "type", "component", "value"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceDefinitionVersion`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("value", "value__ext")]
+        return required_fields

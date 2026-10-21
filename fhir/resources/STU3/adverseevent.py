@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/AdverseEvent
 Release: STU3
@@ -6,6 +5,9 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -26,10 +28,10 @@ class AdverseEvent(domainresource.DomainResource):
     or hospitalization, or that results in death.
     """
 
-    resource_type = Field("AdverseEvent", const=True)
+    __resource_type__ = "AdverseEvent"
 
-    category: fhirtypes.Code = Field(
-        None,
+    category: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="category",
         title=(
             "AE | PAE  An adverse event is an event that caused harm to a patient,"
@@ -43,42 +45,48 @@ class AdverseEvent(domainresource.DomainResource):
             " caused harm to the subject, or had the potential to cause harm to the"
             " subject."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["AE", "PAE"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["AE", "PAE"],
+        },
     )
-    category__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_category", title="Extension field for ``category``."
+    category__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_category", title="Extension field for ``category``."
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="When the event occurred",
         description="The date (and perhaps time) when the adverse event occurred.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Description of the adverse event",
         description="Describes the adverse event in text.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    eventParticipant: fhirtypes.ReferenceType = Field(
-        None,
+    eventParticipant: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="eventParticipant",
         title="Who  was involved in the adverse event or the potential adverse event",
         description=(
@@ -89,14 +97,16 @@ class AdverseEvent(domainresource.DomainResource):
             "informant of clinical history), or information about what Act was "
             "performed (e.g. informant witness)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner", "Device"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner", "Device"],
+        },
     )
 
-    identifier: fhirtypes.IdentifierType = Field(
-        None,
+    identifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="identifier",
         title="Business identifier for the event",
         description=(
@@ -104,94 +114,110 @@ class AdverseEvent(domainresource.DomainResource):
             "processes and/or used to refer to it when a direct URL reference to "
             "the resource itsefl is not appropriate."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    location: fhirtypes.ReferenceType = Field(
-        None,
+    location: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="location",
         title="Location where adverse event occurred",
         description="The information about where the adverse event occurred.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    outcome: fhirtypes.CodeableConceptType = Field(
-        None,
+    outcome: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="outcome",
         title=(
             "resolved | recovering | ongoing | resolvedWithSequelae | fatal | "
             "unknown"
         ),
         description="Describes the type of outcome from the adverse event.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    reaction: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    reaction: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="reaction",
         title="Adverse Reaction Events linked to exposure to substance",
         description=(
             "Includes information about the reaction that occurred as a result of "
             "exposure to a substance (for example, a drug or a chemical)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Condition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Condition"],
+        },
     )
 
-    recorder: fhirtypes.ReferenceType = Field(
-        None,
+    recorder: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="recorder",
         title="Who recorded the adverse event",
         description=(
             "Information on who recorded the adverse event.  May be the patient or "
             "a practitioner."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Practitioner", "RelatedPerson"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Practitioner", "RelatedPerson"],
+        },
     )
 
-    referenceDocument: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    referenceDocument: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="referenceDocument",
         title="AdverseEvent.referenceDocument",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["DocumentReference"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["DocumentReference"],
+        },
     )
 
-    seriousness: fhirtypes.CodeableConceptType = Field(
-        None,
+    seriousness: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="seriousness",
         title="Mild | Moderate | Severe",
         description="Describes the seriousness or severity of the adverse event.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    study: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    study: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="study",
         title="AdverseEvent.study",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ResearchStudy"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ResearchStudy"],
+        },
     )
 
-    subject: fhirtypes.ReferenceType = Field(
-        None,
+    subject: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="subject",
         title="Subject or group impacted by event",
         description=(
@@ -199,59 +225,72 @@ class AdverseEvent(domainresource.DomainResource):
             "adverse event, there will be no subject as the adverse event was "
             "prevented."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "ResearchSubject", "Medication", "Device"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Patient",
+                "ResearchSubject",
+                "Medication",
+                "Device",
+            ],
+        },
     )
 
-    subjectMedicalHistory: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    subjectMedicalHistory: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="subjectMedicalHistory",
         title="AdverseEvent.subjectMedicalHistory",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Condition",
-            "Observation",
-            "AllergyIntolerance",
-            "FamilyMemberHistory",
-            "Immunization",
-            "Procedure",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Condition",
+                "Observation",
+                "AllergyIntolerance",
+                "FamilyMemberHistory",
+                "Immunization",
+                "Procedure",
+            ],
+        },
     )
 
-    suspectEntity: typing.List[fhirtypes.AdverseEventSuspectEntityType] = Field(
-        None,
+    suspectEntity: typing.List[fhirtypes.AdverseEventSuspectEntityType] | None = Field(
+        default=None,
         alias="suspectEntity",
         title="The suspected agent causing the adverse event",
         description=(
             "Describes the entity that is suspected to have caused the adverse "
             "event."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="actual | potential",
         description=(
             "This element defines the specific type of event that occurred or that "
             "was prevented from occurring."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AdverseEvent`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AdverseEvent`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -280,6 +319,33 @@ class AdverseEvent(domainresource.DomainResource):
             "study",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AdverseEvent`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "category",
+            "type",
+            "subject",
+            "date",
+            "reaction",
+            "location",
+            "seriousness",
+            "outcome",
+            "recorder",
+            "eventParticipant",
+            "description",
+            "suspectEntity",
+            "subjectMedicalHistory",
+            "referenceDocument",
+            "study",
+        ]
+
 
 class AdverseEventSuspectEntity(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -290,77 +356,91 @@ class AdverseEventSuspectEntity(backboneelement.BackboneElement):
     Describes the entity that is suspected to have caused the adverse event.
     """
 
-    resource_type = Field("AdverseEventSuspectEntity", const=True)
+    __resource_type__ = "AdverseEventSuspectEntity"
 
-    causality: fhirtypes.Code = Field(
-        None,
+    causality: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="causality",
         title="causality1 | causality2",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["causality1", "causality2"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["causality1", "causality2"],
+        },
     )
-    causality__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_causality", title="Extension field for ``causality``."
+    causality__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_causality", title="Extension field for ``causality``."
     )
 
-    causalityAssessment: fhirtypes.CodeableConceptType = Field(
-        None,
+    causalityAssessment: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="causalityAssessment",
         title="assess1 | assess2",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    causalityAuthor: fhirtypes.ReferenceType = Field(
-        None,
+    causalityAuthor: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="causalityAuthor",
         title="AdverseEvent.suspectEntity.causalityAuthor",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner", "PractitionerRole"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner", "PractitionerRole"],
+        },
     )
 
-    causalityMethod: fhirtypes.CodeableConceptType = Field(
-        None,
+    causalityMethod: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="causalityMethod",
         title="method1 | method2",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    causalityProductRelatedness: fhirtypes.String = Field(
-        None,
+    causalityProductRelatedness: fhirtypes.StringType | None = Field(
+        default=None,
         alias="causalityProductRelatedness",
         title="AdverseEvent.suspectEntity.causalityProductRelatedness",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    causalityProductRelatedness__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
-        alias="_causalityProductRelatedness",
-        title="Extension field for ``causalityProductRelatedness``.",
+    causalityProductRelatedness__ext: fhirtypes.FHIRPrimitiveExtensionType | None = (
+        Field(
+            default=None,
+            alias="_causalityProductRelatedness",
+            title="Extension field for ``causalityProductRelatedness``.",
+        )
     )
 
-    causalityResult: fhirtypes.CodeableConceptType = Field(
-        None,
+    causalityResult: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="causalityResult",
         title="result1 | result2",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     instance: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="instance",
         title="Refers to the specific entity that caused the adverse event",
         description=(
@@ -368,27 +448,45 @@ class AdverseEventSuspectEntity(backboneelement.BackboneElement):
             "be a substance, medication, medication administration, medication "
             "statement or a device."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Substance",
-            "Medication",
-            "MedicationAdministration",
-            "MedicationStatement",
-            "Device",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Substance",
+                "Medication",
+                "MedicationAdministration",
+                "MedicationStatement",
+                "Device",
+            ],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AdverseEventSuspectEntity`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AdverseEventSuspectEntity`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
+            "modifierExtension",
+            "instance",
+            "causality",
+            "causalityAssessment",
+            "causalityProductRelatedness",
+            "causalityMethod",
+            "causalityAuthor",
+            "causalityResult",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AdverseEventSuspectEntity`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
             "modifierExtension",
             "instance",
             "causality",

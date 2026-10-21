@@ -1,120 +1,902 @@
 # -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/DocumentReference
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
-from pydantic.validators import bytes_validator  # noqa: F401
-
-from .. import fhirtypes  # noqa: F401
 from .. import documentreference
+from .conftest import ExternalValidatorModel
 
 
 def impl_documentreference_1(inst):
-    assert inst.authenticator.reference == "Organization/f001"
-    assert inst.author[0].reference == "Practitioner/xcda1"
-    assert inst.author[1].reference == "#a2"
-    assert inst.category[0].coding[0].code == "History and Physical"
-    assert inst.category[0].coding[0].display == "History and Physical"
     assert (
-        inst.category[0].coding[0].system
-        == "http://ihe.net/xds/connectathon/classCodes"
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2021-01-01T01:02:01+01:00"}
+        ).valueDateTime
     )
-    assert inst.contained[0].id == "a2"
-    assert inst.content[0].attachment.contentType == "application/hl7-v3+xml"
-    assert inst.content[0].attachment.creation == fhirtypes.DateTime.validate(
-        "2005-12-24T09:35:00+11:00"
-    )
-    assert inst.content[0].attachment.hash == bytes_validator(
-        "2jmj7l5rSw0yVb/vlWAYkK/YBwk="
-    )
-    assert inst.content[0].attachment.language == "en-US"
-    assert inst.content[0].attachment.size == 3654
-    assert inst.content[0].attachment.title == "Physical"
-    assert inst.content[0].attachment.url == (
-        "http://example.org/xds/mhd/Binary/07a6483f-732b-461e-86b6-ed" "b665c45510"
-    )
-    assert inst.content[0].format.code == "urn:ihe:pcc:handp:2008"
-    assert inst.content[0].format.display == "History and Physical Specification"
-    assert inst.content[0].format.system == "urn:oid:1.3.6.1.4.1.19376.1.2.3"
-    assert inst.context.encounter[0].reference == "Encounter/xcda"
-    assert inst.context.event[0].coding[0].code == "T-D8200"
-    assert inst.context.event[0].coding[0].display == "Arm"
+    assert inst.content[0].attachment.title == "Sample Genomic File"
     assert (
-        inst.context.event[0].coding[0].system
-        == "http://ihe.net/xds/connectathon/eventCodes"
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {"valueUrl": "http://www.somesystemabc.net/identifiers/files/11114"}
+        ).valueUrl
     )
-    assert inst.context.facilityType.coding[0].code == "Outpatient"
-    assert inst.context.facilityType.coding[0].display == "Outpatient"
-    assert inst.context.facilityType.coding[0].system == (
-        "http://www.ihe.net/xds/connectathon/healthcareFacilityTypeCo" "des"
+    assert inst.description == (
+        "A sample Document Reference instance representing a generic "
+        "genomic file that may ber used as input or output of a "
+        "genomic analysis pipeline."
     )
-    assert inst.context.period.end == fhirtypes.DateTime.validate(
-        "2004-12-23T08:01:00+11:00"
-    )
-    assert inst.context.period.start == fhirtypes.DateTime.validate(
-        "2004-12-23T08:00:00+11:00"
-    )
-    assert inst.context.practiceSetting.coding[0].code == "General Medicine"
-    assert inst.context.practiceSetting.coding[0].display == "General Medicine"
-    assert (
-        inst.context.practiceSetting.coding[0].system
-        == "http://www.ihe.net/xds/connectathon/practiceSettingCodes"
-    )
-    assert inst.context.related[0].identifier.system == "urn:ietf:rfc:3986"
-    assert (
-        inst.context.related[0].identifier.value
-        == "urn:oid:1.3.6.1.4.1.21367.2005.3.7.2345"
-    )
-    assert inst.context.related[0].reference == "Patient/xcda"
-    assert inst.context.sourcePatientInfo.reference == "Patient/xcda"
-    assert inst.custodian.reference == "Organization/f001"
-    assert inst.date == fhirtypes.Instant.validate("2005-12-24T09:43:41+11:00")
-    assert inst.description == "Physical"
     assert inst.docStatus == "preliminary"
-    assert inst.id == "example"
-    assert inst.identifier[0].system == "urn:ietf:rfc:3986"
-    assert inst.identifier[0].value == "urn:oid:1.3.6.1.4.1.21367.2005.3.7.1234"
-    assert inst.masterIdentifier.system == "urn:ietf:rfc:3986"
-    assert inst.masterIdentifier.value == "urn:oid:1.3.6.1.4.1.21367.2005.3.7"
+    assert inst.id == "genomicFile4"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.somesystemabc.net/identifiers/files"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "11114"
     assert inst.meta.tag[0].code == "HTEST"
     assert inst.meta.tag[0].display == "test health data"
     assert (
-        inst.meta.tag[0].system == "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
     )
-    assert inst.relatesTo[0].code == "appends"
-    assert inst.relatesTo[0].target.reference == "DocumentReference/example"
-    assert inst.securityLabel[0].coding[0].code == "V"
-    assert inst.securityLabel[0].coding[0].display == "very restricted"
+    assert inst.securityLabel[0].coding[0].code == "R"
+    assert inst.securityLabel[0].coding[0].display == "Restricted"
     assert (
         inst.securityLabel[0].coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
     )
     assert inst.status == "current"
-    assert inst.subject.reference == "Patient/xcda"
+    assert inst.subject.display == "Child Junior Doe"
+    assert inst.subject.reference == "Patient/denovoChild"
     assert inst.text.status == "generated"
-    assert inst.type.coding[0].code == "34108-1"
-    assert inst.type.coding[0].display == "Outpatient Note"
-    assert inst.type.coding[0].system == "http://loinc.org"
 
 
 def test_documentreference_1(base_settings):
     """No. 1 tests collection for DocumentReference.
-    Test File: documentreference-example.json
+    Test File: DocumentReference-genomicFile4.json
     """
-    filename = base_settings["unittest_data_dir"] / "documentreference-example.json"
-    inst = documentreference.DocumentReference.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
+    filename = (
+        base_settings["unittest_data_dir"] / "DocumentReference-genomicFile4.json"
     )
-    assert "DocumentReference" == inst.resource_type
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
 
     impl_documentreference_1(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "DocumentReference" == data["resourceType"]
 
     inst2 = documentreference.DocumentReference(**data)
     impl_documentreference_1(inst2)
+
+
+def impl_documentreference_2(inst):
+    assert inst.author[0].display == "G.E. Medical Systems"
+    assert inst.bodySite[0].concept.coding[0].code == "67734004"
+    assert inst.bodySite[0].concept.coding[0].display == "Upper Trunk Structure"
+    assert (
+        inst.bodySite[0].concept.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://snomed.info/sct"}
+        ).valueUri
+    )
+    assert inst.content[0].attachment.contentType == "application/dicom"
+    assert inst.content[0].attachment.height == 480
+    assert inst.content[0].attachment.width == 640
+    assert inst.event[0].concept.coding[0].code == "399067008"
+    assert inst.event[0].concept.coding[0].display == "Lateral projection"
+    assert (
+        inst.event[0].concept.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://snomed.info/sct"}
+        ).valueUri
+    )
+    assert (
+        inst.extension[0].url
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://nema.org/fhir/extensions#0002-0010"}
+        ).valueUri
+    )
+    assert (
+        inst.extension[0].valueUri
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:oid:1.2.840.10008.1.2.1"}
+        ).valueUri
+    )
+    assert inst.id == "1.2.840.11361907579238403408700.3.1.04.19970327150033"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://acme-imaging.com/accession/2012"}
+        ).valueUri
+    )
+    assert inst.identifier[0].type.text == "accessionNo"
+    assert inst.identifier[0].value == "1234567"
+    assert (
+        inst.identifier[1].system
+        == ExternalValidatorModel.model_validate({"valueUri": "urn:dicom:uid"}).valueUri
+    )
+    assert inst.identifier[1].type.text == "studyId"
+    assert (
+        inst.identifier[1].value
+        == "urn:oid:1.2.840.113619.2.21.848.34082.0.538976288.3"
+    )
+    assert (
+        inst.identifier[2].system
+        == ExternalValidatorModel.model_validate({"valueUri": "urn:dicom:uid"}).valueUri
+    )
+    assert inst.identifier[2].type.text == "seriesId"
+    assert (
+        inst.identifier[2].value
+        == "urn:oid:1.2.840.113619.2.21.3408.700.0.757923840.3.0"
+    )
+    assert (
+        inst.identifier[3].system
+        == ExternalValidatorModel.model_validate({"valueUri": "urn:dicom:uid"}).valueUri
+    )
+    assert inst.identifier[3].type.text == "InstanceUID"
+    assert inst.identifier[3].use == "official"
+    assert inst.identifier[3].value == (
+        "urn:oid:1.2.840.11361907579238403408700.3.1.04.1997032715003" "3"
+    )
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.modality[0].coding[0].code == "US"
+    assert (
+        inst.modality[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://dicom.nema.org/resources/ontology/DCM"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.subject.reference == "Patient/example"
+    assert inst.text.status == "generated"
+
+
+def test_documentreference_2(base_settings):
+    """No. 2 tests collection for DocumentReference.
+    Test File: documentreference-example-dicom.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"] / "documentreference-example-dicom.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_2(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_2(inst2)
+
+
+def impl_documentreference_3(inst):
+    assert (
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2019-03-01T01:02:01+01:00"}
+        ).valueDateTime
+    )
+    assert inst.content[0].attachment.title == "CNVAnalysis_called"
+    assert (
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUrl": "https://chat.fhir.org/user_uploads/10155/Hnv3LtumKn-1QjeyS2KVuw4R/CNVAnalysis_called.bed"
+            }
+        ).valueUrl
+    )
+    assert inst.description == (
+        "CNVAnalysis_called: A sample Document Reference instance "
+        "representing a BED file that may be used as input or output "
+        "of a genomic analysis pipeline."
+    )
+    assert inst.docStatus == "preliminary"
+    assert inst.id == "CNVAnalysis-called"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.somesystemabc.net/identifiers/files"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "11120"
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.securityLabel[0].coding[0].code == "R"
+    assert inst.securityLabel[0].coding[0].display == "Restricted"
+    assert (
+        inst.securityLabel[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.text.status == "generated"
+
+
+def test_documentreference_3(base_settings):
+    """No. 3 tests collection for DocumentReference.
+    Test File: DocumentReference-CNVAnalysis_called.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"] / "DocumentReference-CNVAnalysis_called.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_3(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_3(inst2)
+
+
+def impl_documentreference_4(inst):
+    assert (
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2021-01-01T01:01:01+01:00"}
+        ).valueDateTime
+    )
+    assert inst.content[0].attachment.title == "Sample Genomic File"
+    assert (
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {"valueUrl": "http://www.somesystemabc.net/identifiers/files/11113"}
+        ).valueUrl
+    )
+    assert inst.description == (
+        "A sample Document Reference instance representing a generic "
+        "genomic file that may ber used as input or output of a "
+        "genomic analysis pipeline."
+    )
+    assert inst.docStatus == "preliminary"
+    assert inst.id == "genomicFileFather"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.somesystemabc.net/identifiers/files"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "111110"
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.securityLabel[0].coding[0].code == "R"
+    assert inst.securityLabel[0].coding[0].display == "Restricted"
+    assert (
+        inst.securityLabel[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.subject.display == "John Doe"
+    assert inst.subject.reference == "Patient/father"
+    assert inst.text.status == "generated"
+
+
+def test_documentreference_4(base_settings):
+    """No. 4 tests collection for DocumentReference.
+    Test File: DocumentReference-genomicFileFather.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"] / "DocumentReference-genomicFileFather.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_4(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_4(inst2)
+
+
+def impl_documentreference_5(inst):
+    assert inst.attester[0].mode.coding[0].code == "professional"
+    assert (
+        inst.attester[0].mode.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://hl7.org/fhir/composition-attestation-mode"}
+        ).valueUri
+    )
+    assert inst.attester[0].party.reference == "#in-author"
+    assert inst.author[0].reference == "#in-author"
+    assert inst.category[0].coding[0].code == "11369-6"
+    assert (
+        inst.category[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://loinc.org"}
+        ).valueUri
+    )
+    assert inst.contained[0].id == "in-author"
+    assert inst.contained[1].id == "in-patient"
+    assert inst.content[0].attachment.contentType == "text/plain"
+    assert (
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2020-12-31T23:50:50-05:00"}
+        ).valueDateTime
+    )
+    assert (
+        inst.content[0].attachment.hash
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueBase64Binary": "OGEzOGYyNjMzMDA2ZmQ1MzUxNDljNDRhM2E3M2YzMTI0MzdiMzQ3OA=="
+            }
+        ).valueBase64Binary
+    )
+    assert inst.content[0].attachment.language == "en"
+    # Don't know how to create unit test
+    # for "content[0].attachment.size",
+    # which is a Integer64
+    assert (
+        inst.content[0].attachment.title
+        == "DocumentReference for Comprehensive fully filled metadata"
+    )
+    assert (
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {"valueUrl": "http://example.com/nowhere.txt"}
+        ).valueUrl
+    )
+    assert inst.content[0].profile[0].valueCoding.code == "urn:ihe:iti:xds-sd:text:2008"
+    assert (
+        inst.content[0].profile[0].valueCoding.system
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUri": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode"
+            }
+        ).valueUri
+    )
+    assert (
+        inst.date
+        == ExternalValidatorModel.model_validate(
+            {"valueInstant": "2020-12-31T23:50:50-05:00"}
+        ).valueInstant
+    )
+    assert inst.description == (
+        "Example of a Comprehensive DocumentReference resource. This "
+        "is fully filled for all mandatory elements and all optional "
+        "elements."
+    )
+    assert inst.event[0].concept.coding[0].code == "ACCTRECEIVABLE"
+    assert (
+        inst.event[0].concept.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActCode"}
+        ).valueUri
+    )
+    assert (
+        inst.event[1].reference.identifier.system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:ietf:rfc:3986"}
+        ).valueUri
+    )
+    assert inst.event[1].reference.identifier.value == (
+        "urn:oid:1.2.840.113556.1.8000.2554.17917.46600.21181.17878.3"
+        "3419.62048.57128.2759"
+    )
+    assert (
+        inst.extension[0].url
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUri": "http://hl7.org/fhir/StructureDefinition/documentreference-sourcepatient"
+            }
+        ).valueUri
+    )
+    assert inst.extension[0].valueReference.reference == "#in-patient"
+    assert inst.facilityType.coding[0].code == "82242000"
+    assert (
+        inst.facilityType.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://snomed.info/sct"}
+        ).valueUri
+    )
+    assert inst.id == "example-comprehensive"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:ietf:rfc:3986"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == (
+        "urn:oid:1.2.840.113556.1.8000.2554.58783.21864.3474.19410.44"
+        "358.58254.41281.46340"
+    )
+    assert (
+        inst.identifier[1].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:ietf:rfc:3986"}
+        ).valueUri
+    )
+    assert inst.identifier[1].value == "urn:uuid:0c287d32-01e3-4d87-9953-9fcc9404eb21"
+    assert inst.meta.security[0].code == "HTEST"
+    assert (
+        inst.meta.security[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert (
+        inst.period.end
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2020-12-31T23:50:50-05:00"}
+        ).valueDateTime
+    )
+    assert (
+        inst.period.start
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2020-12-31T23:50:50-05:00"}
+        ).valueDateTime
+    )
+    assert inst.practiceSetting.coding[0].code == "408467006"
+    assert (
+        inst.practiceSetting.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://snomed.info/sct"}
+        ).valueUri
+    )
+    assert inst.relatesTo[0].code.coding[0].code == "appends"
+    assert (
+        inst.relatesTo[0].code.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://hl7.org/fhir/document-relationship-type"}
+        ).valueUri
+    )
+    assert inst.relatesTo[0].target.reference == "DocumentReference/example"
+    assert inst.securityLabel[0].coding[0].code == "N"
+    assert (
+        inst.securityLabel[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.subject.reference == "Patient/xcda"
+    assert inst.text.status == "extensions"
+    assert inst.type.coding[0].code == "55107-7"
+    assert (
+        inst.type.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://loinc.org"}
+        ).valueUri
+    )
+    assert inst.version == "urn:uuid:0c287d32-01e3-4d87-9953-9fcc9404eb21"
+
+
+def test_documentreference_5(base_settings):
+    """No. 5 tests collection for DocumentReference.
+    Test File: documentreference-example-comprehensive.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"]
+        / "documentreference-example-comprehensive.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_5(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_5(inst2)
+
+
+def impl_documentreference_6(inst):
+    assert (
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2019-03-01T01:02:01+01:00"}
+        ).valueDateTime
+    )
+    assert inst.content[0].attachment.title == "Sample Genomic VCF File"
+    assert (
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {"valueUrl": "http://www.somesystemabc.net/identifiers/files/11114"}
+        ).valueUrl
+    )
+    assert inst.description == (
+        "A sample Document Reference instance representing a VCF file"
+        " that may be used as input or output of a genomic analysis "
+        "pipeline."
+    )
+    assert inst.docStatus == "preliminary"
+    assert inst.id == "genomicVCFfile"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.somesystemabc.net/identifiers/files"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "11116"
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.securityLabel[0].coding[0].code == "R"
+    assert inst.securityLabel[0].coding[0].display == "Restricted"
+    assert (
+        inst.securityLabel[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.text.status == "generated"
+
+
+def test_documentreference_6(base_settings):
+    """No. 6 tests collection for DocumentReference.
+    Test File: DocumentReference-genomicVCFfile.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"] / "DocumentReference-genomicVCFfile.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_6(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_6(inst2)
+
+
+def impl_documentreference_7(inst):
+    assert (
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2019-03-01T01:02:01+01:00"}
+        ).valueDateTime
+    )
+    assert inst.content[0].attachment.title == "WES_FullSequencedRegion_GRCh38"
+    assert (
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUrl": "https://chat.fhir.org/user_uploads/10155/BILYJerATC59WlG15J316BEf/WES_FullSequencedRegion_GRCh38.bed"
+            }
+        ).valueUrl
+    )
+    assert inst.description == (
+        "WES_FullSequencedRegion_GRCh38: A sample Document Reference "
+        "instance representing a BED file that may be used as input "
+        "or output of a genomic analysis pipeline."
+    )
+    assert inst.docStatus == "preliminary"
+    assert inst.id == "WES-FullSequencedRegion-GRCh38"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.somesystemabc.net/identifiers/files"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "11117"
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.securityLabel[0].coding[0].code == "R"
+    assert inst.securityLabel[0].coding[0].display == "Restricted"
+    assert (
+        inst.securityLabel[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.text.status == "generated"
+
+
+def test_documentreference_7(base_settings):
+    """No. 7 tests collection for DocumentReference.
+    Test File: DocumentReference-WES_FullSequencedRegion_GRCh38.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"]
+        / "DocumentReference-WES_FullSequencedRegion_GRCh38.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_7(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_7(inst2)
+
+
+def impl_documentreference_8(inst):
+    assert (
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2019-03-01T01:02:01+01:00"}
+        ).valueDateTime
+    )
+    assert inst.content[0].attachment.title == "SimpleVariantAnalysis_called"
+    assert (
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUrl": "https://chat.fhir.org/user_uploads/10155/jQZWWKs4JO8ZfhfrbsCbbMUA/SimpleVariantAnalysis_called.bed"
+            }
+        ).valueUrl
+    )
+    assert inst.description == (
+        "SimpleVariantAnalysis_called: A sample Document Reference "
+        "instance representing a BED file that may be used as input "
+        "or output of a genomic analysis pipeline."
+    )
+    assert inst.docStatus == "preliminary"
+    assert inst.id == "SimpleVariantAnalysis-called"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.somesystemabc.net/identifiers/files"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "11118"
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.securityLabel[0].coding[0].code == "R"
+    assert inst.securityLabel[0].coding[0].display == "Restricted"
+    assert (
+        inst.securityLabel[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.text.status == "generated"
+
+
+def test_documentreference_8(base_settings):
+    """No. 8 tests collection for DocumentReference.
+    Test File: DocumentReference-SimpleVariantAnalysis_called.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"]
+        / "DocumentReference-SimpleVariantAnalysis_called.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_8(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_8(inst2)
+
+
+def impl_documentreference_9(inst):
+    assert (
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2019-03-01T01:02:01+01:00"}
+        ).valueDateTime
+    )
+    assert inst.content[0].attachment.title == "genomicVCFfile_simple"
+    assert (
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUrl": "https://chat.fhir.org/user_uploads/10155/gdL90-np7lJjGwUxeARapUHB/genomicVCFFile_simple.vcf"
+            }
+        ).valueUrl
+    )
+    assert inst.description == (
+        "genomicVCFfile_simple: A sample Document Reference instance "
+        "representing a VCF file that may be used as input or output "
+        "of a genomic analysis pipeline."
+    )
+    assert inst.docStatus == "preliminary"
+    assert inst.id == "genomicVCFfile-simple"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.somesystemabc.net/identifiers/files"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "11119"
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.securityLabel[0].coding[0].code == "R"
+    assert inst.securityLabel[0].coding[0].display == "Restricted"
+    assert (
+        inst.securityLabel[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.text.status == "generated"
+
+
+def test_documentreference_9(base_settings):
+    """No. 9 tests collection for DocumentReference.
+    Test File: DocumentReference-genomicVCFfile_simple.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"]
+        / "DocumentReference-genomicVCFfile_simple.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_9(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_9(inst2)
+
+
+def impl_documentreference_10(inst):
+    assert (
+        inst.content[0].attachment.creation
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2021-01-01T01:01:01+01:00"}
+        ).valueDateTime
+    )
+    assert inst.content[0].attachment.title == "Sample Genomic File"
+    assert (
+        inst.content[0].attachment.url
+        == ExternalValidatorModel.model_validate(
+            {"valueUrl": "http://www.somesystemabc.net/identifiers/files/11112"}
+        ).valueUrl
+    )
+    assert inst.description == (
+        "A sample Document Reference instance representing a generic "
+        "genomic file that may ber used as input or output of a "
+        "genomic analysis pipeline."
+    )
+    assert inst.docStatus == "preliminary"
+    assert inst.id == "genomicFile2"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.somesystemabc.net/identifiers/files"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "11112"
+    assert inst.meta.tag[0].code == "HTEST"
+    assert inst.meta.tag[0].display == "test health data"
+    assert (
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
+    )
+    assert inst.securityLabel[0].coding[0].code == "R"
+    assert inst.securityLabel[0].coding[0].display == "Restricted"
+    assert (
+        inst.securityLabel[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-Confidentiality"}
+        ).valueUri
+    )
+    assert inst.status == "current"
+    assert inst.subject.display == "Jane Doe"
+    assert inst.subject.reference == "Patient/denovoMother"
+    assert inst.text.status == "generated"
+
+
+def test_documentreference_10(base_settings):
+    """No. 10 tests collection for DocumentReference.
+    Test File: DocumentReference-genomicFile2.json
+    """
+    filename = (
+        base_settings["unittest_data_dir"] / "DocumentReference-genomicFile2.json"
+    )
+    inst = documentreference.DocumentReference.model_validate_json(
+        filename.read_bytes()
+    )
+    assert "DocumentReference" == inst.get_resource_type()
+
+    impl_documentreference_10(inst)
+
+    # testing reverse by generating data from itself and create again.
+    data = inst.model_dump()
+    assert "DocumentReference" == data["resourceType"]
+
+    inst2 = documentreference.DocumentReference(**data)
+    impl_documentreference_10(inst2)

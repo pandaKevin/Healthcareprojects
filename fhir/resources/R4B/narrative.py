@@ -1,0 +1,90 @@
+"""
+Profile: http://hl7.org/fhir/StructureDefinition/Narrative
+Release: R4B
+Version: 4.3.0
+Build ID: c475c22
+Last updated: 2022-05-28T12:47:40.239+10:00
+"""
+
+from __future__ import annotations as _annotations
+
+import typing
+
+from pydantic import Field
+
+from . import element, fhirtypes
+
+
+class Narrative(element.Element):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Human-readable summary of the resource (essential clinical and business
+    information).
+    A human-readable summary of the resource conveying the essential clinical
+    and business information for the resource.
+    """
+
+    __resource_type__ = "Narrative"
+
+    div: fhirtypes.XhtmlType | None = Field(
+        default=None,
+        alias="div",
+        title="Limited xhtml content",
+        description="The actual narrative content, a stripped down version of XHTML.",
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
+    )
+    div__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_div", title="Extension field for ``div``."
+    )
+
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="status",
+        title="generated | extensions | additional | empty",
+        description=(
+            "The status of the narrative - whether it's entirely generated (from "
+            "just the defined data or the extensions too), or whether a human "
+            "authored it and it may contain additional data."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["generated", "extensions", "additional", "empty"],
+        },
+    )
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Narrative`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "status", "div"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Narrative`` according to specification,
+        with preserving the original sequence order.
+        """
+        return []
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("div", "div__ext"), ("status", "status__ext")]
+        return required_fields

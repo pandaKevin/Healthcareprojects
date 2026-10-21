@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Schedule
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -22,71 +24,96 @@ class Schedule(domainresource.DomainResource):
     appointments.
     """
 
-    resource_type = Field("Schedule", const=True)
+    __resource_type__ = "Schedule"
 
-    active: bool = Field(
-        None,
+    active: bool | None = Field(
+        default=None,
         alias="active",
         title="Whether this schedule is in active use",
         description=(
             "Whether this schedule record is in active use or should not be used "
             "(such as was entered in error)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    active__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_active", title="Extension field for ``active``."
+    active__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_active", title="Extension field for ``active``."
     )
 
     actor: typing.List[fhirtypes.ReferenceType] = Field(
-        ...,
+        default=...,
         alias="actor",
         title="Resource(s) that availability information is being provided for",
         description=(
             "Slots that reference this schedule resource provide the availability "
             "details to these referenced resource(s)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Patient",
-            "Practitioner",
-            "PractitionerRole",
-            "RelatedPerson",
-            "Device",
-            "HealthcareService",
-            "Location",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Patient",
+                "Practitioner",
+                "PractitionerRole",
+                "CareTeam",
+                "RelatedPerson",
+                "Device",
+                "HealthcareService",
+                "Location",
+            ],
+        },
     )
 
-    comment: fhirtypes.String = Field(
-        None,
+    comment: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="comment",
         title="Comments on availability",
         description=(
             "Comments on the availability to describe any extended information. "
             "Such as custom constraints on the slots that may be associated."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    comment__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_comment", title="Extension field for ``comment``."
+    comment__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_comment", title="Extension field for ``comment``."
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="External Ids for this item",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    planningHorizon: fhirtypes.PeriodType = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="name",
+        title="Human-readable label",
+        description=(
+            "Further description of the schedule as it would be presented to a "
+            "consumer while searching."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
+    )
+
+    planningHorizon: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="planningHorizon",
         title="Period of time covered by schedule",
         description=(
@@ -96,48 +123,58 @@ class Schedule(domainresource.DomainResource):
             "are currently accepting appointments. This does not define a "
             '"template" for planning outside these dates.'
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    serviceCategory: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    serviceCategory: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="serviceCategory",
         title="High-level category",
         description=(
             "A broad categorization of the service that is to be performed during "
             "this appointment."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    serviceType: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    serviceType: typing.List[fhirtypes.CodeableReferenceType] | None = Field(
+        default=None,
         alias="serviceType",
         title="Specific service",
         description="The specific service that is to be performed during this appointment.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["HealthcareService"],
+        },
     )
 
-    specialty: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    specialty: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="specialty",
         title="Type of specialty needed",
         description=(
             "The specialty of a practitioner that would be required to perform the "
             "service requested in this appointment."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Schedule`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Schedule`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -153,7 +190,28 @@ class Schedule(domainresource.DomainResource):
             "serviceCategory",
             "serviceType",
             "specialty",
+            "name",
             "actor",
             "planningHorizon",
             "comment",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Schedule`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "identifier",
+            "active",
+            "serviceCategory",
+            "serviceType",
+            "specialty",
+            "name",
+            "actor",
+            "planningHorizon",
         ]

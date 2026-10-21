@@ -1,19 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Extension
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
+from pydantic import Field
 
-from . import element, fhirtypes
+from . import datatype, fhirtypes
 
 
-class Extension(element.Element):
+class Extension(datatype.DataType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -22,776 +24,891 @@ class Extension(element.Element):
     Optional Extension Element - found in all resources.
     """
 
-    resource_type = Field("Extension", const=True)
+    __resource_type__ = "Extension"
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title="identifies the meaning of the extension",
         description=(
             "Source of the definition for the extension code - a logical name or a "
             "URL."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
 
-    valueAddress: fhirtypes.AddressType = Field(
-        None,
+    valueAddress: fhirtypes.AddressType | None = Field(
+        default=None,
         alias="valueAddress",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueAge: fhirtypes.AgeType = Field(
-        None,
+    valueAge: fhirtypes.AgeType | None = Field(
+        default=None,
         alias="valueAge",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueAnnotation: fhirtypes.AnnotationType = Field(
-        None,
+    valueAnnotation: fhirtypes.AnnotationType | None = Field(
+        default=None,
         alias="valueAnnotation",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueAttachment: fhirtypes.AttachmentType = Field(
-        None,
+    valueAttachment: fhirtypes.AttachmentType | None = Field(
+        default=None,
         alias="valueAttachment",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueBase64Binary: fhirtypes.Base64Binary = Field(
-        None,
+    valueAvailability: fhirtypes.AvailabilityType | None = Field(
+        default=None,
+        alias="valueAvailability",
+        title="Value of extension",
+        description=(
+            "Value of extension - must be one of a constrained set of the data "
+            "types (see [Extensibility](extensibility.html) for a list)."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
+    )
+
+    valueBase64Binary: fhirtypes.Base64BinaryType | None = Field(
+        default=None,
         alias="valueBase64Binary",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueBoolean: bool = Field(
-        None,
+    valueBoolean: bool | None = Field(
+        default=None,
         alias="valueBoolean",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueCanonical: fhirtypes.Canonical = Field(
-        None,
+    valueCanonical: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="valueCanonical",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueCode: fhirtypes.Code = Field(
-        None,
+    valueCode: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="valueCode",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    valueCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="valueCodeableConcept",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueCoding: fhirtypes.CodingType = Field(
-        None,
+    valueCodeableReference: fhirtypes.CodeableReferenceType | None = Field(
+        default=None,
+        alias="valueCodeableReference",
+        title="Value of extension",
+        description=(
+            "Value of extension - must be one of a constrained set of the data "
+            "types (see [Extensibility](extensibility.html) for a list)."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
+    )
+
+    valueCoding: fhirtypes.CodingType | None = Field(
+        default=None,
         alias="valueCoding",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueContactDetail: fhirtypes.ContactDetailType = Field(
-        None,
+    valueContactDetail: fhirtypes.ContactDetailType | None = Field(
+        default=None,
         alias="valueContactDetail",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueContactPoint: fhirtypes.ContactPointType = Field(
-        None,
+    valueContactPoint: fhirtypes.ContactPointType | None = Field(
+        default=None,
         alias="valueContactPoint",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueContributor: fhirtypes.ContributorType = Field(
-        None,
-        alias="valueContributor",
-        title="Value of extension",
-        description=(
-            "Value of extension - must be one of a constrained set of the data "
-            "types (see [Extensibility](extensibility.html) for a list)."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
-    )
-
-    valueCount: fhirtypes.CountType = Field(
-        None,
+    valueCount: fhirtypes.CountType | None = Field(
+        default=None,
         alias="valueCount",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueDataRequirement: fhirtypes.DataRequirementType = Field(
-        None,
+    valueDataRequirement: fhirtypes.DataRequirementType | None = Field(
+        default=None,
         alias="valueDataRequirement",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueDate: fhirtypes.Date = Field(
-        None,
+    valueDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="valueDate",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueDateTime: fhirtypes.DateTime = Field(
-        None,
+    valueDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="valueDateTime",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueDecimal: fhirtypes.Decimal = Field(
-        None,
+    valueDecimal: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="valueDecimal",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueDistance: fhirtypes.DistanceType = Field(
-        None,
+    valueDistance: fhirtypes.DistanceType | None = Field(
+        default=None,
         alias="valueDistance",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueDosage: fhirtypes.DosageType = Field(
-        None,
+    valueDosage: fhirtypes.DosageType | None = Field(
+        default=None,
         alias="valueDosage",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueDuration: fhirtypes.DurationType = Field(
-        None,
+    valueDuration: fhirtypes.DurationType | None = Field(
+        default=None,
         alias="valueDuration",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueExpression: fhirtypes.ExpressionType = Field(
-        None,
+    valueExpression: fhirtypes.ExpressionType | None = Field(
+        default=None,
         alias="valueExpression",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueHumanName: fhirtypes.HumanNameType = Field(
-        None,
+    valueExtendedContactDetail: fhirtypes.ExtendedContactDetailType | None = Field(
+        default=None,
+        alias="valueExtendedContactDetail",
+        title="Value of extension",
+        description=(
+            "Value of extension - must be one of a constrained set of the data "
+            "types (see [Extensibility](extensibility.html) for a list)."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
+    )
+
+    valueHumanName: fhirtypes.HumanNameType | None = Field(
+        default=None,
         alias="valueHumanName",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueId: fhirtypes.Id = Field(
-        None,
+    valueId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="valueId",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueIdentifier: fhirtypes.IdentifierType = Field(
-        None,
+    valueIdentifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="valueIdentifier",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueInstant: fhirtypes.Instant = Field(
-        None,
+    valueInstant: fhirtypes.InstantType | None = Field(
+        default=None,
         alias="valueInstant",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueInteger: fhirtypes.Integer = Field(
-        None,
+    valueInteger: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="valueInteger",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueMarkdown: fhirtypes.Markdown = Field(
-        None,
+    valueInteger64: fhirtypes.Integer64Type | None = Field(
+        default=None,
+        alias="valueInteger64",
+        title="Value of extension",
+        description=(
+            "Value of extension - must be one of a constrained set of the data "
+            "types (see [Extensibility](extensibility.html) for a list)."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
+    )
+
+    valueMarkdown: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="valueMarkdown",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueMeta: fhirtypes.MetaType = Field(
-        None,
+    valueMeta: fhirtypes.MetaType | None = Field(
+        default=None,
         alias="valueMeta",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueMoney: fhirtypes.MoneyType = Field(
-        None,
+    valueMoney: fhirtypes.MoneyType | None = Field(
+        default=None,
         alias="valueMoney",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueOid: fhirtypes.Oid = Field(
-        None,
+    valueOid: fhirtypes.OidType | None = Field(
+        default=None,
         alias="valueOid",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueParameterDefinition: fhirtypes.ParameterDefinitionType = Field(
-        None,
+    valueParameterDefinition: fhirtypes.ParameterDefinitionType | None = Field(
+        default=None,
         alias="valueParameterDefinition",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valuePeriod: fhirtypes.PeriodType = Field(
-        None,
+    valuePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="valuePeriod",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valuePositiveInt: fhirtypes.PositiveInt = Field(
-        None,
+    valuePositiveInt: fhirtypes.PositiveIntType | None = Field(
+        default=None,
         alias="valuePositiveInt",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueQuantity: fhirtypes.QuantityType = Field(
-        None,
+    valueQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="valueQuantity",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueRange: fhirtypes.RangeType = Field(
-        None,
+    valueRange: fhirtypes.RangeType | None = Field(
+        default=None,
         alias="valueRange",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueRatio: fhirtypes.RatioType = Field(
-        None,
+    valueRatio: fhirtypes.RatioType | None = Field(
+        default=None,
         alias="valueRatio",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueReference: fhirtypes.ReferenceType = Field(
-        None,
+    valueRatioRange: fhirtypes.RatioRangeType | None = Field(
+        default=None,
+        alias="valueRatioRange",
+        title="Value of extension",
+        description=(
+            "Value of extension - must be one of a constrained set of the data "
+            "types (see [Extensibility](extensibility.html) for a list)."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
+    )
+
+    valueReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="valueReference",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueRelatedArtifact: fhirtypes.RelatedArtifactType = Field(
-        None,
+    valueRelatedArtifact: fhirtypes.RelatedArtifactType | None = Field(
+        default=None,
         alias="valueRelatedArtifact",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueSampledData: fhirtypes.SampledDataType = Field(
-        None,
+    valueSampledData: fhirtypes.SampledDataType | None = Field(
+        default=None,
         alias="valueSampledData",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueSignature: fhirtypes.SignatureType = Field(
-        None,
+    valueSignature: fhirtypes.SignatureType | None = Field(
+        default=None,
         alias="valueSignature",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueString: fhirtypes.String = Field(
-        None,
+    valueString: fhirtypes.StringType | None = Field(
+        default=None,
         alias="valueString",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueTime: fhirtypes.Time = Field(
-        None,
+    valueTime: fhirtypes.TimeType | None = Field(
+        default=None,
         alias="valueTime",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueTiming: fhirtypes.TimingType = Field(
-        None,
+    valueTiming: fhirtypes.TimingType | None = Field(
+        default=None,
         alias="valueTiming",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueTriggerDefinition: fhirtypes.TriggerDefinitionType = Field(
-        None,
+    valueTriggerDefinition: fhirtypes.TriggerDefinitionType | None = Field(
+        default=None,
         alias="valueTriggerDefinition",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueUnsignedInt: fhirtypes.UnsignedInt = Field(
-        None,
+    valueUnsignedInt: fhirtypes.UnsignedIntType | None = Field(
+        default=None,
         alias="valueUnsignedInt",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueUri: fhirtypes.Uri = Field(
-        None,
+    valueUri: fhirtypes.UriType | None = Field(
+        default=None,
         alias="valueUri",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueUrl: fhirtypes.Url = Field(
-        None,
+    valueUrl: fhirtypes.UrlType | None = Field(
+        default=None,
         alias="valueUrl",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueUsageContext: fhirtypes.UsageContextType = Field(
-        None,
+    valueUsageContext: fhirtypes.UsageContextType | None = Field(
+        default=None,
         alias="valueUsageContext",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
-    valueUuid: fhirtypes.Uuid = Field(
-        None,
+    valueUuid: fhirtypes.UuidType | None = Field(
+        default=None,
         alias="valueUuid",
         title="Value of extension",
         description=(
             "Value of extension - must be one of a constrained set of the data "
             "types (see [Extensibility](extensibility.html) for a list)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": False,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Extension`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Extension`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -807,6 +924,7 @@ class Extension(element.Element):
             "valueId",
             "valueInstant",
             "valueInteger",
+            "valueInteger64",
             "valueMarkdown",
             "valueOid",
             "valuePositiveInt",
@@ -821,6 +939,7 @@ class Extension(element.Element):
             "valueAnnotation",
             "valueAttachment",
             "valueCodeableConcept",
+            "valueCodeableReference",
             "valueCoding",
             "valueContactPoint",
             "valueCount",
@@ -833,26 +952,32 @@ class Extension(element.Element):
             "valueQuantity",
             "valueRange",
             "valueRatio",
+            "valueRatioRange",
             "valueReference",
             "valueSampledData",
             "valueSignature",
             "valueTiming",
             "valueContactDetail",
-            "valueContributor",
             "valueDataRequirement",
             "valueExpression",
             "valueParameterDefinition",
             "valueRelatedArtifact",
             "valueTriggerDefinition",
             "valueUsageContext",
+            "valueAvailability",
+            "valueExtendedContactDetail",
             "valueDosage",
             "valueMeta",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1136(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Extension`` according to specification,
+        with preserving the original sequence order.
+        """
+        return []
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -871,15 +996,16 @@ class Extension(element.Element):
                 "valueAge",
                 "valueAnnotation",
                 "valueAttachment",
+                "valueAvailability",
                 "valueBase64Binary",
                 "valueBoolean",
                 "valueCanonical",
                 "valueCode",
                 "valueCodeableConcept",
+                "valueCodeableReference",
                 "valueCoding",
                 "valueContactDetail",
                 "valueContactPoint",
-                "valueContributor",
                 "valueCount",
                 "valueDataRequirement",
                 "valueDate",
@@ -889,11 +1015,13 @@ class Extension(element.Element):
                 "valueDosage",
                 "valueDuration",
                 "valueExpression",
+                "valueExtendedContactDetail",
                 "valueHumanName",
                 "valueId",
                 "valueIdentifier",
                 "valueInstant",
                 "valueInteger",
+                "valueInteger64",
                 "valueMarkdown",
                 "valueMeta",
                 "valueMoney",
@@ -904,6 +1032,7 @@ class Extension(element.Element):
                 "valueQuantity",
                 "valueRange",
                 "valueRatio",
+                "valueRatioRange",
                 "valueReference",
                 "valueRelatedArtifact",
                 "valueSampledData",
@@ -919,23 +1048,10 @@ class Extension(element.Element):
                 "valueUuid",
             ]
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
+        return one_of_many_fields
 
-        return values
+    def get_required_fields(
+        self,
+    ) -> typing.List[typing.Tuple[str, typing.Optional[str]]]:
+        required_fields = [("url", None)]
+        return required_fields

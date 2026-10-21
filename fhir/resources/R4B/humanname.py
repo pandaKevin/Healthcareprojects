@@ -1,0 +1,180 @@
+"""
+Profile: http://hl7.org/fhir/StructureDefinition/HumanName
+Release: R4B
+Version: 4.3.0
+Build ID: c475c22
+Last updated: 2022-05-28T12:47:40.239+10:00
+"""
+
+from __future__ import annotations as _annotations
+
+import typing
+
+from pydantic import Field
+
+from . import element, fhirtypes
+
+
+class HumanName(element.Element):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Name of a human - parts and usage.
+    A human's name with the ability to identify parts and usage.
+    """
+
+    __resource_type__ = "HumanName"
+
+    family: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="family",
+        title="Family name (often called 'Surname')",
+        description=(
+            "The part of a name that links to the genealogy. In some cultures (e.g."
+            " Eritrea) the family name of a son is the first name of his father."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    family__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_family", title="Extension field for ``family``."
+    )
+
+    given: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
+        alias="given",
+        title="Given names (not always 'first'). Includes middle names",
+        description="Given name.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    given__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_given", title="Extension field for ``given``."
+    )
+
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="period",
+        title="Time period when name was/is in use",
+        description=(
+            "Indicates the period of time when this name was valid for the named "
+            "person."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    prefix: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
+        alias="prefix",
+        title="Parts that come before the name",
+        description=(
+            "Part of the name that is acquired as a title due to academic, legal, "
+            "employment or nobility status, etc. and that appears at the start of "
+            "the name."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    prefix__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_prefix", title="Extension field for ``prefix``."
+    )
+
+    suffix: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
+        alias="suffix",
+        title="Parts that come after the name",
+        description=(
+            "Part of the name that is acquired as a title due to academic, legal, "
+            "employment or nobility status, etc. and that appears at the end of the"
+            " name."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    suffix__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_suffix", title="Extension field for ``suffix``."
+    )
+
+    text: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="text",
+        title="Text representation of the full name",
+        description=(
+            "Specifies the entire name as it should be displayed e.g. on an "
+            "application UI. This may be provided instead of or as well as the "
+            "specific parts."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    text__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_text", title="Extension field for ``text``."
+    )
+
+    use: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="use",
+        title="usual | official | temp | nickname | anonymous | old | maiden",
+        description="Identifies the purpose for this name.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "usual",
+                "official",
+                "temp",
+                "nickname",
+                "anonymous",
+                "old",
+                "maiden",
+            ],
+        },
+    )
+    use__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_use", title="Extension field for ``use``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``HumanName`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "use",
+            "text",
+            "family",
+            "given",
+            "prefix",
+            "suffix",
+            "period",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``HumanName`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["use", "text", "family", "given", "prefix", "suffix", "period"]

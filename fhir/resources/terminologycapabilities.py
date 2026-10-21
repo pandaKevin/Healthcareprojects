@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/TerminologyCapabilities
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -27,40 +27,44 @@ class TerminologyCapabilities(domainresource.DomainResource):
     implementation.
     """
 
-    resource_type = Field("TerminologyCapabilities", const=True)
+    __resource_type__ = "TerminologyCapabilities"
 
-    closure: fhirtypes.TerminologyCapabilitiesClosureType = Field(
-        None,
+    closure: fhirtypes.TerminologyCapabilitiesClosureType | None = Field(
+        default=None,
         alias="closure",
         title=(
             "Information about the [ConceptMap/$closure](conceptmap-operation-"
             "closure.html) operation"
         ),
         description="Whether the $closure operation is supported.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    codeSearch: fhirtypes.Code = Field(
-        None,
+    codeSearch: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="codeSearch",
-        title="explicit | all",
+        title="in-compose | in-expansion | in-compose-or-expansion",
         description=(
             "The degree to which the server supports the code search parameter on "
             "ValueSet, if it is supported."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["explicit", "all"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["in-compose", "in-expansion", "in-compose-or-expansion"],
+        },
     )
-    codeSearch__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_codeSearch", title="Extension field for ``codeSearch``."
+    codeSearch__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_codeSearch", title="Extension field for ``codeSearch``."
     )
 
-    codeSystem: typing.List[fhirtypes.TerminologyCapabilitiesCodeSystemType] = Field(
-        None,
+    codeSystem: typing.List[
+        fhirtypes.TerminologyCapabilitiesCodeSystemType
+    ] | None = Field(
+        default=None,
         alias="codeSystem",
         title="A code system supported by the server",
         description=(
@@ -68,24 +72,27 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "a no code system URL, then this declares the general assumptions a "
             "client can make about support for any CodeSystem resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    contact: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="contact",
         title="Contact details for the publisher",
         description=(
             "Contact details to assist a user in finding and communicating with the"
             " publisher."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    copyright: fhirtypes.Markdown = Field(
-        None,
+    copyright: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="copyright",
         title="Use and/or publishing restrictions",
         description=(
@@ -93,34 +100,58 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "its contents. Copyright statements are generally legal restrictions on"
             " the use and publishing of the terminology capabilities."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_copyright", title="Extension field for ``copyright``."
+    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_copyright", title="Extension field for ``copyright``."
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    copyrightLabel: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="copyrightLabel",
+        title="Copyright holder and year(s)",
+        description=(
+            "A short string (<50 characters), suitable for inclusion in a page "
+            "footer that identifies the copyright holder, effective period, and "
+            "optionally whether rights are resctricted. (e.g. 'All rights "
+            "reserved', 'Some rights reserved')."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    copyrightLabel__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_copyrightLabel",
+        title="Extension field for ``copyrightLabel``.",
+    )
+
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="Date last changed",
         description=(
             "The date  (and optionally time) when the terminology capabilities was "
-            "published. The date must change when the business version changes and "
-            "it must change if the status code changes. In addition, it should "
-            "change when the substantive content of the terminology capabilities "
-            "changes."
+            "last significantly changed. The date must change when the business "
+            "version changes and it must change if the status code changes. In "
+            "addition, it should change when the substantive content of the "
+            "terminology capabilities changes."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    description: fhirtypes.Markdown = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="description",
         title="Natural language description of the terminology capabilities",
         description=(
@@ -130,27 +161,29 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "actual solution, for example as a formal expression of requirements as"
             " part of an RFP."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    expansion: fhirtypes.TerminologyCapabilitiesExpansionType = Field(
-        None,
+    expansion: fhirtypes.TerminologyCapabilitiesExpansionType | None = Field(
+        default=None,
         alias="expansion",
         title=(
             "Information about the [ValueSet/$expand](valueset-operation-"
             "expand.html) operation"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    experimental: bool = Field(
-        None,
+    experimental: bool | None = Field(
+        default=None,
         alias="experimental",
         title="For testing purposes, not real usage",
         description=(
@@ -158,15 +191,34 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "authored for testing purposes (or education/evaluation/marketing) and "
             "is not intended to be used for genuine usage."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_experimental", title="Extension field for ``experimental``."
+    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_experimental",
+        title="Extension field for ``experimental``.",
     )
 
-    implementation: fhirtypes.TerminologyCapabilitiesImplementationType = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
+        alias="identifier",
+        title="Additional identifier for the terminology capabilities",
+        description=(
+            "A formal identifier that is used to identify this terminology "
+            "capabilities when it is represented in other formats, or referenced in"
+            " a specification, model, design or an instance."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    implementation: fhirtypes.TerminologyCapabilitiesImplementationType | None = Field(
+        default=None,
         alias="implementation",
         title="If this describes a specific instance",
         description=(
@@ -174,24 +226,28 @@ class TerminologyCapabilities(domainresource.DomainResource):
             " terminology capability statement - i.e. a particular installation, "
             "rather than the capabilities of a software program."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    jurisdiction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    jurisdiction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="jurisdiction",
         title="Intended jurisdiction for terminology capabilities (if applicable)",
         description=(
             "A legal or geographic region in which the terminology capabilities is "
             "intended to be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    kind: fhirtypes.Code = Field(
-        None,
+    kind: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="kind",
         title="instance | capability | requirements",
         description=(
@@ -200,31 +256,35 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "instance of software) or a class of implementation (e.g. a desired "
             "purchase)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["instance", "capability", "requirements"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["instance", "capability", "requirements"],
+        },
     )
-    kind__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_kind", title="Extension field for ``kind``."
+    kind__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_kind", title="Extension field for ``kind``."
     )
 
-    lockedDate: bool = Field(
-        None,
+    lockedDate: bool | None = Field(
+        default=None,
         alias="lockedDate",
         title="Whether lockedDate is supported",
         description="Whether the server supports lockedDate.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    lockedDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_lockedDate", title="Extension field for ``lockedDate``."
+    lockedDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_lockedDate", title="Extension field for ``lockedDate``."
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Name for this terminology capabilities (computer friendly)",
         description=(
@@ -232,45 +292,50 @@ class TerminologyCapabilities(domainresource.DomainResource):
             " name should be usable as an identifier for the module by machine "
             "processing applications such as code generation."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    publisher: fhirtypes.String = Field(
-        None,
+    publisher: fhirtypes.StringType | None = Field(
+        default=None,
         alias="publisher",
-        title="Name of the publisher (organization or individual)",
+        title="Name of the publisher/steward (organization or individual)",
         description=(
-            "The name of the organization or individual that published the "
-            "terminology capabilities."
+            "The name of the organization or individual responsible for the release"
+            " and ongoing maintenance of the terminology capabilities."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_publisher", title="Extension field for ``publisher``."
+    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_publisher", title="Extension field for ``publisher``."
     )
 
-    purpose: fhirtypes.Markdown = Field(
-        None,
+    purpose: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="purpose",
         title="Why this terminology capabilities is defined",
         description=(
             "Explanation of why this terminology capabilities is needed and why it "
             "has been designed as it has."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_purpose", title="Extension field for ``purpose``."
+    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_purpose", title="Extension field for ``purpose``."
     )
 
-    software: fhirtypes.TerminologyCapabilitiesSoftwareType = Field(
-        None,
+    software: fhirtypes.TerminologyCapabilitiesSoftwareType | None = Field(
+        default=None,
         alias="software",
         title="Software that is covered by this terminology capability statement",
         description=(
@@ -278,58 +343,65 @@ class TerminologyCapabilities(domainresource.DomainResource):
             " is used when the statement describes the capabilities of a particular"
             " software version, independent of an installation."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | retired | unknown",
         description=(
             "The status of this terminology capabilities. Enables tracking the "
             "life-cycle of the content."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "active", "retired", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "active", "retired", "unknown"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Name for this terminology capabilities (human friendly)",
         description=(
             "A short, descriptive, user-friendly title for the terminology "
             "capabilities."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
-    translation: fhirtypes.TerminologyCapabilitiesTranslationType = Field(
-        None,
+    translation: fhirtypes.TerminologyCapabilitiesTranslationType | None = Field(
+        default=None,
         alias="translation",
         title=(
             "Information about the [ConceptMap/$translate](conceptmap-operation-"
             "translate.html) operation"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title=(
             "Canonical identifier for this terminology capabilities, represented as"
@@ -339,21 +411,23 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "An absolute URI that is used to identify this terminology capabilities"
             " when it is referenced in a specification, model, design or an "
             "instance; also called its canonical identifier. This SHOULD be "
-            "globally unique and SHOULD be a literal address at which at which an "
+            "globally unique and SHOULD be a literal address at which an "
             "authoritative instance of this terminology capabilities is (or will "
             "be) published. This URL can be the target of a canonical reference. It"
             " SHALL remain the same when the terminology capabilities is stored on "
             "different servers."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
-    useContext: typing.List[fhirtypes.UsageContextType] = Field(
-        None,
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
         alias="useContext",
         title="The context that the content is intended to support",
         description=(
@@ -364,24 +438,27 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "indexing and searching for appropriate terminology capabilities "
             "instances."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    validateCode: fhirtypes.TerminologyCapabilitiesValidateCodeType = Field(
-        None,
+    validateCode: fhirtypes.TerminologyCapabilitiesValidateCodeType | None = Field(
+        default=None,
         alias="validateCode",
         title=(
             "Information about the [ValueSet/$validate-code](valueset-operation-"
             "validate-code.html) operation"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    version: fhirtypes.String = Field(
-        None,
+    version: fhirtypes.StringType | None = Field(
+        default=None,
         alias="version",
         title="Business version of the terminology capabilities",
         description=(
@@ -393,18 +470,59 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "managed version is not available. There is also no expectation that "
             "versions can be placed in a lexicographical sequence."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    version__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_version", title="Extension field for ``version``."
+    version__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
+    )
+
+    versionAlgorithmCoding: fhirtypes.CodingType | None = Field(
+        default=None,
+        alias="versionAlgorithmCoding",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+
+    versionAlgorithmString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="versionAlgorithmString",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+    versionAlgorithmString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_versionAlgorithmString",
+        title="Extension field for ``versionAlgorithmString``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilities`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilities`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -416,7 +534,10 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "extension",
             "modifierExtension",
             "url",
+            "identifier",
             "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
             "name",
             "title",
             "status",
@@ -429,6 +550,7 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "jurisdiction",
             "purpose",
             "copyright",
+            "copyrightLabel",
             "kind",
             "software",
             "implementation",
@@ -441,10 +563,38 @@ class TerminologyCapabilities(domainresource.DomainResource):
             "closure",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2602(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilities`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "url",
+            "identifier",
+            "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
+            "name",
+            "title",
+            "status",
+            "experimental",
+            "date",
+            "publisher",
+            "contact",
+            "useContext",
+            "jurisdiction",
+            "copyright",
+            "kind",
+            "software",
+            "implementation",
+            "lockedDate",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -457,52 +607,25 @@ class TerminologyCapabilities(domainresource.DomainResource):
             ("kind", "kind__ext"),
             ("status", "status__ext"),
         ]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
 
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {
+            "versionAlgorithm": ["versionAlgorithmCoding", "versionAlgorithmString"]
+        }
+        return one_of_many_fields
 
 
 class TerminologyCapabilitiesClosure(backboneelement.BackboneElement):
@@ -515,27 +638,35 @@ class TerminologyCapabilitiesClosure(backboneelement.BackboneElement):
     Whether the $closure operation is supported.
     """
 
-    resource_type = Field("TerminologyCapabilitiesClosure", const=True)
+    __resource_type__ = "TerminologyCapabilitiesClosure"
 
-    translation: bool = Field(
-        None,
+    translation: bool | None = Field(
+        default=None,
         alias="translation",
         title="If cross-system closure is supported",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    translation__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_translation", title="Extension field for ``translation``."
+    translation__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_translation", title="Extension field for ``translation``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesClosure`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesClosure`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "translation"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesClosure`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class TerminologyCapabilitiesCodeSystem(backboneelement.BackboneElement):
@@ -549,55 +680,111 @@ class TerminologyCapabilitiesCodeSystem(backboneelement.BackboneElement):
     make about support for any CodeSystem resource.
     """
 
-    resource_type = Field("TerminologyCapabilitiesCodeSystem", const=True)
+    __resource_type__ = "TerminologyCapabilitiesCodeSystem"
 
-    subsumption: bool = Field(
-        None,
+    content: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="content",
+        title="not-present | example | fragment | complete | supplement",
+        description=(
+            "The extent of the content of the code system (the concepts and codes "
+            "it defines) are represented in this resource instance."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "not-present",
+                "example",
+                "fragment",
+                "complete",
+                "supplement",
+            ],
+        },
+    )
+    content__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_content", title="Extension field for ``content``."
+    )
+
+    subsumption: bool | None = Field(
+        default=None,
         alias="subsumption",
         title="Whether subsumption is supported",
         description="True if subsumption is supported for this version of the code system.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    subsumption__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_subsumption", title="Extension field for ``subsumption``."
+    subsumption__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_subsumption", title="Extension field for ``subsumption``."
     )
 
-    uri: fhirtypes.Canonical = Field(
-        None,
+    uri: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="uri",
-        title="URI for the Code System",
+        title="Canonical identifier for the code system, represented as a URI",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["CodeSystem"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["CodeSystem"],
+        },
     )
-    uri__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_uri", title="Extension field for ``uri``."
+    uri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_uri", title="Extension field for ``uri``."
     )
 
     version: typing.List[
         fhirtypes.TerminologyCapabilitiesCodeSystemVersionType
-    ] = Field(
-        None,
+    ] | None = Field(
+        default=None,
         alias="version",
         title="Version of Code System supported",
         description=(
             "For the code system, a list of versions that are supported by the "
             "server."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesCodeSystem`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesCodeSystem`` according to specification,
+        with preserving the original sequence order.
         """
-        return ["id", "extension", "modifierExtension", "uri", "version", "subsumption"]
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "uri",
+            "version",
+            "content",
+            "subsumption",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesCodeSystem`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "content"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("content", "content__ext")]
+        return required_fields
 
 
 class TerminologyCapabilitiesCodeSystemVersion(backboneelement.BackboneElement):
@@ -609,87 +796,101 @@ class TerminologyCapabilitiesCodeSystemVersion(backboneelement.BackboneElement):
     For the code system, a list of versions that are supported by the server.
     """
 
-    resource_type = Field("TerminologyCapabilitiesCodeSystemVersion", const=True)
+    __resource_type__ = "TerminologyCapabilitiesCodeSystemVersion"
 
-    code: fhirtypes.String = Field(
-        None,
+    code: fhirtypes.StringType | None = Field(
+        default=None,
         alias="code",
         title="Version identifier for this version",
         description=(
             "For version-less code systems, there should be a single version with "
             "no identifier."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    code__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_code", title="Extension field for ``code``."
+    code__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_code", title="Extension field for ``code``."
     )
 
-    compositional: bool = Field(
-        None,
+    compositional: bool | None = Field(
+        default=None,
         alias="compositional",
         title="If compositional grammar is supported",
         description="If the compositional grammar defined by the code system is supported.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    compositional__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_compositional", title="Extension field for ``compositional``."
+    compositional__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_compositional",
+        title="Extension field for ``compositional``.",
     )
 
     filter: typing.List[
         fhirtypes.TerminologyCapabilitiesCodeSystemVersionFilterType
-    ] = Field(
-        None,
+    ] | None = Field(
+        default=None,
         alias="filter",
         title="Filter Properties supported",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    isDefault: bool = Field(
-        None,
+    isDefault: bool | None = Field(
+        default=None,
         alias="isDefault",
         title="If this is the default version for this code system",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    isDefault__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_isDefault", title="Extension field for ``isDefault``."
+    isDefault__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_isDefault", title="Extension field for ``isDefault``."
     )
 
-    language: typing.List[fhirtypes.Code] = Field(
-        None,
+    language: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="language",
         title="Language Displays supported",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
     language__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_language", title="Extension field for ``language``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_language", title="Extension field for ``language``."
+    )
 
-    property: typing.List[fhirtypes.Code] = Field(
-        None,
+    property: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="property",
         title="Properties supported for $lookup",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
     property__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_property", title="Extension field for ``property``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_property", title="Extension field for ``property``."
+    )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesCodeSystemVersion`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesCodeSystemVersion`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -703,6 +904,13 @@ class TerminologyCapabilitiesCodeSystemVersion(backboneelement.BackboneElement):
             "property",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesCodeSystemVersion`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "code", "isDefault"]
+
 
 class TerminologyCapabilitiesCodeSystemVersionFilter(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -712,46 +920,52 @@ class TerminologyCapabilitiesCodeSystemVersionFilter(backboneelement.BackboneEle
     Filter Properties supported.
     """
 
-    resource_type = Field("TerminologyCapabilitiesCodeSystemVersionFilter", const=True)
+    __resource_type__ = "TerminologyCapabilitiesCodeSystemVersionFilter"
 
-    code: fhirtypes.Code = Field(
-        None,
+    code: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="code",
         title="Code of the property supported",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    code__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_code", title="Extension field for ``code``."
+    code__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_code", title="Extension field for ``code``."
     )
 
-    op: typing.List[fhirtypes.Code] = Field(
-        None,
+    op: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="op",
         title="Operations supported for the property",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    op__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_op", title="Extension field for ``op``.")
+    op__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_op", title="Extension field for ``op``."
+    )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesCodeSystemVersionFilter`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesCodeSystemVersionFilter`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "code", "op"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_4981(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesCodeSystemVersionFilter`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -760,52 +974,7 @@ class TerminologyCapabilitiesCodeSystemVersionFilter(backboneelement.BackboneEle
         the primitive value is not present.
         """
         required_fields = [("code", "code__ext"), ("op", "op__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TerminologyCapabilitiesExpansion(backboneelement.BackboneElement):
@@ -817,72 +986,79 @@ class TerminologyCapabilitiesExpansion(backboneelement.BackboneElement):
     operation.
     """
 
-    resource_type = Field("TerminologyCapabilitiesExpansion", const=True)
+    __resource_type__ = "TerminologyCapabilitiesExpansion"
 
-    hierarchical: bool = Field(
-        None,
+    hierarchical: bool | None = Field(
+        default=None,
         alias="hierarchical",
         title="Whether the server can return nested value sets",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    hierarchical__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_hierarchical", title="Extension field for ``hierarchical``."
+    hierarchical__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_hierarchical",
+        title="Extension field for ``hierarchical``.",
     )
 
-    incomplete: bool = Field(
-        None,
+    incomplete: bool | None = Field(
+        default=None,
         alias="incomplete",
         title="Allow request for incomplete expansions?",
-        description="Allow request for incomplete expansions?",
-        # if property is element of this resource.
-        element_property=True,
+        description="True if requests for incomplete expansions are allowed.",
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    incomplete__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_incomplete", title="Extension field for ``incomplete``."
+    incomplete__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_incomplete", title="Extension field for ``incomplete``."
     )
 
-    paging: bool = Field(
-        None,
+    paging: bool | None = Field(
+        default=None,
         alias="paging",
         title="Whether the server supports paging on expansion",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    paging__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_paging", title="Extension field for ``paging``."
+    paging__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_paging", title="Extension field for ``paging``."
     )
 
     parameter: typing.List[
         fhirtypes.TerminologyCapabilitiesExpansionParameterType
-    ] = Field(
-        None,
+    ] | None = Field(
+        default=None,
         alias="parameter",
         title="Supported expansion parameter",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    textFilter: fhirtypes.Markdown = Field(
-        None,
+    textFilter: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="textFilter",
         title="Documentation about text searching works",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    textFilter__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_textFilter", title="Extension field for ``textFilter``."
+    textFilter__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_textFilter", title="Extension field for ``textFilter``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesExpansion`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesExpansion`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -895,6 +1071,13 @@ class TerminologyCapabilitiesExpansion(backboneelement.BackboneElement):
             "textFilter",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesExpansion`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
 
 class TerminologyCapabilitiesExpansionParameter(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -904,45 +1087,53 @@ class TerminologyCapabilitiesExpansionParameter(backboneelement.BackboneElement)
     Supported expansion parameter.
     """
 
-    resource_type = Field("TerminologyCapabilitiesExpansionParameter", const=True)
+    __resource_type__ = "TerminologyCapabilitiesExpansionParameter"
 
-    documentation: fhirtypes.String = Field(
-        None,
+    documentation: fhirtypes.StringType | None = Field(
+        default=None,
         alias="documentation",
         title="Description of support for parameter",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    documentation__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_documentation", title="Extension field for ``documentation``."
+    documentation__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_documentation",
+        title="Extension field for ``documentation``.",
     )
 
-    name: fhirtypes.Code = Field(
-        None,
+    name: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="name",
-        title="Expansion Parameter name",
+        title="Name of the supported expansion parameter",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesExpansionParameter`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesExpansionParameter`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "name", "documentation"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_4479(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesExpansionParameter`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -951,52 +1142,7 @@ class TerminologyCapabilitiesExpansionParameter(backboneelement.BackboneElement)
         the primitive value is not present.
         """
         required_fields = [("name", "name__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TerminologyCapabilitiesImplementation(backboneelement.BackboneElement):
@@ -1010,48 +1156,56 @@ class TerminologyCapabilitiesImplementation(backboneelement.BackboneElement):
     than the capabilities of a software program.
     """
 
-    resource_type = Field("TerminologyCapabilitiesImplementation", const=True)
+    __resource_type__ = "TerminologyCapabilitiesImplementation"
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Describes this specific instance",
         description=(
             "Information about the specific installation that this terminology "
             "capability statement relates to."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    url: fhirtypes.Url = Field(
-        None,
+    url: fhirtypes.UrlType | None = Field(
+        default=None,
         alias="url",
         title="Base URL for the implementation",
         description="An absolute base URL for the implementation.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesImplementation`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesImplementation`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "description", "url"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_4075(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesImplementation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "description", "url"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1060,52 +1214,7 @@ class TerminologyCapabilitiesImplementation(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("description", "description__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TerminologyCapabilitiesSoftware(backboneelement.BackboneElement):
@@ -1119,45 +1228,53 @@ class TerminologyCapabilitiesSoftware(backboneelement.BackboneElement):
     version, independent of an installation.
     """
 
-    resource_type = Field("TerminologyCapabilitiesSoftware", const=True)
+    __resource_type__ = "TerminologyCapabilitiesSoftware"
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="A name the software is known by",
         description="Name the software is known by.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    version: fhirtypes.String = Field(
-        None,
+    version: fhirtypes.StringType | None = Field(
+        default=None,
         alias="version",
         title="Version covered by this statement",
         description="The version identifier for the software covered by this statement.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    version__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_version", title="Extension field for ``version``."
+    version__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesSoftware`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesSoftware`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "name", "version"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3431(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesSoftware`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "name", "version"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1166,52 +1283,7 @@ class TerminologyCapabilitiesSoftware(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("name", "name__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TerminologyCapabilitiesTranslation(backboneelement.BackboneElement):
@@ -1223,33 +1295,38 @@ class TerminologyCapabilitiesTranslation(backboneelement.BackboneElement):
     translate.html) operation.
     """
 
-    resource_type = Field("TerminologyCapabilitiesTranslation", const=True)
+    __resource_type__ = "TerminologyCapabilitiesTranslation"
 
-    needsMap: bool = Field(
-        None,
+    needsMap: bool | None = Field(
+        default=None,
         alias="needsMap",
         title="Whether the client must identify the map",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    needsMap__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_needsMap", title="Extension field for ``needsMap``."
+    needsMap__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_needsMap", title="Extension field for ``needsMap``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesTranslation`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesTranslation`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "needsMap"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3764(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesTranslation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1258,52 +1335,7 @@ class TerminologyCapabilitiesTranslation(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("needsMap", "needsMap__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TerminologyCapabilitiesValidateCode(backboneelement.BackboneElement):
@@ -1315,33 +1347,40 @@ class TerminologyCapabilitiesValidateCode(backboneelement.BackboneElement):
     validate-code.html) operation.
     """
 
-    resource_type = Field("TerminologyCapabilitiesValidateCode", const=True)
+    __resource_type__ = "TerminologyCapabilitiesValidateCode"
 
-    translations: bool = Field(
-        None,
+    translations: bool | None = Field(
+        default=None,
         alias="translations",
         title="Whether translations are validated",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    translations__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_translations", title="Extension field for ``translations``."
+    translations__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_translations",
+        title="Extension field for ``translations``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TerminologyCapabilitiesValidateCode`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TerminologyCapabilitiesValidateCode`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "translations"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3777(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TerminologyCapabilitiesValidateCode`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1350,49 +1389,4 @@ class TerminologyCapabilitiesValidateCode(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("translations", "translations__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

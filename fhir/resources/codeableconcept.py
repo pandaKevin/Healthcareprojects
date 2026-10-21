@@ -1,19 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/CodeableConcept
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
 
-from . import element, fhirtypes
+from . import datatype, fhirtypes
 
 
-class CodeableConcept(element.Element):
+class CodeableConcept(datatype.DataType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -23,19 +25,21 @@ class CodeableConcept(element.Element):
     ontology or may be provided by text.
     """
 
-    resource_type = Field("CodeableConcept", const=True)
+    __resource_type__ = "CodeableConcept"
 
-    coding: typing.List[fhirtypes.CodingType] = Field(
-        None,
+    coding: typing.List[fhirtypes.CodingType] | None = Field(
+        default=None,
         alias="coding",
         title="Code defined by a terminology system",
         description="A reference to a code defined by a terminology system.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    text: fhirtypes.String = Field(
-        None,
+    text: fhirtypes.StringType | None = Field(
+        default=None,
         alias="text",
         title="Plain text representation of the concept",
         description=(
@@ -43,17 +47,26 @@ class CodeableConcept(element.Element):
             "seen/selected/uttered by the user who entered the data and/or which "
             "represents the intended meaning of the user."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    text__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_text", title="Extension field for ``text``."
+    text__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_text", title="Extension field for ``text``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``CodeableConcept`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``CodeableConcept`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "coding", "text"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``CodeableConcept`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["coding", "text"]

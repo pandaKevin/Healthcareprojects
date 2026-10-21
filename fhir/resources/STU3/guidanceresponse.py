@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/GuidanceResponse
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import domainresource, fhirtypes
 
@@ -26,24 +26,25 @@ class GuidanceResponse(domainresource.DomainResource):
     description of any proposed actions to be taken.
     """
 
-    resource_type = Field("GuidanceResponse", const=True)
+    __resource_type__ = "GuidanceResponse"
 
-    context: fhirtypes.ReferenceType = Field(
-        None,
+    context: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="context",
         title="Encounter or Episode during which the response was returned",
         description=(
             "Allows the context of the guidance response to be provided if "
             "available. In a service context, this would likely be unavailable."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Encounter", "EpisodeOfCare"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter", "EpisodeOfCare"],
+        },
     )
 
-    dataRequirement: typing.List[fhirtypes.DataRequirementType] = Field(
-        None,
+    dataRequirement: typing.List[fhirtypes.DataRequirementType] | None = Field(
+        default=None,
         alias="dataRequirement",
         title="Additional required data",
         description=(
@@ -53,12 +54,13 @@ class GuidanceResponse(domainresource.DomainResource):
             "order to proceed with the evaluation. A subsequent request to the "
             "service should include this data."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    evaluationMessage: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    evaluationMessage: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="evaluationMessage",
         title="Messages resulting from the evaluation of the artifact or artifacts",
         description=(
@@ -67,63 +69,70 @@ class GuidanceResponse(domainresource.DomainResource):
             "informational or warning messages. These messages will be provided by "
             "this element."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["OperationOutcome"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["OperationOutcome"],
+        },
     )
 
-    identifier: fhirtypes.IdentifierType = Field(
-        None,
+    identifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="identifier",
         title="Business identifier",
         description=(
             "Allows a service to provide a unique, business identifier for the "
             "response."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     module: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="module",
         title="A reference to a knowledge module",
         description="A reference to the knowledge module that was invoked.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ServiceDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ServiceDefinition"],
+        },
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Additional notes about the response",
         description=(
             "Provides a mechanism to communicate additional information about the "
             "response."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    occurrenceDateTime: fhirtypes.DateTime = Field(
-        None,
+    occurrenceDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="occurrenceDateTime",
         title="When the guidance response was processed",
         description="Indicates when the guidance response was processed.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    occurrenceDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    occurrenceDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_occurrenceDateTime",
         title="Extension field for ``occurrenceDateTime``.",
     )
 
-    outputParameters: fhirtypes.ReferenceType = Field(
-        None,
+    outputParameters: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="outputParameters",
         title="The output parameters of the evaluation, if any",
         description=(
@@ -134,25 +143,27 @@ class GuidanceResponse(domainresource.DomainResource):
             "returned as the result of the evaluation, and these would be returned "
             "in this element."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Parameters"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Parameters"],
+        },
     )
 
-    performer: fhirtypes.ReferenceType = Field(
-        None,
+    performer: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="performer",
         title="Device returning the guidance",
         description="Provides a reference to the device that performed the guidance.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Device"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Device"],
+        },
     )
 
-    reasonCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    reasonCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="reasonCodeableConcept",
         title="Reason for the response",
         description=(
@@ -161,15 +172,16 @@ class GuidanceResponse(domainresource.DomainResource):
             "although for some use cases, such as subscription- or event-based "
             "scenarios, it may provide an indication of the cause for the response."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e reason[x]
-        one_of_many="reason",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e reason[x]
+            "one_of_many": "reason",
+            "one_of_many_required": False,
+        },
     )
 
-    reasonReference: fhirtypes.ReferenceType = Field(
-        None,
+    reasonReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="reasonReference",
         title="Reason for the response",
         description=(
@@ -178,17 +190,18 @@ class GuidanceResponse(domainresource.DomainResource):
             "although for some use cases, such as subscription- or event-based "
             "scenarios, it may provide an indication of the cause for the response."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e reason[x]
-        one_of_many="reason",
-        one_of_many_required=False,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e reason[x]
+            "one_of_many": "reason",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    requestId: fhirtypes.Id = Field(
-        None,
+    requestId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="requestId",
         title="The id of the request associated with this response, if any",
         description=(
@@ -197,26 +210,29 @@ class GuidanceResponse(domainresource.DomainResource):
             " requester to more easily identify the response in a multi-request "
             "scenario."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    requestId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_requestId", title="Extension field for ``requestId``."
+    requestId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_requestId", title="Extension field for ``requestId``."
     )
 
-    result: fhirtypes.ReferenceType = Field(
-        None,
+    result: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="result",
         title="Proposed actions, if any",
         description="The actions, if any, produced by the evaluation of the artifact.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["CarePlan", "RequestGroup"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["CarePlan", "RequestGroup"],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title=(
             "success | data-requested | data-required | in-progress | failure | "
@@ -233,40 +249,43 @@ class GuidanceResponse(domainresource.DomainResource):
             "available, the status will be data-requested, and the response will "
             "contain a description of the additional requested information."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "success",
-            "data-requested",
-            "data-required",
-            "in-progress",
-            "failure",
-            "entered-in-error",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "success",
+                "data-requested",
+                "data-required",
+                "in-progress",
+                "failure",
+                "entered-in-error",
+            ],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    subject: fhirtypes.ReferenceType = Field(
-        None,
+    subject: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="subject",
         title="Patient the request was performed for",
         description="The patient for which the request was processed.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Group"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Group"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``GuidanceResponse`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``GuidanceResponse`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -294,10 +313,22 @@ class GuidanceResponse(domainresource.DomainResource):
             "dataRequirement",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1819(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``GuidanceResponse`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "requestId",
+            "identifier",
+            "module",
+            "status",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -306,57 +337,9 @@ class GuidanceResponse(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("status", "status__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1819(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -370,23 +353,4 @@ class GuidanceResponse(domainresource.DomainResource):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {"reason": ["reasonCodeableConcept", "reasonReference"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields

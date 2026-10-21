@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Element
 Release: STU3
@@ -6,11 +5,13 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
+from fhir_core import fhirabstractmodel
 from pydantic import Field
-
-from fhir.resources.core import fhirabstractmodel
 
 from . import fhirtypes
 
@@ -24,10 +25,10 @@ class Element(fhirabstractmodel.FHIRAbstractModel):
     Base definition for all elements in a resource.
     """
 
-    resource_type = Field("Element", const=True)
+    __resource_type__ = "Element"
 
-    extension: typing.List[fhirtypes.ExtensionType] = Field(
-        None,
+    extension: typing.List[fhirtypes.ExtensionType] | None = Field(
+        default=None,
         alias="extension",
         title="Additional Content defined by implementations",
         description=(
@@ -39,26 +40,35 @@ class Element(fhirabstractmodel.FHIRAbstractModel):
             "requirements that SHALL be met as part of the definition of the "
             "extension."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    id: fhirtypes.String = Field(
-        None,
+    id: fhirtypes.StringType | None = Field(
+        default=None,
         alias="id",
         title="xml:id (or equivalent in JSON)",
         description=(
             "unique id for the element within a resource (for internal references)."
             " This may be any string value that does not contain spaces."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Element`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Element`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Element`` according to specification,
+        with preserving the original sequence order.
+        """
+        return []

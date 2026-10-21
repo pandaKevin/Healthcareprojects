@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/OperationDefinition
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -25,128 +25,206 @@ class OperationDefinition(domainresource.DomainResource):
     or a named query (using the search interaction).
     """
 
-    resource_type = Field("OperationDefinition", const=True)
+    __resource_type__ = "OperationDefinition"
 
-    affectsState: bool = Field(
-        None,
+    affectsState: bool | None = Field(
+        default=None,
         alias="affectsState",
         title="Whether content is changed by the operation",
         description=(
             "Whether the operation affects state. Side effects such as producing "
             "audit trail entries do not count as 'affecting  state'."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    affectsState__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_affectsState", title="Extension field for ``affectsState``."
+    affectsState__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_affectsState",
+        title="Extension field for ``affectsState``.",
     )
 
-    base: fhirtypes.Canonical = Field(
-        None,
+    base: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="base",
         title="Marks this as a profile of the base",
         description=(
             "Indicates that this operation definition is a constraining profile on "
             "the base."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["OperationDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["OperationDefinition"],
+        },
     )
-    base__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_base", title="Extension field for ``base``."
+    base__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_base", title="Extension field for ``base``."
     )
 
-    code: fhirtypes.Code = Field(
-        None,
+    code: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="code",
-        title="Name used to invoke the operation",
-        description="The name used to invoke the operation.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        title="Recommended name for operation in search url",
+        description=(
+            "The label that is recommended to be used in the URL for this "
+            "operation. In some cases, servers may need to use a different "
+            "CapabilityStatement operation.name to differentiate between multiple "
+            "SearchParameters that happen to have the same code."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    code__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_code", title="Extension field for ``code``."
+    code__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_code", title="Extension field for ``code``."
     )
 
-    comment: fhirtypes.Markdown = Field(
-        None,
+    comment: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="comment",
         title="Additional information about use",
         description="Additional information about how to use this operation or named query.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    comment__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_comment", title="Extension field for ``comment``."
+    comment__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_comment", title="Extension field for ``comment``."
     )
 
-    contact: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="contact",
         title="Contact details for the publisher",
         description=(
             "Contact details to assist a user in finding and communicating with the"
             " publisher."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    copyright: fhirtypes.MarkdownType | None = Field(
+        default=None,
+        alias="copyright",
+        title="Use and/or publishing restrictions",
+        description=(
+            "A copyright statement relating to the operation definition and/or its "
+            "contents. Copyright statements are generally legal restrictions on the"
+            " use and publishing of the operation definition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_copyright", title="Extension field for ``copyright``."
+    )
+
+    copyrightLabel: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="copyrightLabel",
+        title="Copyright holder and year(s)",
+        description=(
+            "A short string (<50 characters), suitable for inclusion in a page "
+            "footer that identifies the copyright holder, effective period, and "
+            "optionally whether rights are resctricted. (e.g. 'All rights "
+            "reserved', 'Some rights reserved')."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    copyrightLabel__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_copyrightLabel",
+        title="Extension field for ``copyrightLabel``.",
+    )
+
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="Date last changed",
         description=(
-            "The date  (and optionally time) when the operation definition was "
-            "published. The date must change when the business version changes and "
-            "it must change if the status code changes. In addition, it should "
-            "change when the substantive content of the operation definition "
-            "changes."
+            "The date  (and optionally time) when the operation definition was last"
+            " significantly changed. The date must change when the business version"
+            " changes and it must change if the status code changes. In addition, "
+            "it should change when the substantive content of the operation "
+            "definition changes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    description: fhirtypes.Markdown = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="description",
         title="Natural language description of the operation definition",
         description=(
             "A free text natural language description of the operation definition "
             "from a consumer's perspective."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    experimental: bool = Field(
-        None,
+    experimental: bool | None = Field(
+        default=None,
         alias="experimental",
         title="For testing purposes, not real usage",
         description=(
             "A Boolean value to indicate that this operation definition is authored"
             " for testing purposes (or education/evaluation/marketing) and is not "
-            "intended to be used for genuine usage."
+            "intended for genuine usage."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_experimental", title="Extension field for ``experimental``."
+    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_experimental",
+        title="Extension field for ``experimental``.",
     )
 
-    inputProfile: fhirtypes.Canonical = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
+        alias="identifier",
+        title=(
+            "Additional identifier for the implementation guide (business "
+            "identifier)"
+        ),
+        description=(
+            "A formal identifier that is used to identify this implementation guide"
+            " when it is represented in other formats, or referenced in a "
+            "specification, model, design or an instance."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    inputProfile: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="inputProfile",
         title="Validation information for in parameters",
         description=(
@@ -154,61 +232,70 @@ class OperationDefinition(domainresource.DomainResource):
             "profile that covers all the parameters. The profile is a constraint on"
             " the parameters resource as a whole."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["StructureDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["StructureDefinition"],
+        },
     )
-    inputProfile__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_inputProfile", title="Extension field for ``inputProfile``."
+    inputProfile__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_inputProfile",
+        title="Extension field for ``inputProfile``.",
     )
 
-    instance: bool = Field(
-        None,
+    instance: bool | None = Field(
+        default=None,
         alias="instance",
         title="Invoke on an instance?",
         description=(
             "Indicates whether this operation can be invoked on a particular "
             "instance of one of the given types."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    instance__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_instance", title="Extension field for ``instance``."
+    instance__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_instance", title="Extension field for ``instance``."
     )
 
-    jurisdiction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    jurisdiction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="jurisdiction",
         title="Intended jurisdiction for operation definition (if applicable)",
         description=(
             "A legal or geographic region in which the operation definition is "
             "intended to be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    kind: fhirtypes.Code = Field(
-        None,
+    kind: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="kind",
         title="operation | query",
         description="Whether this is an operation or a named query.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["operation", "query"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["operation", "query"],
+        },
     )
-    kind__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_kind", title="Extension field for ``kind``."
+    kind__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_kind", title="Extension field for ``kind``."
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Name for this operation definition (computer friendly)",
         description=(
@@ -216,16 +303,18 @@ class OperationDefinition(domainresource.DomainResource):
             "name should be usable as an identifier for the module by machine "
             "processing applications such as code generation."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    outputProfile: fhirtypes.Canonical = Field(
-        None,
+    outputProfile: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="outputProfile",
         title="Validation information for out parameters",
         description=(
@@ -233,17 +322,20 @@ class OperationDefinition(domainresource.DomainResource):
             "profile that covers all the parameters. The profile is a constraint on"
             " the parameters resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["StructureDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["StructureDefinition"],
+        },
     )
-    outputProfile__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_outputProfile", title="Extension field for ``outputProfile``."
+    outputProfile__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_outputProfile",
+        title="Extension field for ``outputProfile``.",
     )
 
-    overload: typing.List[fhirtypes.OperationDefinitionOverloadType] = Field(
-        None,
+    overload: typing.List[fhirtypes.OperationDefinitionOverloadType] | None = Field(
+        default=None,
         alias="overload",
         title="Define overloaded variants for when  generating code",
         description=(
@@ -251,82 +343,90 @@ class OperationDefinition(domainresource.DomainResource):
             "this operation, to help code generators when generating overloaded "
             "parameter sets for this operation."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    parameter: typing.List[fhirtypes.OperationDefinitionParameterType] = Field(
-        None,
+    parameter: typing.List[fhirtypes.OperationDefinitionParameterType] | None = Field(
+        default=None,
         alias="parameter",
         title="Parameters for the operation/query",
         description="The parameters for the operation/query.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    publisher: fhirtypes.String = Field(
-        None,
+    publisher: fhirtypes.StringType | None = Field(
+        default=None,
         alias="publisher",
-        title="Name of the publisher (organization or individual)",
+        title="Name of the publisher/steward (organization or individual)",
         description=(
-            "The name of the organization or individual that published the "
-            "operation definition."
+            "The name of the organization or individual responsible for the release"
+            " and ongoing maintenance of the operation definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_publisher", title="Extension field for ``publisher``."
+    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_publisher", title="Extension field for ``publisher``."
     )
 
-    purpose: fhirtypes.Markdown = Field(
-        None,
+    purpose: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="purpose",
         title="Why this operation definition is defined",
         description=(
             "Explanation of why this operation definition is needed and why it has "
             "been designed as it has."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_purpose", title="Extension field for ``purpose``."
+    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_purpose", title="Extension field for ``purpose``."
     )
 
-    resource: typing.List[fhirtypes.Code] = Field(
-        None,
+    resource: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="resource",
         title="Types this operation applies to",
         description="The types on which this operation can be executed.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
     resource__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_resource", title="Extension field for ``resource``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_resource", title="Extension field for ``resource``."
+    )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | retired | unknown",
-        description=(
-            "The status of this operation definition. Enables tracking the life-"
-            "cycle of the content."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "active", "retired", "unknown"],
+        description="The current state of this operation definition.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "active", "retired", "unknown"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    system: bool = Field(
-        None,
+    system: bool | None = Field(
+        default=None,
         alias="system",
         title="Invoke at the system level?",
         description=(
@@ -334,30 +434,34 @@ class OperationDefinition(domainresource.DomainResource):
             "system level (e.g. without needing to choose a resource type for the "
             "context)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    system__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_system", title="Extension field for ``system``."
+    system__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_system", title="Extension field for ``system``."
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Name for this operation definition (human friendly)",
         description=(
             "A short, descriptive, user-friendly title for the operation " "definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
-    type: bool = Field(
-        None,
+    type: bool | None = Field(
+        default=None,
         alias="type",
         title="Invoke at the type level?",
         description=(
@@ -365,40 +469,44 @@ class OperationDefinition(domainresource.DomainResource):
             "resource type level for any given resource type level (e.g. without "
             "needing to choose a specific resource id for the context)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title=(
-            "Canonical identifier for this operation definition, represented as a "
-            "URI (globally unique)"
+            "Canonical identifier for this operation definition, represented as an "
+            "absolute URI (globally unique)"
         ),
         description=(
             "An absolute URI that is used to identify this operation definition "
             "when it is referenced in a specification, model, design or an "
             "instance; also called its canonical identifier. This SHOULD be "
-            "globally unique and SHOULD be a literal address at which at which an "
+            "globally unique and SHOULD be a literal address at which an "
             "authoritative instance of this operation definition is (or will be) "
             "published. This URL can be the target of a canonical reference. It "
             "SHALL remain the same when the operation definition is stored on "
             "different servers."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
-    useContext: typing.List[fhirtypes.UsageContextType] = Field(
-        None,
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
         alias="useContext",
         title="The context that the content is intended to support",
         description=(
@@ -406,14 +514,16 @@ class OperationDefinition(domainresource.DomainResource):
             "contexts that are listed. These contexts may be general categories "
             "(gender, age, ...) or may be references to specific programs "
             "(insurance plans, studies, ...) and may be used to assist with "
-            "indexing and searching for appropriate operation definition instances."
+            "indexing and searching for appropriate operation definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    version: fhirtypes.String = Field(
-        None,
+    version: fhirtypes.StringType | None = Field(
+        default=None,
         alias="version",
         title="Business version of the operation definition",
         description=(
@@ -425,18 +535,59 @@ class OperationDefinition(domainresource.DomainResource):
             "is not available. There is also no expectation that versions can be "
             "placed in a lexicographical sequence."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    version__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_version", title="Extension field for ``version``."
+    version__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
+    )
+
+    versionAlgorithmCoding: fhirtypes.CodingType | None = Field(
+        default=None,
+        alias="versionAlgorithmCoding",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+
+    versionAlgorithmString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="versionAlgorithmString",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+    versionAlgorithmString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_versionAlgorithmString",
+        title="Extension field for ``versionAlgorithmString``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``OperationDefinition`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OperationDefinition`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -448,7 +599,10 @@ class OperationDefinition(domainresource.DomainResource):
             "extension",
             "modifierExtension",
             "url",
+            "identifier",
             "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
             "name",
             "title",
             "status",
@@ -461,6 +615,8 @@ class OperationDefinition(domainresource.DomainResource):
             "useContext",
             "jurisdiction",
             "purpose",
+            "copyright",
+            "copyrightLabel",
             "affectsState",
             "code",
             "comment",
@@ -475,10 +631,41 @@ class OperationDefinition(domainresource.DomainResource):
             "overload",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2167(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OperationDefinition`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "url",
+            "identifier",
+            "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
+            "name",
+            "title",
+            "status",
+            "kind",
+            "experimental",
+            "date",
+            "publisher",
+            "contact",
+            "useContext",
+            "jurisdiction",
+            "affectsState",
+            "code",
+            "base",
+            "resource",
+            "system",
+            "type",
+            "instance",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -495,52 +682,25 @@ class OperationDefinition(domainresource.DomainResource):
             ("system", "system__ext"),
             ("type", "type__ext"),
         ]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
 
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {
+            "versionAlgorithm": ["versionAlgorithmCoding", "versionAlgorithmString"]
+        }
+        return one_of_many_fields
 
 
 class OperationDefinitionOverload(backboneelement.BackboneElement):
@@ -554,41 +714,52 @@ class OperationDefinitionOverload(backboneelement.BackboneElement):
     sets for this operation.
     """
 
-    resource_type = Field("OperationDefinitionOverload", const=True)
+    __resource_type__ = "OperationDefinitionOverload"
 
-    comment: fhirtypes.String = Field(
-        None,
+    comment: fhirtypes.StringType | None = Field(
+        default=None,
         alias="comment",
         title="Comments to go on overload",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    comment__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_comment", title="Extension field for ``comment``."
+    comment__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_comment", title="Extension field for ``comment``."
     )
 
-    parameterName: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    parameterName: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="parameterName",
         title="Name of parameter to include in overload",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
     parameterName__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(
-        None, alias="_parameterName", title="Extension field for ``parameterName``."
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
+        alias="_parameterName",
+        title="Extension field for ``parameterName``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``OperationDefinitionOverload`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OperationDefinitionOverload`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "parameterName", "comment"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OperationDefinitionOverload`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class OperationDefinitionParameter(backboneelement.BackboneElement):
@@ -600,135 +771,185 @@ class OperationDefinitionParameter(backboneelement.BackboneElement):
     The parameters for the operation/query.
     """
 
-    resource_type = Field("OperationDefinitionParameter", const=True)
+    __resource_type__ = "OperationDefinitionParameter"
 
-    binding: fhirtypes.OperationDefinitionParameterBindingType = Field(
-        None,
+    allowedType: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
+        alias="allowedType",
+        title="Allowed sub-type this parameter can have (if type is abstract)",
+        description=(
+            "Support for polymorphic types. If the parameter type is abstract, this"
+            " element lists allowed sub-types for the parameter."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    allowedType__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_allowedType", title="Extension field for ``allowedType``."
+    )
+
+    binding: fhirtypes.OperationDefinitionParameterBindingType | None = Field(
+        default=None,
         alias="binding",
         title="ValueSet details if this is coded",
         description=(
             "Binds to a value set if this parameter is coded (code, Coding, "
             "CodeableConcept)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    documentation: fhirtypes.String = Field(
-        None,
+    documentation: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="documentation",
         title="Description of meaning/use",
         description="Describes the meaning or use of this parameter.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    documentation__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_documentation", title="Extension field for ``documentation``."
+    documentation__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_documentation",
+        title="Extension field for ``documentation``.",
     )
 
-    max: fhirtypes.String = Field(
-        None,
+    max: fhirtypes.StringType | None = Field(
+        default=None,
         alias="max",
         title="Maximum Cardinality (a number or *)",
         description=(
             "The maximum number of times this element is permitted to appear in the"
             " request or response."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    max__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_max", title="Extension field for ``max``."
+    max__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_max", title="Extension field for ``max``."
     )
 
-    min: fhirtypes.Integer = Field(
-        None,
+    min: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="min",
         title="Minimum Cardinality",
         description=(
             "The minimum number of times this parameter SHALL appear in the request"
             " or response."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    min__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_min", title="Extension field for ``min``."
+    min__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_min", title="Extension field for ``min``."
     )
 
-    name: fhirtypes.Code = Field(
-        None,
+    name: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="name",
         title="Name in Parameters.parameter.name or in URL",
         description="The name of used to identify the parameter.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    part: typing.List[fhirtypes.OperationDefinitionParameterType] = Field(
-        None,
+    part: typing.List[fhirtypes.OperationDefinitionParameterType] | None = Field(
+        default=None,
         alias="part",
         title="Parts of a nested Parameter",
         description="The parts of a nested Parameter.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     referencedFrom: typing.List[
         fhirtypes.OperationDefinitionParameterReferencedFromType
-    ] = Field(
-        None,
+    ] | None = Field(
+        default=None,
         alias="referencedFrom",
         title="References to this parameter",
         description=(
             "Identifies other resource parameters within the operation invocation "
             "that are expected to resolve to this resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    searchType: fhirtypes.Code = Field(
-        None,
+    scope: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
+        alias="scope",
+        title="instance | type | system",
+        description=(
+            "If present, indicates that the parameter applies when the operation is"
+            " being invoked at the specified level."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["instance", "type", "system"],
+        },
+    )
+    scope__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_scope", title="Extension field for ``scope``."
+    )
+
+    searchType: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="searchType",
         title=(
             "number | date | string | token | reference | composite | quantity | "
             "uri | special"
         ),
         description=(
-            "How the parameter is understood as a search parameter. This is only "
-            "used if the parameter type is 'string'."
+            "How the parameter is understood if/when it used as search parameter. "
+            "This is only used if the parameter is a string."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "number",
-            "date",
-            "string",
-            "token",
-            "reference",
-            "composite",
-            "quantity",
-            "uri",
-            "special",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "number",
+                "date",
+                "string",
+                "token",
+                "reference",
+                "composite",
+                "quantity",
+                "uri",
+                "special",
+            ],
+        },
     )
-    searchType__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_searchType", title="Extension field for ``searchType``."
+    searchType__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_searchType", title="Extension field for ``searchType``."
     )
 
-    targetProfile: typing.List[fhirtypes.Canonical] = Field(
-        None,
+    targetProfile: typing.List[fhirtypes.CanonicalType | None] | None = Field(
+        default=None,
         alias="targetProfile",
-        title="If type is Reference | canonical, allowed targets",
+        title=(
+            "If type is Reference | canonical, allowed targets. If type is "
+            "'Resource', then this constrains the allowed resource types"
+        ),
         description=(
             'Used when the type is "Reference" or "canonical", and identifies a '
             "profile structure or implementation Guide that applies to the target "
@@ -740,50 +961,55 @@ class OperationDefinitionParameter(backboneelement.BackboneElement):
             " resource SHALL conform to at least one profile defined in the "
             "implementation guide."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["StructureDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["StructureDefinition"],
+        },
     )
     targetProfile__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(
-        None, alias="_targetProfile", title="Extension field for ``targetProfile``."
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
+        alias="_targetProfile",
+        title="Extension field for ``targetProfile``.",
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title="What type this parameter has",
         description="The type for this parameter.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
-    use: fhirtypes.Code = Field(
-        None,
+    use: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="use",
         title="in | out",
         description="Whether this is an input or an output parameter.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["in", "out"],
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["in", "out"],
+        },
     )
-    use__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_use", title="Extension field for ``use``."
+    use__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_use", title="Extension field for ``use``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``OperationDefinitionParameter`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OperationDefinitionParameter`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -791,10 +1017,12 @@ class OperationDefinitionParameter(backboneelement.BackboneElement):
             "modifierExtension",
             "name",
             "use",
+            "scope",
             "min",
             "max",
             "documentation",
             "type",
+            "allowedType",
             "targetProfile",
             "searchType",
             "binding",
@@ -802,10 +1030,14 @@ class OperationDefinitionParameter(backboneelement.BackboneElement):
             "part",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3100(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OperationDefinitionParameter`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -819,52 +1051,7 @@ class OperationDefinitionParameter(backboneelement.BackboneElement):
             ("name", "name__ext"),
             ("use", "use__ext"),
         ]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class OperationDefinitionParameterBinding(backboneelement.BackboneElement):
@@ -877,10 +1064,10 @@ class OperationDefinitionParameterBinding(backboneelement.BackboneElement):
     CodeableConcept).
     """
 
-    resource_type = Field("OperationDefinitionParameterBinding", const=True)
+    __resource_type__ = "OperationDefinitionParameterBinding"
 
-    strength: fhirtypes.Code = Field(
-        None,
+    strength: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="strength",
         title="required | extensible | preferred | example",
         description=(
@@ -888,47 +1075,53 @@ class OperationDefinitionParameterBinding(backboneelement.BackboneElement):
             "binding - that is, the degree to which the provided value set must be "
             "adhered to in the instances."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["required", "extensible", "preferred", "example"],
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["required", "extensible", "preferred", "example"],
+        },
     )
-    strength__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_strength", title="Extension field for ``strength``."
+    strength__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_strength", title="Extension field for ``strength``."
     )
 
-    valueSet: fhirtypes.Canonical = Field(
-        None,
+    valueSet: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="valueSet",
         title="Source of value set",
         description=(
             "Points to the value set or external definition (e.g. implicit value "
             "set) that identifies the set of codes to be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ValueSet"],
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ValueSet"],
+        },
     )
-    valueSet__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueSet", title="Extension field for ``valueSet``."
+    valueSet__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueSet", title="Extension field for ``valueSet``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``OperationDefinitionParameterBinding`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OperationDefinitionParameterBinding`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "strength", "valueSet"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3788(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OperationDefinitionParameterBinding`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -937,52 +1130,7 @@ class OperationDefinitionParameterBinding(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("strength", "strength__ext"), ("valueSet", "valueSet__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class OperationDefinitionParameterReferencedFrom(backboneelement.BackboneElement):
@@ -995,10 +1143,10 @@ class OperationDefinitionParameterReferencedFrom(backboneelement.BackboneElement
     are expected to resolve to this resource.
     """
 
-    resource_type = Field("OperationDefinitionParameterReferencedFrom", const=True)
+    __resource_type__ = "OperationDefinitionParameterReferencedFrom"
 
-    source: fhirtypes.String = Field(
-        None,
+    source: fhirtypes.StringType | None = Field(
+        default=None,
         alias="source",
         title="Referencing parameter",
         description=(
@@ -1006,41 +1154,47 @@ class OperationDefinitionParameterReferencedFrom(backboneelement.BackboneElement
             "pointing to the resource parameter that is expected to contain a "
             "reference to this resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    source__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_source", title="Extension field for ``source``."
+    source__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_source", title="Extension field for ``source``."
     )
 
-    sourceId: fhirtypes.String = Field(
-        None,
+    sourceId: fhirtypes.StringType | None = Field(
+        default=None,
         alias="sourceId",
         title="Element id of reference",
         description=(
             "The id of the element in the referencing resource that is expected to "
             "resolve to this resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    sourceId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_sourceId", title="Extension field for ``sourceId``."
+    sourceId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_sourceId", title="Extension field for ``sourceId``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``OperationDefinitionParameterReferencedFrom`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OperationDefinitionParameterReferencedFrom`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "source", "sourceId"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_4510(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OperationDefinitionParameterReferencedFrom`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1049,49 +1203,4 @@ class OperationDefinitionParameterReferencedFrom(backboneelement.BackboneElement
         the primitive value is not present.
         """
         required_fields = [("source", "source__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

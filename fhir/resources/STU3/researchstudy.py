@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/ResearchStudy
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -29,10 +29,10 @@ class ResearchStudy(domainresource.DomainResource):
     involves the gathering of information about human or animal subjects.
     """
 
-    resource_type = Field("ResearchStudy", const=True)
+    __resource_type__ = "ResearchStudy"
 
-    arm: typing.List[fhirtypes.ResearchStudyArmType] = Field(
-        None,
+    arm: typing.List[fhirtypes.ResearchStudyArmType] | None = Field(
+        default=None,
         alias="arm",
         title="Defined path through the study for a subject",
         description=(
@@ -40,12 +40,13 @@ class ResearchStudy(domainresource.DomainResource):
             "of a study.  E.g. Exposure to drug A, wash-out, exposure to drug B, "
             "wash-out, follow-up."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    category: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    category: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="category",
         title="Classifications for the study",
         description=(
@@ -53,36 +54,41 @@ class ResearchStudy(domainresource.DomainResource):
             "observational, type of blinding, type of randomization, safety vs. "
             "efficacy, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    contact: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="contact",
         title="Contact details for the study",
         description=(
             "Contact details to assist a user in learning more about or engaging "
             "with the study."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    description: fhirtypes.Markdown = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="description",
         title="What this is study doing",
         description="A full description of how the study is being conducted.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    enrollment: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    enrollment: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="enrollment",
         title="Inclusion & exclusion criteria",
         description=(
@@ -90,14 +96,16 @@ class ResearchStudy(domainresource.DomainResource):
             'subjects participating in the study.  E.g. " 200 female Europeans '
             'between the ages of 20 and 45 with early onset diabetes".'
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Group"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Group"],
+        },
     )
 
-    focus: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    focus: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="focus",
         title="Drugs, devices, conditions, etc. under study",
         description=(
@@ -105,198 +113,226 @@ class ResearchStudy(domainresource.DomainResource):
             "other concerns or interventions that the study is seeking to gain more"
             " information about."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business Identifier for study",
         description=(
             "Identifiers assigned to this research study by the sponsor or other "
             "systems."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    jurisdiction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    jurisdiction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="jurisdiction",
         title="Geographic region(s) for study",
         description=(
             "Indicates a country, state or other region where the study is taking "
             "place."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    keyword: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    keyword: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="keyword",
         title="Used to search for the study",
         description="Key terms to aid in searching for or filtering the study.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Comments made about the event",
         description=(
             "Comments made about the event by the performer, subject or other "
             "participants."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    partOf: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    partOf: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="partOf",
         title="Part of larger study",
         description=(
             "A larger research study of which this particular study is a component "
             "or step."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ResearchStudy"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ResearchStudy"],
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="When the study began and ended",
         description=(
             "Identifies the start date and the expected (or actual, depending on "
             "status) end date for the study."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    principalInvestigator: fhirtypes.ReferenceType = Field(
-        None,
+    principalInvestigator: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="principalInvestigator",
         title="The individual responsible for the study",
         description=(
             "Indicates the individual who has primary oversite of the execution of "
             "the study."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner"],
+        },
     )
 
-    protocol: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    protocol: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="protocol",
         title="Steps followed in executing study",
         description=(
             "The set of steps expected to be performed as part of the execution of "
             "the study."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["PlanDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["PlanDefinition"],
+        },
     )
 
-    reasonStopped: fhirtypes.CodeableConceptType = Field(
-        None,
+    reasonStopped: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="reasonStopped",
         title="Reason for terminating study early",
         description=(
             "A description and/or code explaining the premature termination of the "
             "study."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    relatedArtifact: typing.List[fhirtypes.RelatedArtifactType] = Field(
-        None,
+    relatedArtifact: typing.List[fhirtypes.RelatedArtifactType] | None = Field(
+        default=None,
         alias="relatedArtifact",
         title="References and dependencies",
         description="Citations, references and other related documents.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    site: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    site: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="site",
         title="Location involved in study execution",
         description=(
             "Clinic, hospital or other healthcare location that is participating in"
             " the study."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    sponsor: fhirtypes.ReferenceType = Field(
-        None,
+    sponsor: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="sponsor",
         title="Organization responsible for the study",
         description="The organization responsible for the execution of the study.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title=(
             "draft | in-progress | suspended | stopped | completed | entered-in-"
             "error"
         ),
         description="The current state of the study.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "draft",
-            "in-progress",
-            "suspended",
-            "stopped",
-            "completed",
-            "entered-in-error",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "draft",
+                "in-progress",
+                "suspended",
+                "stopped",
+                "completed",
+                "entered-in-error",
+            ],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Name for this study",
         description="A short, descriptive user-friendly label for the study.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ResearchStudy`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ResearchStudy`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -329,10 +365,34 @@ class ResearchStudy(domainresource.DomainResource):
             "arm",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1553(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ResearchStudy`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "title",
+            "protocol",
+            "partOf",
+            "status",
+            "category",
+            "focus",
+            "contact",
+            "keyword",
+            "jurisdiction",
+            "enrollment",
+            "period",
+            "sponsor",
+            "principalInvestigator",
+            "site",
+            "reasonStopped",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -341,52 +401,7 @@ class ResearchStudy(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("status", "status__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class ResearchStudyArm(backboneelement.BackboneElement):
@@ -400,60 +415,67 @@ class ResearchStudyArm(backboneelement.BackboneElement):
     follow-up.
     """
 
-    resource_type = Field("ResearchStudyArm", const=True)
+    __resource_type__ = "ResearchStudyArm"
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
         title="Categorization of study arm",
         description=(
             "Categorization of study arm, e.g. experimental, active comparator, "
             "placebo comparater."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Short explanation of study path",
         description=(
             "A succinct description of the path through the study that would be "
             "followed by a subject adhering to this arm."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Label for study arm",
         description="Unique, human-readable label for this arm of the study.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ResearchStudyArm`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ResearchStudyArm`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "name", "code", "description"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1829(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ResearchStudyArm`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -462,49 +484,4 @@ class ResearchStudyArm(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("name", "name__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

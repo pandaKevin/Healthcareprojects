@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Flag
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import domainresource, fhirtypes
 
@@ -25,63 +25,72 @@ class Flag(domainresource.DomainResource):
     patient.
     """
 
-    resource_type = Field("Flag", const=True)
+    __resource_type__ = "Flag"
 
-    author: fhirtypes.ReferenceType = Field(
-        None,
+    author: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="author",
         title="Flag creator",
         description="The person, organization or device that created the flag.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Device",
-            "Organization",
-            "Patient",
-            "Practitioner",
-            "PractitionerRole",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Device",
+                "Organization",
+                "Patient",
+                "RelatedPerson",
+                "Practitioner",
+                "PractitionerRole",
+            ],
+        },
     )
 
-    category: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    category: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="category",
-        title="Clinical, administrative, etc.",
+        title="Clinical, administrative, etc",
         description=(
             "Allows a flag to be divided into different categories like clinical, "
             "administrative etc. Intended to be used as a means of filtering which "
             "flags are displayed to particular user or in a given context."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     code: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="code",
         title="Coded or textual message to display to user",
         description=(
             "The coded value or textual component of the flag to display to the "
             "user."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    encounter: fhirtypes.ReferenceType = Field(
-        None,
+    encounter: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="encounter",
         title="Alert relevant during encounter",
         description="This alert is only relevant during the encounter.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Encounter"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter"],
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business identifier",
         description=(
@@ -89,12 +98,14 @@ class Flag(domainresource.DomainResource):
             "systems which remain constant as the resource is updated and "
             "propagates from server to server."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="Time period when flag is active",
         description=(
@@ -102,54 +113,62 @@ class Flag(domainresource.DomainResource):
             "the flag. If the flag is active, the end of the period should be "
             "unspecified."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="active | inactive | entered-in-error",
         description="Supports basic workflow.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["active", "inactive", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["active", "inactive", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     subject: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="subject",
         title="Who/What is flag about?",
         description=(
-            "The patient, location, group, organization, or practitioner etc. this "
-            "is about record this flag is associated with."
+            "The patient, related person, location, group, organization, or "
+            "practitioner etc. this is about record this flag is associated with."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Patient",
-            "Location",
-            "Group",
-            "Organization",
-            "Practitioner",
-            "PlanDefinition",
-            "Medication",
-            "Procedure",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Patient",
+                "RelatedPerson",
+                "Location",
+                "Group",
+                "Organization",
+                "Practitioner",
+                "PractitionerRole",
+                "PlanDefinition",
+                "Medication",
+                "Procedure",
+            ],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Flag`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Flag`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -170,10 +189,27 @@ class Flag(domainresource.DomainResource):
             "author",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_551(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Flag`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "identifier",
+            "status",
+            "category",
+            "code",
+            "subject",
+            "period",
+            "encounter",
+            "author",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -182,49 +218,4 @@ class Flag(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("status", "status__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

@@ -1,39 +1,49 @@
 # -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/MedicationKnowledge
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
-from pydantic.validators import bytes_validator  # noqa: F401
-
-from .. import fhirtypes  # noqa: F401
 from .. import medicationknowledge
+from .conftest import ExternalValidatorModel
 
 
 def impl_medicationknowledge_1(inst):
-    assert inst.amount.unit == "mg/ml"
-    assert float(inst.amount.value) == float(50)
-    assert inst.code.coding[0].code == "0069-2587-10"
+    assert inst.code.coding[0].code == "0409-6531-02"
     assert (
         inst.code.coding[0].display
         == "Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)"
     )
-    assert inst.code.coding[0].system == "http://hl7.org/fhir/sid/ndc"
-    assert inst.contained[0].id == "org4"
-    assert inst.doseForm.coding[0].code == "385219001"
-    assert inst.doseForm.coding[0].display == "Injection Solution (qualifier value)"
-    assert inst.doseForm.coding[0].system == "http://snomed.info/sct"
+    assert (
+        inst.code.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://hl7.org/fhir/sid/ndc"}
+        ).valueUri
+    )
+    assert inst.definitional.doseForm.coding[0].code == "385268001"
+    assert (
+        inst.definitional.doseForm.coding[0].display
+        == "Oral Dose Form (qualifier value)"
+    )
+    assert (
+        inst.definitional.doseForm.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://snomed.info/sct"}
+        ).valueUri
+    )
     assert inst.id == "example"
-    assert inst.manufacturer.reference == "#org4"
     assert inst.meta.tag[0].code == "HTEST"
     assert inst.meta.tag[0].display == "test health data"
     assert (
-        inst.meta.tag[0].system == "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
     )
+    assert inst.name[0] == "Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)"
     assert inst.status == "active"
-    assert inst.synonym[0] == "Vancomycin Hydrochloride (VANCOMYCIN HYDROCHLORIDE)"
     assert inst.text.status == "generated"
 
 
@@ -42,15 +52,15 @@ def test_medicationknowledge_1(base_settings):
     Test File: medicationknowledge-example.json
     """
     filename = base_settings["unittest_data_dir"] / "medicationknowledge-example.json"
-    inst = medicationknowledge.MedicationKnowledge.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
+    inst = medicationknowledge.MedicationKnowledge.model_validate_json(
+        filename.read_bytes()
     )
-    assert "MedicationKnowledge" == inst.resource_type
+    assert "MedicationKnowledge" == inst.get_resource_type()
 
     impl_medicationknowledge_1(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "MedicationKnowledge" == data["resourceType"]
 
     inst2 = medicationknowledge.MedicationKnowledge(**data)

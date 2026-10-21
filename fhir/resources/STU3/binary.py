@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Binary
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import fhirtypes, resource
 
@@ -25,56 +25,61 @@ class Binary(resource.Resource):
     archive, etc.
     """
 
-    resource_type = Field("Binary", const=True)
+    __resource_type__ = "Binary"
 
-    content: fhirtypes.Base64Binary = Field(
-        None,
+    content: fhirtypes.Base64BinaryType | None = Field(
+        default=None,
         alias="content",
         title="The actual content",
         description="The actual content, base64 encoded.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    content__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_content", title="Extension field for ``content``."
+    content__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_content", title="Extension field for ``content``."
     )
 
-    contentType: fhirtypes.Code = Field(
-        None,
+    contentType: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="contentType",
         title="MimeType of the binary content",
         description=(
             "MimeType of the binary content represented as a standard MimeType (BCP"
             " 13)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    contentType__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_contentType", title="Extension field for ``contentType``."
+    contentType__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_contentType", title="Extension field for ``contentType``."
     )
 
-    securityContext: fhirtypes.ReferenceType = Field(
-        None,
+    securityContext: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="securityContext",
         title="Access Control Management",
         description=(
             "Treat this binary as if it was this other resource for access control "
             "purposes."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Binary`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Binary`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -86,10 +91,14 @@ class Binary(resource.Resource):
             "content",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_800(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Binary`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "contentType", "securityContext"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -101,49 +110,4 @@ class Binary(resource.Resource):
             ("content", "content__ext"),
             ("contentType", "contentType__ext"),
         ]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

@@ -1,61 +1,64 @@
-# -*- coding: utf-8 -*-
-"""see: https://www.hl7.org/fhir/extensibility.html
-Extensibility feature for FHIR Primitive Data Types.
-"""
-__author__ = "Md Nazrul Islam<email2nazrul@gmail.com>"
+from __future__ import annotations as _annotations
 
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError
-
-from fhir.resources.core import fhirabstractmodel
+from fhir_core import fhirabstractmodel
+from pydantic import Field, model_validator
+from pydantic_core import PydanticCustomError
 
 from . import fhirtypes
 
+__author__ = "Md Nazrul Islam"
+__email__ = "email2nazrul@gmail.com"
+
 
 class FHIRPrimitiveExtension(fhirabstractmodel.FHIRAbstractModel):
-    """"""
+    """@see: https://www.hl7.org/fhir/extensibility.html
+    Extensibility feature for FHIR Primitive Data Types."""
 
-    resource_type = Field("FHIRPrimitiveExtension", const=True)
+    __resource_type__ = "FHIRPrimitiveExtension"
 
-    id: fhirtypes.String = Field(
-        None,
+    id: typing.Optional[fhirtypes.StringType] = Field(
+        default=None,
         alias="id",
         title="Type `String`",
         description="Unique id for inter-element referencing",
-        # if property is element of this resource.
-        element_property=False,
+        # if property is an element of this resource.
+        json_schema_extra={"element_property": False},
     )
 
-    extension: typing.List[fhirtypes.ExtensionType] = Field(
+    extension: typing.Optional[typing.List[fhirtypes.ExtensionType]] = Field(
         None,
         alias="extension",
         title="List of `Extension` items (represented as `dict` in JSON)",
         description="Additional content defined by implementations",
-        # if property is element of this resource.
-        element_property=True,
+        # if property is an element of this resource.
+        json_schema_extra={"element_property": False},
     )
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def validate_extension_or_fhir_comment_required(
         cls, values: typing.Dict[str, typing.Any]
     ) -> typing.Dict[str, typing.Any]:
         """Conditional Required Validation"""
-        errors = list()
         extension = values.get("extension", None)
         fhir_comments = values.get("fhir_comments", None)
 
-        if extension is None and fhir_comments is None:
-            errors.append(ErrorWrapper(MissingError(), loc="extension"))
-            raise ValidationError(errors, cls)  # type: ignore
-
+        if (
+            values.get("id", None) is None
+            and extension is None
+            and fhir_comments is None
+        ):
+            raise PydanticCustomError(
+                "model_validation_format",
+                "One of field value is required.",
+                {},
+            )
         return values
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from ``FHIRPrimitiveExtension`` according specification,
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from ``FHIRPrimitiveExtension`` according to specification,
         with preserving original sequence order.
         """
         return ["id", "extension"]

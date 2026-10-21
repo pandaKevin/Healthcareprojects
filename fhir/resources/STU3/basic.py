@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Basic
 Release: STU3
@@ -6,6 +5,9 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -24,74 +26,84 @@ class Basic(domainresource.DomainResource):
     appropriate for inclusion in the FHIR specification.
     """
 
-    resource_type = Field("Basic", const=True)
+    __resource_type__ = "Basic"
 
-    author: fhirtypes.ReferenceType = Field(
-        None,
+    author: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="author",
         title="Who created",
         description="Indicates who was responsible for creating the resource instance.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner", "Patient", "RelatedPerson"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner", "Patient", "RelatedPerson"],
+        },
     )
 
     code: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="code",
         title="Kind of Resource",
         description=(
             "Identifies the 'type' of resource - equivalent to the resource name "
             "for other resources."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    created: fhirtypes.Date = Field(
-        None,
+    created: fhirtypes.DateType | None = Field(
+        default=None,
         alias="created",
         title="When created",
         description="Identifies when the resource was first created.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    created__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_created", title="Extension field for ``created``."
+    created__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_created", title="Extension field for ``created``."
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business identifier",
         description=(
             "Identifier assigned to the resource for business purposes, outside the"
             " context of FHIR."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    subject: fhirtypes.ReferenceType = Field(
-        None,
+    subject: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="subject",
         title="Identifies the focus of this resource",
         description=(
             "Identifies the patient, practitioner, device or any other resource "
             'that is the "focus" of this resource.'
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Basic`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Basic`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -102,6 +114,22 @@ class Basic(domainresource.DomainResource):
             "contained",
             "extension",
             "modifierExtension",
+            "identifier",
+            "code",
+            "subject",
+            "created",
+            "author",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Basic`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
             "identifier",
             "code",
             "subject",

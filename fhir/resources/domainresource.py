@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/DomainResource
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -22,39 +24,43 @@ class DomainResource(resource.Resource):
     A resource that includes narrative, extensions, and contained resources.
     """
 
-    resource_type = Field("DomainResource", const=True)
+    __resource_type__ = "DomainResource"
 
-    contained: typing.List[fhirtypes.ResourceType] = Field(
-        None,
+    contained: typing.List[fhirtypes.ResourceType] | None = Field(
+        default=None,
         alias="contained",
         title="Contained, inline Resources",
         description=(
             "These resources do not have an independent existence apart from the "
             "resource that contains them - they cannot be identified independently,"
-            " and nor can they have their own independent transaction scope."
+            " nor can they have their own independent transaction scope. This is "
+            "allowed to be a Parameters resource if and only if it is referenced by"
+            " a resource that provides context/meaning."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    extension: typing.List[fhirtypes.ExtensionType] = Field(
-        None,
+    extension: typing.List[fhirtypes.ExtensionType] | None = Field(
+        default=None,
         alias="extension",
         title="Additional content defined by implementations",
         description=(
             "May be used to represent additional information that is not part of "
             "the basic definition of the resource. To make the use of extensions "
-            "safe and manageable, there is a strict set of governance  applied to "
-            "the definition and use of extensions. Though any implementer can "
-            "define an extension, there is a set of requirements that SHALL be met "
-            "as part of the definition of the extension."
+            "safe and managable, there is a strict set of governance applied to the"
+            " definition and use of extensions. Though any implementer can define "
+            "an extension, there is a set of requirements that SHALL be met as part"
+            " of the definition of the extension."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    modifierExtension: typing.List[fhirtypes.ExtensionType] = Field(
-        None,
+    modifierExtension: typing.List[fhirtypes.ExtensionType] | None = Field(
+        default=None,
         alias="modifierExtension",
         title="Extensions that cannot be ignored",
         description=(
@@ -63,7 +69,7 @@ class DomainResource(resource.Resource):
             "understanding of the element that contains it and/or the understanding"
             " of the containing element's descendants. Usually modifier elements "
             "provide negation or qualification. To make the use of extensions safe "
-            "and manageable, there is a strict set of governance applied to the "
+            "and managable, there is a strict set of governance applied to the "
             "definition and use of extensions. Though any implementer is allowed to"
             " define an extension, there is a set of requirements that SHALL be met"
             " as part of the definition of the extension. Applications processing a"
@@ -72,12 +78,14 @@ class DomainResource(resource.Resource):
             " DomainResource (including cannot change the meaning of "
             "modifierExtension itself)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    text: fhirtypes.NarrativeType = Field(
-        None,
+    text: fhirtypes.NarrativeType | None = Field(
+        default=None,
         alias="text",
         title="Text summary of the resource, for human interpretation",
         description=(
@@ -88,15 +96,16 @@ class DomainResource(resource.Resource):
             "just read the narrative. Resource definitions may define what content "
             "should be represented in the narrative to ensure clinical safety."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DomainResource`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DomainResource`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -108,3 +117,10 @@ class DomainResource(resource.Resource):
             "extension",
             "modifierExtension",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DomainResource`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "modifierExtension"]

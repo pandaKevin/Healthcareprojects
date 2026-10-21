@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Task
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -23,85 +23,115 @@ class Task(domainresource.DomainResource):
     A task to be performed.
     """
 
-    resource_type = Field("Task", const=True)
+    __resource_type__ = "Task"
 
-    authoredOn: fhirtypes.DateTime = Field(
-        None,
+    authoredOn: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="authoredOn",
         title="Task Creation Date",
         description="The date and time this task was created.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    authoredOn__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_authoredOn", title="Extension field for ``authoredOn``."
+    authoredOn__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_authoredOn", title="Extension field for ``authoredOn``."
     )
 
-    basedOn: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    basedOn: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="basedOn",
         title="Request fulfilled by this task",
         description=(
             "BasedOn refers to a higher-level authorization that triggered the "
             'creation of the task.  It references a "request" resource such as a '
-            "ServiceRequest, MedicationRequest, ServiceRequest, CarePlan, etc. "
-            'which is distinct from the "request" resource the task is seeking to '
-            "fulfill.  This latter resource is referenced by FocusOn.  For example,"
-            " based on a ServiceRequest (= BasedOn), a task is created to fulfill a"
-            " procedureRequest ( = FocusOn ) to collect a specimen from a patient."
+            "ServiceRequest, MedicationRequest, CarePlan, etc. which is distinct "
+            'from the "request" resource the task is seeking to fulfill.  This '
+            "latter resource is referenced by focus.  For example, based on a "
+            "CarePlan (= basedOn), a task is created to fulfill a ServiceRequest ( "
+            "= focus ) to collect a specimen from a patient."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    businessStatus: fhirtypes.CodeableConceptType = Field(
-        None,
+    businessStatus: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="businessStatus",
         title='E.g. "Specimen collected", "IV prepped"',
         description="Contains business-specific nuances of the business state.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
         title="Task Type",
         description="A name or code (or both) briefly describing what the task involves.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Human-readable explanation of task",
         description="A free-text description of what is to be performed.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    encounter: fhirtypes.ReferenceType = Field(
-        None,
+    doNotPerform: bool | None = Field(
+        default=None,
+        alias="doNotPerform",
+        title="True if Task is prohibiting action",
+        description=(
+            "If true indicates that the Task is asking for the specified action to "
+            "*not* occur."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    doNotPerform__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_doNotPerform",
+        title="Extension field for ``doNotPerform``.",
+    )
+
+    encounter: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="encounter",
         title="Healthcare event during which this task originated",
         description=(
             "The healthcare event  (e.g. a patient and healthcare provider "
             "interaction) during which this task was created."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Encounter"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter"],
+        },
     )
 
-    executionPeriod: fhirtypes.PeriodType = Field(
-        None,
+    executionPeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="executionPeriod",
         title="Start and end time of execution",
         description=(
@@ -109,91 +139,108 @@ class Task(domainresource.DomainResource):
             "and/or the time final action was taken against the task prior to "
             "marking it as completed (end)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    focus: fhirtypes.ReferenceType = Field(
-        None,
+    focus: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="focus",
         title="What task is acting on",
         description=(
-            "The request being actioned or the resource being manipulated by this "
-            "task."
+            "The request being fulfilled or the resource being manipulated "
+            "(changed, suspended, etc.) by this task."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    for_fhir: fhirtypes.ReferenceType = Field(
-        None,
+    for_fhir: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="for",
         title="Beneficiary of the Task",
         description=(
             "The entity who benefits from the performance of the service specified "
             "in the task (e.g., the patient)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    groupIdentifier: fhirtypes.IdentifierType = Field(
-        None,
+    groupIdentifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="groupIdentifier",
         title="Requisition or grouper id",
         description=(
-            "An identifier that links together multiple tasks and other requests "
-            "that were created in the same context."
+            "A shared identifier common to multiple independent Task and Request "
+            "instances that were activated/authorized more or less simultaneously "
+            "by a single author.  The presence of the same identifier on each "
+            "request ties those requests together and may have business "
+            "ramifications in terms of reporting of results, billing, etc.  E.g. a "
+            "requisition number shared by a set of lab tests ordered together, or a"
+            " prescription number shared by all meds ordered at one time."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Task Instance Identifier",
         description="The business identifier for this task.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    input: typing.List[fhirtypes.TaskInputType] = Field(
-        None,
+    input: typing.List[fhirtypes.TaskInputType] | None = Field(
+        default=None,
         alias="input",
         title="Information used to perform task",
         description=(
             "Additional information that may be needed in the execution of the " "task."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    instantiatesCanonical: fhirtypes.Canonical = Field(
-        None,
+    instantiatesCanonical: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="instantiatesCanonical",
         title="Formal definition of task",
         description=(
             "The URL pointing to a *FHIR*-defined protocol, guideline, orderset or "
             "other definition that is adhered to in whole or in part by this Task."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ActivityDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ActivityDefinition"],
+        },
     )
-    instantiatesCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    instantiatesCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_instantiatesCanonical",
         title="Extension field for ``instantiatesCanonical``.",
     )
 
-    instantiatesUri: fhirtypes.Uri = Field(
-        None,
+    instantiatesUri: fhirtypes.UriType | None = Field(
+        default=None,
         alias="instantiatesUri",
         title="Formal definition of task",
         description=(
@@ -201,29 +248,34 @@ class Task(domainresource.DomainResource):
             "orderset or other definition that is adhered to in whole or in part by"
             " this Task."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    instantiatesUri__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_instantiatesUri", title="Extension field for ``instantiatesUri``."
+    instantiatesUri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_instantiatesUri",
+        title="Extension field for ``instantiatesUri``.",
     )
 
-    insurance: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    insurance: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="insurance",
         title="Associated insurance coverage",
         description=(
             "Insurance plans, coverage extensions, pre-authorizations and/or pre-"
             "determinations that may be relevant to the Task."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Coverage", "ClaimResponse"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Coverage", "ClaimResponse"],
+        },
     )
 
-    intent: fhirtypes.Code = Field(
-        None,
+    intent: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="intent",
         title=(
             "unknown | proposal | plan | order | original-order | reflex-order | "
@@ -234,151 +286,156 @@ class Task(domainresource.DomainResource):
             "i+R[9]Cs this a proposed task, a planned task, an actionable task, "
             "etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "unknown",
-            "proposal",
-            "plan",
-            "order",
-            "original-order",
-            "reflex-order",
-            "filler-order",
-            "instance-order",
-            "option",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "unknown",
+                "proposal",
+                "plan",
+                "order",
+                "original-order",
+                "reflex-order",
+                "filler-order",
+                "instance-order",
+                "option",
+            ],
+        },
     )
-    intent__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_intent", title="Extension field for ``intent``."
+    intent__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_intent", title="Extension field for ``intent``."
     )
 
-    lastModified: fhirtypes.DateTime = Field(
-        None,
+    lastModified: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="lastModified",
         title="Task Last Modified Date",
         description="The date and time of last modification to this task.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    lastModified__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_lastModified", title="Extension field for ``lastModified``."
+    lastModified__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_lastModified",
+        title="Extension field for ``lastModified``.",
     )
 
-    location: fhirtypes.ReferenceType = Field(
-        None,
+    location: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="location",
         title="Where task occurs",
-        description="Principal physical location where the this task is performed.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
+        description="Principal physical location where this task is performed.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Comments made about the task",
         description="Free-text information captured about the task as it progresses.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    output: typing.List[fhirtypes.TaskOutputType] = Field(
-        None,
+    output: typing.List[fhirtypes.TaskOutputType] | None = Field(
+        default=None,
         alias="output",
         title="Information produced as part of task",
         description="Outputs produced by the Task.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    owner: fhirtypes.ReferenceType = Field(
-        None,
+    owner: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="owner",
         title="Responsible individual",
-        description=(
-            "Individual organization or Device currently responsible for task "
-            "execution."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Practitioner",
-            "PractitionerRole",
-            "Organization",
-            "CareTeam",
-            "HealthcareService",
-            "Patient",
-            "Device",
-            "RelatedPerson",
-        ],
+        description="Party responsible for managing task execution.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+                "CareTeam",
+                "Patient",
+                "RelatedPerson",
+            ],
+        },
     )
 
-    partOf: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    partOf: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="partOf",
         title="Composite task",
         description="Task that this particular task is part of.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Task"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Task"],
+        },
     )
 
-    performerType: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
-        alias="performerType",
-        title="Requested performer",
-        description="The kind of participant that should perform the task.",
-        # if property is element of this resource.
-        element_property=True,
+    performer: typing.List[fhirtypes.TaskPerformerType] | None = Field(
+        default=None,
+        alias="performer",
+        title="Who or what performed the task",
+        description="The entity who performed the requested task.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    priority: fhirtypes.Code = Field(
-        None,
+    priority: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="priority",
         title="routine | urgent | asap | stat",
         description=(
             "Indicates how quickly the Task should be addressed with respect to "
             "other requests."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["routine", "urgent", "asap", "stat"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["routine", "urgent", "asap", "stat"],
+        },
     )
-    priority__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_priority", title="Extension field for ``priority``."
+    priority__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_priority", title="Extension field for ``priority``."
     )
 
-    reasonCode: fhirtypes.CodeableConceptType = Field(
-        None,
-        alias="reasonCode",
+    reason: typing.List[fhirtypes.CodeableReferenceType] | None = Field(
+        default=None,
+        alias="reason",
         title="Why task is needed",
-        description="A description or code indicating why this task needs to be performed.",
-        # if property is element of this resource.
-        element_property=True,
+        description=(
+            "A description, code, or reference indicating why this task needs to be"
+            " performed."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    reasonReference: fhirtypes.ReferenceType = Field(
-        None,
-        alias="reasonReference",
-        title="Why task is needed",
-        description="A resource reference indicating why this task needs to be performed.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
-    )
-
-    relevantHistory: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    relevantHistory: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="relevantHistory",
         title="Key events in history of the Task",
         description=(
@@ -386,32 +443,73 @@ class Task(domainresource.DomainResource):
             "identify key state transitions or updates that are likely to be "
             "relevant to a user looking at the current version of the task."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Provenance"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Provenance"],
+        },
     )
 
-    requester: fhirtypes.ReferenceType = Field(
-        None,
+    requestedPerformer: typing.List[fhirtypes.CodeableReferenceType] | None = Field(
+        default=None,
+        alias="requestedPerformer",
+        title="Who should perform Task",
+        description=(
+            "The kind of participant or specific participant that should perform "
+            "the task."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+                "CareTeam",
+                "HealthcareService",
+                "Patient",
+                "Device",
+                "RelatedPerson",
+            ],
+        },
+    )
+
+    requestedPeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="requestedPeriod",
+        title="When the task should be performed",
+        description=(
+            "Indicates the start and/or end of the period of time when completion "
+            "of the task is desired to take place."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    requester: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="requester",
         title="Who is asking for task to be done",
         description="The creator of the task.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Device",
-            "Organization",
-            "Patient",
-            "Practitioner",
-            "PractitionerRole",
-            "RelatedPerson",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Device",
+                "Organization",
+                "Patient",
+                "Practitioner",
+                "PractitionerRole",
+                "RelatedPerson",
+            ],
+        },
     )
 
-    restriction: fhirtypes.TaskRestrictionType = Field(
-        None,
+    restriction: fhirtypes.TaskRestrictionType | None = Field(
+        default=None,
         alias="restriction",
         title="Constraints on fulfillment tasks",
         description=(
@@ -420,40 +518,45 @@ class Task(domainresource.DomainResource):
             "element identifies any limitations on what parts of the referenced "
             "request should be actioned."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | requested | received | accepted | +",
         description="The current status of the task.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "requested", "received", "accepted", "+"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "requested", "received", "accepted", "+"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    statusReason: fhirtypes.CodeableConceptType = Field(
-        None,
+    statusReason: fhirtypes.CodeableReferenceType | None = Field(
+        default=None,
         alias="statusReason",
         title="Reason for current status",
         description="An explanation as to why this task is held, failed, was refused, etc.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Task`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Task`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -475,20 +578,22 @@ class Task(domainresource.DomainResource):
             "businessStatus",
             "intent",
             "priority",
+            "doNotPerform",
             "code",
             "description",
             "focus",
             "for",
             "encounter",
+            "requestedPeriod",
             "executionPeriod",
             "authoredOn",
             "lastModified",
             "requester",
-            "performerType",
+            "requestedPerformer",
             "owner",
+            "performer",
             "location",
-            "reasonCode",
-            "reasonReference",
+            "reason",
             "insurance",
             "note",
             "relevantHistory",
@@ -497,10 +602,41 @@ class Task(domainresource.DomainResource):
             "output",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_594(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Task`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "instantiatesCanonical",
+            "instantiatesUri",
+            "basedOn",
+            "groupIdentifier",
+            "partOf",
+            "status",
+            "statusReason",
+            "businessStatus",
+            "intent",
+            "doNotPerform",
+            "code",
+            "description",
+            "focus",
+            "for",
+            "encounter",
+            "requestedPeriod",
+            "executionPeriod",
+            "lastModified",
+            "requester",
+            "owner",
+            "performer",
+            "location",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -509,52 +645,7 @@ class Task(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("intent", "intent__ext"), ("status", "status__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TaskInput(backboneelement.BackboneElement):
@@ -566,688 +657,810 @@ class TaskInput(backboneelement.BackboneElement):
     Additional information that may be needed in the execution of the task.
     """
 
-    resource_type = Field("TaskInput", const=True)
+    __resource_type__ = "TaskInput"
 
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Label for the input",
         description=(
             "A code or description indicating how the input is intended to be used "
             "as part of the task execution."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    valueAddress: fhirtypes.AddressType = Field(
-        None,
+    valueAddress: fhirtypes.AddressType | None = Field(
+        default=None,
         alias="valueAddress",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueAge: fhirtypes.AgeType = Field(
-        None,
+    valueAge: fhirtypes.AgeType | None = Field(
+        default=None,
         alias="valueAge",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueAnnotation: fhirtypes.AnnotationType = Field(
-        None,
+    valueAnnotation: fhirtypes.AnnotationType | None = Field(
+        default=None,
         alias="valueAnnotation",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueAttachment: fhirtypes.AttachmentType = Field(
-        None,
+    valueAttachment: fhirtypes.AttachmentType | None = Field(
+        default=None,
         alias="valueAttachment",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueBase64Binary: fhirtypes.Base64Binary = Field(
-        None,
+    valueAvailability: fhirtypes.AvailabilityType | None = Field(
+        default=None,
+        alias="valueAvailability",
+        title="Content to use in performing the task",
+        description="The value of the input parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueBase64Binary: fhirtypes.Base64BinaryType | None = Field(
+        default=None,
         alias="valueBase64Binary",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueBase64Binary__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    valueBase64Binary__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_valueBase64Binary",
         title="Extension field for ``valueBase64Binary``.",
     )
 
-    valueBoolean: bool = Field(
-        None,
+    valueBoolean: bool | None = Field(
+        default=None,
         alias="valueBoolean",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueBoolean", title="Extension field for ``valueBoolean``."
+    valueBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueBoolean",
+        title="Extension field for ``valueBoolean``.",
     )
 
-    valueCanonical: fhirtypes.Canonical = Field(
-        None,
+    valueCanonical: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="valueCanonical",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueCanonical", title="Extension field for ``valueCanonical``."
+    valueCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueCanonical",
+        title="Extension field for ``valueCanonical``.",
     )
 
-    valueCode: fhirtypes.Code = Field(
-        None,
+    valueCode: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="valueCode",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueCode__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueCode", title="Extension field for ``valueCode``."
+    valueCode__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueCode", title="Extension field for ``valueCode``."
     )
 
-    valueCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    valueCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="valueCodeableConcept",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueCoding: fhirtypes.CodingType = Field(
-        None,
+    valueCodeableReference: fhirtypes.CodeableReferenceType | None = Field(
+        default=None,
+        alias="valueCodeableReference",
+        title="Content to use in performing the task",
+        description="The value of the input parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueCoding: fhirtypes.CodingType | None = Field(
+        default=None,
         alias="valueCoding",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueContactDetail: fhirtypes.ContactDetailType = Field(
-        None,
+    valueContactDetail: fhirtypes.ContactDetailType | None = Field(
+        default=None,
         alias="valueContactDetail",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueContactPoint: fhirtypes.ContactPointType = Field(
-        None,
+    valueContactPoint: fhirtypes.ContactPointType | None = Field(
+        default=None,
         alias="valueContactPoint",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueContributor: fhirtypes.ContributorType = Field(
-        None,
-        alias="valueContributor",
-        title="Content to use in performing the task",
-        description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
-    )
-
-    valueCount: fhirtypes.CountType = Field(
-        None,
+    valueCount: fhirtypes.CountType | None = Field(
+        default=None,
         alias="valueCount",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueDataRequirement: fhirtypes.DataRequirementType = Field(
-        None,
+    valueDataRequirement: fhirtypes.DataRequirementType | None = Field(
+        default=None,
         alias="valueDataRequirement",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueDate: fhirtypes.Date = Field(
-        None,
+    valueDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="valueDate",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueDate", title="Extension field for ``valueDate``."
+    valueDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueDate", title="Extension field for ``valueDate``."
     )
 
-    valueDateTime: fhirtypes.DateTime = Field(
-        None,
+    valueDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="valueDateTime",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueDateTime", title="Extension field for ``valueDateTime``."
+    valueDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueDateTime",
+        title="Extension field for ``valueDateTime``.",
     )
 
-    valueDecimal: fhirtypes.Decimal = Field(
-        None,
+    valueDecimal: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="valueDecimal",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueDecimal__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueDecimal", title="Extension field for ``valueDecimal``."
+    valueDecimal__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueDecimal",
+        title="Extension field for ``valueDecimal``.",
     )
 
-    valueDistance: fhirtypes.DistanceType = Field(
-        None,
+    valueDistance: fhirtypes.DistanceType | None = Field(
+        default=None,
         alias="valueDistance",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueDosage: fhirtypes.DosageType = Field(
-        None,
+    valueDosage: fhirtypes.DosageType | None = Field(
+        default=None,
         alias="valueDosage",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueDuration: fhirtypes.DurationType = Field(
-        None,
+    valueDuration: fhirtypes.DurationType | None = Field(
+        default=None,
         alias="valueDuration",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueExpression: fhirtypes.ExpressionType = Field(
-        None,
+    valueExpression: fhirtypes.ExpressionType | None = Field(
+        default=None,
         alias="valueExpression",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueHumanName: fhirtypes.HumanNameType = Field(
-        None,
+    valueExtendedContactDetail: fhirtypes.ExtendedContactDetailType | None = Field(
+        default=None,
+        alias="valueExtendedContactDetail",
+        title="Content to use in performing the task",
+        description="The value of the input parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueHumanName: fhirtypes.HumanNameType | None = Field(
+        default=None,
         alias="valueHumanName",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueId: fhirtypes.Id = Field(
-        None,
+    valueId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="valueId",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueId", title="Extension field for ``valueId``."
+    valueId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueId", title="Extension field for ``valueId``."
     )
 
-    valueIdentifier: fhirtypes.IdentifierType = Field(
-        None,
+    valueIdentifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="valueIdentifier",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueInstant: fhirtypes.Instant = Field(
-        None,
+    valueInstant: fhirtypes.InstantType | None = Field(
+        default=None,
         alias="valueInstant",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueInstant__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueInstant", title="Extension field for ``valueInstant``."
+    valueInstant__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueInstant",
+        title="Extension field for ``valueInstant``.",
     )
 
-    valueInteger: fhirtypes.Integer = Field(
-        None,
+    valueInteger: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="valueInteger",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueInteger__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueInteger", title="Extension field for ``valueInteger``."
+    valueInteger__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueInteger",
+        title="Extension field for ``valueInteger``.",
     )
 
-    valueMarkdown: fhirtypes.Markdown = Field(
-        None,
+    valueInteger64: fhirtypes.Integer64Type | None = Field(
+        default=None,
+        alias="valueInteger64",
+        title="Content to use in performing the task",
+        description="The value of the input parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueInteger64__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueInteger64",
+        title="Extension field for ``valueInteger64``.",
+    )
+
+    valueMarkdown: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="valueMarkdown",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueMarkdown__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueMarkdown", title="Extension field for ``valueMarkdown``."
+    valueMarkdown__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueMarkdown",
+        title="Extension field for ``valueMarkdown``.",
     )
 
-    valueMeta: fhirtypes.MetaType = Field(
-        None,
+    valueMeta: fhirtypes.MetaType | None = Field(
+        default=None,
         alias="valueMeta",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueMoney: fhirtypes.MoneyType = Field(
-        None,
+    valueMoney: fhirtypes.MoneyType | None = Field(
+        default=None,
         alias="valueMoney",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueOid: fhirtypes.Oid = Field(
-        None,
+    valueOid: fhirtypes.OidType | None = Field(
+        default=None,
         alias="valueOid",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueOid__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueOid", title="Extension field for ``valueOid``."
+    valueOid__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueOid", title="Extension field for ``valueOid``."
     )
 
-    valueParameterDefinition: fhirtypes.ParameterDefinitionType = Field(
-        None,
+    valueParameterDefinition: fhirtypes.ParameterDefinitionType | None = Field(
+        default=None,
         alias="valueParameterDefinition",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valuePeriod: fhirtypes.PeriodType = Field(
-        None,
+    valuePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="valuePeriod",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valuePositiveInt: fhirtypes.PositiveInt = Field(
-        None,
+    valuePositiveInt: fhirtypes.PositiveIntType | None = Field(
+        default=None,
         alias="valuePositiveInt",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valuePositiveInt__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    valuePositiveInt__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_valuePositiveInt",
         title="Extension field for ``valuePositiveInt``.",
     )
 
-    valueQuantity: fhirtypes.QuantityType = Field(
-        None,
+    valueQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="valueQuantity",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueRange: fhirtypes.RangeType = Field(
-        None,
+    valueRange: fhirtypes.RangeType | None = Field(
+        default=None,
         alias="valueRange",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueRatio: fhirtypes.RatioType = Field(
-        None,
+    valueRatio: fhirtypes.RatioType | None = Field(
+        default=None,
         alias="valueRatio",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueReference: fhirtypes.ReferenceType = Field(
-        None,
+    valueRatioRange: fhirtypes.RatioRangeType | None = Field(
+        default=None,
+        alias="valueRatioRange",
+        title="Content to use in performing the task",
+        description="The value of the input parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="valueReference",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueRelatedArtifact: fhirtypes.RelatedArtifactType = Field(
-        None,
+    valueRelatedArtifact: fhirtypes.RelatedArtifactType | None = Field(
+        default=None,
         alias="valueRelatedArtifact",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueSampledData: fhirtypes.SampledDataType = Field(
-        None,
+    valueSampledData: fhirtypes.SampledDataType | None = Field(
+        default=None,
         alias="valueSampledData",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueSignature: fhirtypes.SignatureType = Field(
-        None,
+    valueSignature: fhirtypes.SignatureType | None = Field(
+        default=None,
         alias="valueSignature",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueString: fhirtypes.String = Field(
-        None,
+    valueString: fhirtypes.StringType | None = Field(
+        default=None,
         alias="valueString",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueString__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueString", title="Extension field for ``valueString``."
+    valueString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueString", title="Extension field for ``valueString``."
     )
 
-    valueTime: fhirtypes.Time = Field(
-        None,
+    valueTime: fhirtypes.TimeType | None = Field(
+        default=None,
         alias="valueTime",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueTime", title="Extension field for ``valueTime``."
+    valueTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueTime", title="Extension field for ``valueTime``."
     )
 
-    valueTiming: fhirtypes.TimingType = Field(
-        None,
+    valueTiming: fhirtypes.TimingType | None = Field(
+        default=None,
         alias="valueTiming",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueTriggerDefinition: fhirtypes.TriggerDefinitionType = Field(
-        None,
+    valueTriggerDefinition: fhirtypes.TriggerDefinitionType | None = Field(
+        default=None,
         alias="valueTriggerDefinition",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueUnsignedInt: fhirtypes.UnsignedInt = Field(
-        None,
+    valueUnsignedInt: fhirtypes.UnsignedIntType | None = Field(
+        default=None,
         alias="valueUnsignedInt",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueUnsignedInt__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    valueUnsignedInt__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_valueUnsignedInt",
         title="Extension field for ``valueUnsignedInt``.",
     )
 
-    valueUri: fhirtypes.Uri = Field(
-        None,
+    valueUri: fhirtypes.UriType | None = Field(
+        default=None,
         alias="valueUri",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueUri__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueUri", title="Extension field for ``valueUri``."
+    valueUri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueUri", title="Extension field for ``valueUri``."
     )
 
-    valueUrl: fhirtypes.Url = Field(
-        None,
+    valueUrl: fhirtypes.UrlType | None = Field(
+        default=None,
         alias="valueUrl",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueUrl__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueUrl", title="Extension field for ``valueUrl``."
+    valueUrl__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueUrl", title="Extension field for ``valueUrl``."
     )
 
-    valueUsageContext: fhirtypes.UsageContextType = Field(
-        None,
+    valueUsageContext: fhirtypes.UsageContextType | None = Field(
+        default=None,
         alias="valueUsageContext",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueUuid: fhirtypes.Uuid = Field(
-        None,
+    valueUuid: fhirtypes.UuidType | None = Field(
+        default=None,
         alias="valueUuid",
         title="Content to use in performing the task",
         description="The value of the input parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueUuid__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueUuid", title="Extension field for ``valueUuid``."
+    valueUuid__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueUuid", title="Extension field for ``valueUuid``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TaskInput`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TaskInput`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -1264,6 +1477,7 @@ class TaskInput(backboneelement.BackboneElement):
             "valueId",
             "valueInstant",
             "valueInteger",
+            "valueInteger64",
             "valueMarkdown",
             "valueOid",
             "valuePositiveInt",
@@ -1278,6 +1492,7 @@ class TaskInput(backboneelement.BackboneElement):
             "valueAnnotation",
             "valueAttachment",
             "valueCodeableConcept",
+            "valueCodeableReference",
             "valueCoding",
             "valueContactPoint",
             "valueCount",
@@ -1290,26 +1505,32 @@ class TaskInput(backboneelement.BackboneElement):
             "valueQuantity",
             "valueRange",
             "valueRatio",
+            "valueRatioRange",
             "valueReference",
             "valueSampledData",
             "valueSignature",
             "valueTiming",
             "valueContactDetail",
-            "valueContributor",
             "valueDataRequirement",
             "valueExpression",
             "valueParameterDefinition",
             "valueRelatedArtifact",
             "valueTriggerDefinition",
             "valueUsageContext",
+            "valueAvailability",
+            "valueExtendedContactDetail",
             "valueDosage",
             "valueMeta",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1131(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TaskInput`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -1328,15 +1549,16 @@ class TaskInput(backboneelement.BackboneElement):
                 "valueAge",
                 "valueAnnotation",
                 "valueAttachment",
+                "valueAvailability",
                 "valueBase64Binary",
                 "valueBoolean",
                 "valueCanonical",
                 "valueCode",
                 "valueCodeableConcept",
+                "valueCodeableReference",
                 "valueCoding",
                 "valueContactDetail",
                 "valueContactPoint",
-                "valueContributor",
                 "valueCount",
                 "valueDataRequirement",
                 "valueDate",
@@ -1346,11 +1568,13 @@ class TaskInput(backboneelement.BackboneElement):
                 "valueDosage",
                 "valueDuration",
                 "valueExpression",
+                "valueExtendedContactDetail",
                 "valueHumanName",
                 "valueId",
                 "valueIdentifier",
                 "valueInstant",
                 "valueInteger",
+                "valueInteger64",
                 "valueMarkdown",
                 "valueMeta",
                 "valueMoney",
@@ -1361,6 +1585,7 @@ class TaskInput(backboneelement.BackboneElement):
                 "valueQuantity",
                 "valueRange",
                 "valueRatio",
+                "valueRatioRange",
                 "valueReference",
                 "valueRelatedArtifact",
                 "valueSampledData",
@@ -1376,26 +1601,7 @@ class TaskInput(backboneelement.BackboneElement):
                 "valueUuid",
             ]
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class TaskOutput(backboneelement.BackboneElement):
@@ -1407,685 +1613,807 @@ class TaskOutput(backboneelement.BackboneElement):
     Outputs produced by the Task.
     """
 
-    resource_type = Field("TaskOutput", const=True)
+    __resource_type__ = "TaskOutput"
 
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Label for output",
         description="The name of the Output parameter.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    valueAddress: fhirtypes.AddressType = Field(
-        None,
+    valueAddress: fhirtypes.AddressType | None = Field(
+        default=None,
         alias="valueAddress",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueAge: fhirtypes.AgeType = Field(
-        None,
+    valueAge: fhirtypes.AgeType | None = Field(
+        default=None,
         alias="valueAge",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueAnnotation: fhirtypes.AnnotationType = Field(
-        None,
+    valueAnnotation: fhirtypes.AnnotationType | None = Field(
+        default=None,
         alias="valueAnnotation",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueAttachment: fhirtypes.AttachmentType = Field(
-        None,
+    valueAttachment: fhirtypes.AttachmentType | None = Field(
+        default=None,
         alias="valueAttachment",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueBase64Binary: fhirtypes.Base64Binary = Field(
-        None,
+    valueAvailability: fhirtypes.AvailabilityType | None = Field(
+        default=None,
+        alias="valueAvailability",
+        title="Result of output",
+        description="The value of the Output parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueBase64Binary: fhirtypes.Base64BinaryType | None = Field(
+        default=None,
         alias="valueBase64Binary",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueBase64Binary__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    valueBase64Binary__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_valueBase64Binary",
         title="Extension field for ``valueBase64Binary``.",
     )
 
-    valueBoolean: bool = Field(
-        None,
+    valueBoolean: bool | None = Field(
+        default=None,
         alias="valueBoolean",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueBoolean", title="Extension field for ``valueBoolean``."
+    valueBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueBoolean",
+        title="Extension field for ``valueBoolean``.",
     )
 
-    valueCanonical: fhirtypes.Canonical = Field(
-        None,
+    valueCanonical: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="valueCanonical",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueCanonical", title="Extension field for ``valueCanonical``."
+    valueCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueCanonical",
+        title="Extension field for ``valueCanonical``.",
     )
 
-    valueCode: fhirtypes.Code = Field(
-        None,
+    valueCode: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="valueCode",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueCode__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueCode", title="Extension field for ``valueCode``."
+    valueCode__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueCode", title="Extension field for ``valueCode``."
     )
 
-    valueCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    valueCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="valueCodeableConcept",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueCoding: fhirtypes.CodingType = Field(
-        None,
+    valueCodeableReference: fhirtypes.CodeableReferenceType | None = Field(
+        default=None,
+        alias="valueCodeableReference",
+        title="Result of output",
+        description="The value of the Output parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueCoding: fhirtypes.CodingType | None = Field(
+        default=None,
         alias="valueCoding",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueContactDetail: fhirtypes.ContactDetailType = Field(
-        None,
+    valueContactDetail: fhirtypes.ContactDetailType | None = Field(
+        default=None,
         alias="valueContactDetail",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueContactPoint: fhirtypes.ContactPointType = Field(
-        None,
+    valueContactPoint: fhirtypes.ContactPointType | None = Field(
+        default=None,
         alias="valueContactPoint",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueContributor: fhirtypes.ContributorType = Field(
-        None,
-        alias="valueContributor",
-        title="Result of output",
-        description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
-    )
-
-    valueCount: fhirtypes.CountType = Field(
-        None,
+    valueCount: fhirtypes.CountType | None = Field(
+        default=None,
         alias="valueCount",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueDataRequirement: fhirtypes.DataRequirementType = Field(
-        None,
+    valueDataRequirement: fhirtypes.DataRequirementType | None = Field(
+        default=None,
         alias="valueDataRequirement",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueDate: fhirtypes.Date = Field(
-        None,
+    valueDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="valueDate",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueDate", title="Extension field for ``valueDate``."
+    valueDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueDate", title="Extension field for ``valueDate``."
     )
 
-    valueDateTime: fhirtypes.DateTime = Field(
-        None,
+    valueDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="valueDateTime",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueDateTime", title="Extension field for ``valueDateTime``."
+    valueDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueDateTime",
+        title="Extension field for ``valueDateTime``.",
     )
 
-    valueDecimal: fhirtypes.Decimal = Field(
-        None,
+    valueDecimal: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="valueDecimal",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueDecimal__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueDecimal", title="Extension field for ``valueDecimal``."
+    valueDecimal__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueDecimal",
+        title="Extension field for ``valueDecimal``.",
     )
 
-    valueDistance: fhirtypes.DistanceType = Field(
-        None,
+    valueDistance: fhirtypes.DistanceType | None = Field(
+        default=None,
         alias="valueDistance",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueDosage: fhirtypes.DosageType = Field(
-        None,
+    valueDosage: fhirtypes.DosageType | None = Field(
+        default=None,
         alias="valueDosage",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueDuration: fhirtypes.DurationType = Field(
-        None,
+    valueDuration: fhirtypes.DurationType | None = Field(
+        default=None,
         alias="valueDuration",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueExpression: fhirtypes.ExpressionType = Field(
-        None,
+    valueExpression: fhirtypes.ExpressionType | None = Field(
+        default=None,
         alias="valueExpression",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueHumanName: fhirtypes.HumanNameType = Field(
-        None,
+    valueExtendedContactDetail: fhirtypes.ExtendedContactDetailType | None = Field(
+        default=None,
+        alias="valueExtendedContactDetail",
+        title="Result of output",
+        description="The value of the Output parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueHumanName: fhirtypes.HumanNameType | None = Field(
+        default=None,
         alias="valueHumanName",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueId: fhirtypes.Id = Field(
-        None,
+    valueId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="valueId",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueId", title="Extension field for ``valueId``."
+    valueId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueId", title="Extension field for ``valueId``."
     )
 
-    valueIdentifier: fhirtypes.IdentifierType = Field(
-        None,
+    valueIdentifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="valueIdentifier",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueInstant: fhirtypes.Instant = Field(
-        None,
+    valueInstant: fhirtypes.InstantType | None = Field(
+        default=None,
         alias="valueInstant",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueInstant__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueInstant", title="Extension field for ``valueInstant``."
+    valueInstant__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueInstant",
+        title="Extension field for ``valueInstant``.",
     )
 
-    valueInteger: fhirtypes.Integer = Field(
-        None,
+    valueInteger: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="valueInteger",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueInteger__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueInteger", title="Extension field for ``valueInteger``."
+    valueInteger__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueInteger",
+        title="Extension field for ``valueInteger``.",
     )
 
-    valueMarkdown: fhirtypes.Markdown = Field(
-        None,
+    valueInteger64: fhirtypes.Integer64Type | None = Field(
+        default=None,
+        alias="valueInteger64",
+        title="Result of output",
+        description="The value of the Output parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueInteger64__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueInteger64",
+        title="Extension field for ``valueInteger64``.",
+    )
+
+    valueMarkdown: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="valueMarkdown",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueMarkdown__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueMarkdown", title="Extension field for ``valueMarkdown``."
+    valueMarkdown__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueMarkdown",
+        title="Extension field for ``valueMarkdown``.",
     )
 
-    valueMeta: fhirtypes.MetaType = Field(
-        None,
+    valueMeta: fhirtypes.MetaType | None = Field(
+        default=None,
         alias="valueMeta",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueMoney: fhirtypes.MoneyType = Field(
-        None,
+    valueMoney: fhirtypes.MoneyType | None = Field(
+        default=None,
         alias="valueMoney",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueOid: fhirtypes.Oid = Field(
-        None,
+    valueOid: fhirtypes.OidType | None = Field(
+        default=None,
         alias="valueOid",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueOid__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueOid", title="Extension field for ``valueOid``."
+    valueOid__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueOid", title="Extension field for ``valueOid``."
     )
 
-    valueParameterDefinition: fhirtypes.ParameterDefinitionType = Field(
-        None,
+    valueParameterDefinition: fhirtypes.ParameterDefinitionType | None = Field(
+        default=None,
         alias="valueParameterDefinition",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valuePeriod: fhirtypes.PeriodType = Field(
-        None,
+    valuePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="valuePeriod",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valuePositiveInt: fhirtypes.PositiveInt = Field(
-        None,
+    valuePositiveInt: fhirtypes.PositiveIntType | None = Field(
+        default=None,
         alias="valuePositiveInt",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valuePositiveInt__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    valuePositiveInt__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_valuePositiveInt",
         title="Extension field for ``valuePositiveInt``.",
     )
 
-    valueQuantity: fhirtypes.QuantityType = Field(
-        None,
+    valueQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="valueQuantity",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueRange: fhirtypes.RangeType = Field(
-        None,
+    valueRange: fhirtypes.RangeType | None = Field(
+        default=None,
         alias="valueRange",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueRatio: fhirtypes.RatioType = Field(
-        None,
+    valueRatio: fhirtypes.RatioType | None = Field(
+        default=None,
         alias="valueRatio",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueReference: fhirtypes.ReferenceType = Field(
-        None,
+    valueRatioRange: fhirtypes.RatioRangeType | None = Field(
+        default=None,
+        alias="valueRatioRange",
+        title="Result of output",
+        description="The value of the Output parameter as a basic type.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="valueReference",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueRelatedArtifact: fhirtypes.RelatedArtifactType = Field(
-        None,
+    valueRelatedArtifact: fhirtypes.RelatedArtifactType | None = Field(
+        default=None,
         alias="valueRelatedArtifact",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueSampledData: fhirtypes.SampledDataType = Field(
-        None,
+    valueSampledData: fhirtypes.SampledDataType | None = Field(
+        default=None,
         alias="valueSampledData",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueSignature: fhirtypes.SignatureType = Field(
-        None,
+    valueSignature: fhirtypes.SignatureType | None = Field(
+        default=None,
         alias="valueSignature",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueString: fhirtypes.String = Field(
-        None,
+    valueString: fhirtypes.StringType | None = Field(
+        default=None,
         alias="valueString",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueString__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueString", title="Extension field for ``valueString``."
+    valueString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueString", title="Extension field for ``valueString``."
     )
 
-    valueTime: fhirtypes.Time = Field(
-        None,
+    valueTime: fhirtypes.TimeType | None = Field(
+        default=None,
         alias="valueTime",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueTime", title="Extension field for ``valueTime``."
+    valueTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueTime", title="Extension field for ``valueTime``."
     )
 
-    valueTiming: fhirtypes.TimingType = Field(
-        None,
+    valueTiming: fhirtypes.TimingType | None = Field(
+        default=None,
         alias="valueTiming",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueTriggerDefinition: fhirtypes.TriggerDefinitionType = Field(
-        None,
+    valueTriggerDefinition: fhirtypes.TriggerDefinitionType | None = Field(
+        default=None,
         alias="valueTriggerDefinition",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueUnsignedInt: fhirtypes.UnsignedInt = Field(
-        None,
+    valueUnsignedInt: fhirtypes.UnsignedIntType | None = Field(
+        default=None,
         alias="valueUnsignedInt",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueUnsignedInt__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    valueUnsignedInt__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_valueUnsignedInt",
         title="Extension field for ``valueUnsignedInt``.",
     )
 
-    valueUri: fhirtypes.Uri = Field(
-        None,
+    valueUri: fhirtypes.UriType | None = Field(
+        default=None,
         alias="valueUri",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueUri__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueUri", title="Extension field for ``valueUri``."
+    valueUri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueUri", title="Extension field for ``valueUri``."
     )
 
-    valueUrl: fhirtypes.Url = Field(
-        None,
+    valueUrl: fhirtypes.UrlType | None = Field(
+        default=None,
         alias="valueUrl",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueUrl__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueUrl", title="Extension field for ``valueUrl``."
+    valueUrl__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueUrl", title="Extension field for ``valueUrl``."
     )
 
-    valueUsageContext: fhirtypes.UsageContextType = Field(
-        None,
+    valueUsageContext: fhirtypes.UsageContextType | None = Field(
+        default=None,
         alias="valueUsageContext",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueUuid: fhirtypes.Uuid = Field(
-        None,
+    valueUuid: fhirtypes.UuidType | None = Field(
+        default=None,
         alias="valueUuid",
         title="Result of output",
         description="The value of the Output parameter as a basic type.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueUuid__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueUuid", title="Extension field for ``valueUuid``."
+    valueUuid__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueUuid", title="Extension field for ``valueUuid``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TaskOutput`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TaskOutput`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -2102,6 +2430,7 @@ class TaskOutput(backboneelement.BackboneElement):
             "valueId",
             "valueInstant",
             "valueInteger",
+            "valueInteger64",
             "valueMarkdown",
             "valueOid",
             "valuePositiveInt",
@@ -2116,6 +2445,7 @@ class TaskOutput(backboneelement.BackboneElement):
             "valueAnnotation",
             "valueAttachment",
             "valueCodeableConcept",
+            "valueCodeableReference",
             "valueCoding",
             "valueContactPoint",
             "valueCount",
@@ -2128,26 +2458,32 @@ class TaskOutput(backboneelement.BackboneElement):
             "valueQuantity",
             "valueRange",
             "valueRatio",
+            "valueRatioRange",
             "valueReference",
             "valueSampledData",
             "valueSignature",
             "valueTiming",
             "valueContactDetail",
-            "valueContributor",
             "valueDataRequirement",
             "valueExpression",
             "valueParameterDefinition",
             "valueRelatedArtifact",
             "valueTriggerDefinition",
             "valueUsageContext",
+            "valueAvailability",
+            "valueExtendedContactDetail",
             "valueDosage",
             "valueMeta",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1260(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TaskOutput`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -2166,15 +2502,16 @@ class TaskOutput(backboneelement.BackboneElement):
                 "valueAge",
                 "valueAnnotation",
                 "valueAttachment",
+                "valueAvailability",
                 "valueBase64Binary",
                 "valueBoolean",
                 "valueCanonical",
                 "valueCode",
                 "valueCodeableConcept",
+                "valueCodeableReference",
                 "valueCoding",
                 "valueContactDetail",
                 "valueContactPoint",
-                "valueContributor",
                 "valueCount",
                 "valueDataRequirement",
                 "valueDate",
@@ -2184,11 +2521,13 @@ class TaskOutput(backboneelement.BackboneElement):
                 "valueDosage",
                 "valueDuration",
                 "valueExpression",
+                "valueExtendedContactDetail",
                 "valueHumanName",
                 "valueId",
                 "valueIdentifier",
                 "valueInstant",
                 "valueInteger",
+                "valueInteger64",
                 "valueMarkdown",
                 "valueMeta",
                 "valueMoney",
@@ -2199,6 +2538,7 @@ class TaskOutput(backboneelement.BackboneElement):
                 "valueQuantity",
                 "valueRange",
                 "valueRatio",
+                "valueRatioRange",
                 "valueReference",
                 "valueRelatedArtifact",
                 "valueSampledData",
@@ -2214,26 +2554,65 @@ class TaskOutput(backboneelement.BackboneElement):
                 "valueUuid",
             ]
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
+        return one_of_many_fields
 
-        return values
+
+class TaskPerformer(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Who or what performed the task.
+    The entity who performed the requested task.
+    """
+
+    __resource_type__ = "TaskPerformer"
+
+    actor: fhirtypes.ReferenceType = Field(
+        default=...,
+        alias="actor",
+        title="Who performed the task",
+        description="The actor or entity who performed the task.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+                "CareTeam",
+                "Patient",
+                "RelatedPerson",
+            ],
+        },
+    )
+
+    function: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="function",
+        title="Type of performance",
+        description="A code or description of the performer of the task.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TaskPerformer`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "function", "actor"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TaskPerformer`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "function", "actor"]
 
 
 class TaskRestriction(backboneelement.BackboneElement):
@@ -2247,55 +2626,62 @@ class TaskRestriction(backboneelement.BackboneElement):
     any limitations on what parts of the referenced request should be actioned.
     """
 
-    resource_type = Field("TaskRestriction", const=True)
+    __resource_type__ = "TaskRestriction"
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
-        title="When fulfillment sought",
-        description="Over what time-period is fulfillment sought.",
-        # if property is element of this resource.
-        element_property=True,
+        title="When fulfillment is sought",
+        description=(
+            "The time-period for which fulfillment is sought. This must fall within"
+            " the overall time period authorized in the referenced request.  E.g. "
+            "ServiceRequest.occurance[x]."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    recipient: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    recipient: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="recipient",
         title="For whom is fulfillment sought?",
         description=(
-            "For requests that are targeted to more than on potential "
-            "recipient/target, for whom is fulfillment sought?"
+            "For requests that are targeted to more than one potential "
+            "recipient/target, to identify who is fulfillment is sought for."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Patient",
-            "Practitioner",
-            "PractitionerRole",
-            "RelatedPerson",
-            "Group",
-            "Organization",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Patient",
+                "Practitioner",
+                "PractitionerRole",
+                "RelatedPerson",
+                "Group",
+                "Organization",
+            ],
+        },
     )
 
-    repetitions: fhirtypes.PositiveInt = Field(
-        None,
+    repetitions: fhirtypes.PositiveIntType | None = Field(
+        default=None,
         alias="repetitions",
         title="How many times to repeat",
         description="Indicates the number of times the requested action should occur.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    repetitions__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_repetitions", title="Extension field for ``repetitions``."
+    repetitions__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_repetitions", title="Extension field for ``repetitions``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TaskRestriction`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TaskRestriction`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -2305,3 +2691,10 @@ class TaskRestriction(backboneelement.BackboneElement):
             "period",
             "recipient",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TaskRestriction`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

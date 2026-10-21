@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Sequence
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -24,10 +24,10 @@ class Sequence(domainresource.DomainResource):
     Raw data describing a biological sequence.
     """
 
-    resource_type = Field("Sequence", const=True)
+    __resource_type__ = "Sequence"
 
-    coordinateSystem: fhirtypes.Integer = Field(
-        None,
+    coordinateSystem: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="coordinateSystem",
         title=(
             "Base number of coordinate system (0 for 0-based numbering or "
@@ -39,41 +39,47 @@ class Sequence(domainresource.DomainResource):
             "coordinates, inclusive start, exclusive end) or starting at 1 (1-based"
             " numbering, inclusive start and inclusive end)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    coordinateSystem__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    coordinateSystem__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_coordinateSystem",
         title="Extension field for ``coordinateSystem``.",
     )
 
-    device: fhirtypes.ReferenceType = Field(
-        None,
+    device: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="device",
         title="The method for sequencing",
         description="The method for sequencing, for example, chip information.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Device"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Device"],
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Unique ID for this particular sequence. This is a FHIR-defined id",
         description=(
             "A unique identifier for this particular sequence instance. This is a "
             "FHIR-defined id."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    observedSeq: fhirtypes.String = Field(
-        None,
+    observedSeq: fhirtypes.StringType | None = Field(
+        default=None,
         alias="observedSeq",
         title="Sequence that was observed",
         description=(
@@ -81,48 +87,56 @@ class Sequence(domainresource.DomainResource):
             "along with variant records on referenceSeq. This shall starts from "
             "referenceSeq.windowStart and end by referenceSeq.windowEnd."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    observedSeq__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_observedSeq", title="Extension field for ``observedSeq``."
+    observedSeq__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_observedSeq", title="Extension field for ``observedSeq``."
     )
 
-    patient: fhirtypes.ReferenceType = Field(
-        None,
+    patient: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="patient",
         title="Who and/or what this is about",
         description="The patient whose sequencing results are described by this resource.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient"],
+        },
     )
 
-    performer: fhirtypes.ReferenceType = Field(
-        None,
+    performer: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="performer",
         title="Who should be responsible for test result",
         description="The organization or lab that should be responsible for this result.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    pointer: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    pointer: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="pointer",
         title="Pointer to next atomic sequence",
         description="Pointer to next atomic sequence which at most contains one variant.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Sequence"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Sequence"],
+        },
     )
 
-    quality: typing.List[fhirtypes.SequenceQualityType] = Field(
-        None,
+    quality: typing.List[fhirtypes.SequenceQualityType] | None = Field(
+        default=None,
         alias="quality",
         title="An set of value as quality of sequence",
         description=(
@@ -131,21 +145,25 @@ class Sequence(domainresource.DomainResource):
             "686](http://www.sequenceontology.org/browser/current_svn/term/SO:00016"
             "86))."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    quantity: fhirtypes.QuantityType = Field(
-        None,
+    quantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="quantity",
         title="The number of copies of the seqeunce of interest.  (RNASeq)",
         description="The number of copies of the seqeunce of interest. (RNASeq).",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    readCoverage: fhirtypes.Integer = Field(
-        None,
+    readCoverage: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="readCoverage",
         title=(
             "Average number of reads representing a given nucleotide in the "
@@ -155,27 +173,33 @@ class Sequence(domainresource.DomainResource):
             "Coverage (read depth or depth) is the average number of reads "
             "representing a given nucleotide in the reconstructed sequence."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    readCoverage__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_readCoverage", title="Extension field for ``readCoverage``."
+    readCoverage__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_readCoverage",
+        title="Extension field for ``readCoverage``.",
     )
 
-    referenceSeq: fhirtypes.SequenceReferenceSeqType = Field(
-        None,
+    referenceSeq: fhirtypes.SequenceReferenceSeqType | None = Field(
+        default=None,
         alias="referenceSeq",
         title="A sequence used as reference",
         description=(
             "A sequence that is used as a reference to describe variants that are "
             "present in a sequence analyzed."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    repository: typing.List[fhirtypes.SequenceRepositoryType] = Field(
-        None,
+    repository: typing.List[fhirtypes.SequenceRepositoryType] | None = Field(
+        default=None,
         alias="repository",
         title=(
             "External repository which contains detailed report related with "
@@ -185,38 +209,44 @@ class Sequence(domainresource.DomainResource):
             "Configurations of the external repository. The repository shall store "
             "target's observedSeq or records related with target's observedSeq."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    specimen: fhirtypes.ReferenceType = Field(
-        None,
+    specimen: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="specimen",
         title="Specimen used for sequencing",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Specimen"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Specimen"],
+        },
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title="aa | dna | rna",
         description="Amino Acid Sequence/ DNA Sequence / RNA Sequence.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["aa", "dna", "rna"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["aa", "dna", "rna"],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
-    variant: typing.List[fhirtypes.SequenceVariantType] = Field(
-        None,
+    variant: typing.List[fhirtypes.SequenceVariantType] | None = Field(
+        default=None,
         alias="variant",
         title="Variant in sequence",
         description=(
@@ -226,15 +256,17 @@ class Sequence(domainresource.DomainResource):
             "change(including insertion,deletion,SNP,etc.)  It can represent some "
             "complex mutation or segment variation with the assist of CIGAR string."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Sequence`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Sequence`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -262,10 +294,33 @@ class Sequence(domainresource.DomainResource):
             "pointer",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1009(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Sequence`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "type",
+            "coordinateSystem",
+            "patient",
+            "specimen",
+            "device",
+            "performer",
+            "quantity",
+            "referenceSeq",
+            "variant",
+            "observedSeq",
+            "quality",
+            "readCoverage",
+            "repository",
+            "pointer",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -274,52 +329,7 @@ class Sequence(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("coordinateSystem", "coordinateSystem__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class SequenceQuality(backboneelement.BackboneElement):
@@ -333,10 +343,10 @@ class SequenceQuality(backboneelement.BackboneElement):
     ww.sequenceontology.org/browser/current_svn/term/SO:0001686)).
     """
 
-    resource_type = Field("SequenceQuality", const=True)
+    __resource_type__ = "SequenceQuality"
 
-    end: fhirtypes.Integer = Field(
-        None,
+    end: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="end",
         title="End position of the sequence",
         description=(
@@ -345,30 +355,34 @@ class SequenceQuality(backboneelement.BackboneElement):
             "coordinate system is 1-base, then end is inclusive and includes the "
             "last position."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    end__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_end", title="Extension field for ``end``."
+    end__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_end", title="Extension field for ``end``."
     )
 
-    fScore: fhirtypes.Decimal = Field(
-        None,
+    fScore: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="fScore",
         title="F-score",
         description=(
             "Harmonic mean of Recall and Precision, computed as: 2 * precision * "
             "recall / (precision + recall)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    fScore__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_fScore", title="Extension field for ``fScore``."
+    fScore__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_fScore", title="Extension field for ``fScore``."
     )
 
-    gtFP: fhirtypes.Decimal = Field(
-        None,
+    gtFP: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="gtFP",
         title=(
             "False positives where the non-REF alleles in the Truth and Query Call "
@@ -379,36 +393,42 @@ class SequenceQuality(backboneelement.BackboneElement):
             "and Query Call Sets match (i.e. cases where the truth is 1/1 and the "
             "query is 0/1 or similar)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    gtFP__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_gtFP", title="Extension field for ``gtFP``."
+    gtFP__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_gtFP", title="Extension field for ``gtFP``."
     )
 
-    method: fhirtypes.CodeableConceptType = Field(
-        None,
+    method: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="method",
         title="Method to get quality",
         description="Which method is used to get sequence quality.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    precision: fhirtypes.Decimal = Field(
-        None,
+    precision: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="precision",
         title="Precision of comparison",
         description="QUERY.TP / (QUERY.TP + QUERY.FP).",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    precision__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_precision", title="Extension field for ``precision``."
+    precision__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_precision", title="Extension field for ``precision``."
     )
 
-    queryFP: fhirtypes.Decimal = Field(
-        None,
+    queryFP: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="queryFP",
         title="False positives",
         description=(
@@ -417,15 +437,17 @@ class SequenceQuality(backboneelement.BackboneElement):
             "with this site. Sites with correct variant but incorrect genotype are "
             "counted here."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    queryFP__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_queryFP", title="Extension field for ``queryFP``."
+    queryFP__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_queryFP", title="Extension field for ``queryFP``."
     )
 
-    queryTP: fhirtypes.Decimal = Field(
-        None,
+    queryTP: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="queryTP",
         title="True positives from the perspective of the query data",
         description=(
@@ -435,27 +457,31 @@ class SequenceQuality(backboneelement.BackboneElement):
             " at this site, and for which there is an accurate genotype call for "
             "the event."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    queryTP__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_queryTP", title="Extension field for ``queryTP``."
+    queryTP__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_queryTP", title="Extension field for ``queryTP``."
     )
 
-    recall: fhirtypes.Decimal = Field(
-        None,
+    recall: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="recall",
         title="Recall of comparison",
         description="TRUTH.TP / (TRUTH.TP + TRUTH.FN).",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    recall__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_recall", title="Extension field for ``recall``."
+    recall__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_recall", title="Extension field for ``recall``."
     )
 
-    score: fhirtypes.QuantityType = Field(
-        None,
+    score: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="score",
         title="Quality score for the comparison",
         description=(
@@ -463,36 +489,42 @@ class SequenceQuality(backboneelement.BackboneElement):
             "0001685](http://www.sequenceontology.org/browser/current_svn/term/SO:0"
             "001685))."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    standardSequence: fhirtypes.CodeableConceptType = Field(
-        None,
+    standardSequence: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="standardSequence",
         title="Standard sequence for comparison",
         description="Gold standard sequence used for comparing against.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    start: fhirtypes.Integer = Field(
-        None,
+    start: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="start",
         title="Start position of the sequence",
         description=(
             "Start position of the sequence. If the coordinate system is either "
             "0-based or 1-based, then start position is inclusive."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    start__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_start", title="Extension field for ``start``."
+    start__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_start", title="Extension field for ``start``."
     )
 
-    truthFN: fhirtypes.Decimal = Field(
-        None,
+    truthFN: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="truthFN",
         title="False negatives",
         description=(
@@ -502,15 +534,17 @@ class SequenceQuality(backboneelement.BackboneElement):
             "inaccurate genotype call for the event. Sites with correct variant but"
             " incorrect genotype are counted here."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    truthFN__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_truthFN", title="Extension field for ``truthFN``."
+    truthFN__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_truthFN", title="Extension field for ``truthFN``."
     )
 
-    truthTP: fhirtypes.Decimal = Field(
-        None,
+    truthTP: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="truthTP",
         title="True positives from the perspective of the truth data",
         description=(
@@ -520,34 +554,38 @@ class SequenceQuality(backboneelement.BackboneElement):
             " at this site, and for which there is an accurate genotype call for "
             "the event."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    truthTP__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_truthTP", title="Extension field for ``truthTP``."
+    truthTP__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_truthTP", title="Extension field for ``truthTP``."
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title="indel | snp | unknown",
         description="INDEL / SNP / Undefined variant.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["indel", "snp", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["indel", "snp", "unknown"],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SequenceQuality`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SequenceQuality`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -569,10 +607,30 @@ class SequenceQuality(backboneelement.BackboneElement):
             "fScore",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1774(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SequenceQuality`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "modifierExtension",
+            "type",
+            "standardSequence",
+            "start",
+            "end",
+            "score",
+            "method",
+            "truthTP",
+            "queryTP",
+            "truthFN",
+            "queryFP",
+            "gtFP",
+            "precision",
+            "recall",
+            "fScore",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -581,52 +639,7 @@ class SequenceQuality(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("type", "type__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class SequenceReferenceSeq(backboneelement.BackboneElement):
@@ -639,10 +652,10 @@ class SequenceReferenceSeq(backboneelement.BackboneElement):
     present in a sequence analyzed.
     """
 
-    resource_type = Field("SequenceReferenceSeq", const=True)
+    __resource_type__ = "SequenceReferenceSeq"
 
-    chromosome: fhirtypes.CodeableConceptType = Field(
-        None,
+    chromosome: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="chromosome",
         title="Chromosome containing genetic finding",
         description=(
@@ -651,12 +664,14 @@ class SequenceReferenceSeq(backboneelement.BackboneElement):
             "or more origins of replication ([SO:0000340](http://www.sequenceontolo"
             "gy.org/browser/current_svn/term/SO:0000340))."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    genomeBuild: fhirtypes.String = Field(
-        None,
+    genomeBuild: fhirtypes.StringType | None = Field(
+        default=None,
         alias="genomeBuild",
         title=(
             "The Genome Build used for reference, following GRCh build versions "
@@ -667,55 +682,62 @@ class SequenceReferenceSeq(backboneelement.BackboneElement):
             "e.g. 'GRCh 37'.  Version number must be included if a versioned "
             "release of a primary build was used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    genomeBuild__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_genomeBuild", title="Extension field for ``genomeBuild``."
+    genomeBuild__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_genomeBuild", title="Extension field for ``genomeBuild``."
     )
 
-    referenceSeqId: fhirtypes.CodeableConceptType = Field(
-        None,
+    referenceSeqId: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="referenceSeqId",
         title="Reference identifier",
         description=(
             "Reference identifier of reference sequence submitted to NCBI. It must "
             "match the type in the Sequence.type field. For example, the prefix, "
-            "\u201cNG_\u201d identifies reference sequence for genes, \u201cNM_"
-            "\u201d for messenger RNA"
+            "\u201cNG_\u201d identifies reference sequence for genes, \u201cNM_\u201d for messenger RNA"
             " transcripts, and \u201cNP_\u201d for amino acid sequences."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    referenceSeqPointer: fhirtypes.ReferenceType = Field(
-        None,
+    referenceSeqPointer: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="referenceSeqPointer",
         title="A Pointer to another Sequence entity as reference sequence",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Sequence"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Sequence"],
+        },
     )
 
-    referenceSeqString: fhirtypes.String = Field(
-        None,
+    referenceSeqString: fhirtypes.StringType | None = Field(
+        default=None,
         alias="referenceSeqString",
         title="A string to represent reference sequence",
         description='A string like "ACGT".',
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    referenceSeqString__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    referenceSeqString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_referenceSeqString",
         title="Extension field for ``referenceSeqString``.",
     )
 
-    strand: fhirtypes.Integer = Field(
-        None,
+    strand: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="strand",
         title="Directionality of DNA ( +1/-1)",
         description=(
@@ -723,15 +745,17 @@ class SequenceReferenceSeq(backboneelement.BackboneElement):
             "strand (5' to 3')/Watson/Sense/positive  and \"-1\" for the minus "
             "strand(3' to 5')/Crick/Antisense/negative."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    strand__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_strand", title="Extension field for ``strand``."
+    strand__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_strand", title="Extension field for ``strand``."
     )
 
-    windowEnd: fhirtypes.Integer = Field(
-        None,
+    windowEnd: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="windowEnd",
         title="End position of the window on the reference sequence",
         description=(
@@ -740,16 +764,18 @@ class SequenceReferenceSeq(backboneelement.BackboneElement):
             "include the last position. If the coordinate system is 1-base, then "
             "end is inclusive and includes the last position."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    windowEnd__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_windowEnd", title="Extension field for ``windowEnd``."
+    windowEnd__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_windowEnd", title="Extension field for ``windowEnd``."
     )
 
-    windowStart: fhirtypes.Integer = Field(
-        None,
+    windowStart: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="windowStart",
         title="Start position of the window on the  reference sequence",
         description=(
@@ -757,19 +783,21 @@ class SequenceReferenceSeq(backboneelement.BackboneElement):
             "coordinate system is either 0-based or 1-based, then start position is"
             " inclusive."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    windowStart__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_windowStart", title="Extension field for ``windowStart``."
+    windowStart__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_windowStart", title="Extension field for ``windowStart``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SequenceReferenceSeq`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SequenceReferenceSeq`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -785,10 +813,24 @@ class SequenceReferenceSeq(backboneelement.BackboneElement):
             "windowEnd",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2229(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SequenceReferenceSeq`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "modifierExtension",
+            "chromosome",
+            "genomeBuild",
+            "referenceSeqId",
+            "referenceSeqPointer",
+            "referenceSeqString",
+            "strand",
+            "windowStart",
+            "windowEnd",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -800,52 +842,7 @@ class SequenceReferenceSeq(backboneelement.BackboneElement):
             ("windowEnd", "windowEnd__ext"),
             ("windowStart", "windowStart__ext"),
         ]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class SequenceRepository(backboneelement.BackboneElement):
@@ -859,10 +856,10 @@ class SequenceRepository(backboneelement.BackboneElement):
     target's observedSeq or records related with target's observedSeq.
     """
 
-    resource_type = Field("SequenceRepository", const=True)
+    __resource_type__ = "SequenceRepository"
 
-    datasetId: fhirtypes.String = Field(
-        None,
+    datasetId: fhirtypes.StringType | None = Field(
+        default=None,
         alias="datasetId",
         title="Id of the dataset that used to call for dataset in repository",
         description=(
@@ -870,76 +867,86 @@ class SequenceRepository(backboneelement.BackboneElement):
             "understand how to use this id to call for more info about datasets in "
             "external repository."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    datasetId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_datasetId", title="Extension field for ``datasetId``."
+    datasetId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_datasetId", title="Extension field for ``datasetId``."
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Repository's name",
         description=(
             "URI of an external repository which contains further details about the"
             " genetics data."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    readsetId: fhirtypes.String = Field(
-        None,
+    readsetId: fhirtypes.StringType | None = Field(
+        default=None,
         alias="readsetId",
         title="Id of the read",
         description="Id of the read in this external repository.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    readsetId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_readsetId", title="Extension field for ``readsetId``."
+    readsetId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_readsetId", title="Extension field for ``readsetId``."
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title="directlink | openapi | login | oauth | other",
         description=(
             "Click and see / RESTful API / Need login to see / RESTful API with "
             "authentication / Other ways to see resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["directlink", "openapi", "login", "oauth", "other"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["directlink", "openapi", "login", "oauth", "other"],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title="URI of the repository",
         description=(
             "URI of an external repository which contains further details about the"
             " genetics data."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
-    variantsetId: fhirtypes.String = Field(
-        None,
+    variantsetId: fhirtypes.StringType | None = Field(
+        default=None,
         alias="variantsetId",
         title="Id of the variantset that used to call for variantset in repository",
         description=(
@@ -947,18 +954,22 @@ class SequenceRepository(backboneelement.BackboneElement):
             "understand how to use this id to call for more info about variantsets "
             "in external repository."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    variantsetId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_variantsetId", title="Extension field for ``variantsetId``."
+    variantsetId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_variantsetId",
+        title="Extension field for ``variantsetId``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SequenceRepository`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SequenceRepository`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -972,10 +983,22 @@ class SequenceRepository(backboneelement.BackboneElement):
             "readsetId",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2117(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SequenceRepository`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "modifierExtension",
+            "type",
+            "url",
+            "name",
+            "datasetId",
+            "variantsetId",
+            "readsetId",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -984,52 +1007,7 @@ class SequenceRepository(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("type", "type__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class SequenceVariant(backboneelement.BackboneElement):
@@ -1045,10 +1023,10 @@ class SequenceVariant(backboneelement.BackboneElement):
     segment variation with the assist of CIGAR string.
     """
 
-    resource_type = Field("SequenceVariant", const=True)
+    __resource_type__ = "SequenceVariant"
 
-    cigar: fhirtypes.String = Field(
-        None,
+    cigar: fhirtypes.StringType | None = Field(
+        default=None,
         alias="cigar",
         title="Extended CIGAR string for aligning the sequence with reference bases",
         description=(
@@ -1057,15 +1035,17 @@ class SequenceVariant(backboneelement.BackboneElement):
             "uencingAnalysisWorkflow/Content/Vault/Informatics/Sequencing_Analysis/"
             "CASAVA/swSEQ_mCA_ExtendedCIGARFormat.htm)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    cigar__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_cigar", title="Extension field for ``cigar``."
+    cigar__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_cigar", title="Extension field for ``cigar``."
     )
 
-    end: fhirtypes.Integer = Field(
-        None,
+    end: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="end",
         title="End position of the variant on the reference sequence",
         description=(
@@ -1074,15 +1054,17 @@ class SequenceVariant(backboneelement.BackboneElement):
             "include the last position. If the coordinate system is 1-base, then "
             "end is inclusive and includes the last position."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    end__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_end", title="Extension field for ``end``."
+    end__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_end", title="Extension field for ``end``."
     )
 
-    observedAllele: fhirtypes.String = Field(
-        None,
+    observedAllele: fhirtypes.StringType | None = Field(
+        default=None,
         alias="observedAllele",
         title="Allele that was observed",
         description=(
@@ -1094,15 +1076,19 @@ class SequenceVariant(backboneelement.BackboneElement):
             "the sequence on the positive (+) strand. This will lay in the range "
             "between variant.start and variant.end."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    observedAllele__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_observedAllele", title="Extension field for ``observedAllele``."
+    observedAllele__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_observedAllele",
+        title="Extension field for ``observedAllele``.",
     )
 
-    referenceAllele: fhirtypes.String = Field(
-        None,
+    referenceAllele: fhirtypes.StringType | None = Field(
+        default=None,
         alias="referenceAllele",
         title="Allele in the reference sequence",
         description=(
@@ -1114,15 +1100,19 @@ class SequenceVariant(backboneelement.BackboneElement):
             "sequence on the positive (+) strand. This will lay in the range "
             "between variant.start and variant.end."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    referenceAllele__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_referenceAllele", title="Extension field for ``referenceAllele``."
+    referenceAllele__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_referenceAllele",
+        title="Extension field for ``referenceAllele``.",
     )
 
-    start: fhirtypes.Integer = Field(
-        None,
+    start: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="start",
         title="Start position of the variant on the  reference sequence",
         description=(
@@ -1130,33 +1120,52 @@ class SequenceVariant(backboneelement.BackboneElement):
             "coordinate system is either 0-based or 1-based, then start position is"
             " inclusive."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    start__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_start", title="Extension field for ``start``."
+    start__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_start", title="Extension field for ``start``."
     )
 
-    variantPointer: fhirtypes.ReferenceType = Field(
-        None,
+    variantPointer: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="variantPointer",
         title="Pointer to observed variant information",
         description="A pointer to an Observation containing variant information.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Observation"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Observation"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SequenceVariant`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SequenceVariant`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
+            "modifierExtension",
+            "start",
+            "end",
+            "observedAllele",
+            "referenceAllele",
+            "cigar",
+            "variantPointer",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SequenceVariant`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
             "modifierExtension",
             "start",
             "end",

@@ -1,58 +1,68 @@
 # -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Subscription
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
-from pydantic.validators import bytes_validator  # noqa: F401
-
-from .. import fhirtypes  # noqa: F401
 from .. import subscription
+from .conftest import ExternalValidatorModel
 
 
 def impl_subscription_1(inst):
+    assert inst.channelType.code == "rest-hook"
+    assert inst.content == "id-only"
+    assert inst.contentType == "application/fhir+json"
     assert (
-        inst.channel.endpoint
-        == "https://biliwatch.com/customers/mount-auburn-miu/on-result"
+        inst.end
+        == ExternalValidatorModel.model_validate(
+            {"valueInstant": "2019-08-07T11:15:18Z"}
+        ).valueInstant
     )
-    assert inst.channel.header[0] == "Authorization: Bearer secret-token-abc-123"
-    assert inst.channel.payload == "application/fhir+json"
-    assert inst.channel.type == "rest-hook"
-    assert inst.contact[0].system == "phone"
-    assert inst.contact[0].value == "ext 4123"
-    assert inst.criteria == "Observation?code=http://loinc.org|1975-2"
-    assert inst.end == fhirtypes.Instant.validate("2021-01-01T00:00:00Z")
-    assert inst.error == "Socket Error 10060 - can't connect to host"
-    assert inst.id == "example-error"
+    assert (
+        inst.endpoint
+        == ExternalValidatorModel.model_validate(
+            {"valueUrl": "https://example.org/Endpoints/P123"}
+        ).valueUrl
+    )
+    assert inst.filterBy[0].filterParameter == "patient"
+    assert inst.filterBy[0].value == "Patient/123"
+    assert inst.heartbeatPeriod == 60
+    assert inst.id == "admission"
+    assert inst.maxCount == 100
     assert inst.meta.tag[0].code == "HTEST"
     assert inst.meta.tag[0].display == "test health data"
     assert (
-        inst.meta.tag[0].system == "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
     )
-    assert inst.reason == "Monitor new neonatal function"
-    assert inst.status == "error"
-    assert inst.text.div == (
-        '<div xmlns="http://www.w3.org/1999/xhtml">[Put rendering ' "here]</div>"
+    assert inst.name == "AdmissionExample"
+    assert inst.parameter[0].name == "Authorization"
+    assert inst.parameter[0].value == "Bearer secret-token-abc-123"
+    assert inst.reason == (
+        "subscription for beginning of a clinical encounter for " "patient 123"
     )
+    assert inst.status == "active"
     assert inst.text.status == "generated"
+    assert inst.timeout == 5
+    assert inst.topic == "http://example.org/R5/SubscriptionTopic/admission"
 
 
 def test_subscription_1(base_settings):
     """No. 1 tests collection for Subscription.
-    Test File: subscription-example-error.json
+    Test File: subscription-admission.json
     """
-    filename = base_settings["unittest_data_dir"] / "subscription-example-error.json"
-    inst = subscription.Subscription.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
-    )
-    assert "Subscription" == inst.resource_type
+    filename = base_settings["unittest_data_dir"] / "subscription-admission.json"
+    inst = subscription.Subscription.model_validate_json(filename.read_bytes())
+    assert "Subscription" == inst.get_resource_type()
 
     impl_subscription_1(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "Subscription" == data["resourceType"]
 
     inst2 = subscription.Subscription(**data)
@@ -60,29 +70,33 @@ def test_subscription_1(base_settings):
 
 
 def impl_subscription_2(inst):
-    assert (
-        inst.channel.endpoint
-        == "https://biliwatch.com/customers/mount-auburn-miu/on-result"
-    )
-    assert inst.channel.header[0] == "Authorization: Bearer secret-token-abc-123"
-    assert inst.channel.payload == "application/fhir+json"
-    assert inst.channel.type == "rest-hook"
+    assert inst.channelType.code == "rest-hook"
     assert inst.contact[0].system == "phone"
-    assert inst.contact[0].value == "ext 4123"
-    assert inst.criteria == "Observation?code=http://loinc.org|1975-2"
-    assert inst.end == fhirtypes.Instant.validate("2021-01-01T00:00:00Z")
+    assert inst.contact[0].use == "work"
+    assert inst.contact[0].value == "(555) 555-1212"
+    assert inst.filterBy[0].filterParameter == "patient"
+    assert inst.filterBy[0].value == "Patient/123"
     assert inst.id == "example"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:ietf:rfc:3986"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "urn:uuid:97e5aa1e-5916-4512-a36e-24eef784e3cc"
     assert inst.meta.tag[0].code == "HTEST"
     assert inst.meta.tag[0].display == "test health data"
     assert (
-        inst.meta.tag[0].system == "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
     )
-    assert inst.reason == "Monitor new neonatal function"
-    assert inst.status == "requested"
-    assert inst.text.div == (
-        '<div xmlns="http://www.w3.org/1999/xhtml">[Put rendering ' "here]</div>"
-    )
+    assert inst.name == "Example"
+    assert inst.reason == "Example subscription for example topic"
+    assert inst.status == "active"
     assert inst.text.status == "generated"
+    assert inst.topic == "http://example.org/R5/SubscriptionTopic/example"
 
 
 def test_subscription_2(base_settings):
@@ -90,15 +104,13 @@ def test_subscription_2(base_settings):
     Test File: subscription-example.json
     """
     filename = base_settings["unittest_data_dir"] / "subscription-example.json"
-    inst = subscription.Subscription.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
-    )
-    assert "Subscription" == inst.resource_type
+    inst = subscription.Subscription.model_validate_json(filename.read_bytes())
+    assert "Subscription" == inst.get_resource_type()
 
     impl_subscription_2(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "Subscription" == data["resourceType"]
 
     inst2 = subscription.Subscription(**data)

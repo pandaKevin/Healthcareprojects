@@ -4,7 +4,7 @@ requires = ["setuptools", "wheel"]  # PEP 508 specifications.
 
 [tool.black]
 line-length = 88
-target-version = ['py37']
+target-version = ['py38']
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -25,4 +25,4 @@ exclude = '''
 '''
 
 [tool.pytest.ini_options]
-minversion = "6.0"
+minversion = "7.0"

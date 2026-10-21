@@ -1,0 +1,251 @@
+"""
+Profile: http://hl7.org/fhir/StructureDefinition/DeviceAssociation
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
+"""
+
+from __future__ import annotations as _annotations
+
+import typing
+
+from pydantic import Field
+
+from . import backboneelement, domainresource, fhirtypes
+
+
+class DeviceAssociation(domainresource.DomainResource):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    A record of association or dissociation of a device with a patient.
+    """
+
+    __resource_type__ = "DeviceAssociation"
+
+    bodyStructure: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="bodyStructure",
+        title="Current anatomical location of the device in/on subject",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["BodyStructure"],
+        },
+    )
+
+    category: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="category",
+        title="Describes the relationship between the device and subject",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    device: fhirtypes.ReferenceType = Field(
+        default=...,
+        alias="device",
+        title="Reference to the devices associated with the patient or group",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Device"],
+        },
+    )
+
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
+        alias="identifier",
+        title="Instance identifier",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    operation: typing.List[fhirtypes.DeviceAssociationOperationType] | None = Field(
+        default=None,
+        alias="operation",
+        title=(
+            "The details about the device when it is in use to describe its "
+            "operation"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="period",
+        title="Begin and end dates and times for the device association",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    status: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="status",
+        title="implanted | explanted | attached | entered-in-error | unknown",
+        description="Indicates the state of the Device association.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    statusReason: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="statusReason",
+        title="The reasons given for the current association status",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    subject: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="subject",
+        title=(
+            "The individual, group of individuals or device that the device is on "
+            "or associated with"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Patient",
+                "Group",
+                "Practitioner",
+                "RelatedPerson",
+                "Device",
+            ],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceAssociation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "language",
+            "text",
+            "contained",
+            "extension",
+            "modifierExtension",
+            "identifier",
+            "device",
+            "category",
+            "status",
+            "statusReason",
+            "subject",
+            "bodyStructure",
+            "period",
+            "operation",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceAssociation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "identifier",
+            "device",
+            "category",
+            "status",
+            "statusReason",
+            "subject",
+            "bodyStructure",
+            "period",
+            "operation",
+        ]
+
+
+class DeviceAssociationOperation(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    The details about the device when it is in use to describe its operation.
+    """
+
+    __resource_type__ = "DeviceAssociationOperation"
+
+    operator: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="operator",
+        title="The individual performing the action enabled by the device",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Practitioner", "RelatedPerson"],
+        },
+    )
+
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="period",
+        title="Begin and end dates and times for the device's operation",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    status: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="status",
+        title="Device operational condition",
+        description="Device operational condition corresponding to the association.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceAssociationOperation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "status", "operator", "period"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceAssociationOperation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "status", "operator", "period"]

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Signature
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import element, fhirtypes
 
@@ -27,25 +27,26 @@ class Signature(element.Element):
     approaches have different utilities.
     """
 
-    resource_type = Field("Signature", const=True)
+    __resource_type__ = "Signature"
 
-    blob: fhirtypes.Base64Binary = Field(
-        None,
+    blob: fhirtypes.Base64BinaryType | None = Field(
+        default=None,
         alias="blob",
         title="The actual signature content (XML DigSig. JWT, picture, etc.)",
         description=(
             "The base64 encoding of the Signature content. When signature is not "
             "recorded electronically this element would be empty."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    blob__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_blob", title="Extension field for ``blob``."
+    blob__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_blob", title="Extension field for ``blob``."
     )
 
-    contentType: fhirtypes.Code = Field(
-        None,
+    contentType: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="contentType",
         title="The technical format of the signature",
         description=(
@@ -54,56 +55,64 @@ class Signature(element.Element):
             "application/jwt for JWT, and image/* for a graphical image of a "
             "signature, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    contentType__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_contentType", title="Extension field for ``contentType``."
+    contentType__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_contentType", title="Extension field for ``contentType``."
     )
 
-    onBehalfOfReference: fhirtypes.ReferenceType = Field(
-        None,
+    onBehalfOfReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="onBehalfOfReference",
         title="The party represented",
         description=(
             "A reference to an application-usable description of the identity that "
             "is represented by the signature."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e onBehalfOf[x]
-        one_of_many="onBehalfOf",
-        one_of_many_required=False,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Practitioner",
-            "RelatedPerson",
-            "Patient",
-            "Device",
-            "Organization",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e onBehalfOf[x]
+            "one_of_many": "onBehalfOf",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "RelatedPerson",
+                "Patient",
+                "Device",
+                "Organization",
+            ],
+        },
     )
 
-    onBehalfOfUri: fhirtypes.Uri = Field(
-        None,
+    onBehalfOfUri: fhirtypes.UriType | None = Field(
+        default=None,
         alias="onBehalfOfUri",
         title="The party represented",
         description=(
             "A reference to an application-usable description of the identity that "
             "is represented by the signature."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e onBehalfOf[x]
-        one_of_many="onBehalfOf",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e onBehalfOf[x]
+            "one_of_many": "onBehalfOf",
+            "one_of_many_required": False,
+        },
     )
-    onBehalfOfUri__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_onBehalfOfUri", title="Extension field for ``onBehalfOfUri``."
+    onBehalfOfUri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_onBehalfOfUri",
+        title="Extension field for ``onBehalfOfUri``.",
     )
 
     type: typing.List[fhirtypes.CodingType] = Field(
-        ...,
+        default=...,
         alias="type",
         title="Indication of the reason the entity signed the object(s)",
         description=(
@@ -112,69 +121,77 @@ class Signature(element.Element):
             "can be used when determining accountability for various actions "
             "concerning the document."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    when: fhirtypes.Instant = Field(
-        None,
+    when: fhirtypes.InstantType | None = Field(
+        default=None,
         alias="when",
         title="When the signature was created",
         description="When the digital signature was signed.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    when__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_when", title="Extension field for ``when``."
+    when__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_when", title="Extension field for ``when``."
     )
 
-    whoReference: fhirtypes.ReferenceType = Field(
-        None,
+    whoReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="whoReference",
         title="Who signed",
         description=(
             "A reference to an application-usable description of the identity that "
             "signed  (e.g. the signature used their private key)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e who[x]
-        one_of_many="who",
-        one_of_many_required=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Practitioner",
-            "RelatedPerson",
-            "Patient",
-            "Device",
-            "Organization",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e who[x]
+            "one_of_many": "who",
+            "one_of_many_required": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "RelatedPerson",
+                "Patient",
+                "Device",
+                "Organization",
+            ],
+        },
     )
 
-    whoUri: fhirtypes.Uri = Field(
-        None,
+    whoUri: fhirtypes.UriType | None = Field(
+        default=None,
         alias="whoUri",
         title="Who signed",
         description=(
             "A reference to an application-usable description of the identity that "
             "signed  (e.g. the signature used their private key)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e who[x]
-        one_of_many="who",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e who[x]
+            "one_of_many": "who",
+            "one_of_many_required": True,
+        },
     )
-    whoUri__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_whoUri", title="Extension field for ``whoUri``."
+    whoUri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_whoUri", title="Extension field for ``whoUri``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Signature`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Signature`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -197,10 +214,30 @@ class Signature(element.Element):
             "blob",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1130(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Signature`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "type",
+            "when",
+            "whoUri",
+            "whoReference",
+            "whoReference",
+            "whoReference",
+            "whoReference",
+            "whoReference",
+            "onBehalfOfUri",
+            "onBehalfOfReference",
+            "onBehalfOfReference",
+            "onBehalfOfReference",
+            "onBehalfOfReference",
+            "onBehalfOfReference",
+            "contentType",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -209,57 +246,9 @@ class Signature(element.Element):
         the primitive value is not present.
         """
         required_fields = [("when", "when__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1130(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -276,23 +265,4 @@ class Signature(element.Element):
             "onBehalfOf": ["onBehalfOfReference", "onBehalfOfUri"],
             "who": ["whoReference", "whoUri"],
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields

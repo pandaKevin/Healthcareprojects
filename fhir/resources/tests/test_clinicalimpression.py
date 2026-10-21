@@ -1,51 +1,57 @@
 # -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/ClinicalImpression
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
-from pydantic.validators import bytes_validator  # noqa: F401
-
-from .. import fhirtypes  # noqa: F401
 from .. import clinicalimpression
+from .conftest import ExternalValidatorModel
 
 
 def impl_clinicalimpression_1(inst):
-    assert inst.assessor.reference == "Practitioner/example"
-    assert inst.date == fhirtypes.DateTime.validate("2014-12-06T22:33:00+11:00")
+    assert (
+        inst.date
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-12-06T22:33:00+11:00"}
+        ).valueDateTime
+    )
     assert inst.description == (
         "This 26 yo male patient is brought into ER by ambulance "
         "after being involved in a motor vehicle accident"
     )
-    assert inst.effectivePeriod.end == fhirtypes.DateTime.validate(
-        "2014-12-06T22:33:00+11:00"
+    assert (
+        inst.effectivePeriod.end
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-12-06T22:33:00+11:00"}
+        ).valueDateTime
     )
-    assert inst.effectivePeriod.start == fhirtypes.DateTime.validate(
-        "2014-12-06T20:00:00+11:00"
+    assert (
+        inst.effectivePeriod.start
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-12-06T20:00:00+11:00"}
+        ).valueDateTime
     )
     assert inst.encounter.reference == "Encounter/example"
-    assert inst.finding[0].itemCodeableConcept.coding[0].code == "850.0"
+    assert inst.finding[0].item.concept.coding[0].code == "850.0"
     assert (
-        inst.finding[0].itemCodeableConcept.coding[0].system
-        == "http://hl7.org/fhir/sid/icd-9"
+        inst.finding[0].item.concept.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://hl7.org/fhir/sid/icd-9"}
+        ).valueUri
     )
     assert inst.id == "example"
     assert inst.identifier[0].value == "12345"
-    assert inst.investigation[0].code.text == "Initial Examination"
-    assert (
-        inst.investigation[0].item[0].display
-        == "deep laceration of the scalp (left temporo-occipital)"
-    )
-    assert inst.investigation[0].item[1].display == "decreased level of consciousness"
-    assert inst.investigation[0].item[2].display == "disoriented to time and place"
-    assert inst.investigation[0].item[3].display == "restless"
     assert inst.meta.tag[0].code == "HTEST"
     assert inst.meta.tag[0].display == "test health data"
     assert (
-        inst.meta.tag[0].system == "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
     )
+    assert inst.performer.reference == "Practitioner/example"
     assert inst.problem[0].display == "MVA"
     assert inst.status == "completed"
     assert inst.subject.reference == "Patient/example"
@@ -61,15 +67,15 @@ def test_clinicalimpression_1(base_settings):
     Test File: clinicalimpression-example.json
     """
     filename = base_settings["unittest_data_dir"] / "clinicalimpression-example.json"
-    inst = clinicalimpression.ClinicalImpression.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
+    inst = clinicalimpression.ClinicalImpression.model_validate_json(
+        filename.read_bytes()
     )
-    assert "ClinicalImpression" == inst.resource_type
+    assert "ClinicalImpression" == inst.get_resource_type()
 
     impl_clinicalimpression_1(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "ClinicalImpression" == data["resourceType"]
 
     inst2 = clinicalimpression.ClinicalImpression(**data)

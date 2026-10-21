@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Composition
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -31,36 +31,45 @@ class Composition(domainresource.DomainResource):
     the first resource contained.
     """
 
-    resource_type = Field("Composition", const=True)
+    __resource_type__ = "Composition"
 
-    attester: typing.List[fhirtypes.CompositionAttesterType] = Field(
-        None,
+    attester: typing.List[fhirtypes.CompositionAttesterType] | None = Field(
+        default=None,
         alias="attester",
         title="Attests to accuracy of composition",
         description=(
             "A participant who has attested to the accuracy of the "
             "composition/document."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     author: typing.List[fhirtypes.ReferenceType] = Field(
-        ...,
+        default=...,
         alias="author",
         title="Who and/or what authored the composition",
         description=(
             "Identifies who is responsible for the information in the composition, "
             "not necessarily who typed it in."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner", "Device", "Patient", "RelatedPerson"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "Device",
+                "Patient",
+                "RelatedPerson",
+            ],
+        },
     )
 
-    class_fhir: fhirtypes.CodeableConceptType = Field(
-        None,
+    class_fhir: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="class",
         title="Categorization of Composition",
         description=(
@@ -68,132 +77,153 @@ class Composition(domainresource.DomainResource):
             "and searching. This may be implied by or derived from the code "
             "specified in the Composition Type."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    confidentiality: fhirtypes.Code = Field(
-        None,
+    confidentiality: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="confidentiality",
         title="As defined by affinity domain",
         description="The code specifying the level of confidentiality of the Composition.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    confidentiality__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_confidentiality", title="Extension field for ``confidentiality``."
+    confidentiality__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_confidentiality",
+        title="Extension field for ``confidentiality``.",
     )
 
-    custodian: fhirtypes.ReferenceType = Field(
-        None,
+    custodian: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="custodian",
         title="Organization which maintains the composition",
         description=(
             "Identifies the organization or group who is responsible for ongoing "
             "maintenance of and access to the composition/document information."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="Composition editing time",
         description=(
             "The composition editing time, when the composition was last logically "
             "changed by the author."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    encounter: fhirtypes.ReferenceType = Field(
-        None,
+    encounter: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="encounter",
         title="Context of the Composition",
         description=(
             "Describes the clinical encounter or type of care this documentation is"
             " associated with."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Encounter"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter"],
+        },
     )
 
-    event: typing.List[fhirtypes.CompositionEventType] = Field(
-        None,
+    event: typing.List[fhirtypes.CompositionEventType] | None = Field(
+        default=None,
         alias="event",
         title="The clinical service(s) being documented",
         description=(
             "The clinical service, such as a colonoscopy or an appendectomy, being "
             "documented."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    identifier: fhirtypes.IdentifierType = Field(
-        None,
+    identifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="identifier",
         title="Logical identifier of composition (version-independent)",
         description=(
             "Logical identifier for the composition, assigned when created. This "
             "identifier stays constant as the composition is changed over time."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    relatesTo: typing.List[fhirtypes.CompositionRelatesToType] = Field(
-        None,
+    relatesTo: typing.List[fhirtypes.CompositionRelatesToType] | None = Field(
+        default=None,
         alias="relatesTo",
         title="Relationships to other compositions/documents",
         description=(
             "Relationships that this composition has with other compositions or "
             "documents that already exist."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    section: typing.List[fhirtypes.CompositionSectionType] = Field(
-        None,
+    section: typing.List[fhirtypes.CompositionSectionType] | None = Field(
+        default=None,
         alias="section",
         title="Composition is broken into sections",
         description="The root of the sections that make up the composition.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="preliminary | final | amended | entered-in-error",
         description=(
             "The workflow/clinical status of this composition. The status is a "
             "marker for the clinical standing of the document."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["preliminary", "final", "amended", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["preliminary", "final", "amended", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     subject: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="subject",
         title="Who and/or what the composition is about",
         description=(
@@ -202,27 +232,31 @@ class Composition(domainresource.DomainResource):
             "machine) or even a group of subjects (such as a document about a herd "
             "of livestock, or a set of patients that share a common exposure)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Human Readable name/title",
         description="Official human-readable label for the composition.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Kind of composition (LOINC if possible)",
         description=(
@@ -230,15 +264,17 @@ class Composition(domainresource.DomainResource):
             "Physical, Discharge Summary, Progress Note). This usually equates to "
             "the purpose of making the composition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Composition`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Composition`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -266,10 +302,32 @@ class Composition(domainresource.DomainResource):
             "section",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1349(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Composition`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "status",
+            "type",
+            "class",
+            "subject",
+            "encounter",
+            "date",
+            "author",
+            "title",
+            "confidentiality",
+            "attester",
+            "custodian",
+            "relatesTo",
+            "event",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -282,52 +340,7 @@ class Composition(domainresource.DomainResource):
             ("status", "status__ext"),
             ("title", "title__ext"),
         ]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class CompositionAttester(backboneelement.BackboneElement):
@@ -339,59 +352,69 @@ class CompositionAttester(backboneelement.BackboneElement):
     A participant who has attested to the accuracy of the composition/document.
     """
 
-    resource_type = Field("CompositionAttester", const=True)
+    __resource_type__ = "CompositionAttester"
 
-    mode: typing.List[fhirtypes.Code] = Field(
-        None,
+    mode: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="mode",
         title="personal | professional | legal | official",
         description="The type of attestation the authenticator offers.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["personal", "professional", "legal", "official"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["personal", "professional", "legal", "official"],
+        },
     )
-    mode__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_mode", title="Extension field for ``mode``.")
+    mode__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_mode", title="Extension field for ``mode``."
+    )
 
-    party: fhirtypes.ReferenceType = Field(
-        None,
+    party: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="party",
         title="Who attested the composition",
         description="Who attested the composition in the specified way.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Practitioner", "Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Practitioner", "Organization"],
+        },
     )
 
-    time: fhirtypes.DateTime = Field(
-        None,
+    time: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="time",
         title="When the composition was attested",
         description="When the composition was attested by the party.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    time__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_time", title="Extension field for ``time``."
+    time__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_time", title="Extension field for ``time``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``CompositionAttester`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``CompositionAttester`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "mode", "time", "party"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2197(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``CompositionAttester`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "mode", "time", "party"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -400,52 +423,7 @@ class CompositionAttester(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("mode", "mode__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class CompositionEvent(backboneelement.BackboneElement):
@@ -458,10 +436,10 @@ class CompositionEvent(backboneelement.BackboneElement):
     documented.
     """
 
-    resource_type = Field("CompositionEvent", const=True)
+    __resource_type__ = "CompositionEvent"
 
-    code: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    code: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="code",
         title="Code(s) that apply to the event being documented",
         description=(
@@ -471,12 +449,14 @@ class CompositionEvent(backboneelement.BackboneElement):
             'Report" in which the procedure being documented is necessarily a '
             '"History and Physical" act.'
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    detail: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    detail: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="detail",
         title="The event(s) being documented",
         description=(
@@ -484,14 +464,16 @@ class CompositionEvent(backboneelement.BackboneElement):
             " example, this could be used to document such a colonoscopy or an "
             "appendectomy."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="The period covered by the documentation",
         description=(
@@ -499,17 +481,26 @@ class CompositionEvent(backboneelement.BackboneElement):
             " that the documentation is a complete representation for this period, "
             "only that it documents events during this time."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``CompositionEvent`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``CompositionEvent`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "code", "period", "detail"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``CompositionEvent`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "code", "period", "detail"]
 
 
 class CompositionRelatesTo(backboneelement.BackboneElement):
@@ -522,58 +513,64 @@ class CompositionRelatesTo(backboneelement.BackboneElement):
     documents that already exist.
     """
 
-    resource_type = Field("CompositionRelatesTo", const=True)
+    __resource_type__ = "CompositionRelatesTo"
 
-    code: fhirtypes.Code = Field(
-        None,
+    code: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="code",
         title="replaces | transforms | signs | appends",
         description=(
             "The type of relationship that this composition has with anther "
             "composition or document."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["replaces", "transforms", "signs", "appends"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["replaces", "transforms", "signs", "appends"],
+        },
     )
-    code__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_code", title="Extension field for ``code``."
+    code__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_code", title="Extension field for ``code``."
     )
 
-    targetIdentifier: fhirtypes.IdentifierType = Field(
-        None,
+    targetIdentifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="targetIdentifier",
         title="Target of the relationship",
         description="The target composition/document of this relationship.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e target[x]
-        one_of_many="target",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e target[x]
+            "one_of_many": "target",
+            "one_of_many_required": True,
+        },
     )
 
-    targetReference: fhirtypes.ReferenceType = Field(
-        None,
+    targetReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="targetReference",
         title="Target of the relationship",
         description="The target composition/document of this relationship.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e target[x]
-        one_of_many="target",
-        one_of_many_required=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Composition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e target[x]
+            "one_of_many": "target",
+            "one_of_many_required": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Composition"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``CompositionRelatesTo`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``CompositionRelatesTo`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -584,10 +581,14 @@ class CompositionRelatesTo(backboneelement.BackboneElement):
             "targetReference",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2265(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``CompositionRelatesTo`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "code", "targetIdentifier", "targetReference"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -596,57 +597,9 @@ class CompositionRelatesTo(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("code", "code__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2265(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -660,26 +613,7 @@ class CompositionRelatesTo(backboneelement.BackboneElement):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {"target": ["targetIdentifier", "targetReference"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class CompositionSection(backboneelement.BackboneElement):
@@ -691,48 +625,51 @@ class CompositionSection(backboneelement.BackboneElement):
     The root of the sections that make up the composition.
     """
 
-    resource_type = Field("CompositionSection", const=True)
+    __resource_type__ = "CompositionSection"
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
         title="Classification of section (recommended)",
         description=(
             "A code identifying the kind of content contained within the section. "
             "This must be consistent with the section title."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    emptyReason: fhirtypes.CodeableConceptType = Field(
-        None,
+    emptyReason: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="emptyReason",
         title="Why the section is empty",
         description=(
             "If the section is empty, why the list is empty. An empty section "
             "typically has some text explaining the empty reason."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    entry: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    entry: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="entry",
         title="A reference to data that supports this section",
         description=(
             "A reference to the actual resource from which the narrative in the "
             "section is derived."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    mode: fhirtypes.Code = Field(
-        None,
+    mode: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="mode",
         title="working | snapshot | changes",
         description=(
@@ -742,36 +679,40 @@ class CompositionSection(backboneelement.BackboneElement):
             "whether it is a prepared list where items may be marked as added, "
             "modified or deleted."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["working", "snapshot", "changes"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["working", "snapshot", "changes"],
+        },
     )
-    mode__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_mode", title="Extension field for ``mode``."
+    mode__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_mode", title="Extension field for ``mode``."
     )
 
-    orderedBy: fhirtypes.CodeableConceptType = Field(
-        None,
+    orderedBy: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="orderedBy",
         title="Order of section entries",
         description="Specifies the order applied to the items in the section entries.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    section: typing.List[fhirtypes.CompositionSectionType] = Field(
-        None,
+    section: typing.List[fhirtypes.CompositionSectionType] | None = Field(
+        default=None,
         alias="section",
         title="Nested Section",
         description="A nested sub-section within this section.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    text: fhirtypes.NarrativeType = Field(
-        None,
+    text: fhirtypes.NarrativeType | None = Field(
+        default=None,
         alias="text",
         title="Text summary of the section, for human interpretation",
         description=(
@@ -781,12 +722,13 @@ class CompositionSection(backboneelement.BackboneElement):
             ' contain sufficient detail to make it "clinically safe" for a human to'
             " just read the narrative."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Label for section (e.g. for ToC)",
         description=(
@@ -794,18 +736,19 @@ class CompositionSection(backboneelement.BackboneElement):
             "rendered content for the document, and is often used to build a table "
             "of contents."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``CompositionSection`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``CompositionSection`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -820,3 +763,10 @@ class CompositionSection(backboneelement.BackboneElement):
             "emptyReason",
             "section",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``CompositionSection`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "mode"]

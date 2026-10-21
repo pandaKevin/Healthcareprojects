@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/ActivityDefinition
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -27,10 +27,10 @@ class ActivityDefinition(domainresource.DomainResource):
     context.
     """
 
-    resource_type = Field("ActivityDefinition", const=True)
+    __resource_type__ = "ActivityDefinition"
 
-    approvalDate: fhirtypes.Date = Field(
-        None,
+    approvalDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="approvalDate",
         title="When the activity definition was approved by publisher",
         description=(
@@ -38,63 +38,111 @@ class ActivityDefinition(domainresource.DomainResource):
             "Approval happens once when the content is officially approved for "
             "usage."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    approvalDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_approvalDate", title="Extension field for ``approvalDate``."
+    approvalDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_approvalDate",
+        title="Extension field for ``approvalDate``.",
     )
 
-    author: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    asNeededBoolean: bool | None = Field(
+        default=None,
+        alias="asNeededBoolean",
+        title="Preconditions for service",
+        description=(
+            "If a CodeableConcept is present, it indicates the pre-condition for "
+            'performing the service.  For example "pain", "on flare-up", etc.'
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e asNeeded[x]
+            "one_of_many": "asNeeded",
+            "one_of_many_required": False,
+        },
+    )
+    asNeededBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_asNeededBoolean",
+        title="Extension field for ``asNeededBoolean``.",
+    )
+
+    asNeededCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="asNeededCodeableConcept",
+        title="Preconditions for service",
+        description=(
+            "If a CodeableConcept is present, it indicates the pre-condition for "
+            'performing the service.  For example "pain", "on flare-up", etc.'
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e asNeeded[x]
+            "one_of_many": "asNeeded",
+            "one_of_many_required": False,
+        },
+    )
+
+    author: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="author",
         title="Who authored the content",
         description=(
             "An individiual or organization primarily involved in the creation and "
             "maintenance of the content."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    bodySite: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    bodySite: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="bodySite",
         title="What part of body to perform on",
         description=(
             "Indicates the sites on the subject's body where the procedure should "
             "be performed (I.e. the target sites)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
         title="Detail type of activity",
         description=(
             "Detailed description of the type of activity; e.g. What lab test, what"
             " procedure, what kind of encounter."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    contact: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="contact",
         title="Contact details for the publisher",
         description=(
             "Contact details to assist a user in finding and communicating with the"
             " publisher."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    copyright: fhirtypes.Markdown = Field(
-        None,
+    copyright: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="copyright",
         title="Use and/or publishing restrictions",
         description=(
@@ -102,48 +150,73 @@ class ActivityDefinition(domainresource.DomainResource):
             "contents. Copyright statements are generally legal restrictions on the"
             " use and publishing of the activity definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_copyright", title="Extension field for ``copyright``."
+    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_copyright", title="Extension field for ``copyright``."
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    copyrightLabel: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="copyrightLabel",
+        title="Copyright holder and year(s)",
+        description=(
+            "A short string (<50 characters), suitable for inclusion in a page "
+            "footer that identifies the copyright holder, effective period, and "
+            "optionally whether rights are resctricted. (e.g. 'All rights "
+            "reserved', 'Some rights reserved')."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    copyrightLabel__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_copyrightLabel",
+        title="Extension field for ``copyrightLabel``.",
+    )
+
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="Date last changed",
         description=(
-            "The date  (and optionally time) when the activity definition was "
-            "published. The date must change when the business version changes and "
-            "it must change if the status code changes. In addition, it should "
-            "change when the substantive content of the activity definition "
-            "changes."
+            "The date  (and optionally time) when the activity definition was last "
+            "significantly changed. The date must change when the business version "
+            "changes and it must change if the status code changes. In addition, it"
+            " should change when the substantive content of the activity definition"
+            " changes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    description: fhirtypes.Markdown = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="description",
         title="Natural language description of the activity definition",
         description=(
             "A free text natural language description of the activity definition "
             "from a consumer's perspective."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    doNotPerform: bool = Field(
-        None,
+    doNotPerform: bool | None = Field(
+        default=None,
         alias="doNotPerform",
         title="True if the activity should not be performed",
         description=(
@@ -153,27 +226,34 @@ class ActivityDefinition(domainresource.DomainResource):
             "with a doNotPerform of true would still indicate to NOT perform the "
             "action."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    doNotPerform__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_doNotPerform", title="Extension field for ``doNotPerform``."
+    doNotPerform__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_doNotPerform",
+        title="Extension field for ``doNotPerform``.",
     )
 
-    dosage: typing.List[fhirtypes.DosageType] = Field(
-        None,
+    dosage: typing.List[fhirtypes.DosageType] | None = Field(
+        default=None,
         alias="dosage",
         title="Detailed dosage instructions",
         description=(
             "Provides detailed dosage instructions in the same way that they are "
             "described for MedicationRequest resources."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    dynamicValue: typing.List[fhirtypes.ActivityDefinitionDynamicValueType] = Field(
-        None,
+    dynamicValue: typing.List[
+        fhirtypes.ActivityDefinitionDynamicValueType
+    ] | None = Field(
+        default=None,
         alias="dynamicValue",
         title="Dynamic aspects of the definition",
         description=(
@@ -183,48 +263,54 @@ class ActivityDefinition(domainresource.DomainResource):
             "be used to specify an expression that calculated the weight, and the "
             "path on the request resource that would contain the result."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    editor: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    editor: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="editor",
         title="Who edited the content",
         description=(
             "An individual or organization primarily responsible for internal "
             "coherence of the content."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    effectivePeriod: fhirtypes.PeriodType = Field(
-        None,
+    effectivePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="effectivePeriod",
         title="When the activity definition is expected to be used",
         description=(
             "The period during which the activity definition content was or is "
             "planned to be in active use."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    endorser: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    endorser: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="endorser",
         title="Who endorsed the content",
         description=(
-            "An individual or organization responsible for officially endorsing the"
-            " content for use in some setting."
+            "An individual or organization asserted by the publisher to be "
+            "responsible for officially endorsing the content for use in some "
+            "setting."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    experimental: bool = Field(
-        None,
+    experimental: bool | None = Field(
+        default=None,
         alias="experimental",
         title="For testing purposes, not real usage",
         description=(
@@ -232,15 +318,19 @@ class ActivityDefinition(domainresource.DomainResource):
             "for testing purposes (or education/evaluation/marketing) and is not "
             "intended to be used for genuine usage."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_experimental", title="Extension field for ``experimental``."
+    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_experimental",
+        title="Extension field for ``experimental``.",
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Additional identifier for the activity definition",
         description=(
@@ -248,12 +338,14 @@ class ActivityDefinition(domainresource.DomainResource):
             "when it is represented in other formats, or referenced in a "
             "specification, model, design or an instance."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    intent: fhirtypes.Code = Field(
-        None,
+    intent: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="intent",
         title=(
             "proposal | plan | directive | order | original-order | reflex-order | "
@@ -263,104 +355,115 @@ class ActivityDefinition(domainresource.DomainResource):
             "Indicates the level of authority/intentionality associated with the "
             "activity and where the request should fit into the workflow chain."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "proposal",
-            "plan",
-            "directive",
-            "order",
-            "original-order",
-            "reflex-order",
-            "filler-order",
-            "instance-order",
-            "option",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "proposal",
+                "plan",
+                "directive",
+                "order",
+                "original-order",
+                "reflex-order",
+                "filler-order",
+                "instance-order",
+                "option",
+            ],
+        },
     )
-    intent__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_intent", title="Extension field for ``intent``."
+    intent__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_intent", title="Extension field for ``intent``."
     )
 
-    jurisdiction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    jurisdiction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="jurisdiction",
         title="Intended jurisdiction for activity definition (if applicable)",
         description=(
             "A legal or geographic region in which the activity definition is "
             "intended to be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    kind: fhirtypes.Code = Field(
-        None,
+    kind: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="kind",
         title="Kind of resource",
         description=(
             "A description of the kind of resource the activity definition is "
             "representing. For example, a MedicationRequest, a ServiceRequest, or a"
-            " CommunicationRequest. Typically, but not always, this is a Request "
-            "resource."
+            " CommunicationRequest."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    kind__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_kind", title="Extension field for ``kind``."
+    kind__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_kind", title="Extension field for ``kind``."
     )
 
-    lastReviewDate: fhirtypes.Date = Field(
-        None,
+    lastReviewDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="lastReviewDate",
-        title="When the activity definition was last reviewed",
+        title="When the activity definition was last reviewed by the publisher",
         description=(
             "The date on which the resource content was last reviewed. Review "
             "happens periodically after approval but does not change the original "
             "approval date."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    lastReviewDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_lastReviewDate", title="Extension field for ``lastReviewDate``."
+    lastReviewDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_lastReviewDate",
+        title="Extension field for ``lastReviewDate``.",
     )
 
-    library: typing.List[fhirtypes.Canonical] = Field(
-        None,
+    library: typing.List[fhirtypes.CanonicalType | None] | None = Field(
+        default=None,
         alias="library",
         title="Logic used by the activity definition",
         description=(
             "A reference to a Library resource containing any formal logic used by "
             "the activity definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Library"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Library"],
+        },
     )
     library__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_library", title="Extension field for ``library``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_library", title="Extension field for ``library``."
+    )
 
-    location: fhirtypes.ReferenceType = Field(
-        None,
+    location: fhirtypes.CodeableReferenceType | None = Field(
+        default=None,
         alias="location",
         title="Where it should happen",
         description=(
             "Identifies the facility where the activity will occur; e.g. home, "
             "hospital, specific clinic, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Name for this activity definition (computer friendly)",
         description=(
@@ -368,383 +471,441 @@ class ActivityDefinition(domainresource.DomainResource):
             " should be usable as an identifier for the module by machine "
             "processing applications such as code generation."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    observationRequirement: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    observationRequirement: typing.List[fhirtypes.CanonicalType | None] | None = Field(
+        default=None,
         alias="observationRequirement",
         title="What observations are required to perform this action",
         description=(
             "Defines observation requirements for the action to be performed, such "
             "as body weight or surface area."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ObservationDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ObservationDefinition"],
+        },
+    )
+    observationRequirement__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
+        alias="_observationRequirement",
+        title="Extension field for ``observationRequirement``.",
     )
 
-    observationResultRequirement: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    observationResultRequirement: typing.List[
+        fhirtypes.CanonicalType | None
+    ] | None = Field(
+        default=None,
         alias="observationResultRequirement",
         title="What observations must be produced by this action",
         description=(
             "Defines the observations that are expected to be produced by the "
             "action."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ObservationDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ObservationDefinition"],
+        },
+    )
+    observationResultRequirement__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
+        alias="_observationResultRequirement",
+        title="Extension field for ``observationResultRequirement``.",
     )
 
-    participant: typing.List[fhirtypes.ActivityDefinitionParticipantType] = Field(
-        None,
+    participant: typing.List[
+        fhirtypes.ActivityDefinitionParticipantType
+    ] | None = Field(
+        default=None,
         alias="participant",
         title="Who should participate in the action",
         description="Indicates who should participate in performing the action described.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    priority: fhirtypes.Code = Field(
-        None,
+    priority: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="priority",
         title="routine | urgent | asap | stat",
         description=(
             "Indicates how quickly the activity  should be addressed with respect "
             "to other requests."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["routine", "urgent", "asap", "stat"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["routine", "urgent", "asap", "stat"],
+        },
     )
-    priority__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_priority", title="Extension field for ``priority``."
+    priority__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_priority", title="Extension field for ``priority``."
     )
 
-    productCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    productCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="productCodeableConcept",
         title="What's administered/supplied",
         description=(
             "Identifies the food, drug or other product being consumed or supplied "
             "in the activity."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e product[x]
-        one_of_many="product",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e product[x]
+            "one_of_many": "product",
+            "one_of_many_required": False,
+        },
     )
 
-    productReference: fhirtypes.ReferenceType = Field(
-        None,
+    productReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="productReference",
         title="What's administered/supplied",
         description=(
             "Identifies the food, drug or other product being consumed or supplied "
             "in the activity."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e product[x]
-        one_of_many="product",
-        one_of_many_required=False,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Medication", "Substance"],
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e product[x]
+            "one_of_many": "product",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Medication",
+                "Ingredient",
+                "Substance",
+                "SubstanceDefinition",
+            ],
+        },
     )
 
-    profile: fhirtypes.Canonical = Field(
-        None,
+    profile: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="profile",
         title="What profile the resource needs to conform to",
         description=(
             "A profile to which the target of the activity definition is expected "
             "to conform."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["StructureDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["StructureDefinition"],
+        },
     )
-    profile__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_profile", title="Extension field for ``profile``."
+    profile__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_profile", title="Extension field for ``profile``."
     )
 
-    publisher: fhirtypes.String = Field(
-        None,
+    publisher: fhirtypes.StringType | None = Field(
+        default=None,
         alias="publisher",
-        title="Name of the publisher (organization or individual)",
+        title="Name of the publisher/steward (organization or individual)",
         description=(
-            "The name of the organization or individual that published the activity"
-            " definition."
+            "The name of the organization or individual responsible for the release"
+            " and ongoing maintenance of the activity definition."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_publisher", title="Extension field for ``publisher``."
+    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_publisher", title="Extension field for ``publisher``."
     )
 
-    purpose: fhirtypes.Markdown = Field(
-        None,
+    purpose: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="purpose",
         title="Why this activity definition is defined",
         description=(
             "Explanation of why this activity definition is needed and why it has "
             "been designed as it has."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_purpose", title="Extension field for ``purpose``."
+    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_purpose", title="Extension field for ``purpose``."
     )
 
-    quantity: fhirtypes.QuantityType = Field(
-        None,
+    quantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="quantity",
         title="How much is administered/consumed/supplied",
         description=(
             "Identifies the quantity expected to be consumed at once (per dose, per"
             " meal, etc.)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    relatedArtifact: typing.List[fhirtypes.RelatedArtifactType] = Field(
-        None,
+    relatedArtifact: typing.List[fhirtypes.RelatedArtifactType] | None = Field(
+        default=None,
         alias="relatedArtifact",
-        title="Additional documentation, citations, etc.",
+        title="Additional documentation, citations, etc",
         description=(
             "Related artifacts such as additional documentation, justification, or "
             "bibliographic references."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    reviewer: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    reviewer: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="reviewer",
         title="Who reviewed the content",
         description=(
-            "An individual or organization primarily responsible for review of some"
-            " aspect of the content."
+            "An individual or organization asserted by the publisher to be "
+            "primarily responsible for review of some aspect of the content."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    specimenRequirement: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    specimenRequirement: typing.List[fhirtypes.CanonicalType | None] | None = Field(
+        default=None,
         alias="specimenRequirement",
         title="What specimens are required to perform this action",
         description=(
             "Defines specimen requirements for the action to be performed, such as "
             "required specimens for a lab test."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["SpecimenDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["SpecimenDefinition"],
+        },
+    )
+    specimenRequirement__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
+        alias="_specimenRequirement",
+        title="Extension field for ``specimenRequirement``.",
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | retired | unknown",
         description=(
             "The status of this activity definition. Enables tracking the life-"
             "cycle of the content."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "active", "retired", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "active", "retired", "unknown"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    subjectCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    subjectCanonical: fhirtypes.CanonicalType | None = Field(
+        default=None,
+        alias="subjectCanonical",
+        title="Type of individual the activity definition is intended for",
+        description=(
+            "A code, group definition, or canonical reference that describes  or "
+            "identifies the intended subject of the activity being defined.  "
+            "Canonical references are allowed to support the definition of "
+            "protocols for drug and substance quality specifications, and is "
+            "allowed to reference a MedicinalProductDefinition, "
+            "SubstanceDefinition, AdministrableProductDefinition, "
+            "ManufacturedItemDefinition, or PackagedProductDefinition resource."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e subject[x]
+            "one_of_many": "subject",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["EvidenceVariable"],
+        },
+    )
+    subjectCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_subjectCanonical",
+        title="Extension field for ``subjectCanonical``.",
+    )
+
+    subjectCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="subjectCodeableConcept",
         title="Type of individual the activity definition is intended for",
         description=(
-            "A code or group definition that describes the intended subject of the "
-            "activity being defined."
+            "A code, group definition, or canonical reference that describes  or "
+            "identifies the intended subject of the activity being defined.  "
+            "Canonical references are allowed to support the definition of "
+            "protocols for drug and substance quality specifications, and is "
+            "allowed to reference a MedicinalProductDefinition, "
+            "SubstanceDefinition, AdministrableProductDefinition, "
+            "ManufacturedItemDefinition, or PackagedProductDefinition resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e subject[x]
-        one_of_many="subject",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e subject[x]
+            "one_of_many": "subject",
+            "one_of_many_required": False,
+        },
     )
 
-    subjectReference: fhirtypes.ReferenceType = Field(
-        None,
+    subjectReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="subjectReference",
         title="Type of individual the activity definition is intended for",
         description=(
-            "A code or group definition that describes the intended subject of the "
-            "activity being defined."
+            "A code, group definition, or canonical reference that describes  or "
+            "identifies the intended subject of the activity being defined.  "
+            "Canonical references are allowed to support the definition of "
+            "protocols for drug and substance quality specifications, and is "
+            "allowed to reference a MedicinalProductDefinition, "
+            "SubstanceDefinition, AdministrableProductDefinition, "
+            "ManufacturedItemDefinition, or PackagedProductDefinition resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e subject[x]
-        one_of_many="subject",
-        one_of_many_required=False,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Group"],
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e subject[x]
+            "one_of_many": "subject",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Group",
+                "MedicinalProductDefinition",
+                "SubstanceDefinition",
+                "AdministrableProductDefinition",
+                "ManufacturedItemDefinition",
+                "PackagedProductDefinition",
+            ],
+        },
     )
 
-    subtitle: fhirtypes.String = Field(
-        None,
+    subtitle: fhirtypes.StringType | None = Field(
+        default=None,
         alias="subtitle",
         title="Subordinate title of the activity definition",
         description=(
             "An explanatory or alternate title for the activity definition giving "
             "additional information about its content."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    subtitle__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_subtitle", title="Extension field for ``subtitle``."
+    subtitle__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_subtitle", title="Extension field for ``subtitle``."
     )
 
-    timingAge: fhirtypes.AgeType = Field(
-        None,
+    timingAge: fhirtypes.AgeType | None = Field(
+        default=None,
         alias="timingAge",
         title="When activity is to occur",
-        description=(
-            "The period, timing or frequency upon which the described activity is "
-            "to occur."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        description="The timing or frequency upon which the described activity is to occur.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
 
-    timingDateTime: fhirtypes.DateTime = Field(
-        None,
-        alias="timingDateTime",
-        title="When activity is to occur",
-        description=(
-            "The period, timing or frequency upon which the described activity is "
-            "to occur."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
-    )
-    timingDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_timingDateTime", title="Extension field for ``timingDateTime``."
-    )
-
-    timingDuration: fhirtypes.DurationType = Field(
-        None,
+    timingDuration: fhirtypes.DurationType | None = Field(
+        default=None,
         alias="timingDuration",
         title="When activity is to occur",
-        description=(
-            "The period, timing or frequency upon which the described activity is "
-            "to occur."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        description="The timing or frequency upon which the described activity is to occur.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
 
-    timingPeriod: fhirtypes.PeriodType = Field(
-        None,
-        alias="timingPeriod",
-        title="When activity is to occur",
-        description=(
-            "The period, timing or frequency upon which the described activity is "
-            "to occur."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
-    )
-
-    timingRange: fhirtypes.RangeType = Field(
-        None,
+    timingRange: fhirtypes.RangeType | None = Field(
+        default=None,
         alias="timingRange",
         title="When activity is to occur",
-        description=(
-            "The period, timing or frequency upon which the described activity is "
-            "to occur."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        description="The timing or frequency upon which the described activity is to occur.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
 
-    timingTiming: fhirtypes.TimingType = Field(
-        None,
+    timingTiming: fhirtypes.TimingType | None = Field(
+        default=None,
         alias="timingTiming",
         title="When activity is to occur",
-        description=(
-            "The period, timing or frequency upon which the described activity is "
-            "to occur."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        description="The timing or frequency upon which the described activity is to occur.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Name for this activity definition (human friendly)",
         description="A short, descriptive, user-friendly title for the activity definition.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
-    topic: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    topic: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="topic",
-        title="E.g. Education, Treatment, Assessment, etc.",
+        title="E.g. Education, Treatment, Assessment, etc",
         description=(
             "Descriptive topics related to the content of the activity. Topics "
             "provide a high-level categorization of the activity that can be useful"
             " for filtering and searching."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    transform: fhirtypes.Canonical = Field(
-        None,
+    transform: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="transform",
         title="Transform to apply the template",
         description=(
@@ -752,17 +913,18 @@ class ActivityDefinition(domainresource.DomainResource):
             "can be executed to produce the intent resource using the "
             "ActivityDefinition instance as the input."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["StructureMap"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["StructureMap"],
+        },
     )
-    transform__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_transform", title="Extension field for ``transform``."
+    transform__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_transform", title="Extension field for ``transform``."
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title=(
             "Canonical identifier for this activity definition, represented as a "
@@ -772,35 +934,38 @@ class ActivityDefinition(domainresource.DomainResource):
             "An absolute URI that is used to identify this activity definition when"
             " it is referenced in a specification, model, design or an instance; "
             "also called its canonical identifier. This SHOULD be globally unique "
-            "and SHOULD be a literal address at which at which an authoritative "
-            "instance of this activity definition is (or will be) published. This "
-            "URL can be the target of a canonical reference. It SHALL remain the "
-            "same when the activity definition is stored on different servers."
+            "and SHOULD be a literal address at which an authoritative instance of "
+            "this activity definition is (or will be) published. This URL can be "
+            "the target of a canonical reference. It SHALL remain the same when the"
+            " activity definition is stored on different servers."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
-    usage: fhirtypes.String = Field(
-        None,
+    usage: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="usage",
         title="Describes the clinical usage of the activity definition",
         description=(
             "A detailed description of how the activity definition is used from a "
             "clinical perspective."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    usage__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_usage", title="Extension field for ``usage``."
+    usage__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_usage", title="Extension field for ``usage``."
     )
 
-    useContext: typing.List[fhirtypes.UsageContextType] = Field(
-        None,
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
         alias="useContext",
         title="The context that the content is intended to support",
         description=(
@@ -810,12 +975,14 @@ class ActivityDefinition(domainresource.DomainResource):
             "(insurance plans, studies, ...) and may be used to assist with "
             "indexing and searching for appropriate activity definition instances."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    version: fhirtypes.String = Field(
-        None,
+    version: fhirtypes.StringType | None = Field(
+        default=None,
         alias="version",
         title="Business version of the activity definition",
         description=(
@@ -831,18 +998,59 @@ class ActivityDefinition(domainresource.DomainResource):
             "knowledge assets, refer to the Decision Support Service specification."
             " Note that a version is required for non-experimental active assets."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    version__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_version", title="Extension field for ``version``."
+    version__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
+    )
+
+    versionAlgorithmCoding: fhirtypes.CodingType | None = Field(
+        default=None,
+        alias="versionAlgorithmCoding",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+
+    versionAlgorithmString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="versionAlgorithmString",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+    versionAlgorithmString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_versionAlgorithmString",
+        title="Extension field for ``versionAlgorithmString``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ActivityDefinition`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ActivityDefinition`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -856,6 +1064,8 @@ class ActivityDefinition(domainresource.DomainResource):
             "url",
             "identifier",
             "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
             "name",
             "title",
             "subtitle",
@@ -863,6 +1073,7 @@ class ActivityDefinition(domainresource.DomainResource):
             "experimental",
             "subjectCodeableConcept",
             "subjectReference",
+            "subjectCanonical",
             "date",
             "publisher",
             "contact",
@@ -872,6 +1083,7 @@ class ActivityDefinition(domainresource.DomainResource):
             "purpose",
             "usage",
             "copyright",
+            "copyrightLabel",
             "approvalDate",
             "lastReviewDate",
             "effectivePeriod",
@@ -889,11 +1101,11 @@ class ActivityDefinition(domainresource.DomainResource):
             "priority",
             "doNotPerform",
             "timingTiming",
-            "timingDateTime",
             "timingAge",
-            "timingPeriod",
             "timingRange",
             "timingDuration",
+            "asNeededBoolean",
+            "asNeededCodeableConcept",
             "location",
             "participant",
             "productReference",
@@ -908,10 +1120,40 @@ class ActivityDefinition(domainresource.DomainResource):
             "dynamicValue",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2053(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ActivityDefinition`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "url",
+            "identifier",
+            "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
+            "name",
+            "title",
+            "status",
+            "experimental",
+            "date",
+            "publisher",
+            "contact",
+            "description",
+            "useContext",
+            "jurisdiction",
+            "effectivePeriod",
+            "kind",
+            "code",
+            "doNotPerform",
+            "asNeededBoolean",
+            "asNeededCodeableConcept",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -920,57 +1162,9 @@ class ActivityDefinition(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("status", "status__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2053(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -984,37 +1178,17 @@ class ActivityDefinition(domainresource.DomainResource):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {
+            "asNeeded": ["asNeededBoolean", "asNeededCodeableConcept"],
             "product": ["productCodeableConcept", "productReference"],
-            "subject": ["subjectCodeableConcept", "subjectReference"],
-            "timing": [
-                "timingAge",
-                "timingDateTime",
-                "timingDuration",
-                "timingPeriod",
-                "timingRange",
-                "timingTiming",
+            "subject": [
+                "subjectCanonical",
+                "subjectCodeableConcept",
+                "subjectReference",
             ],
+            "timing": ["timingAge", "timingDuration", "timingRange", "timingTiming"],
+            "versionAlgorithm": ["versionAlgorithmCoding", "versionAlgorithmString"],
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class ActivityDefinitionDynamicValue(backboneelement.BackboneElement):
@@ -1030,25 +1204,26 @@ class ActivityDefinitionDynamicValue(backboneelement.BackboneElement):
     request resource that would contain the result.
     """
 
-    resource_type = Field("ActivityDefinitionDynamicValue", const=True)
+    __resource_type__ = "ActivityDefinitionDynamicValue"
 
     expression: fhirtypes.ExpressionType = Field(
-        ...,
+        default=...,
         alias="expression",
         title="An expression that provides the dynamic value for the customization",
         description="An expression specifying the value of the customized element.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    path: fhirtypes.String = Field(
-        None,
+    path: fhirtypes.StringType | None = Field(
+        default=None,
         alias="path",
         title="The path to the element to be set dynamically",
         description=(
             "The path to the element to be customized. This is the path on the "
             "resource that will hold the result of the calculation defined by the "
-            "expression. The specified path SHALL be a FHIRPath resolveable on the "
+            "expression. The specified path SHALL be a FHIRPath resolvable on the "
             "specified target type of the ActivityDefinition, and SHALL consist "
             "only of identifiers, constant indexers, and a restricted subset of "
             "functions. The path is allowed to contain qualifiers (.) to traverse "
@@ -1056,26 +1231,31 @@ class ActivityDefinitionDynamicValue(backboneelement.BackboneElement):
             "cardinality sub-elements (see the [Simple FHIRPath "
             "Profile](fhirpath.html#simple) for full details)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    path__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_path", title="Extension field for ``path``."
+    path__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_path", title="Extension field for ``path``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ActivityDefinitionDynamicValue`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ActivityDefinitionDynamicValue`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "path", "expression"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3262(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ActivityDefinitionDynamicValue`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1084,52 +1264,7 @@ class ActivityDefinitionDynamicValue(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("path", "path__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class ActivityDefinitionParticipant(backboneelement.BackboneElement):
@@ -1141,99 +1276,127 @@ class ActivityDefinitionParticipant(backboneelement.BackboneElement):
     Indicates who should participate in performing the action described.
     """
 
-    resource_type = Field("ActivityDefinitionParticipant", const=True)
+    __resource_type__ = "ActivityDefinitionParticipant"
 
-    role: fhirtypes.CodeableConceptType = Field(
-        None,
+    function: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="function",
+        title="E.g. Author, Reviewer, Witness, etc",
+        description=(
+            "Indicates how the actor will be involved in the action - author, "
+            "reviewer, witness, etc."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    role: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="role",
-        title="E.g. Nurse, Surgeon, Parent, etc.",
+        title="E.g. Nurse, Surgeon, Parent, etc",
         description=(
             "The role the participant should play in performing the described "
             "action."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
-        title="patient | practitioner | related-person | device",
+        title=(
+            "careteam | device | group | healthcareservice | location | "
+            "organization | patient | practitioner | practitionerrole | "
+            "relatedperson"
+        ),
         description="The type of participant in the action.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["patient", "practitioner", "related-person", "device"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "careteam",
+                "device",
+                "group",
+                "healthcareservice",
+                "location",
+                "organization",
+                "patient",
+                "practitioner",
+                "practitionerrole",
+                "relatedperson",
+            ],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
+    )
+
+    typeCanonical: fhirtypes.CanonicalType | None = Field(
+        default=None,
+        alias="typeCanonical",
+        title="Who or what can participate",
+        description="The type of participant in the action.",
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["CapabilityStatement"],
+        },
+    )
+    typeCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_typeCanonical",
+        title="Extension field for ``typeCanonical``.",
+    )
+
+    typeReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="typeReference",
+        title="Who or what can participate",
+        description="The type of participant in the action.",
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "CareTeam",
+                "Device",
+                "DeviceDefinition",
+                "Endpoint",
+                "Group",
+                "HealthcareService",
+                "Location",
+                "Organization",
+                "Patient",
+                "Practitioner",
+                "PractitionerRole",
+                "RelatedPerson",
+            ],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ActivityDefinitionParticipant`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ActivityDefinitionParticipant`` according to specification,
+        with preserving the original sequence order.
         """
-        return ["id", "extension", "modifierExtension", "type", "role"]
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "type",
+            "typeCanonical",
+            "typeReference",
+            "role",
+            "function",
+        ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3210(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
-        """https://www.hl7.org/fhir/extensibility.html#Special-Case
-        In some cases, implementers might find that they do not have appropriate data for
-        an element with minimum cardinality = 1. In this case, the element must be present,
-        but unless the resource or a profile on it has made the actual value of the primitive
-        data type mandatory, it is possible to provide an extension that explains why
-        the primitive value is not present.
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ActivityDefinitionParticipant`` according to specification,
+        with preserving the original sequence order.
         """
-        required_fields = [("type", "type__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return ["modifierExtension"]

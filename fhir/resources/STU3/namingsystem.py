@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/NamingSystem
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -26,22 +26,24 @@ class NamingSystem(domainresource.DomainResource):
     "System" used within the Identifier and Coding data types.
     """
 
-    resource_type = Field("NamingSystem", const=True)
+    __resource_type__ = "NamingSystem"
 
-    contact: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="contact",
         title="Contact details for the publisher",
         description=(
             "Contact details to assist a user in finding and communicating with the"
             " publisher."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="Date this was last changed",
         description=(
@@ -50,16 +52,18 @@ class NamingSystem(domainresource.DomainResource):
             "must change if the status code changes. In addition, it should change "
             "when the substantive content of the naming system changes."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    description: fhirtypes.Markdown = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="description",
         title="Natural language description of the naming system",
         description=(
@@ -67,46 +71,50 @@ class NamingSystem(domainresource.DomainResource):
             "consumer's perspective. Details about what the namespace identifies "
             "including scope, granularity, version labeling, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    jurisdiction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    jurisdiction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="jurisdiction",
         title="Intended jurisdiction for naming system (if applicable)",
         description=(
             "A legal or geographic region in which the naming system is intended to"
             " be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    kind: fhirtypes.Code = Field(
-        None,
+    kind: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="kind",
         title="codesystem | identifier | root",
         description=(
             "Indicates the purpose for the naming system - what kinds of things "
             "does it make unique?"
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["codesystem", "identifier", "root"],
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["codesystem", "identifier", "root"],
+        },
     )
-    kind__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_kind", title="Extension field for ``kind``."
+    kind__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_kind", title="Extension field for ``kind``."
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Name for this naming system (computer friendly)",
         description=(
@@ -114,45 +122,50 @@ class NamingSystem(domainresource.DomainResource):
             "should be usable as an identifier for the module by machine processing"
             " applications such as code generation."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    publisher: fhirtypes.String = Field(
-        None,
+    publisher: fhirtypes.StringType | None = Field(
+        default=None,
         alias="publisher",
         title="Name of the publisher (organization or individual)",
         description=(
             "The name of the individual or organization that published the naming "
             "system."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_publisher", title="Extension field for ``publisher``."
+    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_publisher", title="Extension field for ``publisher``."
     )
 
-    replacedBy: fhirtypes.ReferenceType = Field(
-        None,
+    replacedBy: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="replacedBy",
         title="Use this instead",
         description=(
             "For naming systems that are retired, indicates the naming system that "
             "should be used in their place (if any)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["NamingSystem"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["NamingSystem"],
+        },
     )
 
-    responsible: fhirtypes.String = Field(
-        None,
+    responsible: fhirtypes.StringType | None = Field(
+        default=None,
         alias="responsible",
         title="Who maintains system namespace?",
         description=(
@@ -160,73 +173,79 @@ class NamingSystem(domainresource.DomainResource):
             "identifiers or codes for this namespace and ensuring their non-"
             "collision."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    responsible__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_responsible", title="Extension field for ``responsible``."
+    responsible__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_responsible", title="Extension field for ``responsible``."
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | retired | unknown",
         description=(
             "The status of this naming system. Enables tracking the life-cycle of "
             "the content."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "active", "retired", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "active", "retired", "unknown"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="e.g. driver,  provider,  patient, bank etc.",
         description=(
             "Categorizes a naming system for easier search by grouping related "
             "naming systems."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     uniqueId: typing.List[fhirtypes.NamingSystemUniqueIdType] = Field(
-        ...,
+        default=...,
         alias="uniqueId",
         title="Unique identifiers used for system",
         description=(
             "Indicates how the system may be identified when referenced in "
             "electronic exchange."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    usage: fhirtypes.String = Field(
-        None,
+    usage: fhirtypes.StringType | None = Field(
+        default=None,
         alias="usage",
         title="How/where is it used",
         description=(
             "Provides guidance on the use of the namespace, including the handling "
             "of formatting characters, use of upper vs. lower case, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    usage__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_usage", title="Extension field for ``usage``."
+    usage__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_usage", title="Extension field for ``usage``."
     )
 
-    useContext: typing.List[fhirtypes.UsageContextType] = Field(
-        None,
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
         alias="useContext",
         title="Context the content is intended to support",
         description=(
@@ -234,15 +253,17 @@ class NamingSystem(domainresource.DomainResource):
             "contexts that are listed. These terms may be used to assist with "
             "indexing and searching for appropriate naming system instances."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``NamingSystem`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``NamingSystem`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -269,10 +290,25 @@ class NamingSystem(domainresource.DomainResource):
             "replacedBy",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1434(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``NamingSystem`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "name",
+            "status",
+            "date",
+            "publisher",
+            "contact",
+            "useContext",
+            "jurisdiction",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -286,52 +322,7 @@ class NamingSystem(domainresource.DomainResource):
             ("name", "name__ext"),
             ("status", "status__ext"),
         ]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class NamingSystemUniqueId(backboneelement.BackboneElement):
@@ -344,22 +335,23 @@ class NamingSystemUniqueId(backboneelement.BackboneElement):
     exchange.
     """
 
-    resource_type = Field("NamingSystemUniqueId", const=True)
+    __resource_type__ = "NamingSystemUniqueId"
 
-    comment: fhirtypes.String = Field(
-        None,
+    comment: fhirtypes.StringType | None = Field(
+        default=None,
         alias="comment",
         title="Notes about identifier usage",
         description="Notes about the past or intended usage of this identifier.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    comment__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_comment", title="Extension field for ``comment``."
+    comment__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_comment", title="Extension field for ``comment``."
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="When is identifier valid?",
         description=(
@@ -367,65 +359,69 @@ class NamingSystemUniqueId(backboneelement.BackboneElement):
             " appropriate to refer to the naming system.  Outside of this window, "
             "the identifier might be non-deterministic."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    preferred: bool = Field(
-        None,
+    preferred: bool | None = Field(
+        default=None,
         alias="preferred",
         title="Is this the id that should be used for this type",
         description=(
             'Indicates whether this identifier is the "preferred" identifier of '
             "this type."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    preferred__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_preferred", title="Extension field for ``preferred``."
+    preferred__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_preferred", title="Extension field for ``preferred``."
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title="oid | uuid | uri | other",
         description=(
             "Identifies the unique identifier scheme used for this particular "
             "identifier."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["oid", "uuid", "uri", "other"],
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["oid", "uuid", "uri", "other"],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
-    value: fhirtypes.String = Field(
-        None,
+    value: fhirtypes.StringType | None = Field(
+        default=None,
         alias="value",
         title="The unique identifier",
         description=(
             "The string that should be sent over the wire to identify the code "
             "system or identifier system."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    value__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_value", title="Extension field for ``value``."
+    value__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_value", title="Extension field for ``value``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``NamingSystemUniqueId`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``NamingSystemUniqueId`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -438,10 +434,14 @@ class NamingSystemUniqueId(backboneelement.BackboneElement):
             "period",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2229(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``NamingSystemUniqueId`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -450,49 +450,4 @@ class NamingSystemUniqueId(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("type", "type__ext"), ("value", "value__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

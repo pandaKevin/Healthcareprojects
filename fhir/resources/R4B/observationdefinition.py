@@ -1,0 +1,533 @@
+"""
+Profile: http://hl7.org/fhir/StructureDefinition/ObservationDefinition
+Release: R4B
+Version: 4.3.0
+Build ID: c475c22
+Last updated: 2022-05-28T12:47:40.239+10:00
+"""
+
+from __future__ import annotations as _annotations
+
+import typing
+
+from pydantic import Field
+
+from . import backboneelement, domainresource, fhirtypes
+
+
+class ObservationDefinition(domainresource.DomainResource):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Definition of an observation.
+    Set of definitional characteristics for a kind of observation or
+    measurement produced or consumed by an orderable health care service.
+    """
+
+    __resource_type__ = "ObservationDefinition"
+
+    abnormalCodedValueSet: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="abnormalCodedValueSet",
+        title=(
+            "Value set of abnormal coded values for the observations conforming to "
+            "this ObservationDefinition"
+        ),
+        description=(
+            "The set of abnormal coded results for the observation conforming to "
+            "this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ValueSet"],
+        },
+    )
+
+    category: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="category",
+        title="Category of observation",
+        description="A code that classifies the general type of observation.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    code: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="code",
+        title="Type of observation (code / type)",
+        description=(
+            "Describes what will be observed. Sometimes this is called the "
+            'observation "name".'
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    criticalCodedValueSet: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="criticalCodedValueSet",
+        title=(
+            "Value set of critical coded values for the observations conforming to "
+            "this ObservationDefinition"
+        ),
+        description=(
+            "The set of critical coded results for the observation conforming to "
+            "this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ValueSet"],
+        },
+    )
+
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
+        alias="identifier",
+        title="Business identifier for this ObservationDefinition instance",
+        description="A unique identifier assigned to this ObservationDefinition artifact.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    method: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="method",
+        title="Method used to produce the observation",
+        description="The method or technique used to perform the observation.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    multipleResultsAllowed: bool | None = Field(
+        default=None,
+        alias="multipleResultsAllowed",
+        title="Multiple results allowed",
+        description=(
+            "Multiple results allowed for observations conforming to this "
+            "ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    multipleResultsAllowed__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_multipleResultsAllowed",
+        title="Extension field for ``multipleResultsAllowed``.",
+    )
+
+    normalCodedValueSet: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="normalCodedValueSet",
+        title=(
+            "Value set of normal coded values for the observations conforming to "
+            "this ObservationDefinition"
+        ),
+        description=(
+            "The set of normal coded results for the observations conforming to "
+            "this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ValueSet"],
+        },
+    )
+
+    permittedDataType: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
+        alias="permittedDataType",
+        title=(
+            "Quantity | CodeableConcept | string | boolean | integer | Range | "
+            "Ratio | SampledData | time | dateTime | Period"
+        ),
+        description=(
+            "The data types allowed for the value element of the instance "
+            "observations conforming to this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "Quantity",
+                "CodeableConcept",
+                "string",
+                "boolean",
+                "integer",
+                "Range",
+                "Ratio",
+                "SampledData",
+                "time",
+                "dateTime",
+                "Period",
+            ],
+        },
+    )
+    permittedDataType__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
+        alias="_permittedDataType",
+        title="Extension field for ``permittedDataType``.",
+    )
+
+    preferredReportName: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="preferredReportName",
+        title="Preferred report name",
+        description=(
+            "The preferred name to be used when reporting the results of "
+            "observations conforming to this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    preferredReportName__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_preferredReportName",
+        title="Extension field for ``preferredReportName``.",
+    )
+
+    qualifiedInterval: typing.List[
+        fhirtypes.ObservationDefinitionQualifiedIntervalType
+    ] | None = Field(
+        default=None,
+        alias="qualifiedInterval",
+        title="Qualified range for continuous and ordinal observation results",
+        description=(
+            "Multiple  ranges of results qualified by different contexts for "
+            "ordinal or continuous observations conforming to this "
+            "ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    quantitativeDetails: fhirtypes.ObservationDefinitionQuantitativeDetailsType | None = Field(
+        default=None,
+        alias="quantitativeDetails",
+        title="Characteristics of quantitative results",
+        description="Characteristics for quantitative results of this observation.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    validCodedValueSet: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="validCodedValueSet",
+        title=(
+            "Value set of valid coded values for the observations conforming to "
+            "this ObservationDefinition"
+        ),
+        description=(
+            "The set of valid coded results for the observations  conforming to "
+            "this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ValueSet"],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ObservationDefinition`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "language",
+            "text",
+            "contained",
+            "extension",
+            "modifierExtension",
+            "category",
+            "code",
+            "identifier",
+            "permittedDataType",
+            "multipleResultsAllowed",
+            "method",
+            "preferredReportName",
+            "quantitativeDetails",
+            "qualifiedInterval",
+            "validCodedValueSet",
+            "normalCodedValueSet",
+            "abnormalCodedValueSet",
+            "criticalCodedValueSet",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ObservationDefinition`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "category", "code", "identifier"]
+
+
+class ObservationDefinitionQualifiedInterval(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Qualified range for continuous and ordinal observation results.
+    Multiple  ranges of results qualified by different contexts for ordinal or
+    continuous observations conforming to this ObservationDefinition.
+    """
+
+    __resource_type__ = "ObservationDefinitionQualifiedInterval"
+
+    age: fhirtypes.RangeType | None = Field(
+        default=None,
+        alias="age",
+        title="Applicable age range, if relevant",
+        description=(
+            "The age at which this reference range is applicable. This is a "
+            "neonatal age (e.g. number of weeks at term) if the meaning says so."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    appliesTo: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="appliesTo",
+        title="Targetted population of the range",
+        description=(
+            "Codes to indicate the target population this reference range applies "
+            "to."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    category: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="category",
+        title="reference | critical | absolute",
+        description=(
+            "The category of interval of values for continuous or ordinal "
+            "observations conforming to this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["reference", "critical", "absolute"],
+        },
+    )
+    category__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_category", title="Extension field for ``category``."
+    )
+
+    condition: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="condition",
+        title="Condition associated with the reference range",
+        description="Text based condition for which the reference range is valid.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    condition__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_condition", title="Extension field for ``condition``."
+    )
+
+    context: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="context",
+        title="Range context qualifier",
+        description=(
+            "Codes to indicate the health context the range applies to. For "
+            "example, the normal or therapeutic range."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    gender: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="gender",
+        title="male | female | other | unknown",
+        description="Sex of the population the range applies to.",
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["male", "female", "other", "unknown"],
+        },
+    )
+    gender__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_gender", title="Extension field for ``gender``."
+    )
+
+    gestationalAge: fhirtypes.RangeType | None = Field(
+        default=None,
+        alias="gestationalAge",
+        title="Applicable gestational age range, if relevant",
+        description=(
+            "The gestational age to which this reference range is applicable, in "
+            "the context of pregnancy."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    range: fhirtypes.RangeType | None = Field(
+        default=None,
+        alias="range",
+        title="The interval itself, for continuous or ordinal observations",
+        description=(
+            "The low and high values determining the interval. There may be only "
+            "one of the two."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ObservationDefinitionQualifiedInterval`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "category",
+            "range",
+            "context",
+            "appliesTo",
+            "gender",
+            "age",
+            "gestationalAge",
+            "condition",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ObservationDefinitionQualifiedInterval`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+
+class ObservationDefinitionQuantitativeDetails(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Characteristics of quantitative results.
+    Characteristics for quantitative results of this observation.
+    """
+
+    __resource_type__ = "ObservationDefinitionQuantitativeDetails"
+
+    conversionFactor: fhirtypes.DecimalType | None = Field(
+        default=None,
+        alias="conversionFactor",
+        title="SI to Customary unit conversion factor",
+        description=(
+            "Factor for converting value expressed with SI unit to value expressed "
+            "with customary unit."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    conversionFactor__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_conversionFactor",
+        title="Extension field for ``conversionFactor``.",
+    )
+
+    customaryUnit: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="customaryUnit",
+        title="Customary unit for quantitative results",
+        description=(
+            "Customary unit used to report quantitative results of observations "
+            "conforming to this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    decimalPrecision: fhirtypes.IntegerType | None = Field(
+        default=None,
+        alias="decimalPrecision",
+        title="Decimal precision of observation quantitative results",
+        description=(
+            "Number of digits after decimal separator when the results of such "
+            "observations are of type Quantity."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    decimalPrecision__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_decimalPrecision",
+        title="Extension field for ``decimalPrecision``.",
+    )
+
+    unit: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="unit",
+        title="SI unit for quantitative results",
+        description=(
+            "SI unit used to report quantitative results of observations conforming"
+            " to this ObservationDefinition."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ObservationDefinitionQuantitativeDetails`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "customaryUnit",
+            "unit",
+            "conversionFactor",
+            "decimalPrecision",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ObservationDefinitionQuantitativeDetails`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

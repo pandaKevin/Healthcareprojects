@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Group
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -27,25 +27,27 @@ class Group(domainresource.DomainResource):
     isn't an Organization.
     """
 
-    resource_type = Field("Group", const=True)
+    __resource_type__ = "Group"
 
-    active: bool = Field(
-        None,
+    active: bool | None = Field(
+        default=None,
         alias="active",
         title="Whether this group's record is in active use",
         description=(
             "Indicates whether the record for the group is available for use or is "
             "merely being retained for historical purposes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    active__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_active", title="Extension field for ``active``."
+    active__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_active", title="Extension field for ``active``."
     )
 
-    actual: bool = Field(
-        None,
+    actual: bool | None = Field(
+        default=None,
         alias="actual",
         title="Descriptive or actual",
         description=(
@@ -53,113 +55,127 @@ class Group(domainresource.DomainResource):
             "real individuals.  If false, the group defines a set of intended "
             "individuals."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    actual__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_actual", title="Extension field for ``actual``."
+    actual__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_actual", title="Extension field for ``actual``."
     )
 
-    characteristic: typing.List[fhirtypes.GroupCharacteristicType] = Field(
-        None,
+    characteristic: typing.List[fhirtypes.GroupCharacteristicType] | None = Field(
+        default=None,
         alias="characteristic",
         title="Trait of group members",
         description="Identifies the traits shared by members of the group.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
         title="Kind of Group members",
         description=(
             'Provides a specific type of resource the group includes; e.g. "cow", '
             '"syringe", etc.'
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Unique id",
         description="A unique business identifier for this group.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    member: typing.List[fhirtypes.GroupMemberType] = Field(
-        None,
+    member: typing.List[fhirtypes.GroupMemberType] | None = Field(
+        default=None,
         alias="member",
         title="Who or what is in group",
         description="Identifies the resource instances that are members of the group.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Label for Group",
         description=(
             "A label assigned to the group for human identification and "
             "communication."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    quantity: fhirtypes.UnsignedInt = Field(
-        None,
+    quantity: fhirtypes.UnsignedIntType | None = Field(
+        default=None,
         alias="quantity",
         title="Number of members",
         description=(
             "A count of the number of resource instances that are part of the " "group."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    quantity__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_quantity", title="Extension field for ``quantity``."
+    quantity__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_quantity", title="Extension field for ``quantity``."
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title="person | animal | practitioner | device | medication | substance",
         description=(
             "Identifies the broad classification of the kind of resources the group"
             " includes."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "person",
-            "animal",
-            "practitioner",
-            "device",
-            "medication",
-            "substance",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "person",
+                "animal",
+                "practitioner",
+                "device",
+                "medication",
+                "substance",
+            ],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Group`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Group`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -181,10 +197,25 @@ class Group(domainresource.DomainResource):
             "member",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_708(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Group`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "active",
+            "type",
+            "actual",
+            "code",
+            "name",
+            "quantity",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -193,52 +224,7 @@ class Group(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("actual", "actual__ext"), ("type", "type__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class GroupCharacteristic(backboneelement.BackboneElement):
@@ -250,113 +236,122 @@ class GroupCharacteristic(backboneelement.BackboneElement):
     Identifies the traits shared by members of the group.
     """
 
-    resource_type = Field("GroupCharacteristic", const=True)
+    __resource_type__ = "GroupCharacteristic"
 
     code: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="code",
         title="Kind of characteristic",
         description="A code that identifies the kind of trait being asserted.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    exclude: bool = Field(
-        None,
+    exclude: bool | None = Field(
+        default=None,
         alias="exclude",
         title="Group includes or excludes",
         description=(
             "If true, indicates the characteristic is one that is NOT held by "
             "members of the group."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    exclude__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_exclude", title="Extension field for ``exclude``."
+    exclude__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_exclude", title="Extension field for ``exclude``."
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="Period over which characteristic is tested",
         description=(
             "The period over which the characteristic is tested; e.g. the patient "
             "had an operation during the month of June."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    valueBoolean: bool = Field(
-        None,
+    valueBoolean: bool | None = Field(
+        default=None,
         alias="valueBoolean",
         title="Value held by characteristic",
         description=(
             "The value of the trait that holds (or does not hold - see 'exclude') "
             "for members of the group."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
-    valueBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueBoolean", title="Extension field for ``valueBoolean``."
+    valueBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueBoolean",
+        title="Extension field for ``valueBoolean``.",
     )
 
-    valueCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    valueCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="valueCodeableConcept",
         title="Value held by characteristic",
         description=(
             "The value of the trait that holds (or does not hold - see 'exclude') "
             "for members of the group."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueQuantity: fhirtypes.QuantityType = Field(
-        None,
+    valueQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="valueQuantity",
         title="Value held by characteristic",
         description=(
             "The value of the trait that holds (or does not hold - see 'exclude') "
             "for members of the group."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
-    valueRange: fhirtypes.RangeType = Field(
-        None,
+    valueRange: fhirtypes.RangeType | None = Field(
+        default=None,
         alias="valueRange",
         title="Value held by characteristic",
         description=(
             "The value of the trait that holds (or does not hold - see 'exclude') "
             "for members of the group."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``GroupCharacteristic`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``GroupCharacteristic`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -371,10 +366,14 @@ class GroupCharacteristic(backboneelement.BackboneElement):
             "period",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2144(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``GroupCharacteristic`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -383,57 +382,9 @@ class GroupCharacteristic(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("exclude", "exclude__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2144(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -454,26 +405,7 @@ class GroupCharacteristic(backboneelement.BackboneElement):
                 "valueRange",
             ]
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class GroupMember(backboneelement.BackboneElement):
@@ -485,56 +417,66 @@ class GroupMember(backboneelement.BackboneElement):
     Identifies the resource instances that are members of the group.
     """
 
-    resource_type = Field("GroupMember", const=True)
+    __resource_type__ = "GroupMember"
 
     entity: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="entity",
         title="Reference to the group member",
         description=(
             "A reference to the entity that is a member of the group. Must be "
             "consistent with Group.type."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Patient",
-            "Practitioner",
-            "Device",
-            "Medication",
-            "Substance",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Patient",
+                "Practitioner",
+                "Device",
+                "Medication",
+                "Substance",
+            ],
+        },
     )
 
-    inactive: bool = Field(
-        None,
+    inactive: bool | None = Field(
+        default=None,
         alias="inactive",
         title="If member is no longer in group",
         description=(
             "A flag to indicate that the member is no longer in the group, but "
             "previously may have been a member."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    inactive__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_inactive", title="Extension field for ``inactive``."
+    inactive__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_inactive", title="Extension field for ``inactive``."
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="Period member belonged to the group",
         description="The period that the member was in the group, if known.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``GroupMember`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``GroupMember`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "entity", "period", "inactive"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``GroupMember`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Specimen
 Release: STU3
@@ -6,9 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -22,10 +24,10 @@ class Specimen(domainresource.DomainResource):
     A sample to be used for analysis.
     """
 
-    resource_type = Field("Specimen", const=True)
+    __resource_type__ = "Specimen"
 
-    accessionIdentifier: fhirtypes.IdentifierType = Field(
-        None,
+    accessionIdentifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="accessionIdentifier",
         title="Identifier assigned by the lab",
         description=(
@@ -33,42 +35,48 @@ class Specimen(domainresource.DomainResource):
             " is not necessarily the same as the specimen identifier, depending on "
             "local lab procedures."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    collection: fhirtypes.SpecimenCollectionType = Field(
-        None,
+    collection: fhirtypes.SpecimenCollectionType | None = Field(
+        default=None,
         alias="collection",
         title="Collection details",
         description="Details concerning the specimen collection.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    container: typing.List[fhirtypes.SpecimenContainerType] = Field(
-        None,
+    container: typing.List[fhirtypes.SpecimenContainerType] | None = Field(
+        default=None,
         alias="container",
         title="Direct container of specimen (tube/slide, etc.)",
         description=(
             "The container holding the specimen.  The recursive nature of "
             "containers; i.e. blood in tube in tray in rack is not addressed here."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="External Identifier",
         description="Id for specimen.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Comments",
         description=(
@@ -76,102 +84,121 @@ class Specimen(domainresource.DomainResource):
             "specimen collection. (for example: broken vial, sent with patient, "
             "frozen)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    parent: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    parent: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="parent",
         title="Specimen from which this specimen originated",
         description=(
             "Reference to the parent (source) specimen which is used when the "
             "specimen was either derived from or a component of another specimen."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Specimen"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Specimen"],
+        },
     )
 
-    processing: typing.List[fhirtypes.SpecimenProcessingType] = Field(
-        None,
+    processing: typing.List[fhirtypes.SpecimenProcessingType] | None = Field(
+        default=None,
         alias="processing",
         title="Processing and processing step details",
         description="Details concerning processing and processing steps for the specimen.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    receivedTime: fhirtypes.DateTime = Field(
-        None,
+    receivedTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="receivedTime",
         title="The time when specimen was received for processing",
         description="Time when specimen was received for processing or testing.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    receivedTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_receivedTime", title="Extension field for ``receivedTime``."
+    receivedTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_receivedTime",
+        title="Extension field for ``receivedTime``.",
     )
 
-    request: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    request: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="request",
         title="Why the specimen was collected",
         description=(
             "Details concerning a test or procedure request that required a "
             "specimen to be collected."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ProcedureRequest"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ProcedureRequest"],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="available | unavailable | unsatisfactory | entered-in-error",
         description="The availability of the specimen.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["available", "unavailable", "unsatisfactory", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "available",
+                "unavailable",
+                "unsatisfactory",
+                "entered-in-error",
+            ],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     subject: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="subject",
         title=(
             "Where the specimen came from. This may be from the patient(s) or from "
             "the environment or a device"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Group", "Device", "Substance"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Group", "Device", "Substance"],
+        },
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="Kind of material that forms the specimen",
         description="The kind of material that forms the specimen.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Specimen`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Specimen`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -196,6 +223,23 @@ class Specimen(domainresource.DomainResource):
             "note",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Specimen`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "accessionIdentifier",
+            "status",
+            "type",
+            "subject",
+            "receivedTime",
+        ]
+
 
 class SpecimenCollection(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -206,10 +250,10 @@ class SpecimenCollection(backboneelement.BackboneElement):
     Details concerning the specimen collection.
     """
 
-    resource_type = Field("SpecimenCollection", const=True)
+    __resource_type__ = "SpecimenCollection"
 
-    bodySite: fhirtypes.CodeableConceptType = Field(
-        None,
+    bodySite: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="bodySite",
         title="Anatomical collection site",
         description=(
@@ -217,85 +261,94 @@ class SpecimenCollection(backboneelement.BackboneElement):
             "is a patient). This is the target site.  This element is not used for "
             "environmental specimens."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    collectedDateTime: fhirtypes.DateTime = Field(
-        None,
+    collectedDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="collectedDateTime",
         title="Collection time",
         description=(
             "Time when specimen was collected from subject - the physiologically "
             "relevant time."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e collected[x]
-        one_of_many="collected",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e collected[x]
+            "one_of_many": "collected",
+            "one_of_many_required": False,
+        },
     )
-    collectedDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    collectedDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_collectedDateTime",
         title="Extension field for ``collectedDateTime``.",
     )
 
-    collectedPeriod: fhirtypes.PeriodType = Field(
-        None,
+    collectedPeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="collectedPeriod",
         title="Collection time",
         description=(
             "Time when specimen was collected from subject - the physiologically "
             "relevant time."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e collected[x]
-        one_of_many="collected",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e collected[x]
+            "one_of_many": "collected",
+            "one_of_many_required": False,
+        },
     )
 
-    collector: fhirtypes.ReferenceType = Field(
-        None,
+    collector: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="collector",
         title="Who collected the specimen",
         description="Person who collected the specimen.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner"],
+        },
     )
 
-    method: fhirtypes.CodeableConceptType = Field(
-        None,
+    method: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="method",
         title="Technique used to perform collection",
         description=(
             "A coded value specifying the technique that is used to perform the "
             "procedure."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    quantity: fhirtypes.QuantityType = Field(
-        None,
+    quantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="quantity",
         title="The quantity of specimen collected",
         description=(
             "The quantity of specimen collected; for instance the volume of a blood"
             " sample, or the physical measurement of an anatomic pathology sample."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SpecimenCollection`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SpecimenCollection`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -309,10 +362,19 @@ class SpecimenCollection(backboneelement.BackboneElement):
             "bodySite",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2049(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SpecimenCollection`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "modifierExtension",
+            "collector",
+            "collectedDateTime",
+            "collectedPeriod",
+        ]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -326,26 +388,7 @@ class SpecimenCollection(backboneelement.BackboneElement):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {"collected": ["collectedDateTime", "collectedPeriod"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class SpecimenContainer(backboneelement.BackboneElement):
@@ -358,63 +401,67 @@ class SpecimenContainer(backboneelement.BackboneElement):
     i.e. blood in tube in tray in rack is not addressed here.
     """
 
-    resource_type = Field("SpecimenContainer", const=True)
+    __resource_type__ = "SpecimenContainer"
 
-    additiveCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    additiveCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="additiveCodeableConcept",
         title="Additive associated with container",
         description=(
             "Introduced substance to preserve, maintain or enhance the specimen. "
             "Examples: Formalin, Citrate, EDTA."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e additive[x]
-        one_of_many="additive",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e additive[x]
+            "one_of_many": "additive",
+            "one_of_many_required": False,
+        },
     )
 
-    additiveReference: fhirtypes.ReferenceType = Field(
-        None,
+    additiveReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="additiveReference",
         title="Additive associated with container",
         description=(
             "Introduced substance to preserve, maintain or enhance the specimen. "
             "Examples: Formalin, Citrate, EDTA."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e additive[x]
-        one_of_many="additive",
-        one_of_many_required=False,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Substance"],
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e additive[x]
+            "one_of_many": "additive",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Substance"],
+        },
     )
 
-    capacity: fhirtypes.QuantityType = Field(
-        None,
+    capacity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="capacity",
         title="Container volume or size",
         description="The capacity (volume or other measure) the container may contain.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Textual description of the container",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Id for the container",
         description=(
@@ -422,39 +469,43 @@ class SpecimenContainer(backboneelement.BackboneElement):
             "lab assigned identifier, etc. The container ID may differ from the "
             "specimen id in some circumstances."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    specimenQuantity: fhirtypes.QuantityType = Field(
-        None,
+    specimenQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="specimenQuantity",
         title="Quantity of specimen within container",
         description=(
             "The quantity of specimen in the container; may be volume, dimensions, "
             "or other appropriate measurements, depending on the specimen type."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="Kind of container directly associated with specimen",
         description=(
             "The type of container associated with the specimen (e.g. slide, "
             "aliquot, etc.)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SpecimenContainer`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SpecimenContainer`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -469,10 +520,14 @@ class SpecimenContainer(backboneelement.BackboneElement):
             "additiveReference",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1948(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SpecimenContainer`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "identifier"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -488,26 +543,7 @@ class SpecimenContainer(backboneelement.BackboneElement):
         one_of_many_fields = {
             "additive": ["additiveCodeableConcept", "additiveReference"]
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class SpecimenProcessing(backboneelement.BackboneElement):
@@ -519,42 +555,45 @@ class SpecimenProcessing(backboneelement.BackboneElement):
     Details concerning processing and processing steps for the specimen.
     """
 
-    resource_type = Field("SpecimenProcessing", const=True)
+    __resource_type__ = "SpecimenProcessing"
 
-    additive: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    additive: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="additive",
         title="Material used in the processing step",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Substance"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Substance"],
+        },
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Textual description of procedure",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    procedure: fhirtypes.CodeableConceptType = Field(
-        None,
+    procedure: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="procedure",
         title="Indicates the treatment step  applied to the specimen",
         description="A coded value specifying the procedure used to process the specimen.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    timeDateTime: fhirtypes.DateTime = Field(
-        None,
+    timeDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="timeDateTime",
         title="Date and time of specimen processing",
         description=(
@@ -562,18 +601,21 @@ class SpecimenProcessing(backboneelement.BackboneElement):
             "  For example the time of sample fixation or the period of time the "
             "sample was in formalin."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e time[x]
-        one_of_many="time",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e time[x]
+            "one_of_many": "time",
+            "one_of_many_required": False,
+        },
     )
-    timeDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_timeDateTime", title="Extension field for ``timeDateTime``."
+    timeDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_timeDateTime",
+        title="Extension field for ``timeDateTime``.",
     )
 
-    timePeriod: fhirtypes.PeriodType = Field(
-        None,
+    timePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="timePeriod",
         title="Date and time of specimen processing",
         description=(
@@ -581,18 +623,19 @@ class SpecimenProcessing(backboneelement.BackboneElement):
             "  For example the time of sample fixation or the period of time the "
             "sample was in formalin."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e time[x]
-        one_of_many="time",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e time[x]
+            "one_of_many": "time",
+            "one_of_many_required": False,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SpecimenProcessing`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SpecimenProcessing`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -605,10 +648,14 @@ class SpecimenProcessing(backboneelement.BackboneElement):
             "timePeriod",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2059(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SpecimenProcessing`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -622,23 +669,4 @@ class SpecimenProcessing(backboneelement.BackboneElement):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {"time": ["timeDateTime", "timePeriod"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields

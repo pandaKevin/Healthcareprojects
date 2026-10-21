@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/SearchParameter
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -25,26 +25,28 @@ class SearchParameter(domainresource.DomainResource):
     search/filter on a resource.
     """
 
-    resource_type = Field("SearchParameter", const=True)
+    __resource_type__ = "SearchParameter"
 
-    base: typing.List[fhirtypes.Code] = Field(
-        None,
+    base: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="base",
         title="The resource type(s) this search parameter applies to",
         description=(
             "The base resource type(s) that this search parameter can be used "
             "against."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    base__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_base", title="Extension field for ``base``.")
+    base__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_base", title="Extension field for ``base``."
+    )
 
-    chain: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    chain: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="chain",
         title="Chained names supported",
         description=(
@@ -56,84 +58,152 @@ class SearchParameter(domainresource.DomainResource):
             "drawn from SearchParameter.code for a parameter on the target resource"
             " type."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    chain__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_chain", title="Extension field for ``chain``.")
+    chain__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_chain", title="Extension field for ``chain``."
+    )
 
-    code: fhirtypes.Code = Field(
-        None,
+    code: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="code",
-        title="Code used in URL",
+        title="Recommended name for parameter in search url",
         description=(
-            "The code used in the URL or the parameter name in a parameters "
-            "resource for this search parameter."
+            "The label that is recommended to be used in the URL or the parameter "
+            "name in a parameters resource for this search parameter.  In some "
+            "cases, servers may need to use a different CapabilityStatement "
+            "searchParam.name to differentiate between multiple SearchParameters "
+            "that happen to have the same code."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    code__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_code", title="Extension field for ``code``."
+    code__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_code", title="Extension field for ``code``."
     )
 
-    comparator: typing.List[fhirtypes.Code] = Field(
-        None,
+    comparator: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="comparator",
         title="eq | ne | gt | lt | ge | le | sa | eb | ap",
         description="Comparators supported for the search parameter.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["eq", "ne", "gt", "lt", "ge", "le", "sa", "eb", "ap"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["eq", "ne", "gt", "lt", "ge", "le", "sa", "eb", "ap"],
+        },
     )
     comparator__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_comparator", title="Extension field for ``comparator``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_comparator", title="Extension field for ``comparator``."
+    )
 
-    component: typing.List[fhirtypes.SearchParameterComponentType] = Field(
-        None,
+    component: typing.List[fhirtypes.SearchParameterComponentType] | None = Field(
+        default=None,
         alias="component",
         title="For Composite resources to define the parts",
         description="Used to define the parts of a composite search parameter.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    contact: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    constraint: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="constraint",
+        title="FHIRPath expression that constraints the usage of this SearchParamete",
+        description=(
+            "FHIRPath expression that defines/sets a complex constraint for when "
+            "this SearchParameter is applicable."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    constraint__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_constraint", title="Extension field for ``constraint``."
+    )
+
+    contact: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="contact",
         title="Contact details for the publisher",
         description=(
             "Contact details to assist a user in finding and communicating with the"
             " publisher."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    copyright: fhirtypes.MarkdownType | None = Field(
+        default=None,
+        alias="copyright",
+        title="Use and/or publishing restrictions",
+        description=(
+            "A copyright statement relating to the search parameter and/or its "
+            "contents. Copyright statements are generally legal restrictions on the"
+            " use and publishing of the search parameter."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_copyright", title="Extension field for ``copyright``."
+    )
+
+    copyrightLabel: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="copyrightLabel",
+        title="Copyright holder and year(s)",
+        description=(
+            "A short string (<50 characters), suitable for inclusion in a page "
+            "footer that identifies the copyright holder, effective period, and "
+            "optionally whether rights are resctricted. (e.g. 'All rights "
+            "reserved', 'Some rights reserved')."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    copyrightLabel__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_copyrightLabel",
+        title="Extension field for ``copyrightLabel``.",
+    )
+
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="Date last changed",
         description=(
-            "The date  (and optionally time) when the search parameter was "
-            "published. The date must change when the business version changes and "
-            "it must change if the status code changes. In addition, it should "
-            "change when the substantive content of the search parameter changes."
+            "The date  (and optionally time) when the search parameter was last "
+            "significantly changed. The date must change when the business version "
+            "changes and it must change if the status code changes. In addition, it"
+            " should change when the substantive content of the search parameter "
+            "changes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    derivedFrom: fhirtypes.Canonical = Field(
-        None,
+    derivedFrom: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="derivedFrom",
         title="Original definition for the search parameter",
         description=(
@@ -143,30 +213,33 @@ class SearchParameter(domainresource.DomainResource):
             "should have the same meaning, and (usually) the functionality should "
             "be a proper subset of the underlying search parameter."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["SearchParameter"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["SearchParameter"],
+        },
     )
-    derivedFrom__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_derivedFrom", title="Extension field for ``derivedFrom``."
+    derivedFrom__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_derivedFrom", title="Extension field for ``derivedFrom``."
     )
 
-    description: fhirtypes.Markdown = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="description",
         title="Natural language description of the search parameter",
         description="And how it used.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    experimental: bool = Field(
-        None,
+    experimental: bool | None = Field(
+        default=None,
         alias="experimental",
         title="For testing purposes, not real usage",
         description=(
@@ -174,88 +247,117 @@ class SearchParameter(domainresource.DomainResource):
             " testing purposes (or education/evaluation/marketing) and is not "
             "intended to be used for genuine usage."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_experimental", title="Extension field for ``experimental``."
+    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_experimental",
+        title="Extension field for ``experimental``.",
     )
 
-    expression: fhirtypes.String = Field(
-        None,
+    expression: fhirtypes.StringType | None = Field(
+        default=None,
         alias="expression",
         title="FHIRPath expression that extracts the values",
         description=(
             "A FHIRPath expression that returns a set of elements for the search "
             "parameter."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    expression__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_expression", title="Extension field for ``expression``."
+    expression__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_expression", title="Extension field for ``expression``."
     )
 
-    jurisdiction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
+        alias="identifier",
+        title="Additional identifier for the search parameter (business identifier)",
+        description=(
+            "A formal identifier that is used to identify this search parameter "
+            "when it is represented in other formats, or referenced in a "
+            "specification, model, design or an instance."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    jurisdiction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="jurisdiction",
         title="Intended jurisdiction for search parameter (if applicable)",
         description=(
             "A legal or geographic region in which the search parameter is intended"
             " to be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    modifier: typing.List[fhirtypes.Code] = Field(
-        None,
+    modifier: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="modifier",
         title=(
             "missing | exact | contains | not | text | in | not-in | below | above "
-            "| type | identifier | ofType"
+            "| type | identifier | of-type | code-text | text-advanced | iterate"
         ),
         description="A modifier supported for the search parameter.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "missing",
-            "exact",
-            "contains",
-            "not",
-            "text",
-            "in",
-            "not-in",
-            "below",
-            "above",
-            "type",
-            "identifier",
-            "ofType",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "missing",
+                "exact",
+                "contains",
+                "not",
+                "text",
+                "in",
+                "not-in",
+                "below",
+                "above",
+                "type",
+                "identifier",
+                "of-type",
+                "code-text",
+                "text-advanced",
+                "iterate",
+            ],
+        },
     )
     modifier__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_modifier", title="Extension field for ``modifier``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_modifier", title="Extension field for ``modifier``."
+    )
 
-    multipleAnd: bool = Field(
-        None,
+    multipleAnd: bool | None = Field(
+        default=None,
         alias="multipleAnd",
         title="Allow multiple parameters (and)",
         description=(
             "Whether multiple parameters are allowed - e.g. more than one parameter"
             " with the same name. The search matches if all the parameters match."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    multipleAnd__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_multipleAnd", title="Extension field for ``multipleAnd``."
+    multipleAnd__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_multipleAnd", title="Extension field for ``multipleAnd``."
     )
 
-    multipleOr: bool = Field(
-        None,
+    multipleOr: bool | None = Field(
+        default=None,
         alias="multipleOr",
         title="Allow multiple values per parameter (or)",
         description=(
@@ -263,15 +365,16 @@ class SearchParameter(domainresource.DomainResource):
             "exists. Values are separated by commas, and the parameter matches if "
             "any of the values match."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    multipleOr__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_multipleOr", title="Extension field for ``multipleOr``."
+    multipleOr__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_multipleOr", title="Extension field for ``multipleOr``."
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Name for this search parameter (computer friendly)",
         description=(
@@ -279,77 +382,122 @@ class SearchParameter(domainresource.DomainResource):
             "should be usable as an identifier for the module by machine processing"
             " applications such as code generation."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    publisher: fhirtypes.String = Field(
-        None,
-        alias="publisher",
-        title="Name of the publisher (organization or individual)",
+    processingMode: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="processingMode",
+        title="normal | phonetic | other",
         description=(
-            "The name of the organization or individual that published the search "
-            "parameter."
+            "How the search parameter relates to the set of elements returned by "
+            "evaluating the expression query."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["normal", "phonetic", "other"],
+        },
     )
-    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_publisher", title="Extension field for ``publisher``."
+    processingMode__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_processingMode",
+        title="Extension field for ``processingMode``.",
     )
 
-    purpose: fhirtypes.Markdown = Field(
-        None,
+    publisher: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="publisher",
+        title="Name of the publisher/steward (organization or individual)",
+        description=(
+            "The name of the organization or individual tresponsible for the "
+            "release and ongoing maintenance of the search parameter."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_publisher", title="Extension field for ``publisher``."
+    )
+
+    purpose: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="purpose",
         title="Why this search parameter is defined",
         description=(
             "Explanation of why this search parameter is needed and why it has been"
             " designed as it has."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_purpose", title="Extension field for ``purpose``."
+    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_purpose", title="Extension field for ``purpose``."
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | retired | unknown",
         description=(
             "The status of this search parameter. Enables tracking the life-cycle "
             "of the content."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "active", "retired", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "active", "retired", "unknown"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    target: typing.List[fhirtypes.Code] = Field(
-        None,
+    target: typing.List[fhirtypes.CodeType | None] | None = Field(
+        default=None,
         alias="target",
         title="Types of resource (if a resource reference)",
         description="Types of resource (if a resource is referenced).",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
     target__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_target", title="Extension field for ``target``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_target", title="Extension field for ``target``."
+    )
 
-    type: fhirtypes.Code = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="title",
+        title="Name for this search parameter (human friendly)",
+        description="A short, descriptive, user-friendly title for the search parameter.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
+    )
+
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title=(
             "number | date | string | token | reference | composite | quantity | "
@@ -359,29 +507,31 @@ class SearchParameter(domainresource.DomainResource):
             "The type of value that a search parameter may contain, and how the "
             "content is interpreted."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "number",
-            "date",
-            "string",
-            "token",
-            "reference",
-            "composite",
-            "quantity",
-            "uri",
-            "special",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "number",
+                "date",
+                "string",
+                "token",
+                "reference",
+                "composite",
+                "quantity",
+                "uri",
+                "special",
+            ],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title=(
             "Canonical identifier for this search parameter, represented as a URI "
@@ -391,21 +541,23 @@ class SearchParameter(domainresource.DomainResource):
             "An absolute URI that is used to identify this search parameter when it"
             " is referenced in a specification, model, design or an instance; also "
             "called its canonical identifier. This SHOULD be globally unique and "
-            "SHOULD be a literal address at which at which an authoritative "
-            "instance of this search parameter is (or will be) published. This URL "
-            "can be the target of a canonical reference. It SHALL remain the same "
-            "when the search parameter is stored on different servers."
+            "SHOULD be a literal address at which an authoritative instance of this"
+            " search parameter is (or will be) published. This URL can be the "
+            "target of a canonical reference. It SHALL remain the same when the "
+            "search parameter is stored on different servers."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
-    useContext: typing.List[fhirtypes.UsageContextType] = Field(
-        None,
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
         alias="useContext",
         title="The context that the content is intended to support",
         description=(
@@ -415,12 +567,14 @@ class SearchParameter(domainresource.DomainResource):
             "(insurance plans, studies, ...) and may be used to assist with "
             "indexing and searching for appropriate search parameter instances."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    version: fhirtypes.String = Field(
-        None,
+    version: fhirtypes.StringType | None = Field(
+        default=None,
         alias="version",
         title="Business version of the search parameter",
         description=(
@@ -432,51 +586,59 @@ class SearchParameter(domainresource.DomainResource):
             "available. There is also no expectation that versions can be placed in"
             " a lexicographical sequence."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    version__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_version", title="Extension field for ``version``."
-    )
-
-    xpath: fhirtypes.String = Field(
-        None,
-        alias="xpath",
-        title="XPath that extracts the values",
-        description=(
-            "An XPath expression that returns a set of elements for the search "
-            "parameter."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    xpath__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_xpath", title="Extension field for ``xpath``."
+    version__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
     )
 
-    xpathUsage: fhirtypes.Code = Field(
-        None,
-        alias="xpathUsage",
-        title="normal | phonetic | nearby | distance | other",
+    versionAlgorithmCoding: fhirtypes.CodingType | None = Field(
+        default=None,
+        alias="versionAlgorithmCoding",
+        title="How to compare versions",
         description=(
-            "How the search parameter relates to the set of elements returned by "
-            "evaluating the xpath query."
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["normal", "phonetic", "nearby", "distance", "other"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
     )
-    xpathUsage__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_xpathUsage", title="Extension field for ``xpathUsage``."
+
+    versionAlgorithmString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="versionAlgorithmString",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+    versionAlgorithmString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_versionAlgorithmString",
+        title="Extension field for ``versionAlgorithmString``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SearchParameter`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SearchParameter`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -488,8 +650,12 @@ class SearchParameter(domainresource.DomainResource):
             "extension",
             "modifierExtension",
             "url",
+            "identifier",
             "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
             "name",
+            "title",
             "derivedFrom",
             "status",
             "experimental",
@@ -500,12 +666,14 @@ class SearchParameter(domainresource.DomainResource):
             "useContext",
             "jurisdiction",
             "purpose",
+            "copyright",
+            "copyrightLabel",
             "code",
             "base",
             "type",
             "expression",
-            "xpath",
-            "xpathUsage",
+            "processingMode",
+            "constraint",
             "target",
             "multipleOr",
             "multipleAnd",
@@ -515,10 +683,37 @@ class SearchParameter(domainresource.DomainResource):
             "component",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1724(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SearchParameter`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "url",
+            "identifier",
+            "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
+            "name",
+            "title",
+            "status",
+            "experimental",
+            "date",
+            "publisher",
+            "contact",
+            "description",
+            "useContext",
+            "jurisdiction",
+            "code",
+            "base",
+            "type",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -535,52 +730,25 @@ class SearchParameter(domainresource.DomainResource):
             ("type", "type__ext"),
             ("url", "url__ext"),
         ]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
 
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {
+            "versionAlgorithm": ["versionAlgorithmCoding", "versionAlgorithmString"]
+        }
+        return one_of_many_fields
 
 
 class SearchParameterComponent(backboneelement.BackboneElement):
@@ -592,51 +760,57 @@ class SearchParameterComponent(backboneelement.BackboneElement):
     Used to define the parts of a composite search parameter.
     """
 
-    resource_type = Field("SearchParameterComponent", const=True)
+    __resource_type__ = "SearchParameterComponent"
 
-    definition: fhirtypes.Canonical = Field(
-        None,
+    definition: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="definition",
         title="Defines how the part works",
         description="The definition of the search parameter that describes this part.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["SearchParameter"],
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["SearchParameter"],
+        },
     )
-    definition__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_definition", title="Extension field for ``definition``."
+    definition__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_definition", title="Extension field for ``definition``."
     )
 
-    expression: fhirtypes.String = Field(
-        None,
+    expression: fhirtypes.StringType | None = Field(
+        default=None,
         alias="expression",
         title="Subexpression relative to main expression",
         description=(
             "A sub-expression that defines how to extract values for this component"
             " from the output of the main SearchParameter.expression."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    expression__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_expression", title="Extension field for ``expression``."
+    expression__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_expression", title="Extension field for ``expression``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SearchParameterComponent`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SearchParameterComponent`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "definition", "expression"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2673(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SearchParameterComponent`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -648,49 +822,4 @@ class SearchParameterComponent(backboneelement.BackboneElement):
             ("definition", "definition__ext"),
             ("expression", "expression__ext"),
         ]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

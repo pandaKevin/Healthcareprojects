@@ -1,12 +1,14 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Distance
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
-from pydantic import Field
+
+from __future__ import annotations as _annotations
+
+import typing
 
 from . import quantity
 
@@ -19,12 +21,19 @@ class Distance(quantity.Quantity):
     A length - a value with a unit that is a physical distance.
     """
 
-    resource_type = Field("Distance", const=True)
+    __resource_type__ = "Distance"
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Distance`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Distance`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "value", "comparator", "unit", "system", "code"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Distance`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["value", "comparator", "unit", "system", "code"]

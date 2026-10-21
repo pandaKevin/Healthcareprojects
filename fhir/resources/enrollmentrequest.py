@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/EnrollmentRequest
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -23,96 +25,108 @@ class EnrollmentRequest(domainresource.DomainResource):
     regarding a specified coverage.
     """
 
-    resource_type = Field("EnrollmentRequest", const=True)
+    __resource_type__ = "EnrollmentRequest"
 
-    candidate: fhirtypes.ReferenceType = Field(
-        None,
+    candidate: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="candidate",
         title="The subject to be enrolled",
         description="Patient Resource.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient"],
+        },
     )
 
-    coverage: fhirtypes.ReferenceType = Field(
-        None,
+    coverage: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="coverage",
         title="Insurance information",
         description="Reference to the program or plan identification, underwriter or payor.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Coverage"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Coverage"],
+        },
     )
 
-    created: fhirtypes.DateTime = Field(
-        None,
+    created: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="created",
         title="Creation date",
         description="The date when this resource was created.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    created__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_created", title="Extension field for ``created``."
+    created__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_created", title="Extension field for ``created``."
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business Identifier",
         description="The Response business identifier.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    insurer: fhirtypes.ReferenceType = Field(
-        None,
+    insurer: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="insurer",
         title="Target",
         description="The Insurer who is target  of the request.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    provider: fhirtypes.ReferenceType = Field(
-        None,
+    provider: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="provider",
         title="Responsible practitioner",
         description=(
             "The practitioner who is responsible for the services rendered to the "
             "patient."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner", "PractitionerRole", "Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+            ],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="active | cancelled | draft | entered-in-error",
         description="The status of the resource instance.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["active", "cancelled", "draft", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["active", "cancelled", "draft", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``EnrollmentRequest`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``EnrollmentRequest`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -131,3 +145,10 @@ class EnrollmentRequest(domainresource.DomainResource):
             "candidate",
             "coverage",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``EnrollmentRequest`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "modifierExtension", "status"]

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/OperationOutcome
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -25,25 +25,27 @@ class OperationOutcome(domainresource.DomainResource):
     system action.
     """
 
-    resource_type = Field("OperationOutcome", const=True)
+    __resource_type__ = "OperationOutcome"
 
     issue: typing.List[fhirtypes.OperationOutcomeIssueType] = Field(
-        ...,
+        default=...,
         alias="issue",
         title="A single issue associated with the action",
         description=(
             "An error, warning or information message that results from a system "
             "action."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``OperationOutcome`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OperationOutcome`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -57,6 +59,13 @@ class OperationOutcome(domainresource.DomainResource):
             "issue",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OperationOutcome`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "issue"]
+
 
 class OperationOutcomeIssue(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -67,10 +76,10 @@ class OperationOutcomeIssue(backboneelement.BackboneElement):
     An error, warning or information message that results from a system action.
     """
 
-    resource_type = Field("OperationOutcomeIssue", const=True)
+    __resource_type__ = "OperationOutcomeIssue"
 
-    code: fhirtypes.Code = Field(
-        None,
+    code: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="code",
         title="Error or warning code",
         description=(
@@ -79,28 +88,32 @@ class OperationOutcomeIssue(backboneelement.BackboneElement):
             "IssueType value set, and may additional provide its own code for the "
             "error in the details element."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    code__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_code", title="Extension field for ``code``."
+    code__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_code", title="Extension field for ``code``."
     )
 
-    details: fhirtypes.CodeableConceptType = Field(
-        None,
+    details: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="details",
         title="Additional details about the error",
         description=(
             "Additional details about the error. This may be a text description of "
             "the error, or a system code that identifies the error."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    diagnostics: fhirtypes.String = Field(
-        None,
+    diagnostics: fhirtypes.StringType | None = Field(
+        default=None,
         alias="diagnostics",
         title="Additional diagnostic information about the issue",
         description=(
@@ -108,15 +121,17 @@ class OperationOutcomeIssue(backboneelement.BackboneElement):
             "may be a description of how a value is erroneous, or a stack dump to "
             "help trace the issue."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    diagnostics__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_diagnostics", title="Extension field for ``diagnostics``."
+    diagnostics__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_diagnostics", title="Extension field for ``diagnostics``."
     )
 
-    expression: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    expression: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="expression",
         title="FHIRPath of element(s) related to issue",
         description=(
@@ -124,15 +139,19 @@ class OperationOutcomeIssue(backboneelement.BackboneElement):
             "the default child access that identifies one of the elements in the "
             "resource that caused this issue to be raised."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
     expression__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_expression", title="Extension field for ``expression``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_expression", title="Extension field for ``expression``."
+    )
 
-    location: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    location: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="location",
         title="Path of element(s) related to issue",
         description=(
@@ -141,37 +160,43 @@ class OperationOutcomeIssue(backboneelement.BackboneElement):
             "identifies one of the elements in the resource that caused this issue "
             'to be raised.  For HTTP errors, will be "http." + the parameter name.'
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
     location__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_location", title="Extension field for ``location``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_location", title="Extension field for ``location``."
+    )
 
-    severity: fhirtypes.Code = Field(
-        None,
+    severity: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="severity",
         title="fatal | error | warning | information",
         description=(
             "Indicates whether the issue indicates a variation from successful "
             "processing."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["fatal", "error", "warning", "information"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["fatal", "error", "warning", "information"],
+        },
     )
-    severity__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_severity", title="Extension field for ``severity``."
+    severity__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_severity", title="Extension field for ``severity``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``OperationOutcomeIssue`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OperationOutcomeIssue`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -185,10 +210,22 @@ class OperationOutcomeIssue(backboneelement.BackboneElement):
             "expression",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2378(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OperationOutcomeIssue`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "modifierExtension",
+            "severity",
+            "code",
+            "details",
+            "diagnostics",
+            "location",
+            "expression",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -197,49 +234,4 @@ class OperationOutcomeIssue(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("code", "code__ext"), ("severity", "severity__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

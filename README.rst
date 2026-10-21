@@ -1,6 +1,6 @@
-=================================
-FHIR® Resources (R4, STU3, DSTU2)
-=================================
+===============================
+FHIR® Resources (R5, R4B, STU3)
+===============================
 
 .. image:: https://img.shields.io/pypi/v/fhir.resources.svg
         :target: https://pypi.python.org/pypi/fhir.resources
@@ -30,11 +30,19 @@ FHIR® Resources (R4, STU3, DSTU2)
         :target: https://www.hl7.org/implement/standards/product_brief.cfm?product_id=449
         :alt: HL7® FHIR®
 
-**Experimental XML and YAML serialization and deserialization supports. See [Advanced Usages] section!**
+
+FHIR_ (Fast Healthcare Interoperability Resources) is a specification for exchanging healthcare information electronically.
+It is designed to facilitate the exchange of data between different healthcare systems and applications, and is commonly used to build APIs (Application Programming Interfaces) for healthcare data.
+It is based on modern web technologies, and is designed to be easy to use and implement.
+It uses a modular approach, with a set of "resources" that represent different types of healthcare data (such as patients, observations, and diagnoses).
+These resources can be combined and extended as needed to support a wide range of healthcare use cases.
 
 
-Powered by pydantic_, all `FHIR Resources <https://www.hl7.org/fhir/resourcelist.html>`_ are available as python class with built-in
-data validation, faster in performance and optionally ``orjson`` support has been included as a performance booster! Written in modern python.
+This "fhir.resources" package is powered by pydantic_ V2, so it become faster in performance.
+Obviously it is written in modern python and has data validation built-in.
+It provides tools and classes for all of the `FHIR Resources <https://www.hl7.org/fhir/resourcelist.html>`_ defined in the FHIR specification,
+and allows you to create and manipulate FHIR resources in Python. You can then use these resources to build FHIR-based APIs or to work with FHIR data in other ways.
+
 
 * Easy to construct, easy to extended validation, easy to export.
 * By inheriting behaviour from pydantic_, compatible with `ORM <https://en.wikipedia.org/wiki/Object-relational_mapping>`_.
@@ -42,30 +50,24 @@ data validation, faster in performance and optionally ``orjson`` support has bee
 * Previous release of FHIR® Resources are available.
 * Free software: BSD license
 
+**Experimental XML and YAML serialization and deserialization supports. See [Advanced Usages] section!**
 
 FHIR® Version Info
 ------------------
 
-FHIR® (Release R4, version 4.0.1) is available as default. Also previous versions are available as Python sub-package
-(each release name string becomes sub-package name, i.e ``STU3`` ).
+FHIR® (Release R5, version 5.0.0) is available as default. Also previous versions are available as Python sub-package
+(each release name string becomes sub-package name, i.e ``R4B`` ).
+From ``fhir.resources`` version 7.0.0; there is no FHIR ``R4`` instead of ``R4B`` is available as sub-package.
 
 **Available Previous Versions**:
 
+* ``R4B`` (4.3.0)
 * ``STU3`` (3.0.2)
-* ``DSTU2`` (1.0.2) [see `issue#13 <https://github.com/nazrulworld/fhir.resources/issues/13>`_][don't have full tests coverage]
-
-
-Installation
-------------
-
-Just a simple ``pip install fhir.resources`` or ``easy_install fhir.resources`` is enough. But if you want development
-version, just clone from https://github.com/nazrulworld/fhir.resources and ``pip install -e .[dev]``.
-
 
 Usages
 ------
 
-**Example: 1**: Construct Resource Model object::
+**Example: 1**: This example creates a new Organization resource with some of its attributes (id, active, name, address)::
 
     >>> from fhir.resources.organization import Organization
     >>> from fhir.resources.address import Address
@@ -76,16 +78,16 @@ Usages
     ...     "address": [{"country": "Switzerland"}]
     ... }
     >>> org = Organization(**data)
-    >>> org.resource_type == "Organization"
+    >>> org.get_resource_type() == "Organization"
     True
     >>> isinstance(org.address[0], Address)
     True
     >>> org.address[0].country == "Switzerland"
     True
-    >>> org.dict()['active'] is True
+    >>> org.model_dump()['active'] is True
     True
 
-**Example: 2**: Resource object created from json string::
+**Example: 2**: This example creates a new Organization resource from json string::
 
     >>> from fhir.resources.organization import Organization
     >>> from fhir.resources.address import Address
@@ -95,7 +97,7 @@ Usages
     ...     "name": "Acme Corporation",
     ...     "address": [{"country": "Switzerland"}]
     ... }'''
-    >>> org = Organization.parse_raw(json_str)
+    >>> org = Organization.model_validate_json(json_str)
     >>> isinstance(org.address[0], Address)
     True
     >>> org.address[0].country == "Switzerland"
@@ -104,7 +106,7 @@ Usages
     True
 
 
-**Example: 3**: Resource object created from json object(py dict)::
+**Example: 3**: This example creates a new Patient resource from json object(py dict)::
 
     >>> from fhir.resources.patient import Patient
     >>> from fhir.resources.humanname import HumanName
@@ -117,7 +119,7 @@ Usages
     ...      ],
     ...     "birthDate": "1985-06-12"
     ... }
-    >>> pat = Patient.parse_obj(json_obj)
+    >>> pat = Patient.model_validate(json_obj)
     >>> isinstance(pat.name[0], HumanName)
     True
     >>> pat.birthDate == date(year=1985, month=6, day=12)
@@ -126,18 +128,18 @@ Usages
     True
 
 
-**Example: 4**: Construct Resource object from json file::
+**Example: 4**: This example creates a new Patient resource from json file::
 
     >>> from fhir.resources.patient import Patient
     >>> import os
     >>> import pathlib
     >>> filename = pathlib.Path("foo/bar.json")
-    >>> pat = Patient.parse_file(filename)
-    >>> pat.resource_type == "Patient"
+    >>> pat = Patient.model_validate_json(filename.read_bytes())
+    >>> pat.get_resource_type() == "Patient"
     True
 
 
-**Example: 5**: Construct resource object in python way::
+**Example: 5**: This example creates a new Organization resource in python way::
 
     >>> from fhir.resources.organization import Organization
     >>> from fhir.resources.address import Address
@@ -148,36 +150,20 @@ Usages
     ...     "address": [{"country": "Switzerland"}]
     ... }
 
-    >>> org = Organization.construct()
+    >>> org = Organization.model_construct()
     >>> org.id = "f001"
     >>> org.active = True
     >>> org.name = "Acme Corporation"
     >>> org.address = list()
-    >>> address = Address.construct()
+    >>> address = Address.model_construct()
     >>> address.country = "Switzerland"
     >>> org.address.append(address)
-    >>> org.dict() == json_obj
+    >>> org.model_dump() == json_obj
     True
 
 .. note::
-    Please note that due to the way the validation works, you will run into issues if you are using ``construct()`` to create
-    resources that have more than one mandatory field. See `this comment in issue#56 <https://github.com/nazrulworld/fhir.resources/issues/56#issuecomment-784520234>`_ for details.
-
-**Example: 4**: Using Resource Factory Function::
-
-    >>> from fhir.resources import construct_fhir_element
-    >>> json_dict = {"resourceType": "Organization",
-    ...     "id": "mmanu",
-    ...     "active": True,
-    ...     "name": "Acme Corporation",
-    ...     "address": [{"country": "Switzerland"}]
-    ... }
-    >>> org = construct_fhir_element('Organization', json_dict)
-    >>> org.address[0].country == "Switzerland"
-    True
-    >>> org.dict()['active'] is True
-    True
-
+    Please note that due to the way the validation works, you will run into issues if you are using ``model_construct()`` to create
+    resources that have more than one mandatory field. See `this comment in issue#56 
 
 **Example: 5**: Auto validation while providing wrong datatype::
 
@@ -288,10 +274,10 @@ Examples::
     ...  ]
     ... }"""
     >>> from fhir.resources.observation import Observation
-    >>> obj = Observation.parse_raw(observation_str)
-    >>> "fhir_comments" in obj.json()
+    >>> obj = Observation.model_validate_json(observation_str)
+    >>> "fhir_comments" in obj.model_dump_json()
     >>> # Test comments filtering
-    >>> "fhir_comments" not in obj.json(exclude_comments=True)
+    >>> "fhir_comments" not in obj.model_dump_json(exclude_comments=True)
 
 
 Special Case: Missing data
@@ -383,12 +369,13 @@ Example (required ``intent`` element is missing but still valid because of exten
     ...    }
     ... }"""
     >>> from fhir.resources.medicationrequest import MedicationRequest
-    >>> obj = MedicationRequest.parse_raw(json_str)
-    >>> "intent" not in obj.dict()
+    >>> obj = MedicationRequest.model_validate_json(json_str)
+    >>> "intent" not in obj.model_dump()
 
 
 Custom Validators
 ~~~~~~~~~~~~~~~~~
+**This feature is not available**
 
 ``fhir.resources`` is providing the extensive API to create and attach custom validator into any model. See more `about root validator <https://pydantic-docs.helpmanual.io/usage/validators/#root-validators>`_
 Some convention you have to follow though, while creating a root validator.
@@ -460,7 +447,7 @@ Example: Gender Enum::
     def validate_gender(cls, values: Dict):
         if not values:
             return values
-        enums = cls.__fields__["gender"].field_info.extra["enum_values"]
+        enums = cls.model_fields["gender"].json_schema_extra["enum_values"]
         if "gender" in values and values["gender"] not in enums:
             raise ValueError("write your message")
         return values
@@ -471,15 +458,9 @@ Example: Gender Enum::
 Reference Validator
 ~~~~~~~~~~~~~~~~~~~
 
-``fhir.resources`` is also providing enum like list of permitted resource types through field property ``enum_reference_types``.
-You can get that list by following above (Enum) approaches  ``resource_types = cls.__fields__["managingOrganization"].field_info.extra["enum_reference_types"]``
+``fhir.resources`` is also providing enum like list of permitted resource types through json_schema_extra ``enum_reference_types``.
+You can get that list by following above (Enum) approaches  ``resource_types = cls.model_fields["managingOrganization"].json_schema_extra["enum_reference_types"]``
 
-
-Usages of orjson
-~~~~~~~~~~~~~~~~
-
-orjson_ is one of the fastest Python library for JSON and is more correct than the standard json library (according to their docs).
-Good news is that ``fhir.resource`` has an extensive support for orjson_ and it's too easy to enable it automatically. What you need to do, just make orjson_ as your project dependency!
 
 
 pydantic_ Field Type Support
@@ -493,19 +474,22 @@ The module ``fhirtypes.py`` contains all fhir resources related types and should
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 There are a lots of discussion here here i.) https://bit.ly/360HksL ii.) https://bit.ly/3o1fZgl about the length of ``Resource.Id``'s value.
 Based on those discussions, we recommend that keep your ``Resource.Id`` size within 64 letters (for the seek of intercompatibility with third party system), but we are also providing freedom
-about the length of Id, in respect with others opinion that 64 chr length is not sufficient. ``fhirtypes.Id.configure_constraints()``
-is offering to customize as your own requirement.
+about the length of Id, in respect with others opinion that 64 chr length is not sufficient, so default length is now 255.
+But it is offering to customize as your own requirement by doing a monkey patch.
 
 Examples::
-    >>> from fhir.resources.fhirtypes import Id
-    >>> Id.configure_constraints(min_length=16, max_length=128)
+    # ``patch.py``
+    >>> import importlib
+    >>> from fhir_core import constraints
+    >>> from fhir_core import types as ftypes
+    >>> constraints.TYPES_ID_MAX_LENGTH = 64
+    >>> importlib.reload(ftypes)
 
 Note: when you will change that behaviour, that would impact into your whole project.
 
 
 XML Supports
 ~~~~~~~~~~~~
-
 Along side with JSON string export, it is possible to export as XML string!
 Before using this feature, make sure associated dependent library is installed. Use ``fhir.resources[xml]`` or ``fhir.resources[all]`` as
 your project requirements.
@@ -518,7 +502,7 @@ Example-1 Export::
     >>> from fhir.resources.patient import Patient
     >>> data = {"active": True, "gender": "male", "birthDate": "2000-09-18", "name": [{"text": "Primal Kons"}]}
     >>> patient_obj = Patient(**data)
-    >>> xml_str = patient_obj.xml(pretty_print=True)
+    >>> xml_str = patient_obj.model_dump_xml(pretty_print=True)
     >>> print(xml_str)
     <?xml version='1.0' encoding='utf-8'?>
     <Patient xmlns="http://hl7.org/fhir">
@@ -535,7 +519,7 @@ Example-2 Import from string::
     >>> from fhir.resources.patient import Patient
     >>> data = {"active": True, "gender": "male", "birthDate": "2000-09-18", "name": [{"text": "Primal Kons"}]}
     >>> patient_obj = Patient(**data)
-    >>> xml_str = patient_obj.xml(pretty_print=True)
+    >>> xml_str = patient_obj.model_dump_xml(pretty_print=True)
     >>> print(xml_str)
     >>> data = b"""<?xml version='1.0' encoding='utf-8'?>
     ... <Patient xmlns="http://hl7.org/fhir">
@@ -546,8 +530,8 @@ Example-2 Import from string::
     ...   <gender value="male"/>
     ...   <birthDate value="2000-09-18"/>
     ... </Patient>"""
-    >>> patient = Patient.parse_raw(data, content_type="text/xml")
-    >>> print(patient.json(indent=2))
+    >>> patient = Patient.model_validate_xml(data)
+    >>> print(patient.model_dump_json(indent=2))
     {
       "resourceType": "Patient",
       "active": true,
@@ -566,14 +550,16 @@ Example-2 Import from string::
 
     >>> with xml parser
     >>> import lxml
+    >>> from fhir_core.xml_utils import xml_loads
     >>> schema = lxml.etree.XMLSchema(file=str(FHIR_XSD_DIR / "patient.xsd"))
     >>> xmlparser = lxml.etree.XMLParser(schema=schema)
-    >>> patient2 = Patient.parse_raw(data, content_type="text/xml", xmlparser=xmlparser)
+    >>> patient2 = xml_loads(Patient, data, xmlparser=xmlparser)
     >>> patient2 == patient
     True
 
 Example-3 Import from file::
-    >>> patient3 = Patient.parse_file("Patient.xml")
+    >>> import pathlib
+    >>> patient3 = Patient.model_validate_xml(pathlib.Path("Patient.xml").read_bytes())
     >>> patient3 == patient and patient3 == patient2
     True
 
@@ -586,6 +572,7 @@ Example-3 Import from file::
 
 YAML Supports
 ~~~~~~~~~~~~~
+
 Although there is no official support for YAML documented in FHIR specification, but as an experimental feature, we add this support.
 Now it is possible export/import YAML strings.
 Before using this feature, make sure associated dependent library is installed. Use ``fhir.resources[yaml]`` or ``fhir.resources[all]`` as
@@ -595,7 +582,7 @@ Example-1 Export::
     >>> from fhir.resources.patient import Patient
     >>> data = {"active": True, "gender": "male", "birthDate": "2000-09-18", "name": [{"text": "Primal Kons", "family": "Kons", "given": ["Primal"]}]}
     >>> patient_obj = Patient(**data)
-    >>> yml_str = patient_obj.yaml(indent=True)
+    >>> yml_str = patient_obj.model_dump_yaml(indent=2)
     >>> print(yml_str)
     resourceType: Patient
     active: true
@@ -621,8 +608,8 @@ Example-2 Import from YAML string::
     ...  gender: male
     ...  birthDate: 2000-09-18
     ... """
-    >>> patient_obj = Patient.parse_raw(data, content_type="text/yaml")
-    >>> json_str = patient_obj.json(indent=True)
+    >>> patient_obj = Patient.model_validate_yaml(data)
+    >>> json_str = patient_obj.model_dump_json(indent=2)
     >>> print(json_str)
     {
       "resourceType": "Patient",
@@ -641,9 +628,10 @@ Example-2 Import from YAML string::
     }
 
 Example-3 Import from YAML file::
+    >>> import pathlib
     >>> from fhir.resources.patient import Patient
-    >>> patient_obj = Patient.parse_file("Patient.yml")
-    >>> json_str = patient_obj.json(indent=True)
+    >>> patient_obj = Patient.model_validate_yaml(pathlib.Path("Patient.yml").read_bytes())
+    >>> json_str = patient_obj.model_dump_json(indent=2)
     >>> print(json_str)
     {
       "resourceType": "Patient",
@@ -677,8 +665,77 @@ we in real life scenario, is it unavoidable sometimes.
 Examples::
     Place this code inside your __init__.py module or any place, just to make sure that this fragment of codes is runtime executed.
 
-    >>> from fhir.resources.fhirtypes import String
-    >>> String.configure_empty_str(allow=True)
+    >>> # ``__init__.py``
+    >>> import importlib
+    >>> from fhir_core import constraints
+    >>> from fhir_core import types as ftypes
+    >>> constraints.TYPES_STRING_ALLOW_EMPTY_STR = True
+    >>> importlib.reload(ftypes)
+
+
+FHIR ``summary`` search support
+-------------------------------
+This package is providing supporting ´´summary mode´´ activated serialization, meaning that you will not need to do extra, if you are planning to support `summary search <https://www.hl7.org/fhir/search.html#_summary>`_
+
+Example::
+
+    >>> from fhir.resources.organization import Organization
+    >>> json_str = '''{"resourceType": "Organization",
+    ...     "text": {"status": "generated", "div": "<p>summary example</p>"}
+    ...     "id": "f001",
+    ...     "active": True,
+    ...     "name": "Acme Corporation"
+    ... }'''
+    >>> org = Organization.model_validate_json(json_str)
+    >>> summary_dict = org.model_dump(summary_only=True)
+    >>> "text" not in summary_dict
+    True
+    >>> "active" in summary_dict
+    True
+    >>> "name" in summary_dict
+
+FHIR release R4B over R4
+------------------------
+
+FHIR release R4B is coming with not that much changes over the release of R4. So we decided not to create separate sub-package for R4 like STU3, instead there just overlaps on existing R4. This also means that in future, when we will work on R5; there will be sub-package for R4B and no R4.
+We suggest you to try make a plan to be upgraded to R4B. Here you could find related information dealing-strategy-R4-R4B_.
+
+You could find full discussion here https://github.com/nazrulworld/fhir.resources/discussions/116
+
+Migration (from ``7.X.X`` to ``8.X.X``)
+---------------------------------------
+
+There is no breaking changes in terms of api/functions. But it is recommended that you should use new functions from Pydantic V2
+instead of using deprecated functions.
+
+Replacements and/or new functions.
+
+- From ``FHIRAbstractModel::dict`` to ``FHIRAbstractModel::model_dump``
+- From ``FHIRAbstractModel::json`` to ``FHIRAbstractModel::model_dump_json``
+- From ``FHIRAbstractModel::yaml`` to ``FHIRAbstractModel::model_dump_yaml``
+- From ``FHIRAbstractModel::xml`` to ``FHIRAbstractModel::model_dump_xml``
+- From ``FHIRAbstractModel::parse_obj`` to ``FHIRAbstractModel::model_validate``
+- From ``FHIRAbstractModel::parse_raw`` to ``FHIRAbstractModel::model_validate_json``
+- From ``FHIRAbstractModel::parse_file`` to no replacement, we suggest you use pathlib (see examples)
+- ``FHIRAbstractModel::model_validate_yaml`` parse YAML string to FHIRAbstractModel.
+- ``FHIRAbstractModel::model_validate_xml`` parse XML string to FHIRAbstractModel.
+
+
+Breaking: removed attributes and/or functions/methods.
+
+- The attribute ``resource_type`` has been removed from base FHIR class. For example no more ``Resource.resource_type`` attribute. Now you have to use Resource.get_resource_type() instead. Although "resource_type" key is available when you will serialize as json or python dict.
+
+Migration (from ``6.X.X`` to ``7.0.X``)
+---------------------------------------
+
+First of all, you have to correct all imports path, if you wish to keep continue using FHIR release R4B or R4, as those resources
+are moved under sub-package named ``R4B``. Then if you wish to use current ``R5`` release,
+read carefully the following documents.
+
+1. See the full changes history -> https://build.fhir.org/history.html
+2. See complete lists of differences between R5 and R4B -> https://hl7.org/fhir/R5/diff.html
+3. If you are planning to migrate direct from the release ``R4``,
+   then it is important to look at the differences between R4B and R4 here -> https://hl7.org/fhir/R4B/diff.html
 
 
 Migration (from later than ``6.X.X``)
@@ -732,7 +789,7 @@ Release and Version Policy
 --------------------------
 
 Starting from  version ``5.0.0`` we are following our own release policy and we although follow Semantic Versioning scheme like FHIR® version.
-Unlike previous statement (bellow), releasing now is not dependent on FHIR®.
+Unlike previous statement (below), releasing now is not dependent on FHIR®.
 
 
 **removed statement**
@@ -744,7 +801,7 @@ Unlike previous statement (bellow), releasing now is not dependent on FHIR®.
 Credits
 -------
 
-All FHIR® Resources (python classes) are generated using fhir-parser_ which is forked from https://github.com/smart-on-fhir/fhir-parser.git.
+
 
 
 This package skeleton was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
@@ -753,7 +810,8 @@ This package skeleton was created with Cookiecutter_ and the `audreyr/cookiecutt
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
 .. _`fhir-parser`: https://github.com/nazrulworld/fhir-parser
 .. _`pydantic`: https://pydantic-docs.helpmanual.io/
-.. _`orjson`: <https://pypi.org/project/orjson/>
+.. _`dealing-strategy-R4-R4B`: https://confluence.hl7.org/display/FHIR/Strategies+for+dealing+with+R4+and+R4B
+.. _`FHIR`: https://www.hl7.org/implement/standards/product_brief.cfm
 
 © Copyright HL7® logo, FHIR® logo and the flaming fire are registered trademarks
 owned by `Health Level Seven International <https://www.hl7.org/legal/trademarks.cfm?ref=https://pypi.org/project/fhir-resources/>`_

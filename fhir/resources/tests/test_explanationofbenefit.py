@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/ExplanationOfBenefit
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
-from pydantic.validators import bytes_validator  # noqa: F401
-
-from .. import fhirtypes  # noqa: F401
 from .. import explanationofbenefit
+from .conftest import ExternalValidatorModel
 
 
 def impl_explanationofbenefit_1(inst):
@@ -17,14 +15,21 @@ def impl_explanationofbenefit_1(inst):
     assert inst.careTeam[0].sequence == 1
     assert inst.claim.reference == "Claim/100150"
     assert inst.claimResponse.reference == "ClaimResponse/R3500"
-    assert inst.created == fhirtypes.DateTime.validate("2014-08-16T09:23:00+10:00")
+    assert (
+        inst.created
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-08-16"}
+        ).valueDateTime
+    )
     assert inst.disposition == "Claim settled as per contract."
     assert inst.enterer.reference == "Practitioner/1"
     assert inst.facility.reference == "Location/1"
     assert inst.id == "EB3500"
     assert (
         inst.identifier[0].system
-        == "http://www.BenefitsInc.com/fhir/explanationofbenefit"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.BenefitsInc.com/fhir/explanationofbenefit"}
+        ).valueUri
     )
     assert inst.identifier[0].value == "987654321"
     assert inst.insurance[0].coverage.reference == "Coverage/9876B1"
@@ -34,7 +39,7 @@ def impl_explanationofbenefit_1(inst):
     assert float(inst.item[0].adjudication[0].amount.value) == float(120.0)
     assert inst.item[0].adjudication[0].category.coding[0].code == "eligible"
     assert inst.item[0].adjudication[1].category.coding[0].code == "eligpercent"
-    assert float(inst.item[0].adjudication[1].value) == float(0.8)
+    assert float(inst.item[0].adjudication[1].quantity.value) == float(0.8)
     assert inst.item[0].adjudication[2].amount.currency == "USD"
     assert float(inst.item[0].adjudication[2].amount.value) == float(96.0)
     assert inst.item[0].adjudication[2].category.coding[0].code == "benefit"
@@ -45,10 +50,15 @@ def impl_explanationofbenefit_1(inst):
     assert inst.item[0].productOrService.coding[0].code == "1205"
     assert (
         inst.item[0].productOrService.coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/ex-USCLS"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/ex-USCLS"}
+        ).valueUri
     )
     assert inst.item[0].sequence == 1
-    assert inst.item[0].servicedDate == fhirtypes.Date.validate("2014-08-16")
+    assert (
+        inst.item[0].servicedDate
+        == ExternalValidatorModel.model_validate({"valueDate": "2014-08-16"}).valueDate
+    )
     assert inst.item[0].udi[0].reference == "Device/example"
     assert inst.item[0].unitPrice.currency == "USD"
     assert float(inst.item[0].unitPrice.value) == float(135.57)
@@ -75,9 +85,9 @@ def impl_explanationofbenefit_1(inst):
         inst.item[1].detail[0].subDetail[0].adjudication[1].category.coding[0].code
         == "eligpercent"
     )
-    assert float(inst.item[1].detail[0].subDetail[0].adjudication[1].value) == float(
-        0.9
-    )
+    assert float(
+        inst.item[1].detail[0].subDetail[0].adjudication[1].quantity.value
+    ) == float(0.9)
     assert inst.item[1].detail[0].subDetail[0].adjudication[2].amount.currency == "USD"
     assert float(
         inst.item[1].detail[0].subDetail[0].adjudication[2].amount.value
@@ -91,7 +101,9 @@ def impl_explanationofbenefit_1(inst):
     assert inst.item[1].detail[0].subDetail[0].productOrService.coding[0].code == "1205"
     assert (
         inst.item[1].detail[0].subDetail[0].productOrService.coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/ex-USCLS"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/ex-USCLS"}
+        ).valueUri
     )
     assert inst.item[1].detail[0].subDetail[0].sequence == 1
     assert inst.item[1].detail[0].subDetail[0].udi[0].reference == "Device/example"
@@ -102,11 +114,17 @@ def impl_explanationofbenefit_1(inst):
     assert float(inst.item[1].net.value) == float(200.0)
     assert inst.item[1].productOrService.coding[0].code == "group"
     assert inst.item[1].sequence == 2
-    assert inst.item[1].servicedDate == fhirtypes.Date.validate("2014-08-16")
+    assert (
+        inst.item[1].servicedDate
+        == ExternalValidatorModel.model_validate({"valueDate": "2014-08-16"}).valueDate
+    )
     assert inst.meta.tag[0].code == "HTEST"
     assert inst.meta.tag[0].display == "test health data"
     assert (
-        inst.meta.tag[0].system == "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
     )
     assert inst.outcome == "complete"
     assert inst.patient.reference == "Patient/pat1"
@@ -114,7 +132,9 @@ def impl_explanationofbenefit_1(inst):
     assert inst.payee.type.coding[0].code == "provider"
     assert (
         inst.payee.type.coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/payeetype"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/payeetype"}
+        ).valueUri
     )
     assert inst.provider.reference == "Practitioner/1"
     assert inst.status == "active"
@@ -131,7 +151,10 @@ def impl_explanationofbenefit_1(inst):
     assert inst.total[1].category.coding[0].code == "benefit"
     assert inst.type.coding[0].code == "oral"
     assert (
-        inst.type.coding[0].system == "http://terminology.hl7.org/CodeSystem/claim-type"
+        inst.type.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/claim-type"}
+        ).valueUri
     )
     assert inst.use == "claim"
 
@@ -141,15 +164,15 @@ def test_explanationofbenefit_1(base_settings):
     Test File: explanationofbenefit-example.json
     """
     filename = base_settings["unittest_data_dir"] / "explanationofbenefit-example.json"
-    inst = explanationofbenefit.ExplanationOfBenefit.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
+    inst = explanationofbenefit.ExplanationOfBenefit.model_validate_json(
+        filename.read_bytes()
     )
-    assert "ExplanationOfBenefit" == inst.resource_type
+    assert "ExplanationOfBenefit" == inst.get_resource_type()
 
     impl_explanationofbenefit_1(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "ExplanationOfBenefit" == data["resourceType"]
 
     inst2 = explanationofbenefit.ExplanationOfBenefit(**data)
@@ -157,34 +180,54 @@ def test_explanationofbenefit_1(base_settings):
 
 
 def impl_explanationofbenefit_2(inst):
-    assert inst.accident.date == fhirtypes.Date.validate("2014-02-14")
+    assert (
+        inst.accident.date
+        == ExternalValidatorModel.model_validate({"valueDate": "2014-02-14"}).valueDate
+    )
     assert inst.accident.locationReference.reference == "Location/ph"
     assert inst.accident.type.coding[0].code == "SPT"
     assert (
         inst.accident.type.coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActCode"}
+        ).valueUri
     )
-    assert inst.billablePeriod.end == fhirtypes.DateTime.validate(
-        "2014-03-01T09:23:00+10:00"
+    assert (
+        inst.billablePeriod.end
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-03-01"}
+        ).valueDateTime
     )
-    assert inst.billablePeriod.start == fhirtypes.DateTime.validate(
-        "2014-02-01T09:23:00+10:00"
+    assert (
+        inst.billablePeriod.start
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-02-01"}
+        ).valueDateTime
     )
     assert inst.claim.reference == "Claim/100150"
     assert inst.claimResponse.reference == "ClaimResponse/R3500"
-    assert inst.created == fhirtypes.DateTime.validate("2014-08-16T09:23:00+10:00")
+    assert (
+        inst.created
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-08-16"}
+        ).valueDateTime
+    )
     assert inst.disposition == "Could not process."
     assert inst.enterer.reference == "Practitioner/1"
     assert inst.facility.reference == "Location/1"
     assert inst.formCode.coding[0].code == "2"
     assert (
         inst.formCode.coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/forms-codes"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/forms-codes"}
+        ).valueUri
     )
     assert inst.id == "EB3501"
     assert (
         inst.identifier[0].system
-        == "http://www.BenefitsInc.com/fhir/explanationofbenefit"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.BenefitsInc.com/fhir/explanationofbenefit"}
+        ).valueUri
     )
     assert inst.identifier[0].value == "error-1"
     assert inst.insurance[0].coverage.reference == "Coverage/9876B1"
@@ -193,58 +236,106 @@ def impl_explanationofbenefit_2(inst):
     assert inst.meta.tag[0].code == "HTEST"
     assert inst.meta.tag[0].display == "test health data"
     assert (
-        inst.meta.tag[0].system == "http://terminology.hl7.org/CodeSystem/v3-ActReason"
+        inst.meta.tag[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/v3-ActReason"}
+        ).valueUri
     )
     assert inst.originalPrescription.reference == "MedicationRequest/medrx0301"
     assert inst.outcome == "error"
     assert inst.patient.reference == "Patient/pat1"
     assert inst.precedence == 2
     assert inst.prescription.reference == "MedicationRequest/medrx002"
-    assert inst.procedure[0].date == fhirtypes.DateTime.validate(
-        "2014-02-14T09:23:00+10:00"
+    assert (
+        inst.procedure[0].date
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-02-14"}
+        ).valueDateTime
     )
     assert inst.procedure[0].procedureCodeableConcept.coding[0].code == "123001"
     assert (
         inst.procedure[0].procedureCodeableConcept.coding[0].system
-        == "http://hl7.org/fhir/sid/ex-icd-10-procedures"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://hl7.org/fhir/sid/ex-icd-10-procedures"}
+        ).valueUri
     )
     assert inst.procedure[0].sequence == 1
     assert inst.procedure[0].udi[0].reference == "Device/example"
     assert inst.processNote[0].language.coding[0].code == "en-CA"
-    assert inst.processNote[0].language.coding[0].system == "urn:ietf:bcp:47"
+    assert (
+        inst.processNote[0].language.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:ietf:bcp:47"}
+        ).valueUri
+    )
     assert inst.processNote[0].number == 1
     assert inst.processNote[0].text == "Invalid claim"
-    assert inst.processNote[0].type == "display"
+    assert inst.processNote[0].type.coding[0].code == "display"
+    assert (
+        inst.processNote[0].type.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://hl7.org/fhir/note-type"}
+        ).valueUri
+    )
     assert inst.provider.reference == "Organization/2"
-    assert inst.related[0].reference.system == "http://www.BenefitsInc.com/case-number"
+    assert (
+        inst.related[0].reference.system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://www.BenefitsInc.com/case-number"}
+        ).valueUri
+    )
     assert inst.related[0].reference.value == "23-56Tu-XX-47-20150M14"
     assert inst.status == "active"
     assert inst.subType.coding[0].code == "emergency"
     assert (
         inst.subType.coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/ex-claimsubtype"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/ex-claimsubtype"}
+        ).valueUri
     )
     assert inst.supportingInfo[0].category.coding[0].code == "employmentimpacted"
-    assert inst.supportingInfo[0].category.coding[0].system == (
-        "http://terminology.hl7.org/CodeSystem/claiminformationcatego" "ry"
+    assert (
+        inst.supportingInfo[0].category.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUri": "http://terminology.hl7.org/CodeSystem/claiminformationcategory"
+            }
+        ).valueUri
     )
     assert inst.supportingInfo[0].sequence == 1
-    assert inst.supportingInfo[0].timingPeriod.end == fhirtypes.DateTime.validate(
-        "2014-02-28T09:23:00+10:00"
+    assert (
+        inst.supportingInfo[0].timingPeriod.end
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-02-28"}
+        ).valueDateTime
     )
-    assert inst.supportingInfo[0].timingPeriod.start == fhirtypes.DateTime.validate(
-        "2014-02-14T09:23:00+10:00"
+    assert (
+        inst.supportingInfo[0].timingPeriod.start
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-02-14"}
+        ).valueDateTime
     )
     assert inst.supportingInfo[1].category.coding[0].code == "hospitalized"
-    assert inst.supportingInfo[1].category.coding[0].system == (
-        "http://terminology.hl7.org/CodeSystem/claiminformationcatego" "ry"
+    assert (
+        inst.supportingInfo[1].category.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUri": "http://terminology.hl7.org/CodeSystem/claiminformationcategory"
+            }
+        ).valueUri
     )
     assert inst.supportingInfo[1].sequence == 2
-    assert inst.supportingInfo[1].timingPeriod.end == fhirtypes.DateTime.validate(
-        "2014-02-16T09:23:00+10:00"
+    assert (
+        inst.supportingInfo[1].timingPeriod.end
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-02-16"}
+        ).valueDateTime
     )
-    assert inst.supportingInfo[1].timingPeriod.start == fhirtypes.DateTime.validate(
-        "2014-02-14T09:23:00+10:00"
+    assert (
+        inst.supportingInfo[1].timingPeriod.start
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2014-02-14"}
+        ).valueDateTime
     )
     assert inst.text.status == "generated"
     assert inst.total[0].amount.currency == "USD"
@@ -255,7 +346,10 @@ def impl_explanationofbenefit_2(inst):
     assert inst.total[1].category.coding[0].code == "benefit"
     assert inst.type.coding[0].code == "oral"
     assert (
-        inst.type.coding[0].system == "http://terminology.hl7.org/CodeSystem/claim-type"
+        inst.type.coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/claim-type"}
+        ).valueUri
     )
     assert inst.use == "claim"
 
@@ -267,15 +361,15 @@ def test_explanationofbenefit_2(base_settings):
     filename = (
         base_settings["unittest_data_dir"] / "explanationofbenefit-example-2.json"
     )
-    inst = explanationofbenefit.ExplanationOfBenefit.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
+    inst = explanationofbenefit.ExplanationOfBenefit.model_validate_json(
+        filename.read_bytes()
     )
-    assert "ExplanationOfBenefit" == inst.resource_type
+    assert "ExplanationOfBenefit" == inst.get_resource_type()
 
     impl_explanationofbenefit_2(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "ExplanationOfBenefit" == data["resourceType"]
 
     inst2 = explanationofbenefit.ExplanationOfBenefit(**data)

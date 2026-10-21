@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/TestScript
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -25,22 +25,24 @@ class TestScript(domainresource.DomainResource):
     determine compliance against the FHIR specification.
     """
 
-    resource_type = Field("TestScript", const=True)
+    __resource_type__ = "TestScript"
 
-    contact: typing.List[fhirtypes.ContactDetailType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ContactDetailType] | None = Field(
+        default=None,
         alias="contact",
         title="Contact details for the publisher",
         description=(
             "Contact details to assist a user in finding and communicating with the"
             " publisher."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    copyright: fhirtypes.Markdown = Field(
-        None,
+    copyright: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="copyright",
         title="Use and/or publishing restrictions",
         description=(
@@ -48,47 +50,72 @@ class TestScript(domainresource.DomainResource):
             " Copyright statements are generally legal restrictions on the use and "
             "publishing of the test script."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_copyright", title="Extension field for ``copyright``."
+    copyright__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_copyright", title="Extension field for ``copyright``."
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    copyrightLabel: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="copyrightLabel",
+        title="Copyright holder and year(s)",
+        description=(
+            "A short string (<50 characters), suitable for inclusion in a page "
+            "footer that identifies the copyright holder, effective period, and "
+            "optionally whether rights are resctricted. (e.g. 'All rights "
+            "reserved', 'Some rights reserved')."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    copyrightLabel__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_copyrightLabel",
+        title="Extension field for ``copyrightLabel``.",
+    )
+
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="Date last changed",
         description=(
-            "The date  (and optionally time) when the test script was published. "
-            "The date must change when the business version changes and it must "
-            "change if the status code changes. In addition, it should change when "
-            "the substantive content of the test script changes."
+            "The date (and optionally time) when the test script was last "
+            "significantly changed. The date must change when the business version "
+            "changes and it must change if the status code changes. In addition, it"
+            " should change when the substantive content of the test script "
+            "changes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    description: fhirtypes.Markdown = Field(
-        None,
+    description: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="description",
         title="Natural language description of the test script",
         description=(
             "A free text natural language description of the test script from a "
             "consumer's perspective."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    destination: typing.List[fhirtypes.TestScriptDestinationType] = Field(
-        None,
+    destination: typing.List[fhirtypes.TestScriptDestinationType] | None = Field(
+        default=None,
         alias="destination",
         title=(
             "An abstract server representing a destination or receiver in a message"
@@ -98,12 +125,13 @@ class TestScript(domainresource.DomainResource):
             "An abstract server used in operations within this test script in the "
             "destination element."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    experimental: bool = Field(
-        None,
+    experimental: bool | None = Field(
+        default=None,
         alias="experimental",
         title="For testing purposes, not real usage",
         description=(
@@ -111,27 +139,32 @@ class TestScript(domainresource.DomainResource):
             "testing purposes (or education/evaluation/marketing) and is not "
             "intended to be used for genuine usage."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_experimental", title="Extension field for ``experimental``."
+    experimental__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_experimental",
+        title="Extension field for ``experimental``.",
     )
 
-    fixture: typing.List[fhirtypes.TestScriptFixtureType] = Field(
-        None,
+    fixture: typing.List[fhirtypes.TestScriptFixtureType] | None = Field(
+        default=None,
         alias="fixture",
         title="Fixture in the test script - by reference (uri)",
         description=(
             "Fixture in the test script - by reference (uri). All fixtures are "
             "required for the test script to execute."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    identifier: fhirtypes.IdentifierType = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Additional identifier for the test script",
         description=(
@@ -139,24 +172,28 @@ class TestScript(domainresource.DomainResource):
             "is represented in other formats, or referenced in a specification, "
             "model, design or an instance."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    jurisdiction: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    jurisdiction: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="jurisdiction",
         title="Intended jurisdiction for test script (if applicable)",
         description=(
             "A legal or geographic region in which the test script is intended to "
             "be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    metadata: fhirtypes.TestScriptMetadataType = Field(
-        None,
+    metadata: fhirtypes.TestScriptMetadataType | None = Field(
+        default=None,
         alias="metadata",
         title=(
             "Required capability that is assumed to function correctly on the FHIR "
@@ -166,12 +203,13 @@ class TestScript(domainresource.DomainResource):
             "The required capability must exist and are assumed to function "
             "correctly on the FHIR server being tested."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Name for this test script (computer friendly)",
         description=(
@@ -179,16 +217,18 @@ class TestScript(domainresource.DomainResource):
             "be usable as an identifier for the module by machine processing "
             "applications such as code generation."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    origin: typing.List[fhirtypes.TestScriptOriginType] = Field(
-        None,
+    origin: typing.List[fhirtypes.TestScriptOriginType] | None = Field(
+        default=None,
         alias="origin",
         title=(
             "An abstract server representing a client or sender in a message "
@@ -198,114 +238,145 @@ class TestScript(domainresource.DomainResource):
             "An abstract server used in operations within this test script in the "
             "origin element."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    profile: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    profile: typing.List[fhirtypes.CanonicalType | None] | None = Field(
+        default=None,
         alias="profile",
         title="Reference of the validation profile",
         description="Reference to the profile to be used for validation.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["StructureDefinition"],
+        },
+    )
+    profile__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_profile", title="Extension field for ``profile``."
     )
 
-    publisher: fhirtypes.String = Field(
-        None,
+    publisher: fhirtypes.StringType | None = Field(
+        default=None,
         alias="publisher",
-        title="Name of the publisher (organization or individual)",
+        title="Name of the publisher/steward (organization or individual)",
         description=(
-            "The name of the organization or individual that published the test "
-            "script."
+            "The name of the organization or individual responsible for the release"
+            " and ongoing maintenance of the test script."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_publisher", title="Extension field for ``publisher``."
+    publisher__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_publisher", title="Extension field for ``publisher``."
     )
 
-    purpose: fhirtypes.Markdown = Field(
-        None,
+    purpose: fhirtypes.MarkdownType | None = Field(
+        default=None,
         alias="purpose",
         title="Why this test script is defined",
         description=(
             "Explanation of why this test script is needed and why it has been "
             "designed as it has."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_purpose", title="Extension field for ``purpose``."
+    purpose__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_purpose", title="Extension field for ``purpose``."
     )
 
-    setup: fhirtypes.TestScriptSetupType = Field(
-        None,
+    scope: typing.List[fhirtypes.TestScriptScopeType] | None = Field(
+        default=None,
+        alias="scope",
+        title="Indication of the artifact(s) that are tested by this test case",
+        description=(
+            "The scope indicates a conformance artifact that is tested by the "
+            "test(s) within this test case and the expectation of the test "
+            "outcome(s) as well as the intended test phase inclusion."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    setup: fhirtypes.TestScriptSetupType | None = Field(
+        default=None,
         alias="setup",
         title="A series of required setup operations before tests are executed",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | retired | unknown",
         description=(
             "The status of this test script. Enables tracking the life-cycle of the"
             " content."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "active", "retired", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "active", "retired", "unknown"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    teardown: fhirtypes.TestScriptTeardownType = Field(
-        None,
+    teardown: fhirtypes.TestScriptTeardownType | None = Field(
+        default=None,
         alias="teardown",
         title="A series of required clean up steps",
         description=(
             "A series of operations required to clean up after all the tests are "
             "executed (successfully or otherwise)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    test: typing.List[fhirtypes.TestScriptTestType] = Field(
-        None,
+    test: typing.List[fhirtypes.TestScriptTestType] | None = Field(
+        default=None,
         alias="test",
         title="A test in this script",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Name for this test script (human friendly)",
         description="A short, descriptive, user-friendly title for the test script.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title=(
             "Canonical identifier for this test script, represented as a URI "
@@ -315,21 +386,22 @@ class TestScript(domainresource.DomainResource):
             "An absolute URI that is used to identify this test script when it is "
             "referenced in a specification, model, design or an instance; also "
             "called its canonical identifier. This SHOULD be globally unique and "
-            "SHOULD be a literal address at which at which an authoritative "
-            "instance of this test script is (or will be) published. This URL can "
-            "be the target of a canonical reference. It SHALL remain the same when "
-            "the test script is stored on different servers."
+            "SHOULD be a literal address at which an authoritative instance of this"
+            " test script is (or will be) published. This URL can be the target of "
+            "a canonical reference. It SHALL remain the same when the test script "
+            "is stored on different servers."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
-    useContext: typing.List[fhirtypes.UsageContextType] = Field(
-        None,
+    useContext: typing.List[fhirtypes.UsageContextType] | None = Field(
+        default=None,
         alias="useContext",
         title="The context that the content is intended to support",
         description=(
@@ -339,24 +411,27 @@ class TestScript(domainresource.DomainResource):
             "(insurance plans, studies, ...) and may be used to assist with "
             "indexing and searching for appropriate test script instances."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    variable: typing.List[fhirtypes.TestScriptVariableType] = Field(
-        None,
+    variable: typing.List[fhirtypes.TestScriptVariableType] | None = Field(
+        default=None,
         alias="variable",
         title="Placeholder for evaluated elements",
         description=(
             "Variable is set based either on element value in response body or on "
             "header field value in the response headers."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    version: fhirtypes.String = Field(
-        None,
+    version: fhirtypes.StringType | None = Field(
+        default=None,
         alias="version",
         title="Business version of the test script",
         description=(
@@ -368,18 +443,59 @@ class TestScript(domainresource.DomainResource):
             "There is also no expectation that versions can be placed in a "
             "lexicographical sequence."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    version__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_version", title="Extension field for ``version``."
+    version__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
+    )
+
+    versionAlgorithmCoding: fhirtypes.CodingType | None = Field(
+        default=None,
+        alias="versionAlgorithmCoding",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+
+    versionAlgorithmString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="versionAlgorithmString",
+        title="How to compare versions",
+        description=(
+            "Indicates the mechanism used to compare versions to determine which is"
+            " more current."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e versionAlgorithm[x]
+            "one_of_many": "versionAlgorithm",
+            "one_of_many_required": False,
+        },
+    )
+    versionAlgorithmString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_versionAlgorithmString",
+        title="Extension field for ``versionAlgorithmString``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScript`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScript`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -393,6 +509,8 @@ class TestScript(domainresource.DomainResource):
             "url",
             "identifier",
             "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
             "name",
             "title",
             "status",
@@ -405,9 +523,11 @@ class TestScript(domainresource.DomainResource):
             "jurisdiction",
             "purpose",
             "copyright",
+            "copyrightLabel",
             "origin",
             "destination",
             "metadata",
+            "scope",
             "fixture",
             "profile",
             "variable",
@@ -416,10 +536,33 @@ class TestScript(domainresource.DomainResource):
             "teardown",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1245(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScript`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "url",
+            "identifier",
+            "version",
+            "versionAlgorithmString",
+            "versionAlgorithmCoding",
+            "name",
+            "title",
+            "status",
+            "experimental",
+            "date",
+            "publisher",
+            "contact",
+            "useContext",
+            "jurisdiction",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -427,57 +570,26 @@ class TestScript(domainresource.DomainResource):
         data type mandatory, it is possible to provide an extension that explains why
         the primitive value is not present.
         """
-        required_fields = [
-            ("name", "name__ext"),
-            ("status", "status__ext"),
-            ("url", "url__ext"),
-        ]
-        _missing = object()
+        required_fields = [("name", "name__ext"), ("status", "status__ext")]
+        return required_fields
 
-        def _fallback():
-            return ""
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
 
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {
+            "versionAlgorithm": ["versionAlgorithmCoding", "versionAlgorithmString"]
+        }
+        return one_of_many_fields
 
 
 class TestScriptDestination(backboneelement.BackboneElement):
@@ -491,48 +603,70 @@ class TestScriptDestination(backboneelement.BackboneElement):
     destination element.
     """
 
-    resource_type = Field("TestScriptDestination", const=True)
+    __resource_type__ = "TestScriptDestination"
 
-    index: fhirtypes.Integer = Field(
-        None,
+    index: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="index",
         title="The index of the abstract destination server starting at 1",
         description=(
             "Abstract name given to a destination server in this test script.  The "
             "name is provided as a number starting at 1."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    index__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_index", title="Extension field for ``index``."
+    index__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_index", title="Extension field for ``index``."
     )
 
     profile: fhirtypes.CodingType = Field(
-        ...,
+        default=...,
         alias="profile",
         title=(
             "FHIR-Server | FHIR-SDC-FormManager | FHIR-SDC-FormReceiver | FHIR-SDC-"
             "FormProcessor"
         ),
         description="The type of destination profile the test system supports.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    url: fhirtypes.UrlType | None = Field(
+        default=None,
+        alias="url",
+        title="The url path of the destination server",
+        description=(
+            "The explicit url path of the destination server used in this test "
+            "script."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptDestination`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptDestination`` according to specification,
+        with preserving the original sequence order.
         """
-        return ["id", "extension", "modifierExtension", "index", "profile"]
+        return ["id", "extension", "modifierExtension", "index", "profile", "url"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2393(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptDestination`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -541,52 +675,7 @@ class TestScriptDestination(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("index", "index__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TestScriptFixture(backboneelement.BackboneElement):
@@ -599,10 +688,10 @@ class TestScriptFixture(backboneelement.BackboneElement):
     for the test script to execute.
     """
 
-    resource_type = Field("TestScriptFixture", const=True)
+    __resource_type__ = "TestScriptFixture"
 
-    autocreate: bool = Field(
-        None,
+    autocreate: bool | None = Field(
+        default=None,
         alias="autocreate",
         title="Whether or not to implicitly create the fixture during setup",
         description=(
@@ -611,16 +700,17 @@ class TestScriptFixture(backboneelement.BackboneElement):
             "during setup, therefore no create operation is required for this "
             "fixture in the TestScript.setup section."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    autocreate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_autocreate", title="Extension field for ``autocreate``."
+    autocreate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_autocreate", title="Extension field for ``autocreate``."
     )
 
-    autodelete: bool = Field(
-        None,
+    autodelete: bool | None = Field(
+        default=None,
         alias="autodelete",
         title="Whether or not to implicitly delete the fixture during teardown",
         description=(
@@ -629,33 +719,35 @@ class TestScriptFixture(backboneelement.BackboneElement):
             " during teardown, therefore no delete operation is required for this "
             "fixture in the TestScript.teardown section."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    autodelete__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_autodelete", title="Extension field for ``autodelete``."
+    autodelete__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_autodelete", title="Extension field for ``autodelete``."
     )
 
-    resource: fhirtypes.ReferenceType = Field(
-        None,
+    resource: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="resource",
         title="Reference of the resource",
         description=(
             "Reference to the resource (containing the contents of the resource "
-            "needed for operations)."
+            "needed for operations). This is allowed to be a Parameters resource."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptFixture`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptFixture`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -666,10 +758,14 @@ class TestScriptFixture(backboneelement.BackboneElement):
             "resource",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1973(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptFixture`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -681,52 +777,7 @@ class TestScriptFixture(backboneelement.BackboneElement):
             ("autocreate", "autocreate__ext"),
             ("autodelete", "autodelete__ext"),
         ]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TestScriptMetadata(backboneelement.BackboneElement):
@@ -740,10 +791,10 @@ class TestScriptMetadata(backboneelement.BackboneElement):
     the FHIR server being tested.
     """
 
-    resource_type = Field("TestScriptMetadata", const=True)
+    __resource_type__ = "TestScriptMetadata"
 
     capability: typing.List[fhirtypes.TestScriptMetadataCapabilityType] = Field(
-        ...,
+        default=...,
         alias="capability",
         title=(
             "Capabilities  that are assumed to function correctly on the FHIR "
@@ -753,26 +804,35 @@ class TestScriptMetadata(backboneelement.BackboneElement):
             "Capabilities that must exist and are assumed to function correctly on "
             "the FHIR server being tested."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    link: typing.List[fhirtypes.TestScriptMetadataLinkType] = Field(
-        None,
+    link: typing.List[fhirtypes.TestScriptMetadataLinkType] | None = Field(
+        default=None,
         alias="link",
         title="Links to the FHIR specification",
         description="A link to the FHIR specification that this test is covering.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptMetadata`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptMetadata`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "link", "capability"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptMetadata`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class TestScriptMetadataCapability(backboneelement.BackboneElement):
@@ -786,10 +846,10 @@ class TestScriptMetadataCapability(backboneelement.BackboneElement):
     FHIR server being tested.
     """
 
-    resource_type = Field("TestScriptMetadataCapability", const=True)
+    __resource_type__ = "TestScriptMetadataCapability"
 
-    capabilities: fhirtypes.Canonical = Field(
-        None,
+    capabilities: fhirtypes.CanonicalType | None = Field(
+        default=None,
         alias="capabilities",
         title="Required Capability Statement",
         description=(
@@ -797,107 +857,118 @@ class TestScriptMetadataCapability(backboneelement.BackboneElement):
             "successfully.   If server does not meet at a minimum the referenced "
             "capability statement, then all tests in this script are skipped."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["CapabilityStatement"],
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["CapabilityStatement"],
+        },
     )
-    capabilities__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_capabilities", title="Extension field for ``capabilities``."
+    capabilities__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_capabilities",
+        title="Extension field for ``capabilities``.",
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="The expected capabilities of the server",
         description=(
             "Description of the capabilities that this test script is requiring the"
             " server to support."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    destination: fhirtypes.Integer = Field(
-        None,
+    destination: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="destination",
         title="Which server these requirements apply to",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    destination__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_destination", title="Extension field for ``destination``."
+    destination__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_destination", title="Extension field for ``destination``."
     )
 
-    link: typing.List[fhirtypes.Uri] = Field(
-        None,
+    link: typing.List[fhirtypes.UriType | None] | None = Field(
+        default=None,
         alias="link",
         title="Links to the FHIR specification",
         description=(
             "Links to the FHIR specification that describes this interaction and "
             "the resources involved in more detail."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    link__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_link", title="Extension field for ``link``.")
+    link__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_link", title="Extension field for ``link``."
+    )
 
-    origin: typing.List[fhirtypes.Integer] = Field(
-        None,
+    origin: typing.List[fhirtypes.IntegerType | None] | None = Field(
+        default=None,
         alias="origin",
         title="Which origin server these requirements apply to",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
     origin__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_origin", title="Extension field for ``origin``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_origin", title="Extension field for ``origin``."
+    )
 
-    required: bool = Field(
-        None,
+    required: bool | None = Field(
+        default=None,
         alias="required",
         title="Are the capabilities required?",
         description=(
             "Whether or not the test execution will require the given capabilities "
             "of the server in order for this test script to execute."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    required__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_required", title="Extension field for ``required``."
+    required__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_required", title="Extension field for ``required``."
     )
 
-    validated: bool = Field(
-        None,
+    validated: bool | None = Field(
+        default=None,
         alias="validated",
         title="Are the capabilities validated?",
         description=(
             "Whether or not the test execution will validate the given capabilities"
             " of the server in order for this test script to execute."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    validated__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_validated", title="Extension field for ``validated``."
+    validated__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_validated", title="Extension field for ``validated``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptMetadataCapability`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptMetadataCapability`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -912,10 +983,14 @@ class TestScriptMetadataCapability(backboneelement.BackboneElement):
             "capabilities",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3077(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptMetadataCapability`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -928,52 +1003,7 @@ class TestScriptMetadataCapability(backboneelement.BackboneElement):
             ("required", "required__ext"),
             ("validated", "validated__ext"),
         ]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TestScriptMetadataLink(backboneelement.BackboneElement):
@@ -985,48 +1015,54 @@ class TestScriptMetadataLink(backboneelement.BackboneElement):
     A link to the FHIR specification that this test is covering.
     """
 
-    resource_type = Field("TestScriptMetadataLink", const=True)
+    __resource_type__ = "TestScriptMetadataLink"
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Short description",
         description="Short description of the link.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    url: fhirtypes.Uri = Field(
-        None,
+    url: fhirtypes.UriType | None = Field(
+        default=None,
         alias="url",
         title="URL to the specification",
         description=(
             "URL to a particular requirement or feature within the FHIR "
             "specification."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptMetadataLink`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptMetadataLink`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "url", "description"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2435(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptMetadataLink`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1035,52 +1071,7 @@ class TestScriptMetadataLink(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("url", "url__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TestScriptOrigin(backboneelement.BackboneElement):
@@ -1093,45 +1084,64 @@ class TestScriptOrigin(backboneelement.BackboneElement):
     element.
     """
 
-    resource_type = Field("TestScriptOrigin", const=True)
+    __resource_type__ = "TestScriptOrigin"
 
-    index: fhirtypes.Integer = Field(
-        None,
+    index: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="index",
         title="The index of the abstract origin server starting at 1",
         description=(
             "Abstract name given to an origin server in this test script.  The name"
             " is provided as a number starting at 1."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    index__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_index", title="Extension field for ``index``."
+    index__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_index", title="Extension field for ``index``."
     )
 
     profile: fhirtypes.CodingType = Field(
-        ...,
+        default=...,
         alias="profile",
         title="FHIR-Client | FHIR-SDC-FormFiller",
         description="The type of origin profile the test system supports.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    url: fhirtypes.UrlType | None = Field(
+        default=None,
+        alias="url",
+        title="The url path of the origin server",
+        description="The explicit url path of the origin server used in this test script.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptOrigin`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptOrigin`` according to specification,
+        with preserving the original sequence order.
         """
-        return ["id", "extension", "modifierExtension", "index", "profile"]
+        return ["id", "extension", "modifierExtension", "index", "profile", "url"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1855(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptOrigin`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1140,52 +1150,104 @@ class TestScriptOrigin(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("index", "index__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
 
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
+class TestScriptScope(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
 
-        return values
+    Indication of the artifact(s) that are tested by this test case.
+    The scope indicates a conformance artifact that is tested by the test(s)
+    within this test case and the expectation of the test outcome(s) as well as
+    the intended test phase inclusion.
+    """
+
+    __resource_type__ = "TestScriptScope"
+
+    artifact: fhirtypes.CanonicalType | None = Field(
+        default=None,
+        alias="artifact",
+        title="The specific conformance artifact being tested",
+        description=(
+            "The specific conformance artifact being tested. The canonical "
+            "reference can be version-specific."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
+    )
+    artifact__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_artifact", title="Extension field for ``artifact``."
+    )
+
+    conformance: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="conformance",
+        title="required | optional | strict",
+        description=(
+            "The expectation of whether the test must pass for the system to be "
+            "considered conformant with the artifact: required - all tests are "
+            "expected to pass, optional - all test are expected to pass but non-"
+            "pass status may be allowed, strict - all tests are expected to pass "
+            "and warnings are treated as a failure."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    phase: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="phase",
+        title="unit | integration | production",
+        description=(
+            "The phase of testing for this artifact: unit - development / "
+            "implementation phase, integration - internal system to system phase, "
+            "production - live system to system phase (Note, this may involve "
+            "pii/phi data)."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptScope`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "artifact",
+            "conformance",
+            "phase",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptScope`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("artifact", "artifact__ext")]
+        return required_fields
 
 
 class TestScriptSetup(backboneelement.BackboneElement):
@@ -1196,24 +1258,32 @@ class TestScriptSetup(backboneelement.BackboneElement):
     A series of required setup operations before tests are executed.
     """
 
-    resource_type = Field("TestScriptSetup", const=True)
+    __resource_type__ = "TestScriptSetup"
 
     action: typing.List[fhirtypes.TestScriptSetupActionType] = Field(
-        ...,
+        default=...,
         alias="action",
         title="A setup operation or assert to perform",
         description="Action would contain either an operation or an assertion.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptSetup`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptSetup`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "action"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptSetup`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class TestScriptSetupAction(backboneelement.BackboneElement):
@@ -1225,36 +1295,45 @@ class TestScriptSetupAction(backboneelement.BackboneElement):
     Action would contain either an operation or an assertion.
     """
 
-    resource_type = Field("TestScriptSetupAction", const=True)
+    __resource_type__ = "TestScriptSetupAction"
 
-    assert_fhir: fhirtypes.TestScriptSetupActionAssertType = Field(
-        None,
+    assert_fhir: fhirtypes.TestScriptSetupActionAssertType | None = Field(
+        default=None,
         alias="assert",
         title="The assertion to perform",
         description=(
             "Evaluates the results of previous operations to determine if the "
             "server under test behaves appropriately."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    operation: fhirtypes.TestScriptSetupActionOperationType = Field(
-        None,
+    operation: fhirtypes.TestScriptSetupActionOperationType | None = Field(
+        default=None,
         alias="operation",
         title="The setup operation to perform",
         description="The operation to perform.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptSetupAction`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptSetupAction`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "operation", "assert"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptSetupAction`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class TestScriptSetupActionAssert(backboneelement.BackboneElement):
@@ -1267,45 +1346,48 @@ class TestScriptSetupActionAssert(backboneelement.BackboneElement):
     under test behaves appropriately.
     """
 
-    resource_type = Field("TestScriptSetupActionAssert", const=True)
+    __resource_type__ = "TestScriptSetupActionAssert"
 
-    compareToSourceExpression: fhirtypes.String = Field(
-        None,
+    compareToSourceExpression: fhirtypes.StringType | None = Field(
+        default=None,
         alias="compareToSourceExpression",
         title="The FHIRPath expression to evaluate against the source fixture",
         description=(
-            "The FHIRPath expression to evaluate against the source fixture. When "
-            "compareToSourceId is defined, either compareToSourceExpression or "
-            "compareToSourcePath must be defined, but not both."
+            "The FHIRPath expression for a specific value to evaluate against the "
+            "source fixture. When compareToSourceId is defined, either "
+            "compareToSourceExpression or compareToSourcePath must be defined, but "
+            "not both."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    compareToSourceExpression__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    compareToSourceExpression__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_compareToSourceExpression",
         title="Extension field for ``compareToSourceExpression``.",
     )
 
-    compareToSourceId: fhirtypes.String = Field(
-        None,
+    compareToSourceId: fhirtypes.StringType | None = Field(
+        default=None,
         alias="compareToSourceId",
         title="Id of the source fixture to be evaluated",
         description=(
             "Id of the source fixture used as the contents to be evaluated by "
             'either the "source/expression" or "sourceId/path" definition.'
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    compareToSourceId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    compareToSourceId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_compareToSourceId",
         title="Extension field for ``compareToSourceId``.",
     )
 
-    compareToSourcePath: fhirtypes.String = Field(
-        None,
+    compareToSourcePath: fhirtypes.StringType | None = Field(
+        default=None,
         alias="compareToSourcePath",
         title="XPath or JSONPath expression to evaluate against the source fixture",
         description=(
@@ -1313,327 +1395,442 @@ class TestScriptSetupActionAssert(backboneelement.BackboneElement):
             "When compareToSourceId is defined, either compareToSourceExpression or"
             " compareToSourcePath must be defined, but not both."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    compareToSourcePath__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    compareToSourcePath__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_compareToSourcePath",
         title="Extension field for ``compareToSourcePath``.",
     )
 
-    contentType: fhirtypes.Code = Field(
-        None,
+    contentType: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="contentType",
         title="Mime type to compare against the 'Content-Type' header",
         description=(
             "The mime-type contents to compare against the request or response "
             "message 'Content-Type' header."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    contentType__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_contentType", title="Extension field for ``contentType``."
+    contentType__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_contentType", title="Extension field for ``contentType``."
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    defaultManualCompletion: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="defaultManualCompletion",
+        title="fail | pass | skip | stop",
+        description="The default manual completion outcome applied to this assertion.",
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["fail", "pass", "skip", "stop"],
+        },
+    )
+    defaultManualCompletion__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_defaultManualCompletion",
+        title="Extension field for ``defaultManualCompletion``.",
+    )
+
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Tracking/reporting assertion description",
         description=(
             "The description would be used by test engines for tracking and "
             "reporting purposes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    direction: fhirtypes.Code = Field(
-        None,
+    direction: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="direction",
         title="response | request",
         description="The direction to use for the assertion.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["response", "request"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["response", "request"],
+        },
     )
-    direction__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_direction", title="Extension field for ``direction``."
+    direction__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_direction", title="Extension field for ``direction``."
     )
 
-    expression: fhirtypes.String = Field(
-        None,
+    expression: fhirtypes.StringType | None = Field(
+        default=None,
         alias="expression",
         title="The FHIRPath expression to be evaluated",
         description=(
             "The FHIRPath expression to be evaluated against the request or "
             "response message contents - HTTP headers and payload."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    expression__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_expression", title="Extension field for ``expression``."
+    expression__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_expression", title="Extension field for ``expression``."
     )
 
-    headerField: fhirtypes.String = Field(
-        None,
+    headerField: fhirtypes.StringType | None = Field(
+        default=None,
         alias="headerField",
         title="HTTP header field name",
         description="The HTTP header field name e.g. 'Location'.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    headerField__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_headerField", title="Extension field for ``headerField``."
+    headerField__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_headerField", title="Extension field for ``headerField``."
     )
 
-    label: fhirtypes.String = Field(
-        None,
+    label: fhirtypes.StringType | None = Field(
+        default=None,
         alias="label",
         title="Tracking/logging assertion label",
         description="The label would be used for tracking/logging purposes by test engines.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    label__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_label", title="Extension field for ``label``."
+    label__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_label", title="Extension field for ``label``."
     )
 
-    minimumId: fhirtypes.String = Field(
-        None,
+    minimumId: fhirtypes.StringType | None = Field(
+        default=None,
         alias="minimumId",
         title="Fixture Id of minimum content resource",
         description=(
-            "The ID of a fixture.  Asserts that the response contains at a minimum "
+            "The ID of a fixture. Asserts that the response contains at a minimum "
             "the fixture specified by minimumId."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    minimumId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_minimumId", title="Extension field for ``minimumId``."
+    minimumId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_minimumId", title="Extension field for ``minimumId``."
     )
 
-    navigationLinks: bool = Field(
-        None,
+    navigationLinks: bool | None = Field(
+        default=None,
         alias="navigationLinks",
         title="Perform validation on navigation links?",
         description=(
             "Whether or not the test execution performs validation on the bundle "
             "navigation links."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    navigationLinks__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_navigationLinks", title="Extension field for ``navigationLinks``."
+    navigationLinks__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_navigationLinks",
+        title="Extension field for ``navigationLinks``.",
     )
 
-    operator: fhirtypes.Code = Field(
-        None,
+    operator: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="operator",
         title=(
             "equals | notEquals | in | notIn | greaterThan | lessThan | empty | "
-            "notEmpty | contains | notContains | eval"
+            "notEmpty | contains | notContains | eval | manualEval"
         ),
-        description=(
-            "The operator type defines the conditional behavior of the assert. If "
-            "not defined, the default is equals."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "equals",
-            "notEquals",
-            "in",
-            "notIn",
-            "greaterThan",
-            "lessThan",
-            "empty",
-            "notEmpty",
-            "contains",
-            "notContains",
-            "eval",
-        ],
+        description="The operator type defines the conditional behavior of the assert.",
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "equals",
+                "notEquals",
+                "in",
+                "notIn",
+                "greaterThan",
+                "lessThan",
+                "empty",
+                "notEmpty",
+                "contains",
+                "notContains",
+                "eval",
+                "manualEval",
+            ],
+        },
     )
-    operator__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_operator", title="Extension field for ``operator``."
+    operator__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_operator", title="Extension field for ``operator``."
     )
 
-    path: fhirtypes.String = Field(
-        None,
+    path: fhirtypes.StringType | None = Field(
+        default=None,
         alias="path",
         title="XPath or JSONPath expression",
         description=(
             "The XPath or JSONPath expression to be evaluated against the fixture "
             "representing the response received from server."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    path__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_path", title="Extension field for ``path``."
+    path__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_path", title="Extension field for ``path``."
     )
 
-    requestMethod: fhirtypes.Code = Field(
-        None,
+    requestMethod: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="requestMethod",
         title="delete | get | options | patch | post | put | head",
         description=(
             "The request method or HTTP operation code to compare against that used"
             " by the client system under test."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["delete", "get", "options", "patch", "post", "put", "head"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["delete", "get", "options", "patch", "post", "put", "head"],
+        },
     )
-    requestMethod__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_requestMethod", title="Extension field for ``requestMethod``."
+    requestMethod__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_requestMethod",
+        title="Extension field for ``requestMethod``.",
     )
 
-    requestURL: fhirtypes.String = Field(
-        None,
+    requestURL: fhirtypes.StringType | None = Field(
+        default=None,
         alias="requestURL",
         title="Request URL comparison value",
         description="The value to use in a comparison against the request URL path string.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    requestURL__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_requestURL", title="Extension field for ``requestURL``."
+    requestURL__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_requestURL", title="Extension field for ``requestURL``."
     )
 
-    resource: fhirtypes.Code = Field(
-        None,
+    requirement: typing.List[
+        fhirtypes.TestScriptSetupActionAssertRequirementType
+    ] | None = Field(
+        default=None,
+        alias="requirement",
+        title="Links or references to the testing requirements",
+        description=(
+            "Links or references providing traceability to the testing requirements"
+            " for this assert."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    resource: fhirtypes.UriType | None = Field(
+        default=None,
         alias="resource",
         title="Resource type",
-        description=(
-            "The type of the resource.  See " "http://build.fhir.org/resourcelist.html."
-        ),
-        # if property is element of this resource.
-        element_property=True,
+        description="The type of the resource.  See the [resource list](resourcelist.html).",
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    resource__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_resource", title="Extension field for ``resource``."
+    resource__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_resource", title="Extension field for ``resource``."
     )
 
-    response: fhirtypes.Code = Field(
-        None,
+    response: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="response",
         title=(
-            "okay | created | noContent | notModified | bad | forbidden | notFound "
-            "| methodNotAllowed | conflict | gone | preconditionFailed | "
-            "unprocessable"
+            "continue | switchingProtocols | okay | created | accepted | "
+            "nonAuthoritativeInformation | noContent | resetContent | "
+            "partialContent | multipleChoices | movedPermanently | found | seeOther"
+            " | notModified | useProxy | temporaryRedirect | permanentRedirect | "
+            "badRequest | unauthorized | paymentRequired | forbidden | notFound | "
+            "methodNotAllowed | notAcceptable | proxyAuthenticationRequired | "
+            "requestTimeout | conflict | gone | lengthRequired | preconditionFailed"
+            " | contentTooLarge | uriTooLong | unsupportedMediaType | "
+            "rangeNotSatisfiable | expectationFailed | misdirectedRequest | "
+            "unprocessableContent | upgradeRequired | internalServerError | "
+            "notImplemented | badGateway | serviceUnavailable | gatewayTimeout | "
+            "httpVersionNotSupported"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "okay",
-            "created",
-            "noContent",
-            "notModified",
-            "bad",
-            "forbidden",
-            "notFound",
-            "methodNotAllowed",
-            "conflict",
-            "gone",
-            "preconditionFailed",
-            "unprocessable",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "continue",
+                "switchingProtocols",
+                "okay",
+                "created",
+                "accepted",
+                "nonAuthoritativeInformation",
+                "noContent",
+                "resetContent",
+                "partialContent",
+                "multipleChoices",
+                "movedPermanently",
+                "found",
+                "seeOther",
+                "notModified",
+                "useProxy",
+                "temporaryRedirect",
+                "permanentRedirect",
+                "badRequest",
+                "unauthorized",
+                "paymentRequired",
+                "forbidden",
+                "notFound",
+                "methodNotAllowed",
+                "notAcceptable",
+                "proxyAuthenticationRequired",
+                "requestTimeout",
+                "conflict",
+                "gone",
+                "lengthRequired",
+                "preconditionFailed",
+                "contentTooLarge",
+                "uriTooLong",
+                "unsupportedMediaType",
+                "rangeNotSatisfiable",
+                "expectationFailed",
+                "misdirectedRequest",
+                "unprocessableContent",
+                "upgradeRequired",
+                "internalServerError",
+                "notImplemented",
+                "badGateway",
+                "serviceUnavailable",
+                "gatewayTimeout",
+                "httpVersionNotSupported",
+            ],
+        },
     )
-    response__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_response", title="Extension field for ``response``."
+    response__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_response", title="Extension field for ``response``."
     )
 
-    responseCode: fhirtypes.String = Field(
-        None,
+    responseCode: fhirtypes.StringType | None = Field(
+        default=None,
         alias="responseCode",
         title="HTTP response code to test",
         description="The value of the HTTP response code to be tested.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    responseCode__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_responseCode", title="Extension field for ``responseCode``."
+    responseCode__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_responseCode",
+        title="Extension field for ``responseCode``.",
     )
 
-    sourceId: fhirtypes.Id = Field(
-        None,
+    sourceId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="sourceId",
         title="Fixture Id of source expression or headerField",
         description=(
             "Fixture to evaluate the XPath/JSONPath expression or the headerField  "
             "against."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    sourceId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_sourceId", title="Extension field for ``sourceId``."
+    sourceId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_sourceId", title="Extension field for ``sourceId``."
     )
 
-    validateProfileId: fhirtypes.Id = Field(
-        None,
+    stopTestOnFail: bool | None = Field(
+        default=None,
+        alias="stopTestOnFail",
+        title="If this assert fails, will the current test execution stop?",
+        description=(
+            "Whether or not the current test execution will stop on failure for "
+            "this assert."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
+    )
+    stopTestOnFail__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_stopTestOnFail",
+        title="Extension field for ``stopTestOnFail``.",
+    )
+
+    validateProfileId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="validateProfileId",
         title="Profile Id of validation profile reference",
         description="The ID of the Profile to validate against.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    validateProfileId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    validateProfileId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_validateProfileId",
         title="Extension field for ``validateProfileId``.",
     )
 
-    value: fhirtypes.String = Field(
-        None,
+    value: fhirtypes.StringType | None = Field(
+        default=None,
         alias="value",
         title="The value to compare to",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    value__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_value", title="Extension field for ``value``."
+    value__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_value", title="Extension field for ``value``."
     )
 
-    warningOnly: bool = Field(
-        None,
+    warningOnly: bool | None = Field(
+        default=None,
         alias="warningOnly",
         title="Will this assert produce a warning only on error?",
         description=(
             "Whether or not the test execution will produce a warning only on error"
             " for this assert."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    warningOnly__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_warningOnly", title="Extension field for ``warningOnly``."
+    warningOnly__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_warningOnly", title="Extension field for ``warningOnly``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptSetupActionAssert`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptSetupActionAssert`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -1646,6 +1843,7 @@ class TestScriptSetupActionAssert(backboneelement.BackboneElement):
             "compareToSourceExpression",
             "compareToSourcePath",
             "contentType",
+            "defaultManualCompletion",
             "expression",
             "headerField",
             "minimumId",
@@ -1658,15 +1856,21 @@ class TestScriptSetupActionAssert(backboneelement.BackboneElement):
             "response",
             "responseCode",
             "sourceId",
+            "stopTestOnFail",
             "validateProfileId",
             "value",
             "warningOnly",
+            "requirement",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3006(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptSetupActionAssert`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -1674,53 +1878,97 @@ class TestScriptSetupActionAssert(backboneelement.BackboneElement):
         data type mandatory, it is possible to provide an extension that explains why
         the primitive value is not present.
         """
-        required_fields = [("warningOnly", "warningOnly__ext")]
-        _missing = object()
+        required_fields = [
+            ("stopTestOnFail", "stopTestOnFail__ext"),
+            ("warningOnly", "warningOnly__ext"),
+        ]
+        return required_fields
 
-        def _fallback():
-            return ""
 
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
+class TestScriptSetupActionAssertRequirement(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
 
-        return values
+    Links or references to the testing requirements.
+    Links or references providing traceability to the testing requirements for
+    this assert.
+    """
+
+    __resource_type__ = "TestScriptSetupActionAssertRequirement"
+
+    linkCanonical: fhirtypes.CanonicalType | None = Field(
+        default=None,
+        alias="linkCanonical",
+        title="Link or reference to the testing requirement",
+        description=(
+            "Link or reference providing traceability to the testing requirement "
+            "for this test."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e link[x]
+            "one_of_many": "link",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Requirements"],
+        },
+    )
+    linkCanonical__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_linkCanonical",
+        title="Extension field for ``linkCanonical``.",
+    )
+
+    linkUri: fhirtypes.UriType | None = Field(
+        default=None,
+        alias="linkUri",
+        title="Link or reference to the testing requirement",
+        description=(
+            "Link or reference providing traceability to the testing requirement "
+            "for this test."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e link[x]
+            "one_of_many": "link",
+            "one_of_many_required": False,
+        },
+    )
+    linkUri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_linkUri", title="Extension field for ``linkUri``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptSetupActionAssertRequirement`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "linkUri", "linkCanonical"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptSetupActionAssertRequirement`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
+
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {"link": ["linkCanonical", "linkUri"]}
+        return one_of_many_fields
 
 
 class TestScriptSetupActionOperation(backboneelement.BackboneElement):
@@ -1732,67 +1980,71 @@ class TestScriptSetupActionOperation(backboneelement.BackboneElement):
     The operation to perform.
     """
 
-    resource_type = Field("TestScriptSetupActionOperation", const=True)
+    __resource_type__ = "TestScriptSetupActionOperation"
 
-    accept: fhirtypes.Code = Field(
-        None,
+    accept: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="accept",
-        title="Mime type to accept in the payload of the response, with charset etc.",
+        title="Mime type to accept in the payload of the response, with charset etc",
         description="The mime-type to use for RESTful operation in the 'Accept' header.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    accept__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_accept", title="Extension field for ``accept``."
+    accept__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_accept", title="Extension field for ``accept``."
     )
 
-    contentType: fhirtypes.Code = Field(
-        None,
+    contentType: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="contentType",
-        title="Mime type of the request payload contents, with charset etc.",
+        title="Mime type of the request payload contents, with charset etc",
         description=(
             "The mime-type to use for RESTful operation in the 'Content-Type' "
             "header."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    contentType__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_contentType", title="Extension field for ``contentType``."
+    contentType__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_contentType", title="Extension field for ``contentType``."
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Tracking/reporting operation description",
         description=(
             "The description would be used by test engines for tracking and "
             "reporting purposes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    destination: fhirtypes.Integer = Field(
-        None,
+    destination: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="destination",
         title="Server responding to the request",
         description=(
             "The server where the request message is destined for.  Must be one of "
             "the server numbers listed in TestScript.destination section."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    destination__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_destination", title="Extension field for ``destination``."
+    destination__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_destination", title="Extension field for ``destination``."
     )
 
-    encodeRequestUrl: bool = Field(
-        None,
+    encodeRequestUrl: bool | None = Field(
+        default=None,
         alias="encodeRequestUrl",
         title="Whether or not to send the request url in encoded format",
         description=(
@@ -1801,178 +2053,193 @@ class TestScriptSetupActionOperation(backboneelement.BackboneElement):
             " to false when communicating with a server that does not support "
             "encoded url paths."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    encodeRequestUrl__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    encodeRequestUrl__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_encodeRequestUrl",
         title="Extension field for ``encodeRequestUrl``.",
     )
 
-    label: fhirtypes.String = Field(
-        None,
+    label: fhirtypes.StringType | None = Field(
+        default=None,
         alias="label",
         title="Tracking/logging operation label",
         description="The label would be used for tracking/logging purposes by test engines.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    label__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_label", title="Extension field for ``label``."
+    label__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_label", title="Extension field for ``label``."
     )
 
-    method: fhirtypes.Code = Field(
-        None,
+    method: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="method",
         title="delete | get | options | patch | post | put | head",
         description=(
             "The HTTP method the test engine MUST use for this operation regardless"
             " of any other operation details."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["delete", "get", "options", "patch", "post", "put", "head"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["delete", "get", "options", "patch", "post", "put", "head"],
+        },
     )
-    method__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_method", title="Extension field for ``method``."
+    method__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_method", title="Extension field for ``method``."
     )
 
-    origin: fhirtypes.Integer = Field(
-        None,
+    origin: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="origin",
         title="Server initiating the request",
         description=(
             "The server where the request message originates from.  Must be one of "
             "the server numbers listed in TestScript.origin section."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    origin__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_origin", title="Extension field for ``origin``."
+    origin__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_origin", title="Extension field for ``origin``."
     )
 
-    params: fhirtypes.String = Field(
-        None,
+    params: fhirtypes.StringType | None = Field(
+        default=None,
         alias="params",
         title="Explicitly defined path parameters",
         description=(
             "Path plus parameters after [type].  Used to set parts of the request "
             "URL explicitly."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    params__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_params", title="Extension field for ``params``."
+    params__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_params", title="Extension field for ``params``."
     )
 
     requestHeader: typing.List[
         fhirtypes.TestScriptSetupActionOperationRequestHeaderType
-    ] = Field(
-        None,
+    ] | None = Field(
+        default=None,
         alias="requestHeader",
         title="Each operation can have one or more header elements",
         description="Header elements would be used to set HTTP headers.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    requestId: fhirtypes.Id = Field(
-        None,
+    requestId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="requestId",
         title="Fixture Id of mapped request",
         description="The fixture id (maybe new) to map to the request.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    requestId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_requestId", title="Extension field for ``requestId``."
+    requestId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_requestId", title="Extension field for ``requestId``."
     )
 
-    resource: fhirtypes.Code = Field(
-        None,
+    resource: fhirtypes.UriType | None = Field(
+        default=None,
         alias="resource",
         title="Resource type",
         description=(
-            "The type of the resource.  See " "http://build.fhir.org/resourcelist.html."
+            "The type of the FHIR resource. See the [resource "
+            "list](resourcelist.html). Data type of uri is needed when non-HL7 "
+            "artifacts are identified."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    resource__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_resource", title="Extension field for ``resource``."
+    resource__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_resource", title="Extension field for ``resource``."
     )
 
-    responseId: fhirtypes.Id = Field(
-        None,
+    responseId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="responseId",
         title="Fixture Id of mapped response",
         description="The fixture id (maybe new) to map to the response.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    responseId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_responseId", title="Extension field for ``responseId``."
+    responseId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_responseId", title="Extension field for ``responseId``."
     )
 
-    sourceId: fhirtypes.Id = Field(
-        None,
+    sourceId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="sourceId",
         title="Fixture Id of body for PUT and POST requests",
         description="The id of the fixture used as the body of a PUT or POST request.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    sourceId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_sourceId", title="Extension field for ``sourceId``."
+    sourceId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_sourceId", title="Extension field for ``sourceId``."
     )
 
-    targetId: fhirtypes.Id = Field(
-        None,
+    targetId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="targetId",
         title=(
             "Id of fixture used for extracting the [id],  [type], and [vid] for GET"
             " requests"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    targetId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_targetId", title="Extension field for ``targetId``."
+    targetId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_targetId", title="Extension field for ``targetId``."
     )
 
-    type: fhirtypes.CodingType = Field(
-        None,
+    type: fhirtypes.CodingType | None = Field(
+        default=None,
         alias="type",
         title="The operation code type that will be executed",
         description="Server interaction or operation type.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    url: fhirtypes.String = Field(
-        None,
+    url: fhirtypes.StringType | None = Field(
+        default=None,
         alias="url",
         title="Request URL",
         description="Complete request URL.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    url__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_url", title="Extension field for ``url``."
+    url__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_url", title="Extension field for ``url``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptSetupActionOperation`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptSetupActionOperation`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -1997,10 +2264,14 @@ class TestScriptSetupActionOperation(backboneelement.BackboneElement):
             "url",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_3319(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptSetupActionOperation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -2009,52 +2280,7 @@ class TestScriptSetupActionOperation(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("encodeRequestUrl", "encodeRequestUrl__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TestScriptSetupActionOperationRequestHeader(backboneelement.BackboneElement):
@@ -2066,46 +2292,52 @@ class TestScriptSetupActionOperationRequestHeader(backboneelement.BackboneElemen
     Header elements would be used to set HTTP headers.
     """
 
-    resource_type = Field("TestScriptSetupActionOperationRequestHeader", const=True)
+    __resource_type__ = "TestScriptSetupActionOperationRequestHeader"
 
-    field: fhirtypes.String = Field(
-        None,
+    field: fhirtypes.StringType | None = Field(
+        default=None,
         alias="field",
         title="HTTP header field name",
         description='The HTTP header field e.g. "Accept".',
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    field__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_field", title="Extension field for ``field``."
+    field__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_field", title="Extension field for ``field``."
     )
 
-    value: fhirtypes.String = Field(
-        None,
+    value: fhirtypes.StringType | None = Field(
+        default=None,
         alias="value",
         title="HTTP headerfield value",
         description='The value of the header e.g. "application/fhir+xml".',
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    value__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_value", title="Extension field for ``value``."
+    value__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_value", title="Extension field for ``value``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptSetupActionOperationRequestHeader`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptSetupActionOperationRequestHeader`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "field", "value"]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_4653(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptSetupActionOperationRequestHeader`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -2114,52 +2346,7 @@ class TestScriptSetupActionOperationRequestHeader(backboneelement.BackboneElemen
         the primitive value is not present.
         """
         required_fields = [("field", "field__ext"), ("value", "value__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class TestScriptTeardown(backboneelement.BackboneElement):
@@ -2172,24 +2359,32 @@ class TestScriptTeardown(backboneelement.BackboneElement):
     executed (successfully or otherwise).
     """
 
-    resource_type = Field("TestScriptTeardown", const=True)
+    __resource_type__ = "TestScriptTeardown"
 
     action: typing.List[fhirtypes.TestScriptTeardownActionType] = Field(
-        ...,
+        default=...,
         alias="action",
         title="One or more teardown operations to perform",
         description="The teardown action will only contain an operation.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptTeardown`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptTeardown`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "action"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptTeardown`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class TestScriptTeardownAction(backboneelement.BackboneElement):
@@ -2201,24 +2396,32 @@ class TestScriptTeardownAction(backboneelement.BackboneElement):
     The teardown action will only contain an operation.
     """
 
-    resource_type = Field("TestScriptTeardownAction", const=True)
+    __resource_type__ = "TestScriptTeardownAction"
 
     operation: fhirtypes.TestScriptSetupActionOperationType = Field(
-        ...,
+        default=...,
         alias="operation",
         title="The teardown operation to perform",
         description="An operation would involve a REST request to a server.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptTeardownAction`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptTeardownAction`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "operation"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptTeardownAction`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class TestScriptTest(backboneelement.BackboneElement):
@@ -2229,54 +2432,64 @@ class TestScriptTest(backboneelement.BackboneElement):
     A test in this script.
     """
 
-    resource_type = Field("TestScriptTest", const=True)
+    __resource_type__ = "TestScriptTest"
 
     action: typing.List[fhirtypes.TestScriptTestActionType] = Field(
-        ...,
+        default=...,
         alias="action",
         title="A test operation or assert to perform",
         description="Action would contain either an operation or an assertion.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Tracking/reporting short description of the test",
         description=(
             "A short description of the test used by test engines for tracking and "
             "reporting purposes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Tracking/logging name of this test",
         description=(
             "The name of this test used for tracking/logging purposes by test "
             "engines."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptTest`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptTest`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "name", "description", "action"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptTest`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class TestScriptTestAction(backboneelement.BackboneElement):
@@ -2288,36 +2501,45 @@ class TestScriptTestAction(backboneelement.BackboneElement):
     Action would contain either an operation or an assertion.
     """
 
-    resource_type = Field("TestScriptTestAction", const=True)
+    __resource_type__ = "TestScriptTestAction"
 
-    assert_fhir: fhirtypes.TestScriptSetupActionAssertType = Field(
-        None,
+    assert_fhir: fhirtypes.TestScriptSetupActionAssertType | None = Field(
+        default=None,
         alias="assert",
         title="The setup assertion to perform",
         description=(
             "Evaluates the results of previous operations to determine if the "
             "server under test behaves appropriately."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    operation: fhirtypes.TestScriptSetupActionOperationType = Field(
-        None,
+    operation: fhirtypes.TestScriptSetupActionOperationType | None = Field(
+        default=None,
         alias="operation",
         title="The setup operation to perform",
         description="An operation would involve a REST request to a server.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptTestAction`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptTestAction`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "operation", "assert"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptTestAction`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class TestScriptVariable(backboneelement.BackboneElement):
@@ -2330,96 +2552,104 @@ class TestScriptVariable(backboneelement.BackboneElement):
     field value in the response headers.
     """
 
-    resource_type = Field("TestScriptVariable", const=True)
+    __resource_type__ = "TestScriptVariable"
 
-    defaultValue: fhirtypes.String = Field(
-        None,
+    defaultValue: fhirtypes.StringType | None = Field(
+        default=None,
         alias="defaultValue",
         title="Default, hard-coded, or user-defined value for this variable",
         description="A default, hard-coded, or user-defined value for this variable.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    defaultValue__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_defaultValue", title="Extension field for ``defaultValue``."
+    defaultValue__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_defaultValue",
+        title="Extension field for ``defaultValue``.",
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Natural language description of the variable",
         description=(
             "A free text natural language description of the variable and its "
             "purpose."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    expression: fhirtypes.String = Field(
-        None,
+    expression: fhirtypes.StringType | None = Field(
+        default=None,
         alias="expression",
         title="The FHIRPath expression against the fixture body",
         description=(
-            "The FHIRPath expression to evaluate against the fixture body. When "
-            "variables are defined, only one of either expression, headerField or "
-            "path must be specified."
+            "The FHIRPath expression for a specific value to evaluate against the "
+            "fixture body. When variables are defined, only one of either "
+            "expression, headerField or path must be specified."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    expression__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_expression", title="Extension field for ``expression``."
+    expression__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_expression", title="Extension field for ``expression``."
     )
 
-    headerField: fhirtypes.String = Field(
-        None,
+    headerField: fhirtypes.StringType | None = Field(
+        default=None,
         alias="headerField",
         title="HTTP header field name for source",
         description=(
             "Will be used to grab the HTTP header field value from the headers that"
             " sourceId is pointing to."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    headerField__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_headerField", title="Extension field for ``headerField``."
+    headerField__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_headerField", title="Extension field for ``headerField``."
     )
 
-    hint: fhirtypes.String = Field(
-        None,
+    hint: fhirtypes.StringType | None = Field(
+        default=None,
         alias="hint",
         title="Hint help text for default value to enter",
         description=(
             "Displayable text string with hint help information to the user when "
             "entering a default value."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    hint__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_hint", title="Extension field for ``hint``."
+    hint__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_hint", title="Extension field for ``hint``."
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Descriptive name for this variable",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "element_required": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    path: fhirtypes.String = Field(
-        None,
+    path: fhirtypes.StringType | None = Field(
+        default=None,
         alias="path",
         title="XPath or JSONPath against the fixture body",
         description=(
@@ -2427,33 +2657,35 @@ class TestScriptVariable(backboneelement.BackboneElement):
             "variables are defined, only one of either expression, headerField or "
             "path must be specified."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    path__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_path", title="Extension field for ``path``."
+    path__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_path", title="Extension field for ``path``."
     )
 
-    sourceId: fhirtypes.Id = Field(
-        None,
+    sourceId: fhirtypes.IdType | None = Field(
+        default=None,
         alias="sourceId",
         title="Fixture Id of source expression or headerField within this variable",
         description=(
             "Fixture to evaluate the XPath/JSONPath expression or the headerField  "
             "against within this variable."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    sourceId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_sourceId", title="Extension field for ``sourceId``."
+    sourceId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_sourceId", title="Extension field for ``sourceId``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TestScriptVariable`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TestScriptVariable`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -2469,10 +2701,14 @@ class TestScriptVariable(backboneelement.BackboneElement):
             "sourceId",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2036(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TestScriptVariable`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -2481,49 +2717,4 @@ class TestScriptVariable(backboneelement.BackboneElement):
         the primitive value is not present.
         """
         required_fields = [("name", "name__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields

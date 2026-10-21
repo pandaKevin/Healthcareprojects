@@ -1,70 +1,80 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/HumanName
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
 
-from . import element, fhirtypes
+from . import datatype, fhirtypes
 
 
-class HumanName(element.Element):
+class HumanName(datatype.DataType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
 
-    Name of a human - parts and usage.
-    A human's name with the ability to identify parts and usage.
+    Name of a human or other living entity - parts and usage.
+    A name, normally of a human, that can be used for other living entities
+    (e.g. animals but not organizations) that have been assigned names by a
+    human and may need the use of name parts or the need for usage information.
     """
 
-    resource_type = Field("HumanName", const=True)
+    __resource_type__ = "HumanName"
 
-    family: fhirtypes.String = Field(
-        None,
+    family: fhirtypes.StringType | None = Field(
+        default=None,
         alias="family",
         title="Family name (often called 'Surname')",
         description=(
             "The part of a name that links to the genealogy. In some cultures (e.g."
             " Eritrea) the family name of a son is the first name of his father."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    family__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_family", title="Extension field for ``family``."
+    family__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_family", title="Extension field for ``family``."
     )
 
-    given: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    given: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="given",
         title="Given names (not always 'first'). Includes middle names",
         description="Given name.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    given__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_given", title="Extension field for ``given``.")
+    given__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_given", title="Extension field for ``given``."
+    )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="Time period when name was/is in use",
         description=(
             "Indicates the period of time when this name was valid for the named "
             "person."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    prefix: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    prefix: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="prefix",
         title="Parts that come before the name",
         description=(
@@ -72,15 +82,19 @@ class HumanName(element.Element):
             "employment or nobility status, etc. and that appears at the start of "
             "the name."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
     prefix__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_prefix", title="Extension field for ``prefix``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_prefix", title="Extension field for ``prefix``."
+    )
 
-    suffix: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    suffix: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="suffix",
         title="Parts that come after the name",
         description=(
@@ -88,15 +102,19 @@ class HumanName(element.Element):
             "employment or nobility status, etc. and that appears at the end of the"
             " name."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
     suffix__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_suffix", title="Extension field for ``suffix``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_suffix", title="Extension field for ``suffix``."
+    )
 
-    text: fhirtypes.String = Field(
-        None,
+    text: fhirtypes.StringType | None = Field(
+        default=None,
         alias="text",
         title="Text representation of the full name",
         description=(
@@ -104,41 +122,45 @@ class HumanName(element.Element):
             "application UI. This may be provided instead of or as well as the "
             "specific parts."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    text__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_text", title="Extension field for ``text``."
+    text__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_text", title="Extension field for ``text``."
     )
 
-    use: fhirtypes.Code = Field(
-        None,
+    use: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="use",
         title="usual | official | temp | nickname | anonymous | old | maiden",
         description="Identifies the purpose for this name.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "usual",
-            "official",
-            "temp",
-            "nickname",
-            "anonymous",
-            "old",
-            "maiden",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "usual",
+                "official",
+                "temp",
+                "nickname",
+                "anonymous",
+                "old",
+                "maiden",
+            ],
+        },
     )
-    use__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_use", title="Extension field for ``use``."
+    use__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_use", title="Extension field for ``use``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``HumanName`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``HumanName`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -151,3 +173,10 @@ class HumanName(element.Element):
             "suffix",
             "period",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``HumanName`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["use", "text", "family", "given", "prefix", "suffix", "period"]

@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/SubstanceSourceMaterial
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -34,10 +36,10 @@ class SubstanceSourceMaterial(domainresource.DomainResource):
     herbal annex.
     """
 
-    resource_type = Field("SubstanceSourceMaterial", const=True)
+    __resource_type__ = "SubstanceSourceMaterial"
 
-    countryOfOrigin: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    countryOfOrigin: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="countryOfOrigin",
         title=(
             "The country where the plant material is harvested or the countries "
@@ -47,12 +49,14 @@ class SubstanceSourceMaterial(domainresource.DomainResource):
             "the manufacturing of the Cryopoor plama or Crioprecipitate"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    developmentStage: fhirtypes.CodeableConceptType = Field(
-        None,
+    developmentStage: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="developmentStage",
         title=(
             "Stage of life for animals, plants, insects and microorganisms. This "
@@ -60,14 +64,16 @@ class SubstanceSourceMaterial(domainresource.DomainResource):
             " different in these stages (e.g. foetal bovine serum)"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     fractionDescription: typing.List[
         fhirtypes.SubstanceSourceMaterialFractionDescriptionType
-    ] = Field(
-        None,
+    ] | None = Field(
+        default=None,
         alias="fractionDescription",
         title=(
             "Many complex materials are fractions of parts of plants, animals, or "
@@ -81,31 +87,35 @@ class SubstanceSourceMaterial(domainresource.DomainResource):
             "Substance and the Specified Substance Group 1 levels"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    geographicalLocation: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    geographicalLocation: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="geographicalLocation",
         title=(
             "The place/region where the plant is harvested or the places/regions "
             "where the animal source material has its habitat"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
     geographicalLocation__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(
-        None,
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
         alias="_geographicalLocation",
         title="Extension field for ``geographicalLocation``.",
     )
 
-    organism: fhirtypes.SubstanceSourceMaterialOrganismType = Field(
-        None,
+    organism: fhirtypes.SubstanceSourceMaterialOrganismType | None = Field(
+        default=None,
         alias="organism",
         title=(
             "This subclause describes the organism which the substance is derived "
@@ -114,39 +124,47 @@ class SubstanceSourceMaterial(domainresource.DomainResource):
             "described for the Substance Name: ., Leaf"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    organismId: fhirtypes.IdentifierType = Field(
-        None,
+    organismId: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="organismId",
         title=(
             "The unique identifier associated with the source material parent "
             "organism shall be specified"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    organismName: fhirtypes.String = Field(
-        None,
+    organismName: fhirtypes.StringType | None = Field(
+        default=None,
         alias="organismName",
         title=(
             "The organism accepted Scientific name shall be provided based on the "
             "organism taxonomy"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    organismName__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_organismName", title="Extension field for ``organismName``."
+    organismName__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_organismName",
+        title="Extension field for ``organismName``.",
     )
 
-    parentSubstanceId: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    parentSubstanceId: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="parentSubstanceId",
         title=(
             "The parent of the herbal drug Ginkgo biloba, Leaf is the substance ID "
@@ -154,60 +172,70 @@ class SubstanceSourceMaterial(domainresource.DomainResource):
             "(Whole plant)"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    parentSubstanceName: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    parentSubstanceName: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="parentSubstanceName",
         title="The parent substance of the Herbal Drug, or Herbal preparation",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
     parentSubstanceName__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(
-        None,
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None,
         alias="_parentSubstanceName",
         title="Extension field for ``parentSubstanceName``.",
     )
 
     partDescription: typing.List[
         fhirtypes.SubstanceSourceMaterialPartDescriptionType
-    ] = Field(
-        None,
+    ] | None = Field(
+        default=None,
         alias="partDescription",
         title="To do",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    sourceMaterialClass: fhirtypes.CodeableConceptType = Field(
-        None,
+    sourceMaterialClass: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="sourceMaterialClass",
         title=(
             "General high level classification of the source material specific to "
             "the origin of the material"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    sourceMaterialState: fhirtypes.CodeableConceptType = Field(
-        None,
+    sourceMaterialState: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="sourceMaterialState",
         title="The state of the source material when extracted",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    sourceMaterialType: fhirtypes.CodeableConceptType = Field(
-        None,
+    sourceMaterialType: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="sourceMaterialType",
         title=(
             "The type of the source material shall be specified based on a "
@@ -215,15 +243,17 @@ class SubstanceSourceMaterial(domainresource.DomainResource):
             "class of infectious agent"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SubstanceSourceMaterial`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SubstanceSourceMaterial`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -233,6 +263,31 @@ class SubstanceSourceMaterial(domainresource.DomainResource):
             "text",
             "contained",
             "extension",
+            "modifierExtension",
+            "sourceMaterialClass",
+            "sourceMaterialType",
+            "sourceMaterialState",
+            "organismId",
+            "organismName",
+            "parentSubstanceId",
+            "parentSubstanceName",
+            "countryOfOrigin",
+            "geographicalLocation",
+            "developmentStage",
+            "fractionDescription",
+            "organism",
+            "partDescription",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SubstanceSourceMaterial`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
             "modifierExtension",
             "sourceMaterialClass",
             "sourceMaterialType",
@@ -266,25 +321,27 @@ class SubstanceSourceMaterialFractionDescription(backboneelement.BackboneElement
     levels.
     """
 
-    resource_type = Field("SubstanceSourceMaterialFractionDescription", const=True)
+    __resource_type__ = "SubstanceSourceMaterialFractionDescription"
 
-    fraction: fhirtypes.String = Field(
-        None,
+    fraction: fhirtypes.StringType | None = Field(
+        default=None,
         alias="fraction",
         title=(
             "This element is capturing information about the fraction of a plant "
             "part, or human plasma for fractionation"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    fraction__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_fraction", title="Extension field for ``fraction``."
+    fraction__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_fraction", title="Extension field for ``fraction``."
     )
 
-    materialType: fhirtypes.CodeableConceptType = Field(
-        None,
+    materialType: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="materialType",
         title=(
             "The specific type of the material constituting the component. For "
@@ -292,17 +349,26 @@ class SubstanceSourceMaterialFractionDescription(backboneelement.BackboneElement
             "described in Specified Substance Group 1"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SubstanceSourceMaterialFractionDescription`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SubstanceSourceMaterialFractionDescription`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "fraction", "materialType"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SubstanceSourceMaterialFractionDescription`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "fraction", "materialType"]
 
 
 class SubstanceSourceMaterialOrganism(backboneelement.BackboneElement):
@@ -316,28 +382,34 @@ class SubstanceSourceMaterialOrganism(backboneelement.BackboneElement):
     Substance Name: ., Leaf.
     """
 
-    resource_type = Field("SubstanceSourceMaterialOrganism", const=True)
+    __resource_type__ = "SubstanceSourceMaterialOrganism"
 
-    author: typing.List[fhirtypes.SubstanceSourceMaterialOrganismAuthorType] = Field(
-        None,
+    author: typing.List[
+        fhirtypes.SubstanceSourceMaterialOrganismAuthorType
+    ] | None = Field(
+        default=None,
         alias="author",
         title="4.9.13.6.1 Author type (Conditional)",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    family: fhirtypes.CodeableConceptType = Field(
-        None,
+    family: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="family",
         title="The family of an organism shall be specified",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    genus: fhirtypes.CodeableConceptType = Field(
-        None,
+    genus: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="genus",
         title=(
             "The genus of an organism shall be specified; refers to the Latin "
@@ -345,21 +417,25 @@ class SubstanceSourceMaterialOrganism(backboneelement.BackboneElement):
             "is present in names for genera, species and infraspecies"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    hybrid: fhirtypes.SubstanceSourceMaterialOrganismHybridType = Field(
-        None,
+    hybrid: fhirtypes.SubstanceSourceMaterialOrganismHybridType | None = Field(
+        default=None,
         alias="hybrid",
         title="4.9.13.8.1 Hybrid species maternal organism ID (Optional)",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    intraspecificDescription: fhirtypes.String = Field(
-        None,
+    intraspecificDescription: fhirtypes.StringType | None = Field(
+        default=None,
         alias="intraspecificDescription",
         title=(
             "The intraspecific description of an organism shall be specified based "
@@ -368,35 +444,41 @@ class SubstanceSourceMaterialOrganism(backboneelement.BackboneElement):
             "WHO convention"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    intraspecificDescription__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    intraspecificDescription__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_intraspecificDescription",
         title="Extension field for ``intraspecificDescription``.",
     )
 
-    intraspecificType: fhirtypes.CodeableConceptType = Field(
-        None,
+    intraspecificType: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="intraspecificType",
         title="The Intraspecific type of an organism shall be specified",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    organismGeneral: fhirtypes.SubstanceSourceMaterialOrganismOrganismGeneralType = Field(
-        None,
+    organismGeneral: fhirtypes.SubstanceSourceMaterialOrganismOrganismGeneralType | None = Field(
+        default=None,
         alias="organismGeneral",
         title="4.9.13.7.1 Kingdom (Conditional)",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    species: fhirtypes.CodeableConceptType = Field(
-        None,
+    species: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="species",
         title=(
             "The species of an organism shall be specified; refers to the Latin "
@@ -404,19 +486,38 @@ class SubstanceSourceMaterialOrganism(backboneelement.BackboneElement):
             " species and infraspecies"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SubstanceSourceMaterialOrganism`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SubstanceSourceMaterialOrganism`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
+            "modifierExtension",
+            "family",
+            "genus",
+            "species",
+            "intraspecificType",
+            "intraspecificDescription",
+            "author",
+            "hybrid",
+            "organismGeneral",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SubstanceSourceMaterialOrganism`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
             "modifierExtension",
             "family",
             "genus",
@@ -437,10 +538,10 @@ class SubstanceSourceMaterialOrganismAuthor(backboneelement.BackboneElement):
     4.9.13.6.1 Author type (Conditional).
     """
 
-    resource_type = Field("SubstanceSourceMaterialOrganismAuthor", const=True)
+    __resource_type__ = "SubstanceSourceMaterialOrganismAuthor"
 
-    authorDescription: fhirtypes.String = Field(
-        None,
+    authorDescription: fhirtypes.StringType | None = Field(
+        default=None,
         alias="authorDescription",
         title=(
             "The author of an organism species shall be specified. The author year "
@@ -449,17 +550,19 @@ class SubstanceSourceMaterialOrganismAuthor(backboneelement.BackboneElement):
             "plant/animal name (of any rank)"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    authorDescription__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    authorDescription__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_authorDescription",
         title="Extension field for ``authorDescription``.",
     )
 
-    authorType: fhirtypes.CodeableConceptType = Field(
-        None,
+    authorType: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="authorType",
         title=(
             "The type of author of an organism species shall be specified. The "
@@ -469,15 +572,17 @@ class SubstanceSourceMaterialOrganismAuthor(backboneelement.BackboneElement):
             "published the plant/animal name"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SubstanceSourceMaterialOrganismAuthor`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SubstanceSourceMaterialOrganismAuthor`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -486,6 +591,13 @@ class SubstanceSourceMaterialOrganismAuthor(backboneelement.BackboneElement):
             "authorType",
             "authorDescription",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SubstanceSourceMaterialOrganismAuthor`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "authorType", "authorDescription"]
 
 
 class SubstanceSourceMaterialOrganismHybrid(backboneelement.BackboneElement):
@@ -496,19 +608,21 @@ class SubstanceSourceMaterialOrganismHybrid(backboneelement.BackboneElement):
     4.9.13.8.1 Hybrid species maternal organism ID (Optional).
     """
 
-    resource_type = Field("SubstanceSourceMaterialOrganismHybrid", const=True)
+    __resource_type__ = "SubstanceSourceMaterialOrganismHybrid"
 
-    hybridType: fhirtypes.CodeableConceptType = Field(
-        None,
+    hybridType: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="hybridType",
         title="The hybrid type of an organism shall be specified",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    maternalOrganismId: fhirtypes.String = Field(
-        None,
+    maternalOrganismId: fhirtypes.StringType | None = Field(
+        default=None,
         alias="maternalOrganismId",
         title=(
             "The identifier of the maternal species constituting the hybrid "
@@ -517,17 +631,19 @@ class SubstanceSourceMaterialOrganismHybrid(backboneelement.BackboneElement):
             "will be known which is maternal and which is paternal"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    maternalOrganismId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    maternalOrganismId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_maternalOrganismId",
         title="Extension field for ``maternalOrganismId``.",
     )
 
-    maternalOrganismName: fhirtypes.String = Field(
-        None,
+    maternalOrganismName: fhirtypes.StringType | None = Field(
+        default=None,
         alias="maternalOrganismName",
         title=(
             "The name of the maternal species constituting the hybrid organism "
@@ -536,58 +652,78 @@ class SubstanceSourceMaterialOrganismHybrid(backboneelement.BackboneElement):
             "paternal"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    maternalOrganismName__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    maternalOrganismName__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_maternalOrganismName",
         title="Extension field for ``maternalOrganismName``.",
     )
 
-    paternalOrganismId: fhirtypes.String = Field(
-        None,
+    paternalOrganismId: fhirtypes.StringType | None = Field(
+        default=None,
         alias="paternalOrganismId",
         title=(
             "The identifier of the paternal species constituting the hybrid "
             "organism shall be specified based on a controlled vocabulary"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    paternalOrganismId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    paternalOrganismId__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_paternalOrganismId",
         title="Extension field for ``paternalOrganismId``.",
     )
 
-    paternalOrganismName: fhirtypes.String = Field(
-        None,
+    paternalOrganismName: fhirtypes.StringType | None = Field(
+        default=None,
         alias="paternalOrganismName",
         title=(
             "The name of the paternal species constituting the hybrid organism "
             "shall be specified"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    paternalOrganismName__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    paternalOrganismName__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_paternalOrganismName",
         title="Extension field for ``paternalOrganismName``.",
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SubstanceSourceMaterialOrganismHybrid`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SubstanceSourceMaterialOrganismHybrid`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
+            "modifierExtension",
+            "maternalOrganismId",
+            "maternalOrganismName",
+            "paternalOrganismId",
+            "paternalOrganismName",
+            "hybridType",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SubstanceSourceMaterialOrganismHybrid`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
             "modifierExtension",
             "maternalOrganismId",
             "maternalOrganismName",
@@ -605,49 +741,57 @@ class SubstanceSourceMaterialOrganismOrganismGeneral(backboneelement.BackboneEle
     4.9.13.7.1 Kingdom (Conditional).
     """
 
-    resource_type = Field("SubstanceSourceMaterialOrganismOrganismGeneral", const=True)
+    __resource_type__ = "SubstanceSourceMaterialOrganismOrganismGeneral"
 
-    class_fhir: fhirtypes.CodeableConceptType = Field(
-        None,
+    class_fhir: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="class",
         title="The class of an organism shall be specified",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    kingdom: fhirtypes.CodeableConceptType = Field(
-        None,
+    kingdom: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="kingdom",
         title="The kingdom of an organism shall be specified",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    order: fhirtypes.CodeableConceptType = Field(
-        None,
+    order: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="order",
         title="The order of an organism shall be specified,",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    phylum: fhirtypes.CodeableConceptType = Field(
-        None,
+    phylum: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="phylum",
         title="The phylum of an organism shall be specified",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SubstanceSourceMaterialOrganismOrganismGeneral`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SubstanceSourceMaterialOrganismOrganismGeneral`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -659,6 +803,13 @@ class SubstanceSourceMaterialOrganismOrganismGeneral(backboneelement.BackboneEle
             "order",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SubstanceSourceMaterialOrganismOrganismGeneral`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "kingdom", "phylum", "class", "order"]
+
 
 class SubstanceSourceMaterialPartDescription(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -668,19 +819,21 @@ class SubstanceSourceMaterialPartDescription(backboneelement.BackboneElement):
     To do.
     """
 
-    resource_type = Field("SubstanceSourceMaterialPartDescription", const=True)
+    __resource_type__ = "SubstanceSourceMaterialPartDescription"
 
-    part: fhirtypes.CodeableConceptType = Field(
-        None,
+    part: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="part",
         title="Entity of anatomical origin of source material within an organism",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    partLocation: fhirtypes.CodeableConceptType = Field(
-        None,
+    partLocation: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="partLocation",
         title=(
             "The detailed anatomic location when the part can be extracted from "
@@ -688,14 +841,23 @@ class SubstanceSourceMaterialPartDescription(backboneelement.BackboneElement):
             "locations may apply"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``SubstanceSourceMaterialPartDescription`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``SubstanceSourceMaterialPartDescription`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "part", "partLocation"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``SubstanceSourceMaterialPartDescription`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "part", "partLocation"]

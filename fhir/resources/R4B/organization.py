@@ -1,0 +1,277 @@
+"""
+Profile: http://hl7.org/fhir/StructureDefinition/Organization
+Release: R4B
+Version: 4.3.0
+Build ID: c475c22
+Last updated: 2022-05-28T12:47:40.239+10:00
+"""
+
+from __future__ import annotations as _annotations
+
+import typing
+
+from pydantic import Field
+
+from . import backboneelement, domainresource, fhirtypes
+
+
+class Organization(domainresource.DomainResource):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    A grouping of people or organizations with a common purpose.
+    A formally or informally recognized grouping of people or organizations
+    formed for the purpose of achieving some form of collective action.
+    Includes companies, institutions, corporations, departments, community
+    groups, healthcare practice groups, payer/insurer, etc.
+    """
+
+    __resource_type__ = "Organization"
+
+    active: bool | None = Field(
+        default=None,
+        alias="active",
+        title="Whether the organization's record is still in active use",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    active__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_active", title="Extension field for ``active``."
+    )
+
+    address: typing.List[fhirtypes.AddressType] | None = Field(
+        default=None,
+        alias="address",
+        title="An address for the organization",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    alias: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
+        alias="alias",
+        title=(
+            "A list of alternate names that the organization is known as, or was "
+            "known as in the past"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    alias__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_alias", title="Extension field for ``alias``."
+    )
+
+    contact: typing.List[fhirtypes.OrganizationContactType] | None = Field(
+        default=None,
+        alias="contact",
+        title="Contact for the organization for a certain purpose",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    endpoint: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="endpoint",
+        title=(
+            "Technical endpoints providing access to services operated for the "
+            "organization"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Endpoint"],
+        },
+    )
+
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
+        alias="identifier",
+        title="Identifies this organization  across multiple systems",
+        description=(
+            "Identifier for the organization that is used to identify the "
+            "organization across multiple disparate systems."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    name: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="name",
+        title="Name used for the organization",
+        description="A name associated with the organization.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
+    )
+
+    partOf: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="partOf",
+        title="The organization of which this organization forms a part",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
+    )
+
+    telecom: typing.List[fhirtypes.ContactPointType] | None = Field(
+        default=None,
+        alias="telecom",
+        title="A contact detail for the organization",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    type: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="type",
+        title="Kind of organization",
+        description="The kind(s) of organization that this is.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Organization`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "language",
+            "text",
+            "contained",
+            "extension",
+            "modifierExtension",
+            "identifier",
+            "active",
+            "type",
+            "name",
+            "alias",
+            "telecom",
+            "address",
+            "partOf",
+            "contact",
+            "endpoint",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Organization`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "active",
+            "type",
+            "name",
+            "partOf",
+        ]
+
+
+class OrganizationContact(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Contact for the organization for a certain purpose.
+    """
+
+    __resource_type__ = "OrganizationContact"
+
+    address: fhirtypes.AddressType | None = Field(
+        default=None,
+        alias="address",
+        title="Visiting or postal addresses for the contact",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    name: fhirtypes.HumanNameType | None = Field(
+        default=None,
+        alias="name",
+        title="A name associated with the contact",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    purpose: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="purpose",
+        title="The type of contact",
+        description="Indicates a purpose for which the contact can be reached.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    telecom: typing.List[fhirtypes.ContactPointType] | None = Field(
+        default=None,
+        alias="telecom",
+        title="Contact details (telephone, email, etc.)  for a contact",
+        description=(
+            "A contact detail (e.g. a telephone number or an email address) by "
+            "which the party may be contacted."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``OrganizationContact`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "purpose",
+            "name",
+            "telecom",
+            "address",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``OrganizationContact`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

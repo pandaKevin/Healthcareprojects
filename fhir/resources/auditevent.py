@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/AuditEvent
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -20,143 +20,260 @@ class AuditEvent(domainresource.DomainResource):
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
 
-    Event record kept for security purposes.
-    A record of an event made for purposes of maintaining a security log.
-    Typical uses include detection of intrusion attempts and monitoring for
-    inappropriate usage.
+    Record of an event.
+    A record of an event relevant for purposes such as operations, privacy,
+    security, maintenance, and performance analysis.
     """
 
-    resource_type = Field("AuditEvent", const=True)
+    __resource_type__ = "AuditEvent"
 
-    action: fhirtypes.Code = Field(
-        None,
+    action: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="action",
         title="Type of action performed during the event",
         description=(
             "Indicator for type of action performed during the event that generated"
             " the audit."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    action__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_action", title="Extension field for ``action``."
+    action__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_action", title="Extension field for ``action``."
     )
 
     agent: typing.List[fhirtypes.AuditEventAgentType] = Field(
-        ...,
+        default=...,
         alias="agent",
         title="Actor involved in the event",
         description=(
             "An actor taking an active role in the event or activity that is " "logged."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    entity: typing.List[fhirtypes.AuditEventEntityType] = Field(
-        None,
+    authorization: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="authorization",
+        title="Authorization related to the event",
+        description=(
+            "The authorization (e.g., PurposeOfUse) that was used during the event "
+            "being recorded."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    basedOn: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="basedOn",
+        title="Workflow authorization within which this event occurred",
+        description=(
+            "Allows tracing of authorizatino for the events and tracking whether "
+            "proposals/recommendations were acted upon."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "CarePlan",
+                "DeviceRequest",
+                "ImmunizationRecommendation",
+                "MedicationRequest",
+                "NutritionOrder",
+                "ServiceRequest",
+                "Task",
+            ],
+        },
+    )
+
+    category: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="category",
+        title="Type/identifier of event",
+        description="Classification of the type of event.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    code: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="code",
+        title="Specific type of event",
+        description="Describes what happened. The most specific code for the event.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    encounter: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="encounter",
+        title=(
+            "Encounter within which this event occurred or which the event is "
+            "tightly associated"
+        ),
+        description=(
+            "This will typically be the encounter the event occurred, but some "
+            "events may be initiated prior to or after the official completion of "
+            "an encounter but still be tied to the context of the encounter (e.g. "
+            "pre-admission lab tests)."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter"],
+        },
+    )
+
+    entity: typing.List[fhirtypes.AuditEventEntityType] | None = Field(
+        default=None,
         alias="entity",
         title="Data or objects used",
         description="Specific instances of data or objects that have been accessed.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    outcome: fhirtypes.Code = Field(
-        None,
+    occurredDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
+        alias="occurredDateTime",
+        title="When the activity occurred",
+        description="The time or period during which the activity occurred.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e occurred[x]
+            "one_of_many": "occurred",
+            "one_of_many_required": False,
+        },
+    )
+    occurredDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_occurredDateTime",
+        title="Extension field for ``occurredDateTime``.",
+    )
+
+    occurredPeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="occurredPeriod",
+        title="When the activity occurred",
+        description="The time or period during which the activity occurred.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e occurred[x]
+            "one_of_many": "occurred",
+            "one_of_many_required": False,
+        },
+    )
+
+    outcome: fhirtypes.AuditEventOutcomeType | None = Field(
+        default=None,
         alias="outcome",
         title="Whether the event succeeded or failed",
-        description="Indicates whether the event succeeded or failed.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-    outcome__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_outcome", title="Extension field for ``outcome``."
-    )
-
-    outcomeDesc: fhirtypes.String = Field(
-        None,
-        alias="outcomeDesc",
-        title="Description of the event outcome",
-        description="A free text description of the outcome of the event.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-    outcomeDesc__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_outcomeDesc", title="Extension field for ``outcomeDesc``."
-    )
-
-    period: fhirtypes.PeriodType = Field(
-        None,
-        alias="period",
-        title="When the activity occurred",
-        description="The period during which the activity occurred.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    purposeOfEvent: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
-        alias="purposeOfEvent",
-        title="The purposeOfUse of the event",
         description=(
-            "The purposeOfUse (reason) that was used during the event being "
-            "recorded."
+            "Indicates whether the event succeeded or failed. A free text "
+            "descripiton can be given in outcome.text."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    recorded: fhirtypes.Instant = Field(
-        None,
+    patient: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="patient",
+        title=(
+            "The patient is the subject of the data used/created/updated/deleted "
+            "during the activity"
+        ),
+        description=(
+            "The patient element is available to enable deterministic tracking of "
+            "activities that involve the patient as the subject of the data used in"
+            " an activity."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient"],
+        },
+    )
+
+    recorded: fhirtypes.InstantType | None = Field(
+        default=None,
         alias="recorded",
         title="Time when the event was recorded",
         description="The time when the event was recorded.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
     )
-    recorded__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_recorded", title="Extension field for ``recorded``."
+    recorded__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_recorded", title="Extension field for ``recorded``."
+    )
+
+    severity: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="severity",
+        title=(
+            "emergency | alert | critical | error | warning | notice | "
+            "informational | debug"
+        ),
+        description=(
+            "Indicates and enables segmentation of various severity including "
+            "debugging from critical."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "emergency",
+                "alert",
+                "critical",
+                "error",
+                "warning",
+                "notice",
+                "informational",
+                "debug",
+            ],
+        },
+    )
+    severity__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_severity", title="Extension field for ``severity``."
     )
 
     source: fhirtypes.AuditEventSourceType = Field(
-        ...,
+        default=...,
         alias="source",
         title="Audit Event Reporter",
-        description="The system that is reporting the event.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    subtype: typing.List[fhirtypes.CodingType] = Field(
-        None,
-        alias="subtype",
-        title="More specific type/id for the event",
-        description="Identifier for the category of event.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    type: fhirtypes.CodingType = Field(
-        ...,
-        alias="type",
-        title="Type/identifier of event",
-        description=(
-            "Identifier for a family of the event.  For example, a menu item, "
-            "program, rule, policy, function code, application name or URL. It "
-            "identifies the performed function."
-        ),
-        # if property is element of this resource.
-        element_property=True,
+        description="The actor that is reporting the event.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AuditEvent`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AuditEvent`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -167,23 +284,46 @@ class AuditEvent(domainresource.DomainResource):
             "contained",
             "extension",
             "modifierExtension",
-            "type",
-            "subtype",
+            "category",
+            "code",
             "action",
-            "period",
+            "severity",
+            "occurredPeriod",
+            "occurredDateTime",
             "recorded",
             "outcome",
-            "outcomeDesc",
-            "purposeOfEvent",
+            "authorization",
+            "basedOn",
+            "patient",
+            "encounter",
             "agent",
             "source",
             "entity",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1198(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AuditEvent`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "category",
+            "code",
+            "action",
+            "severity",
+            "recorded",
+            "outcome",
+            "authorization",
+            "agent",
+            "source",
+            "entity",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -192,619 +332,9 @@ class AuditEvent(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("recorded", "recorded__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-
-class AuditEventAgent(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    Actor involved in the event.
-    An actor taking an active role in the event or activity that is logged.
-    """
-
-    resource_type = Field("AuditEventAgent", const=True)
-
-    altId: fhirtypes.String = Field(
-        None,
-        alias="altId",
-        title="Alternative User identity",
-        description=(
-            "Alternative agent Identifier. For a human, this should be a user "
-            "identifier text string from authentication system. This identifier "
-            "would be one known to a common authentication system (e.g. single "
-            "sign-on), if available."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    altId__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_altId", title="Extension field for ``altId``."
-    )
-
-    location: fhirtypes.ReferenceType = Field(
-        None,
-        alias="location",
-        title="Where",
-        description="Where the event occurred.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
-    )
-
-    media: fhirtypes.CodingType = Field(
-        None,
-        alias="media",
-        title="Type of media",
-        description=(
-            "Type of media involved. Used when the event is about "
-            "exporting/importing onto media."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    name: fhirtypes.String = Field(
-        None,
-        alias="name",
-        title="Human friendly name for the agent",
-        description="Human-meaningful name for the agent.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
-    )
-
-    network: fhirtypes.AuditEventAgentNetworkType = Field(
-        None,
-        alias="network",
-        title="Logical network location for application activity",
-        description=(
-            "Logical network location for application activity, if the activity has"
-            " a network location."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    policy: typing.List[fhirtypes.Uri] = Field(
-        None,
-        alias="policy",
-        title="Policy that authorized event",
-        description=(
-            "The policy or plan that authorized the activity being recorded. "
-            "Typically, a single activity may have multiple applicable policies, "
-            "such as patient consent, guarantor funding, etc. The policy would also"
-            " indicate the security token used."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    policy__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_policy", title="Extension field for ``policy``.")
-
-    purposeOfUse: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
-        alias="purposeOfUse",
-        title="Reason given for this user",
-        description=(
-            "The reason (purpose of use), specific to this agent, that was used "
-            "during the event being recorded."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    requestor: bool = Field(
-        None,
-        alias="requestor",
-        title="Whether user is initiator",
-        description=(
-            "Indicator that the user is or is not the requestor, or initiator, for "
-            "the event being audited."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-    )
-    requestor__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_requestor", title="Extension field for ``requestor``."
-    )
-
-    role: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
-        alias="role",
-        title="Agent role in the event",
-        description=(
-            "The security role that the user was acting under, that come from local"
-            " codes defined by the access control security system (e.g. RBAC, ABAC)"
-            " used in the local context."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
-        alias="type",
-        title="How agent participated",
-        description=(
-            "Specification of the participation type the user plays when performing"
-            " the event."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    who: fhirtypes.ReferenceType = Field(
-        None,
-        alias="who",
-        title="Identifier of who",
-        description="Reference to who this agent is that was involved in the event.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "PractitionerRole",
-            "Practitioner",
-            "Organization",
-            "Device",
-            "Patient",
-            "RelatedPerson",
-        ],
-    )
-
-    @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AuditEventAgent`` according specification,
-        with preserving original sequence order.
-        """
-        return [
-            "id",
-            "extension",
-            "modifierExtension",
-            "type",
-            "role",
-            "who",
-            "altId",
-            "name",
-            "requestor",
-            "location",
-            "policy",
-            "media",
-            "network",
-            "purposeOfUse",
-        ]
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1693(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
-        """https://www.hl7.org/fhir/extensibility.html#Special-Case
-        In some cases, implementers might find that they do not have appropriate data for
-        an element with minimum cardinality = 1. In this case, the element must be present,
-        but unless the resource or a profile on it has made the actual value of the primitive
-        data type mandatory, it is possible to provide an extension that explains why
-        the primitive value is not present.
-        """
-        required_fields = [("requestor", "requestor__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-
-class AuditEventAgentNetwork(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    Logical network location for application activity.
-    Logical network location for application activity, if the activity has a
-    network location.
-    """
-
-    resource_type = Field("AuditEventAgentNetwork", const=True)
-
-    address: fhirtypes.String = Field(
-        None,
-        alias="address",
-        title="Identifier for the network access point of the user device",
-        description=(
-            "An identifier for the network access point of the user device for the "
-            "audit event."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    address__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_address", title="Extension field for ``address``."
-    )
-
-    type: fhirtypes.Code = Field(
-        None,
-        alias="type",
-        title="The type of network access point",
-        description=(
-            "An identifier for the type of network access point that originated the"
-            " audit event."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
-    )
-
-    @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AuditEventAgentNetwork`` according specification,
-        with preserving original sequence order.
-        """
-        return ["id", "extension", "modifierExtension", "address", "type"]
-
-
-class AuditEventEntity(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    Data or objects used.
-    Specific instances of data or objects that have been accessed.
-    """
-
-    resource_type = Field("AuditEventEntity", const=True)
-
-    description: fhirtypes.String = Field(
-        None,
-        alias="description",
-        title="Descriptive text",
-        description="Text that describes the entity in more detail.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
-    )
-
-    detail: typing.List[fhirtypes.AuditEventEntityDetailType] = Field(
-        None,
-        alias="detail",
-        title="Additional Information about the entity",
-        description=(
-            "Tagged value pairs for conveying additional information about the "
-            "entity."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    lifecycle: fhirtypes.CodingType = Field(
-        None,
-        alias="lifecycle",
-        title="Life-cycle stage for the entity",
-        description="Identifier for the data life-cycle stage for the entity.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    name: fhirtypes.String = Field(
-        None,
-        alias="name",
-        title="Descriptor for entity",
-        description="A name of the entity in the audit event.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
-    )
-
-    query: fhirtypes.Base64Binary = Field(
-        None,
-        alias="query",
-        title="Query parameters",
-        description="The query parameters for a query-type entities.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-    query__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_query", title="Extension field for ``query``."
-    )
-
-    role: fhirtypes.CodingType = Field(
-        None,
-        alias="role",
-        title="What role the entity played",
-        description=(
-            "Code representing the role the entity played in the event being "
-            "audited."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    securityLabel: typing.List[fhirtypes.CodingType] = Field(
-        None,
-        alias="securityLabel",
-        title="Security labels on the entity",
-        description="Security labels for the identified entity.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    type: fhirtypes.CodingType = Field(
-        None,
-        alias="type",
-        title="Type of entity involved",
-        description="The type of the object that was involved in this audit event.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    what: fhirtypes.ReferenceType = Field(
-        None,
-        alias="what",
-        title="Specific instance of resource",
-        description=(
-            "Identifies a specific instance of the entity. The reference should be "
-            "version specific."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
-    )
-
-    @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AuditEventEntity`` according specification,
-        with preserving original sequence order.
-        """
-        return [
-            "id",
-            "extension",
-            "modifierExtension",
-            "what",
-            "type",
-            "role",
-            "lifecycle",
-            "securityLabel",
-            "name",
-            "description",
-            "query",
-            "detail",
-        ]
-
-
-class AuditEventEntityDetail(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    Additional Information about the entity.
-    Tagged value pairs for conveying additional information about the entity.
-    """
-
-    resource_type = Field("AuditEventEntityDetail", const=True)
-
-    type: fhirtypes.String = Field(
-        None,
-        alias="type",
-        title="Name of the property",
-        description="The type of extra detail provided in the value.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-    )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
-    )
-
-    valueBase64Binary: fhirtypes.Base64Binary = Field(
-        None,
-        alias="valueBase64Binary",
-        title="Property value",
-        description="The  value of the extra detail.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
-    )
-    valueBase64Binary__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
-        alias="_valueBase64Binary",
-        title="Extension field for ``valueBase64Binary``.",
-    )
-
-    valueString: fhirtypes.String = Field(
-        None,
-        alias="valueString",
-        title="Property value",
-        description="The  value of the extra detail.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e value[x]
-        one_of_many="value",
-        one_of_many_required=True,
-    )
-    valueString__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_valueString", title="Extension field for ``valueString``."
-    )
-
-    @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AuditEventEntityDetail`` according specification,
-        with preserving original sequence order.
-        """
-        return [
-            "id",
-            "extension",
-            "modifierExtension",
-            "type",
-            "valueString",
-            "valueBase64Binary",
-        ]
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2422(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
-        """https://www.hl7.org/fhir/extensibility.html#Special-Case
-        In some cases, implementers might find that they do not have appropriate data for
-        an element with minimum cardinality = 1. In this case, the element must be present,
-        but unless the resource or a profile on it has made the actual value of the primitive
-        data type mandatory, it is possible to provide an extension that explains why
-        the primitive value is not present.
-        """
-        required_fields = [("type", "type__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2422(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -817,27 +347,662 @@ class AuditEventEntityDetail(backboneelement.BackboneElement):
         choice of types, the authoring system must create a single element with a
         data type chosen from among the list of permitted data types.
         """
-        one_of_many_fields = {"value": ["valueBase64Binary", "valueString"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
+        one_of_many_fields = {"occurred": ["occurredDateTime", "occurredPeriod"]}
+        return one_of_many_fields
 
-        return values
+
+class AuditEventAgent(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Actor involved in the event.
+    An actor taking an active role in the event or activity that is logged.
+    """
+
+    __resource_type__ = "AuditEventAgent"
+
+    authorization: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="authorization",
+        title="Allowable authorization for this agent",
+        description=(
+            "The authorization (e.g., PurposeOfUse) that was used during the event "
+            "being recorded."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    location: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="location",
+        title="The agent location when the event occurred",
+        description=(
+            "Where the agent location is known, the agent location when the event "
+            "occurred."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
+    )
+
+    networkReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="networkReference",
+        title="This agent network location for the activity",
+        description=(
+            "When the event utilizes a network there should be an agent describing "
+            "the local system, and an agent describing remote system, with the "
+            "network interface details."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e network[x]
+            "one_of_many": "network",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Endpoint"],
+        },
+    )
+
+    networkString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="networkString",
+        title="This agent network location for the activity",
+        description=(
+            "When the event utilizes a network there should be an agent describing "
+            "the local system, and an agent describing remote system, with the "
+            "network interface details."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e network[x]
+            "one_of_many": "network",
+            "one_of_many_required": False,
+        },
+    )
+    networkString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_networkString",
+        title="Extension field for ``networkString``.",
+    )
+
+    networkUri: fhirtypes.UriType | None = Field(
+        default=None,
+        alias="networkUri",
+        title="This agent network location for the activity",
+        description=(
+            "When the event utilizes a network there should be an agent describing "
+            "the local system, and an agent describing remote system, with the "
+            "network interface details."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e network[x]
+            "one_of_many": "network",
+            "one_of_many_required": False,
+        },
+    )
+    networkUri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_networkUri", title="Extension field for ``networkUri``."
+    )
+
+    policy: typing.List[fhirtypes.UriType | None] | None = Field(
+        default=None,
+        alias="policy",
+        title="Policy that authorized the agent participation in the event",
+        description=(
+            "Where the policy(ies) are known that authorized the agent "
+            "participation in the event. Typically, a single activity may have "
+            "multiple applicable policies, such as patient consent, guarantor "
+            "funding, etc. The policy would also indicate the security token used."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    policy__ext: typing.List[
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_policy", title="Extension field for ``policy``."
+    )
+
+    requestor: bool | None = Field(
+        default=None,
+        alias="requestor",
+        title="Whether user is initiator",
+        description=(
+            "Indicator that the user is or is not the requestor, or initiator, for "
+            "the event being audited."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    requestor__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_requestor", title="Extension field for ``requestor``."
+    )
+
+    role: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="role",
+        title="Agent role in the event",
+        description=(
+            "The structural roles of the agent indicating the agent's competency. "
+            "The security role enabling the agent with respect to the activity."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="type",
+        title="How agent participated",
+        description="The Functional Role of the user when performing the event.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    who: fhirtypes.ReferenceType = Field(
+        default=...,
+        alias="who",
+        title="Identifier of who",
+        description="Reference to who this agent is that was involved in the event.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+                "CareTeam",
+                "Patient",
+                "Device",
+                "RelatedPerson",
+            ],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AuditEventAgent`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "type",
+            "role",
+            "who",
+            "requestor",
+            "location",
+            "policy",
+            "networkReference",
+            "networkUri",
+            "networkString",
+            "authorization",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AuditEventAgent`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "who", "requestor"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
+
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {
+            "network": ["networkReference", "networkString", "networkUri"]
+        }
+        return one_of_many_fields
+
+
+class AuditEventEntity(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Data or objects used.
+    Specific instances of data or objects that have been accessed.
+    """
+
+    __resource_type__ = "AuditEventEntity"
+
+    agent: typing.List[fhirtypes.AuditEventAgentType] | None = Field(
+        default=None,
+        alias="agent",
+        title="Entity is attributed to this agent",
+        description=(
+            "The entity is attributed to an agent to express the agent's "
+            "responsibility for that entity in the activity. This is most used to "
+            "indicate when persistence media (the entity) are used by an agent. For"
+            " example when importing data from a device, the device would be "
+            "described in an entity, and the user importing data from that media "
+            "would be indicated as the entity.agent."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    detail: typing.List[fhirtypes.AuditEventEntityDetailType] | None = Field(
+        default=None,
+        alias="detail",
+        title="Additional Information about the entity",
+        description=(
+            "Tagged value pairs for conveying additional information about the "
+            "entity."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    query: fhirtypes.Base64BinaryType | None = Field(
+        default=None,
+        alias="query",
+        title="Query parameters",
+        description="The query parameters for a query-type entities.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    query__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_query", title="Extension field for ``query``."
+    )
+
+    role: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="role",
+        title="What role the entity played",
+        description=(
+            "Code representing the role the entity played in the event being "
+            "audited."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    securityLabel: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="securityLabel",
+        title="Security labels on the entity",
+        description="Security labels for the identified entity.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    what: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="what",
+        title="Specific instance of resource",
+        description=(
+            "Identifies a specific instance of the entity. The reference should be "
+            "version specific. This is allowed to be a Parameters resource."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AuditEventEntity`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "what",
+            "role",
+            "securityLabel",
+            "query",
+            "detail",
+            "agent",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AuditEventEntity`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "what", "query"]
+
+
+class AuditEventEntityDetail(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Additional Information about the entity.
+    Tagged value pairs for conveying additional information about the entity.
+    """
+
+    __resource_type__ = "AuditEventEntityDetail"
+
+    type: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="type",
+        title="Name of the property",
+        description="The type of extra detail provided in the value.",
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    valueBase64Binary: fhirtypes.Base64BinaryType | None = Field(
+        default=None,
+        alias="valueBase64Binary",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueBase64Binary__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueBase64Binary",
+        title="Extension field for ``valueBase64Binary``.",
+    )
+
+    valueBoolean: bool | None = Field(
+        default=None,
+        alias="valueBoolean",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueBoolean",
+        title="Extension field for ``valueBoolean``.",
+    )
+
+    valueCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="valueCodeableConcept",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
+        alias="valueDateTime",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueDateTime",
+        title="Extension field for ``valueDateTime``.",
+    )
+
+    valueInteger: fhirtypes.IntegerType | None = Field(
+        default=None,
+        alias="valueInteger",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueInteger__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_valueInteger",
+        title="Extension field for ``valueInteger``.",
+    )
+
+    valuePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="valuePeriod",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueQuantity: fhirtypes.QuantityType | None = Field(
+        default=None,
+        alias="valueQuantity",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueRange: fhirtypes.RangeType | None = Field(
+        default=None,
+        alias="valueRange",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueRatio: fhirtypes.RatioType | None = Field(
+        default=None,
+        alias="valueRatio",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+
+    valueString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="valueString",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueString", title="Extension field for ``valueString``."
+    )
+
+    valueTime: fhirtypes.TimeType | None = Field(
+        default=None,
+        alias="valueTime",
+        title="Property value",
+        description="The  value of the extra detail.",
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e value[x]
+            "one_of_many": "value",
+            "one_of_many_required": True,
+        },
+    )
+    valueTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_valueTime", title="Extension field for ``valueTime``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AuditEventEntityDetail`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "type",
+            "valueQuantity",
+            "valueCodeableConcept",
+            "valueString",
+            "valueBoolean",
+            "valueInteger",
+            "valueRange",
+            "valueRatio",
+            "valueTime",
+            "valueDateTime",
+            "valuePeriod",
+            "valueBase64Binary",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AuditEventEntityDetail`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
+
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {
+            "value": [
+                "valueBase64Binary",
+                "valueBoolean",
+                "valueCodeableConcept",
+                "valueDateTime",
+                "valueInteger",
+                "valuePeriod",
+                "valueQuantity",
+                "valueRange",
+                "valueRatio",
+                "valueString",
+                "valueTime",
+            ]
+        }
+        return one_of_many_fields
+
+
+class AuditEventOutcome(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Whether the event succeeded or failed.
+    Indicates whether the event succeeded or failed. A free text descripiton
+    can be given in outcome.text.
+    """
+
+    __resource_type__ = "AuditEventOutcome"
+
+    code: fhirtypes.CodingType = Field(
+        default=...,
+        alias="code",
+        title="Whether the event succeeded or failed",
+        description="Indicates whether the event succeeded or failed.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    detail: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="detail",
+        title="Additional outcome detail",
+        description=(
+            "Additional details about the error. This may be a text description of "
+            "the error or a system code that identifies the error."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AuditEventOutcome`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "code", "detail"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AuditEventOutcome`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "code", "detail"]
 
 
 class AuditEventSource(backboneelement.BackboneElement):
@@ -846,31 +1011,34 @@ class AuditEventSource(backboneelement.BackboneElement):
     for FHIR Primitive Data Types.
 
     Audit Event Reporter.
-    The system that is reporting the event.
+    The actor that is reporting the event.
     """
 
-    resource_type = Field("AuditEventSource", const=True)
+    __resource_type__ = "AuditEventSource"
 
     observer: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="observer",
         title="The identity of source detecting the event",
         description="Identifier of the source where the event was detected.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "PractitionerRole",
-            "Practitioner",
-            "Organization",
-            "Device",
-            "Patient",
-            "RelatedPerson",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+                "CareTeam",
+                "Patient",
+                "Device",
+                "RelatedPerson",
+            ],
+        },
     )
 
-    site: fhirtypes.String = Field(
-        None,
+    site: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="site",
         title="Logical source location within the enterprise",
         description=(
@@ -878,26 +1046,34 @@ class AuditEventSource(backboneelement.BackboneElement):
             " example, a hospital or other provider location within a multi-entity "
             "provider group."
         ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-    site__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_site", title="Extension field for ``site``."
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    type: typing.List[fhirtypes.CodingType] = Field(
-        None,
+    type: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="type",
         title="The type of source where event originated",
         description="Code specifying the type of source where event originated.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AuditEventSource`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AuditEventSource`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "site", "observer", "type"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AuditEventSource`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "observer"]

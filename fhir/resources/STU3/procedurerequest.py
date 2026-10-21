@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/ProcedureRequest
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -25,173 +25,201 @@ class ProcedureRequest(domainresource.DomainResource):
     operations to be performed.
     """
 
-    resource_type = Field("ProcedureRequest", const=True)
+    __resource_type__ = "ProcedureRequest"
 
-    asNeededBoolean: bool = Field(
-        None,
+    asNeededBoolean: bool | None = Field(
+        default=None,
         alias="asNeededBoolean",
         title="Preconditions for procedure or diagnostic",
         description=(
             "If a CodeableConcept is present, it indicates the pre-condition for "
             'performing the procedure.  For example "pain", "on flare-up", etc.'
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e asNeeded[x]
-        one_of_many="asNeeded",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e asNeeded[x]
+            "one_of_many": "asNeeded",
+            "one_of_many_required": False,
+        },
     )
-    asNeededBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_asNeededBoolean", title="Extension field for ``asNeededBoolean``."
+    asNeededBoolean__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_asNeededBoolean",
+        title="Extension field for ``asNeededBoolean``.",
     )
 
-    asNeededCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    asNeededCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="asNeededCodeableConcept",
         title="Preconditions for procedure or diagnostic",
         description=(
             "If a CodeableConcept is present, it indicates the pre-condition for "
             'performing the procedure.  For example "pain", "on flare-up", etc.'
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e asNeeded[x]
-        one_of_many="asNeeded",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e asNeeded[x]
+            "one_of_many": "asNeeded",
+            "one_of_many_required": False,
+        },
     )
 
-    authoredOn: fhirtypes.DateTime = Field(
-        None,
+    authoredOn: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="authoredOn",
         title="Date request signed",
         description="When the request transitioned to being actionable.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    authoredOn__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_authoredOn", title="Extension field for ``authoredOn``."
+    authoredOn__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_authoredOn", title="Extension field for ``authoredOn``."
     )
 
-    basedOn: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    basedOn: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="basedOn",
         title="What request fulfills",
         description="Plan/proposal/order fulfilled by this request.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    bodySite: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    bodySite: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="bodySite",
         title="Location on Body",
         description=(
             "Anatomic location where the procedure should be performed. This is the"
             " target site."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    category: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    category: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="category",
         title="Classification of procedure",
         description=(
             "A code that classifies the procedure for searching, sorting and "
             'display purposes (e.g. "Surgical Procedure").'
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     code: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="code",
         title="What is being requested/ordered",
         description=(
             "A code that identifies a particular procedure, diagnostic "
             "investigation, or panel of investigations, that have been requested."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    context: fhirtypes.ReferenceType = Field(
-        None,
+    context: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="context",
         title="Encounter or Episode during which request was created",
         description=(
             "An encounter or episode of care that provides additional information "
             "about the healthcare context in which this request is made."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Encounter", "EpisodeOfCare"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter", "EpisodeOfCare"],
+        },
     )
 
-    definition: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    definition: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="definition",
         title="Protocol or definition",
         description="Protocol or definition followed by this request.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ActivityDefinition", "PlanDefinition"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ActivityDefinition", "PlanDefinition"],
+        },
     )
 
-    doNotPerform: bool = Field(
-        None,
+    doNotPerform: bool | None = Field(
+        default=None,
         alias="doNotPerform",
         title="True if procedure should not be performed",
         description=(
             "Set this to true if the record is saying that the procedure should NOT"
             " be performed."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    doNotPerform__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_doNotPerform", title="Extension field for ``doNotPerform``."
+    doNotPerform__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_doNotPerform",
+        title="Extension field for ``doNotPerform``.",
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Identifiers assigned to this order",
         description=(
             "Identifiers assigned to this order instance by the orderer and/or the "
             "receiver and/or order fulfiller."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    intent: fhirtypes.Code = Field(
-        None,
+    intent: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="intent",
         title="proposal | plan | order +",
         description=(
             "Whether the request is a proposal, plan, an original order or a reflex"
             " order."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["proposal", "plan", "order", "+"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["proposal", "plan", "order", "+"],
+        },
     )
-    intent__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_intent", title="Extension field for ``intent``."
+    intent__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_intent", title="Extension field for ``intent``."
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Comments",
         description=(
@@ -199,101 +227,114 @@ class ProcedureRequest(domainresource.DomainResource):
             'example, letting provider know that "patient hates needles" or other '
             "provider instructions."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    occurrenceDateTime: fhirtypes.DateTime = Field(
-        None,
+    occurrenceDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="occurrenceDateTime",
         title="When procedure should occur",
         description="The date/time at which the diagnostic testing should occur.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e occurrence[x]
-        one_of_many="occurrence",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e occurrence[x]
+            "one_of_many": "occurrence",
+            "one_of_many_required": False,
+        },
     )
-    occurrenceDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    occurrenceDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_occurrenceDateTime",
         title="Extension field for ``occurrenceDateTime``.",
     )
 
-    occurrencePeriod: fhirtypes.PeriodType = Field(
-        None,
+    occurrencePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="occurrencePeriod",
         title="When procedure should occur",
         description="The date/time at which the diagnostic testing should occur.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e occurrence[x]
-        one_of_many="occurrence",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e occurrence[x]
+            "one_of_many": "occurrence",
+            "one_of_many_required": False,
+        },
     )
 
-    occurrenceTiming: fhirtypes.TimingType = Field(
-        None,
+    occurrenceTiming: fhirtypes.TimingType | None = Field(
+        default=None,
         alias="occurrenceTiming",
         title="When procedure should occur",
         description="The date/time at which the diagnostic testing should occur.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e occurrence[x]
-        one_of_many="occurrence",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e occurrence[x]
+            "one_of_many": "occurrence",
+            "one_of_many_required": False,
+        },
     )
 
-    performer: fhirtypes.ReferenceType = Field(
-        None,
+    performer: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="performer",
         title="Requested perfomer",
         description=(
             "The desired perfomer for doing the diagnostic testing.  For example, "
             "the surgeon, dermatopathologist, endoscopist, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Practitioner",
-            "Organization",
-            "Patient",
-            "Device",
-            "RelatedPerson",
-            "HealthcareService",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "Organization",
+                "Patient",
+                "Device",
+                "RelatedPerson",
+                "HealthcareService",
+            ],
+        },
     )
 
-    performerType: fhirtypes.CodeableConceptType = Field(
-        None,
+    performerType: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="performerType",
         title="Performer role",
         description="Desired type of performer for doing the diagnostic testing.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    priority: fhirtypes.Code = Field(
-        None,
+    priority: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="priority",
         title="routine | urgent | asap | stat",
         description=(
             "Indicates how quickly the ProcedureRequest should be addressed with "
             "respect to other requests."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["routine", "urgent", "asap", "stat"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["routine", "urgent", "asap", "stat"],
+        },
     )
-    priority__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_priority", title="Extension field for ``priority``."
+    priority__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_priority", title="Extension field for ``priority``."
     )
 
-    reasonCode: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    reasonCode: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="reasonCode",
         title="Explanation/Justification for test",
         description=(
@@ -302,12 +343,14 @@ class ProcedureRequest(domainresource.DomainResource):
             "billing purposes.  May relate to the resources referred to in "
             "supportingInformation."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    reasonReference: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    reasonReference: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="reasonReference",
         title="Explanation/Justification for test",
         description=(
@@ -315,51 +358,58 @@ class ProcedureRequest(domainresource.DomainResource):
             "diagnostic investigation is being requested.   May relate to the "
             "resources referred to in supportingInformation."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Condition", "Observation"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Condition", "Observation"],
+        },
     )
 
-    relevantHistory: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    relevantHistory: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="relevantHistory",
         title="Request provenance",
         description="Key events in the history of the request.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Provenance"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Provenance"],
+        },
     )
 
-    replaces: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    replaces: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="replaces",
         title="What request replaces",
         description=(
             "The request takes the place of the referenced completed or terminated "
             "request(s)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    requester: fhirtypes.ProcedureRequestRequesterType = Field(
-        None,
+    requester: fhirtypes.ProcedureRequestRequesterType | None = Field(
+        default=None,
         alias="requester",
         title="Who/what is requesting procedure or diagnostic",
         description=(
             "The individual who initiated the request and has responsibility for "
             "its activation."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    requisition: fhirtypes.IdentifierType = Field(
-        None,
+    requisition: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="requisition",
         title="Composite Request ID",
         description=(
@@ -367,46 +417,52 @@ class ProcedureRequest(domainresource.DomainResource):
             "that were authorized more or less simultaneously by a single author, "
             "representing the composite or group identifier."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    specimen: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    specimen: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="specimen",
         title="Procedure Samples",
         description="One or more specimens that the laboratory procedure will use.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Specimen"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Specimen"],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | suspended | completed | entered-in-error | cancelled",
         description="The status of the order.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "draft",
-            "active",
-            "suspended",
-            "completed",
-            "entered-in-error",
-            "cancelled",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "draft",
+                "active",
+                "suspended",
+                "completed",
+                "entered-in-error",
+                "cancelled",
+            ],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     subject: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="subject",
         title="Individual the service is ordered for",
         description=(
@@ -415,14 +471,16 @@ class ProcedureRequest(domainresource.DomainResource):
             "groups of humans or animals, devices such as dialysis machines, or "
             "even locations (typically for environmental scans)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Group", "Location", "Device"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Group", "Location", "Device"],
+        },
     )
 
-    supportingInfo: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    supportingInfo: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="supportingInfo",
         title="Additional clinical information",
         description=(
@@ -435,17 +493,18 @@ class ProcedureRequest(domainresource.DomainResource):
             "supporting information needed to complete the order. For example,  "
             "reporting the amount of inspired oxygen for blood gas measurements."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ProcedureRequest`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ProcedureRequest`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -487,10 +546,44 @@ class ProcedureRequest(domainresource.DomainResource):
             "relevantHistory",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1878(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ProcedureRequest`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "definition",
+            "basedOn",
+            "replaces",
+            "requisition",
+            "status",
+            "intent",
+            "priority",
+            "doNotPerform",
+            "category",
+            "code",
+            "subject",
+            "context",
+            "occurrenceDateTime",
+            "occurrencePeriod",
+            "occurrenceTiming",
+            "asNeededBoolean",
+            "asNeededCodeableConcept",
+            "authoredOn",
+            "requester",
+            "performerType",
+            "performer",
+            "reasonCode",
+            "reasonReference",
+            "specimen",
+            "bodySite",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -499,57 +592,9 @@ class ProcedureRequest(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("intent", "intent__ext"), ("status", "status__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1878(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -570,26 +615,7 @@ class ProcedureRequest(domainresource.DomainResource):
                 "occurrenceTiming",
             ],
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class ProcedureRequestRequester(backboneelement.BackboneElement):
@@ -602,34 +628,45 @@ class ProcedureRequestRequester(backboneelement.BackboneElement):
     activation.
     """
 
-    resource_type = Field("ProcedureRequestRequester", const=True)
+    __resource_type__ = "ProcedureRequestRequester"
 
     agent: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="agent",
         title="Individual making the request",
         description="The device, practitioner or organization who initiated the request.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Device", "Practitioner", "Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Device", "Practitioner", "Organization"],
+        },
     )
 
-    onBehalfOf: fhirtypes.ReferenceType = Field(
-        None,
+    onBehalfOf: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="onBehalfOf",
         title="Organization agent is acting for",
         description="The organization the device or practitioner was acting on behalf of.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ProcedureRequestRequester`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ProcedureRequestRequester`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "agent", "onBehalfOf"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ProcedureRequestRequester`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "agent", "onBehalfOf"]

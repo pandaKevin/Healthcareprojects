@@ -1,17 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Money
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
+import typing
+
 from pydantic import Field
 
-from . import element, fhirtypes
+from . import datatype, fhirtypes
 
 
-class Money(element.Element):
+class Money(datatype.DataType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -19,36 +23,47 @@ class Money(element.Element):
     An amount of economic utility in some recognized currency.
     """
 
-    resource_type = Field("Money", const=True)
+    __resource_type__ = "Money"
 
-    currency: fhirtypes.Code = Field(
-        None,
+    currency: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="currency",
         title="ISO 4217 Currency Code",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    currency__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_currency", title="Extension field for ``currency``."
+    currency__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_currency", title="Extension field for ``currency``."
     )
 
-    value: fhirtypes.Decimal = Field(
-        None,
+    value: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="value",
         title="Numerical value (with implicit precision)",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    value__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_value", title="Extension field for ``value``."
+    value__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_value", title="Extension field for ``value``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Money`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Money`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "value", "currency"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Money`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["value", "currency"]

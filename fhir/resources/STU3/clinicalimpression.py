@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/ClinicalImpression
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -31,141 +31,161 @@ class ClinicalImpression(domainresource.DomainResource):
     with the recording of assessment tools such as Apgar score.
     """
 
-    resource_type = Field("ClinicalImpression", const=True)
+    __resource_type__ = "ClinicalImpression"
 
-    action: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    action: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="action",
         title="Action taken as part of assessment procedure",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "ReferralRequest",
-            "ProcedureRequest",
-            "Procedure",
-            "MedicationRequest",
-            "Appointment",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "ReferralRequest",
+                "ProcedureRequest",
+                "Procedure",
+                "MedicationRequest",
+                "Appointment",
+            ],
+        },
     )
 
-    assessor: fhirtypes.ReferenceType = Field(
-        None,
+    assessor: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="assessor",
         title="The clinician performing the assessment",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner"],
+        },
     )
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
         title="Kind of assessment performed",
         description="Categorizes the type of clinical assessment performed.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    context: fhirtypes.ReferenceType = Field(
-        None,
+    context: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="context",
         title="Encounter or Episode created from",
         description=(
             "The encounter or episode of care this impression was created as part "
             "of."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Encounter", "EpisodeOfCare"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter", "EpisodeOfCare"],
+        },
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="When the assessment was documented",
         description="Indicates when the documentation of the assessment was complete.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Why/how the assessment was performed",
         description=(
             "A summary of the context and/or cause of the assessment - why / where "
             "was it performed, and what patient events/status prompted it."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    effectiveDateTime: fhirtypes.DateTime = Field(
-        None,
+    effectiveDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="effectiveDateTime",
         title="Time of assessment",
         description="The point in time or period over which the subject was assessed.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e effective[x]
-        one_of_many="effective",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e effective[x]
+            "one_of_many": "effective",
+            "one_of_many_required": False,
+        },
     )
-    effectiveDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    effectiveDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_effectiveDateTime",
         title="Extension field for ``effectiveDateTime``.",
     )
 
-    effectivePeriod: fhirtypes.PeriodType = Field(
-        None,
+    effectivePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="effectivePeriod",
         title="Time of assessment",
         description="The point in time or period over which the subject was assessed.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e effective[x]
-        one_of_many="effective",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e effective[x]
+            "one_of_many": "effective",
+            "one_of_many_required": False,
+        },
     )
 
-    finding: typing.List[fhirtypes.ClinicalImpressionFindingType] = Field(
-        None,
+    finding: typing.List[fhirtypes.ClinicalImpressionFindingType] | None = Field(
+        default=None,
         alias="finding",
         title="Possible or likely findings and diagnoses",
         description=(
             "Specific findings or diagnoses that was considered likely or relevant "
             "to ongoing treatment."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business identifier",
         description=(
             "A unique identifier assigned to the clinical impression that remains "
             "consistent regardless of what server the impression is stored on."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    investigation: typing.List[fhirtypes.ClinicalImpressionInvestigationType] = Field(
-        None,
+    investigation: typing.List[
+        fhirtypes.ClinicalImpressionInvestigationType
+    ] | None = Field(
+        default=None,
         alias="investigation",
         title="One or more sets of investigations (signs, symptions, etc.)",
         description=(
@@ -175,12 +195,13 @@ class ClinicalImpression(domainresource.DomainResource):
             "generated during the assessment process, or data previously generated "
             "and recorded that is pertinent to the outcomes."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Comments made about the ClinicalImpression",
         description=(
@@ -188,12 +209,13 @@ class ClinicalImpression(domainresource.DomainResource):
             "impression itself was made, though supplemental notes by the original "
             "author could also appear."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    previous: fhirtypes.ReferenceType = Field(
-        None,
+    previous: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="previous",
         title="Reference to last assessment",
         description=(
@@ -202,45 +224,50 @@ class ClinicalImpression(domainresource.DomainResource):
             "(practitioner or team) will make new assessments on an ongoing basis "
             "as new data arises or the patient's conditions changes."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ClinicalImpression"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ClinicalImpression"],
+        },
     )
 
-    problem: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    problem: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="problem",
         title="Relevant impressions of patient state",
         description="This a list of the relevant problems/conditions for a patient.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Condition", "AllergyIntolerance"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Condition", "AllergyIntolerance"],
+        },
     )
 
-    prognosisCodeableConcept: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    prognosisCodeableConcept: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="prognosisCodeableConcept",
         title="Estimate of likely outcome",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    prognosisReference: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    prognosisReference: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="prognosisReference",
         title="RiskAssessment expressing likely outcome",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["RiskAssessment"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["RiskAssessment"],
+        },
     )
 
-    protocol: typing.List[fhirtypes.Uri] = Field(
-        None,
+    protocol: typing.List[fhirtypes.UriType | None] | None = Field(
+        default=None,
         alias="protocol",
         title="Clinical Protocol followed",
         description=(
@@ -248,57 +275,65 @@ class ClinicalImpression(domainresource.DomainResource):
             "during this assessment, and/or that provides evidence in support of "
             "the diagnosis."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
     protocol__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_protocol", title="Extension field for ``protocol``.")
+        fhirtypes.FHIRPrimitiveExtensionType | None
+    ] | None = Field(
+        default=None, alias="_protocol", title="Extension field for ``protocol``."
+    )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | completed | entered-in-error",
         description="Identifies the workflow status of the assessment.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "completed", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "completed", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     subject: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="subject",
         title="Patient or group assessed",
         description="The patient or group of individuals assessed as part of this record.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Group"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Group"],
+        },
     )
 
-    summary: fhirtypes.String = Field(
-        None,
+    summary: fhirtypes.StringType | None = Field(
+        default=None,
         alias="summary",
         title="Summary of the assessment",
         description="A text summary of the investigations and the diagnosis.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    summary__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_summary", title="Extension field for ``summary``."
+    summary__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_summary", title="Extension field for ``summary``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ClinicalImpression`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ClinicalImpression`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -331,10 +366,29 @@ class ClinicalImpression(domainresource.DomainResource):
             "note",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2041(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ClinicalImpression`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "status",
+            "code",
+            "description",
+            "subject",
+            "context",
+            "effectiveDateTime",
+            "effectivePeriod",
+            "date",
+            "assessor",
+            "problem",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -343,57 +397,9 @@ class ClinicalImpression(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("status", "status__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2041(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -407,26 +413,7 @@ class ClinicalImpression(domainresource.DomainResource):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {"effective": ["effectiveDateTime", "effectivePeriod"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class ClinicalImpressionFinding(backboneelement.BackboneElement):
@@ -439,57 +426,60 @@ class ClinicalImpressionFinding(backboneelement.BackboneElement):
     ongoing treatment.
     """
 
-    resource_type = Field("ClinicalImpressionFinding", const=True)
+    __resource_type__ = "ClinicalImpressionFinding"
 
-    basis: fhirtypes.String = Field(
-        None,
+    basis: fhirtypes.StringType | None = Field(
+        default=None,
         alias="basis",
         title="Which investigations support finding",
         description="Which investigations support finding or diagnosis.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    basis__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_basis", title="Extension field for ``basis``."
+    basis__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_basis", title="Extension field for ``basis``."
     )
 
-    itemCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    itemCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="itemCodeableConcept",
         title="What was found",
         description=(
             "Specific text, code or reference for finding or diagnosis, which may "
             "include ruled-out or resolved conditions."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e item[x]
-        one_of_many="item",
-        one_of_many_required=True,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e item[x]
+            "one_of_many": "item",
+            "one_of_many_required": True,
+        },
     )
 
-    itemReference: fhirtypes.ReferenceType = Field(
-        None,
+    itemReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="itemReference",
         title="What was found",
         description=(
             "Specific text, code or reference for finding or diagnosis, which may "
             "include ruled-out or resolved conditions."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e item[x]
-        one_of_many="item",
-        one_of_many_required=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Condition", "Observation"],
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e item[x]
+            "one_of_many": "item",
+            "one_of_many_required": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Condition", "Observation"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ClinicalImpressionFinding`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ClinicalImpressionFinding`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -501,10 +491,14 @@ class ClinicalImpressionFinding(backboneelement.BackboneElement):
             "basis",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2737(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ClinicalImpressionFinding`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -518,26 +512,7 @@ class ClinicalImpressionFinding(backboneelement.BackboneElement):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {"item": ["itemCodeableConcept", "itemReference"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class ClinicalImpressionInvestigation(backboneelement.BackboneElement):
@@ -553,10 +528,10 @@ class ClinicalImpressionInvestigation(backboneelement.BackboneElement):
     pertinent to the outcomes.
     """
 
-    resource_type = Field("ClinicalImpressionInvestigation", const=True)
+    __resource_type__ = "ClinicalImpressionInvestigation"
 
     code: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="code",
         title="A name/code for the set",
         description=(
@@ -565,32 +540,41 @@ class ClinicalImpressionInvestigation(backboneelement.BackboneElement):
             "but the list is not constrained, and others such groups such as "
             "(exposure|family|travel|nutitirional) history may be used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    item: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    item: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="item",
         title="Record of a specific investigation",
         description="A record of a specific investigation that was undertaken.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Observation",
-            "QuestionnaireResponse",
-            "FamilyMemberHistory",
-            "DiagnosticReport",
-            "RiskAssessment",
-            "ImagingStudy",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Observation",
+                "QuestionnaireResponse",
+                "FamilyMemberHistory",
+                "DiagnosticReport",
+                "RiskAssessment",
+                "ImagingStudy",
+            ],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ClinicalImpressionInvestigation`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ClinicalImpressionInvestigation`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "code", "item"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ClinicalImpressionInvestigation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

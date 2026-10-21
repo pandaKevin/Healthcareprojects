@@ -1,19 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/ProductShelfLife
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
 
-from . import backboneelement, fhirtypes
+from . import backbonetype, fhirtypes
 
 
-class ProductShelfLife(backboneelement.BackboneElement):
+class ProductShelfLife(backbonetype.BackboneType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -22,20 +24,11 @@ class ProductShelfLife(backboneelement.BackboneElement):
     container can be described using this class.
     """
 
-    resource_type = Field("ProductShelfLife", const=True)
+    __resource_type__ = "ProductShelfLife"
 
-    identifier: fhirtypes.IdentifierType = Field(
-        None,
-        alias="identifier",
-        title="Unique identifier for the packaged Medicinal Product",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    period: fhirtypes.QuantityType = Field(
-        ...,
-        alias="period",
+    periodDuration: fhirtypes.DurationType | None = Field(
+        default=None,
+        alias="periodDuration",
         title=(
             "The shelf life time period can be specified using a numerical value "
             "for the period of time and its unit of time measurement The unit of "
@@ -44,12 +37,44 @@ class ProductShelfLife(backboneelement.BackboneElement):
             "used"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e period[x]
+            "one_of_many": "period",
+            "one_of_many_required": False,
+        },
     )
 
-    specialPrecautionsForStorage: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    periodString: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="periodString",
+        title=(
+            "The shelf life time period can be specified using a numerical value "
+            "for the period of time and its unit of time measurement The unit of "
+            "measurement shall be specified in accordance with ISO 11240 and the "
+            "resulting terminology The symbol and the symbol identifier shall be "
+            "used"
+        ),
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e period[x]
+            "one_of_many": "period",
+            "one_of_many_required": False,
+        },
+    )
+    periodString__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_periodString",
+        title="Extension field for ``periodString``.",
+    )
+
+    specialPrecautionsForStorage: typing.List[
+        fhirtypes.CodeableConceptType
+    ] | None = Field(
+        default=None,
         alias="specialPrecautionsForStorage",
         title=(
             "Special precautions for storage, if any, can be specified using an "
@@ -57,12 +82,14 @@ class ProductShelfLife(backboneelement.BackboneElement):
             "controlled term identifier shall be specified"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        ...,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title=(
             "This describes the shelf life, taking into account various scenarios "
@@ -73,22 +100,53 @@ class ProductShelfLife(backboneelement.BackboneElement):
             "the controlled term identifier shall be specified"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ProductShelfLife`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ProductShelfLife`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
             "modifierExtension",
-            "identifier",
             "type",
-            "period",
+            "periodDuration",
+            "periodString",
             "specialPrecautionsForStorage",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ProductShelfLife`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "modifierExtension",
+            "type",
+            "periodDuration",
+            "periodString",
+            "specialPrecautionsForStorage",
+        ]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
+
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {"period": ["periodDuration", "periodString"]}
+        return one_of_many_fields

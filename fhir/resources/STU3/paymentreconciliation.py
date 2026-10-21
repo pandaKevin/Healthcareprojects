@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/PaymentReconciliation
 Release: STU3
@@ -6,6 +5,9 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -23,174 +25,191 @@ class PaymentReconciliation(domainresource.DomainResource):
     bulk payment.
     """
 
-    resource_type = Field("PaymentReconciliation", const=True)
+    __resource_type__ = "PaymentReconciliation"
 
-    created: fhirtypes.DateTime = Field(
-        None,
+    created: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="created",
         title="Creation date",
         description=(
             "The date when the enclosed suite of services were performed or "
             "completed."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    created__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_created", title="Extension field for ``created``."
+    created__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_created", title="Extension field for ``created``."
     )
 
-    detail: typing.List[fhirtypes.PaymentReconciliationDetailType] = Field(
-        None,
+    detail: typing.List[fhirtypes.PaymentReconciliationDetailType] | None = Field(
+        default=None,
         alias="detail",
         title="List of settlements",
         description=(
             "List of individual settlement amounts and the corresponding "
             "transaction."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    disposition: fhirtypes.String = Field(
-        None,
+    disposition: fhirtypes.StringType | None = Field(
+        default=None,
         alias="disposition",
         title="Disposition Message",
         description="A description of the status of the adjudication.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    disposition__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_disposition", title="Extension field for ``disposition``."
+    disposition__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_disposition", title="Extension field for ``disposition``."
     )
 
-    form: fhirtypes.CodeableConceptType = Field(
-        None,
+    form: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="form",
         title="Printed Form Identifier",
         description="The form to be used for printing the content.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business Identifier",
         description="The Response business identifier.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    organization: fhirtypes.ReferenceType = Field(
-        None,
+    organization: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="organization",
         title="Insurer",
         description="The Insurer who produced this adjudicated response.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    outcome: fhirtypes.CodeableConceptType = Field(
-        None,
+    outcome: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="outcome",
         title="complete | error | partial",
         description="Transaction status: error, complete.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="Period covered",
         description=(
             "The period of time for which payments have been gathered into this "
             "bulk payment for settlement."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    processNote: typing.List[fhirtypes.PaymentReconciliationProcessNoteType] = Field(
-        None,
+    processNote: typing.List[
+        fhirtypes.PaymentReconciliationProcessNoteType
+    ] | None = Field(
+        default=None,
         alias="processNote",
         title="Processing comments",
         description="Suite of notes.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    request: fhirtypes.ReferenceType = Field(
-        None,
+    request: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="request",
         title="Claim reference",
         description="Original request resource reference.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["ProcessRequest"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ProcessRequest"],
+        },
     )
 
-    requestOrganization: fhirtypes.ReferenceType = Field(
-        None,
+    requestOrganization: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="requestOrganization",
         title="Responsible organization",
         description=(
             "The organization which is responsible for the services rendered to the"
             " patient."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    requestProvider: fhirtypes.ReferenceType = Field(
-        None,
+    requestProvider: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="requestProvider",
         title="Responsible practitioner",
         description=(
             "The practitioner who is responsible for the services rendered to the "
             "patient."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner"],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="active | cancelled | draft | entered-in-error",
         description="The status of the resource instance.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["active", "cancelled", "draft", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["active", "cancelled", "draft", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    total: fhirtypes.MoneyType = Field(
-        None,
+    total: fhirtypes.MoneyType | None = Field(
+        default=None,
         alias="total",
         title="Total amount of Payment",
         description="Total payment amount.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``PaymentReconciliation`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``PaymentReconciliation`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -217,6 +236,13 @@ class PaymentReconciliation(domainresource.DomainResource):
             "processNote",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``PaymentReconciliation`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "status"]
+
 
 class PaymentReconciliationDetail(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -227,90 +253,97 @@ class PaymentReconciliationDetail(backboneelement.BackboneElement):
     List of individual settlement amounts and the corresponding transaction.
     """
 
-    resource_type = Field("PaymentReconciliationDetail", const=True)
+    __resource_type__ = "PaymentReconciliationDetail"
 
-    amount: fhirtypes.MoneyType = Field(
-        None,
+    amount: fhirtypes.MoneyType | None = Field(
+        default=None,
         alias="amount",
         title="Amount being paid",
         description="Amount paid for this detail.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    date: fhirtypes.Date = Field(
-        None,
+    date: fhirtypes.DateType | None = Field(
+        default=None,
         alias="date",
         title="Invoice date",
         description="The date of the invoice or financial resource.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    payee: fhirtypes.ReferenceType = Field(
-        None,
+    payee: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="payee",
         title="Organization which is receiving the payment",
         description="The organization which is receiving the payment.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    request: fhirtypes.ReferenceType = Field(
-        None,
+    request: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="request",
         title="Claim",
         description="The claim or financial resource.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    response: fhirtypes.ReferenceType = Field(
-        None,
+    response: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="response",
         title="Claim Response",
         description="The claim response resource.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    submitter: fhirtypes.ReferenceType = Field(
-        None,
+    submitter: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="submitter",
         title="Organization which submitted the claim",
         description="The Organization which submitted the claim or financial transaction.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Type code",
         description=(
             "Code to indicate the nature of the payment, adjustment, funds advance,"
             " etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``PaymentReconciliationDetail`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``PaymentReconciliationDetail`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -325,6 +358,13 @@ class PaymentReconciliationDetail(backboneelement.BackboneElement):
             "amount",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``PaymentReconciliationDetail`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
 
 class PaymentReconciliationProcessNote(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -335,33 +375,42 @@ class PaymentReconciliationProcessNote(backboneelement.BackboneElement):
     Suite of notes.
     """
 
-    resource_type = Field("PaymentReconciliationProcessNote", const=True)
+    __resource_type__ = "PaymentReconciliationProcessNote"
 
-    text: fhirtypes.String = Field(
-        None,
+    text: fhirtypes.StringType | None = Field(
+        default=None,
         alias="text",
         title="Comment on the processing",
         description="The note text.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    text__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_text", title="Extension field for ``text``."
+    text__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_text", title="Extension field for ``text``."
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="display | print | printoper",
         description="The note purpose: Print/Display.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``PaymentReconciliationProcessNote`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``PaymentReconciliationProcessNote`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "type", "text"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``PaymentReconciliationProcessNote`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

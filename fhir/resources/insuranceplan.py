@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/InsurancePlan
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -21,10 +23,10 @@ class InsurancePlan(domainresource.DomainResource):
     Details of a Health Insurance product/plan provided by an organization.
     """
 
-    resource_type = Field("InsurancePlan", const=True)
+    __resource_type__ = "InsurancePlan"
 
-    administeredBy: fhirtypes.ReferenceType = Field(
-        None,
+    administeredBy: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="administeredBy",
         title="Product administrator",
         description=(
@@ -32,75 +34,87 @@ class InsurancePlan(domainresource.DomainResource):
             "customer service and/or claims processing on behalf of the health "
             "insurance product owner."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    alias: typing.List[typing.Optional[fhirtypes.String]] = Field(
-        None,
+    alias: typing.List[fhirtypes.StringType | None] | None = Field(
+        default=None,
         alias="alias",
         title="Alternate names",
         description=(
             "A list of alternate names that the product is known as, or was known "
             "as in the past."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    alias__ext: typing.List[
-        typing.Union[fhirtypes.FHIRPrimitiveExtensionType, None]
-    ] = Field(None, alias="_alias", title="Extension field for ``alias``.")
+    alias__ext: typing.List[fhirtypes.FHIRPrimitiveExtensionType | None] | None = Field(
+        default=None, alias="_alias", title="Extension field for ``alias``."
+    )
 
-    contact: typing.List[fhirtypes.InsurancePlanContactType] = Field(
-        None,
+    contact: typing.List[fhirtypes.ExtendedContactDetailType] | None = Field(
+        default=None,
         alias="contact",
-        title="Contact for the product",
-        description="The contact for the health insurance product for a certain purpose.",
-        # if property is element of this resource.
-        element_property=True,
+        title="Official contact details relevant to the health insurance plan/product",
+        description=(
+            "The contact details of communication devices available relevant to the"
+            " specific Insurance Plan/Product. This can include addresses, phone "
+            "numbers, fax numbers, mobile numbers, email addresses and web sites."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    coverage: typing.List[fhirtypes.InsurancePlanCoverageType] = Field(
-        None,
+    coverage: typing.List[fhirtypes.InsurancePlanCoverageType] | None = Field(
+        default=None,
         alias="coverage",
         title="Coverage details",
         description="Details about the coverage offered by the insurance product.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    coverageArea: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    coverageArea: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="coverageArea",
         title="Where product applies",
         description=(
             "The geographic region in which a health insurance product's benefits "
             "apply."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    endpoint: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    endpoint: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="endpoint",
         title="Technical endpoint",
         description=(
             "The technical endpoints providing access to services operated for the "
             "health insurance product."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Endpoint"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Endpoint"],
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business Identifier for Product",
         description=(
@@ -108,99 +122,112 @@ class InsurancePlan(domainresource.DomainResource):
             "remain constant as the resource is updated and propagates from server "
             "to server."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Official name",
         description=(
             "Official name of the health insurance product as designated by the "
             "owner."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    network: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    network: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="network",
         title="What networks are Included",
         description="Reference to the network included in the health insurance product.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    ownedBy: fhirtypes.ReferenceType = Field(
-        None,
+    ownedBy: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="ownedBy",
-        title="Plan issuer",
+        title="Product issuer",
         description=(
             "The entity that is providing  the health insurance product and "
             "underwriting the risk.  This is typically an insurance carriers, other"
             " third-party payers, or health plan sponsors comonly referred to as "
             "'payers'."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="When the product is available",
         description="The period of time that the health insurance product is available.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    plan: typing.List[fhirtypes.InsurancePlanPlanType] = Field(
-        None,
+    plan: typing.List[fhirtypes.InsurancePlanPlanType] | None = Field(
+        default=None,
         alias="plan",
         title="Plan details",
         description="Details about an insurance plan.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="draft | active | retired | unknown",
         description="The current state of the health insurance product.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["draft", "active", "retired", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["draft", "active", "retired", "unknown"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    type: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    type: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="type",
         title="Kind of product",
         description="The kind of health insurance product.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlan`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlan`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -227,71 +254,23 @@ class InsurancePlan(domainresource.DomainResource):
             "plan",
         ]
 
-
-class InsurancePlanContact(backboneelement.BackboneElement):
-    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
-    Resource StructureDefinition, instead used to enable Extensibility feature
-    for FHIR Primitive Data Types.
-
-    Contact for the product.
-    The contact for the health insurance product for a certain purpose.
-    """
-
-    resource_type = Field("InsurancePlanContact", const=True)
-
-    address: fhirtypes.AddressType = Field(
-        None,
-        alias="address",
-        title="Visiting or postal addresses for the contact",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    name: fhirtypes.HumanNameType = Field(
-        None,
-        alias="name",
-        title="A name associated with the contact",
-        description=None,
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    purpose: fhirtypes.CodeableConceptType = Field(
-        None,
-        alias="purpose",
-        title="The type of contact",
-        description="Indicates a purpose for which the contact can be reached.",
-        # if property is element of this resource.
-        element_property=True,
-    )
-
-    telecom: typing.List[fhirtypes.ContactPointType] = Field(
-        None,
-        alias="telecom",
-        title="Contact details (telephone, email, etc.)  for a contact",
-        description=(
-            "A contact detail (e.g. a telephone number or an email address) by "
-            "which the party may be contacted."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-    )
-
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanContact`` according specification,
-        with preserving original sequence order.
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlan`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
-            "extension",
+            "meta",
+            "implicitRules",
             "modifierExtension",
-            "purpose",
+            "identifier",
+            "status",
+            "type",
             "name",
-            "telecom",
-            "address",
+            "ownedBy",
+            "administeredBy",
+            "coverageArea",
         ]
 
 
@@ -304,47 +283,57 @@ class InsurancePlanCoverage(backboneelement.BackboneElement):
     Details about the coverage offered by the insurance product.
     """
 
-    resource_type = Field("InsurancePlanCoverage", const=True)
+    __resource_type__ = "InsurancePlanCoverage"
 
     benefit: typing.List[fhirtypes.InsurancePlanCoverageBenefitType] = Field(
-        ...,
+        default=...,
         alias="benefit",
         title="List of benefits",
         description="Specific benefits under this type of coverage.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    network: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    network: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="network",
         title="What networks provide coverage",
         description="Reference to the network that providing the type of coverage.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Type of coverage",
         description=(
             "Type of coverage  (Medical; Dental; Mental Health; Substance Abuse; "
             "Vision; Drug; Short Term; Long Term Care; Hospice; Home Health)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanCoverage`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlanCoverage`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "type", "network", "benefit"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlanCoverage`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class InsurancePlanCoverageBenefit(backboneelement.BackboneElement):
@@ -356,47 +345,57 @@ class InsurancePlanCoverageBenefit(backboneelement.BackboneElement):
     Specific benefits under this type of coverage.
     """
 
-    resource_type = Field("InsurancePlanCoverageBenefit", const=True)
+    __resource_type__ = "InsurancePlanCoverageBenefit"
 
-    limit: typing.List[fhirtypes.InsurancePlanCoverageBenefitLimitType] = Field(
-        None,
+    limit: typing.List[fhirtypes.InsurancePlanCoverageBenefitLimitType] | None = Field(
+        default=None,
         alias="limit",
         title="Benefit limits",
         description="The specific limits on the benefit.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    requirement: fhirtypes.String = Field(
-        None,
+    requirement: fhirtypes.StringType | None = Field(
+        default=None,
         alias="requirement",
         title="Referral requirements",
         description="The referral requirements to have access/coverage for this benefit.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    requirement__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_requirement", title="Extension field for ``requirement``."
+    requirement__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_requirement", title="Extension field for ``requirement``."
     )
 
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Type of benefit",
         description=(
             "Type of benefit (primary care; speciality care; inpatient; " "outpatient)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanCoverageBenefit`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlanCoverageBenefit`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "type", "requirement", "limit"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlanCoverageBenefit`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class InsurancePlanCoverageBenefitLimit(backboneelement.BackboneElement):
@@ -408,36 +407,45 @@ class InsurancePlanCoverageBenefitLimit(backboneelement.BackboneElement):
     The specific limits on the benefit.
     """
 
-    resource_type = Field("InsurancePlanCoverageBenefitLimit", const=True)
+    __resource_type__ = "InsurancePlanCoverageBenefitLimit"
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
         title="Benefit limit details",
         description="The specific limit on the benefit.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    value: fhirtypes.QuantityType = Field(
-        None,
+    value: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="value",
         title="Maximum value allowed",
         description=(
             "The maximum amount of a service item a plan will pay for a covered "
             "benefit.  For examples. wellness visits, or eyeglasses."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanCoverageBenefitLimit`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlanCoverageBenefitLimit`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "value", "code"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlanCoverageBenefitLimit`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class InsurancePlanPlan(backboneelement.BackboneElement):
@@ -449,33 +457,36 @@ class InsurancePlanPlan(backboneelement.BackboneElement):
     Details about an insurance plan.
     """
 
-    resource_type = Field("InsurancePlanPlan", const=True)
+    __resource_type__ = "InsurancePlanPlan"
 
-    coverageArea: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    coverageArea: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="coverageArea",
         title="Where product applies",
         description=(
             "The geographic region in which a health insurance plan's benefits "
             "apply."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    generalCost: typing.List[fhirtypes.InsurancePlanPlanGeneralCostType] = Field(
-        None,
+    generalCost: typing.List[fhirtypes.InsurancePlanPlanGeneralCostType] | None = Field(
+        default=None,
         alias="generalCost",
         title="Overall costs",
         description="Overall costs associated with the plan.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business Identifier for Product",
         description=(
@@ -483,44 +494,51 @@ class InsurancePlanPlan(backboneelement.BackboneElement):
             "remain constant as the resource is updated and propagates from server "
             "to server."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    network: typing.List[fhirtypes.ReferenceType] = Field(
-        None,
+    network: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="network",
         title="What networks provide coverage",
         description="Reference to the network that providing the type of coverage.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    specificCost: typing.List[fhirtypes.InsurancePlanPlanSpecificCostType] = Field(
-        None,
+    specificCost: typing.List[
+        fhirtypes.InsurancePlanPlanSpecificCostType
+    ] | None = Field(
+        default=None,
         alias="specificCost",
         title="Specific costs",
         description="Costs associated with the coverage provided by the product.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="Type of plan",
         description='Type of plan. For example, "Platinum" or "High Deductable".',
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanPlan`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlanPlan`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -534,6 +552,13 @@ class InsurancePlanPlan(backboneelement.BackboneElement):
             "specificCost",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlanPlan`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "identifier", "coverageArea"]
+
 
 class InsurancePlanPlanGeneralCost(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -544,58 +569,62 @@ class InsurancePlanPlanGeneralCost(backboneelement.BackboneElement):
     Overall costs associated with the plan.
     """
 
-    resource_type = Field("InsurancePlanPlanGeneralCost", const=True)
+    __resource_type__ = "InsurancePlanPlanGeneralCost"
 
-    comment: fhirtypes.String = Field(
-        None,
+    comment: fhirtypes.StringType | None = Field(
+        default=None,
         alias="comment",
         title="Additional cost information",
         description=(
             "Additional information about the general costs associated with this "
             "plan."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    comment__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_comment", title="Extension field for ``comment``."
+    comment__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_comment", title="Extension field for ``comment``."
     )
 
-    cost: fhirtypes.MoneyType = Field(
-        None,
+    cost: fhirtypes.MoneyType | None = Field(
+        default=None,
         alias="cost",
         title="Cost value",
         description="Value of the cost.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    groupSize: fhirtypes.PositiveInt = Field(
-        None,
+    groupSize: fhirtypes.PositiveIntType | None = Field(
+        default=None,
         alias="groupSize",
         title="Number of enrollees",
         description="Number of participants enrolled in the plan.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    groupSize__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_groupSize", title="Extension field for ``groupSize``."
+    groupSize__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_groupSize", title="Extension field for ``groupSize``."
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="Type of cost",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanPlanGeneralCost`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlanPlanGeneralCost`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -607,6 +636,13 @@ class InsurancePlanPlanGeneralCost(backboneelement.BackboneElement):
             "comment",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlanPlanGeneralCost`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
+
 
 class InsurancePlanPlanSpecificCost(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -617,36 +653,47 @@ class InsurancePlanPlanSpecificCost(backboneelement.BackboneElement):
     Costs associated with the coverage provided by the product.
     """
 
-    resource_type = Field("InsurancePlanPlanSpecificCost", const=True)
+    __resource_type__ = "InsurancePlanPlanSpecificCost"
 
-    benefit: typing.List[fhirtypes.InsurancePlanPlanSpecificCostBenefitType] = Field(
-        None,
+    benefit: typing.List[
+        fhirtypes.InsurancePlanPlanSpecificCostBenefitType
+    ] | None = Field(
+        default=None,
         alias="benefit",
         title="Benefits list",
         description="List of the specific benefits under this category of benefit.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     category: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="category",
         title="General category of benefit",
         description=(
             "General category of benefit (Medical; Dental; Vision; Drug; Mental "
             "Health; Substance Abuse; Hospice, Home Health)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanPlanSpecificCost`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlanPlanSpecificCost`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "category", "benefit"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlanPlanSpecificCost`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class InsurancePlanPlanSpecificCostBenefit(backboneelement.BackboneElement):
@@ -658,19 +705,22 @@ class InsurancePlanPlanSpecificCostBenefit(backboneelement.BackboneElement):
     List of the specific benefits under this category of benefit.
     """
 
-    resource_type = Field("InsurancePlanPlanSpecificCostBenefit", const=True)
+    __resource_type__ = "InsurancePlanPlanSpecificCostBenefit"
 
-    cost: typing.List[fhirtypes.InsurancePlanPlanSpecificCostBenefitCostType] = Field(
-        None,
+    cost: typing.List[
+        fhirtypes.InsurancePlanPlanSpecificCostBenefitCostType
+    ] | None = Field(
+        default=None,
         alias="cost",
         title="List of the costs",
         description="List of the costs associated with a specific benefit.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Type of specific benefit",
         description=(
@@ -678,17 +728,25 @@ class InsurancePlanPlanSpecificCostBenefit(backboneelement.BackboneElement):
             "speciality office visit; hospitalization; emergency room; urgent "
             "care)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanPlanSpecificCostBenefit`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlanPlanSpecificCostBenefit`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "type", "cost"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlanPlanSpecificCostBenefit`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
 
 
 class InsurancePlanPlanSpecificCostBenefitCost(backboneelement.BackboneElement):
@@ -700,61 +758,65 @@ class InsurancePlanPlanSpecificCostBenefitCost(backboneelement.BackboneElement):
     List of the costs associated with a specific benefit.
     """
 
-    resource_type = Field("InsurancePlanPlanSpecificCostBenefitCost", const=True)
+    __resource_type__ = "InsurancePlanPlanSpecificCostBenefitCost"
 
-    applicability: fhirtypes.CodeableConceptType = Field(
-        None,
+    applicability: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="applicability",
         title="in-network | out-of-network | other",
         description=(
             "Whether the cost applies to in-network or out-of-network providers "
             "(in-network; out-of-network; other)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    qualifiers: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    qualifiers: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="qualifiers",
         title="Additional information about the cost",
         description=(
             "Additional information about the cost, such as information about "
             "funding sources (e.g. HSA, HRA, FSA, RRA)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Type of cost",
         description=(
             "Type of cost (copay; individual cap; family cap; coinsurance; "
             "deductible)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    value: fhirtypes.QuantityType = Field(
-        None,
+    value: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="value",
         title="The actual cost value",
         description=(
             "The actual cost value. (some of the costs may be represented as "
             "percentages rather than currency, e.g. 10% coinsurance)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``InsurancePlanPlanSpecificCostBenefitCost`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``InsurancePlanPlanSpecificCostBenefitCost`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -765,3 +827,10 @@ class InsurancePlanPlanSpecificCostBenefitCost(backboneelement.BackboneElement):
             "qualifiers",
             "value",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``InsurancePlanPlanSpecificCostBenefitCost`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

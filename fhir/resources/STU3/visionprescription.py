@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/VisionPrescription
 Release: STU3
@@ -6,9 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -23,129 +25,139 @@ class VisionPrescription(domainresource.DomainResource):
     patient.
     """
 
-    resource_type = Field("VisionPrescription", const=True)
+    __resource_type__ = "VisionPrescription"
 
-    dateWritten: fhirtypes.DateTime = Field(
-        None,
+    dateWritten: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="dateWritten",
         title="When prescription was authorized",
         description="The date (and perhaps time) when the prescription was written.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    dateWritten__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_dateWritten", title="Extension field for ``dateWritten``."
+    dateWritten__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_dateWritten", title="Extension field for ``dateWritten``."
     )
 
-    dispense: typing.List[fhirtypes.VisionPrescriptionDispenseType] = Field(
-        None,
+    dispense: typing.List[fhirtypes.VisionPrescriptionDispenseType] | None = Field(
+        default=None,
         alias="dispense",
         title="Vision supply authorization",
         description="Deals with details of the dispense part of the supply specification.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    encounter: fhirtypes.ReferenceType = Field(
-        None,
+    encounter: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="encounter",
         title="Created during encounter / admission / stay",
         description=(
             "A link to a resource that identifies the particular occurrence of "
             "contact between patient and health care provider."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Encounter"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter"],
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business identifier",
         description=(
             "Business identifier which may be used by other parties to reference or"
             " identify the prescription."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    patient: fhirtypes.ReferenceType = Field(
-        None,
+    patient: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="patient",
         title="Who prescription is for",
         description=(
             "A link to a resource representing the person to whom the vision "
             "products will be supplied."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient"],
+        },
     )
 
-    prescriber: fhirtypes.ReferenceType = Field(
-        None,
+    prescriber: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="prescriber",
         title="Who authorizes the vision product",
         description=(
             "The healthcare professional responsible for authorizing the "
             "prescription."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner"],
+        },
     )
 
-    reasonCodeableConcept: fhirtypes.CodeableConceptType = Field(
-        None,
+    reasonCodeableConcept: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="reasonCodeableConcept",
         title="Reason or indication for writing the prescription",
         description="Can be the reason or the indication for writing the prescription.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e reason[x]
-        one_of_many="reason",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e reason[x]
+            "one_of_many": "reason",
+            "one_of_many_required": False,
+        },
     )
 
-    reasonReference: fhirtypes.ReferenceType = Field(
-        None,
+    reasonReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="reasonReference",
         title="Reason or indication for writing the prescription",
         description="Can be the reason or the indication for writing the prescription.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e reason[x]
-        one_of_many="reason",
-        one_of_many_required=False,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Condition"],
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e reason[x]
+            "one_of_many": "reason",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Condition"],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="active | cancelled | draft | entered-in-error",
         description="The status of the resource instance.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["active", "cancelled", "draft", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["active", "cancelled", "draft", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``VisionPrescription`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``VisionPrescription`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -167,10 +179,14 @@ class VisionPrescription(domainresource.DomainResource):
             "dispense",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2110(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``VisionPrescription`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "status"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -184,26 +200,7 @@ class VisionPrescription(domainresource.DomainResource):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {"reason": ["reasonCodeableConcept", "reasonReference"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields
 
 
 class VisionPrescriptionDispense(backboneelement.BackboneElement):
@@ -215,196 +212,211 @@ class VisionPrescriptionDispense(backboneelement.BackboneElement):
     Deals with details of the dispense part of the supply specification.
     """
 
-    resource_type = Field("VisionPrescriptionDispense", const=True)
+    __resource_type__ = "VisionPrescriptionDispense"
 
-    add: fhirtypes.Decimal = Field(
-        None,
+    add: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="add",
         title="Lens add",
         description=(
             "Power adjustment for multifocal lenses measured in diopters (0.25 "
             "units)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    add__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_add", title="Extension field for ``add``."
+    add__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_add", title="Extension field for ``add``."
     )
 
-    axis: fhirtypes.Integer = Field(
-        None,
+    axis: fhirtypes.IntegerType | None = Field(
+        default=None,
         alias="axis",
         title="Lens axis",
         description="Adjustment for astigmatism measured in integer degrees.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    axis__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_axis", title="Extension field for ``axis``."
+    axis__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_axis", title="Extension field for ``axis``."
     )
 
-    backCurve: fhirtypes.Decimal = Field(
-        None,
+    backCurve: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="backCurve",
         title="Contact lens back curvature",
         description="Back curvature measured in millimeters.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    backCurve__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_backCurve", title="Extension field for ``backCurve``."
+    backCurve__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_backCurve", title="Extension field for ``backCurve``."
     )
 
-    base: fhirtypes.Code = Field(
-        None,
+    base: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="base",
         title="up | down | in | out",
         description="The relative base, or reference lens edge, for the prism.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["up", "down", "in", "out"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["up", "down", "in", "out"],
+        },
     )
-    base__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_base", title="Extension field for ``base``."
+    base__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_base", title="Extension field for ``base``."
     )
 
-    brand: fhirtypes.String = Field(
-        None,
+    brand: fhirtypes.StringType | None = Field(
+        default=None,
         alias="brand",
         title="Brand required",
         description="Brand recommendations or restrictions.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    brand__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_brand", title="Extension field for ``brand``."
+    brand__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_brand", title="Extension field for ``brand``."
     )
 
-    color: fhirtypes.String = Field(
-        None,
+    color: fhirtypes.StringType | None = Field(
+        default=None,
         alias="color",
         title="Color required",
         description="Special color or pattern.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    color__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_color", title="Extension field for ``color``."
+    color__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_color", title="Extension field for ``color``."
     )
 
-    cylinder: fhirtypes.Decimal = Field(
-        None,
+    cylinder: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="cylinder",
         title="Lens cylinder",
         description="Power adjustment for astigmatism measured in diopters (0.25 units).",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    cylinder__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_cylinder", title="Extension field for ``cylinder``."
+    cylinder__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_cylinder", title="Extension field for ``cylinder``."
     )
 
-    diameter: fhirtypes.Decimal = Field(
-        None,
+    diameter: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="diameter",
         title="Contact lens diameter",
         description="Contact lens diameter measured in millimeters.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    diameter__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_diameter", title="Extension field for ``diameter``."
+    diameter__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_diameter", title="Extension field for ``diameter``."
     )
 
-    duration: fhirtypes.QuantityType = Field(
-        None,
+    duration: fhirtypes.QuantityType | None = Field(
+        default=None,
         alias="duration",
         title="Lens wear duration",
         description="The recommended maximum wear period for the lens.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    eye: fhirtypes.Code = Field(
-        None,
+    eye: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="eye",
         title="right | left",
         description="The eye for which the lens applies.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["right", "left"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["right", "left"],
+        },
     )
-    eye__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_eye", title="Extension field for ``eye``."
+    eye__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_eye", title="Extension field for ``eye``."
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Notes for coatings",
         description="Notes for special requirements such as coatings and lens materials.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    power: fhirtypes.Decimal = Field(
-        None,
+    power: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="power",
         title="Contact lens power",
         description="Contact lens power measured in diopters (0.25 units).",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    power__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_power", title="Extension field for ``power``."
+    power__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_power", title="Extension field for ``power``."
     )
 
-    prism: fhirtypes.Decimal = Field(
-        None,
+    prism: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="prism",
         title="Lens prism",
         description="Amount of prism to compensate for eye alignment in fractional units.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    prism__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_prism", title="Extension field for ``prism``."
+    prism__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_prism", title="Extension field for ``prism``."
     )
 
-    product: fhirtypes.CodeableConceptType = Field(
-        None,
+    product: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="product",
         title="Product to be supplied",
         description=(
             "Identifies the type of vision correction product which is required for"
             " the patient."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    sphere: fhirtypes.Decimal = Field(
-        None,
+    sphere: fhirtypes.DecimalType | None = Field(
+        default=None,
         alias="sphere",
         title="Lens sphere",
         description="Lens power measured in diopters (0.25 units).",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    sphere__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_sphere", title="Extension field for ``sphere``."
+    sphere__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_sphere", title="Extension field for ``sphere``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``VisionPrescriptionDispense`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``VisionPrescriptionDispense`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -426,3 +438,10 @@ class VisionPrescriptionDispense(backboneelement.BackboneElement):
             "brand",
             "note",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``VisionPrescriptionDispense`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

@@ -1,0 +1,628 @@
+"""
+Profile: http://hl7.org/fhir/StructureDefinition/MessageHeader
+Release: R4B
+Version: 4.3.0
+Build ID: c475c22
+Last updated: 2022-05-28T12:47:40.239+10:00
+"""
+
+from __future__ import annotations as _annotations
+
+import typing
+
+from pydantic import Field
+
+from . import backboneelement, domainresource, fhirtypes
+
+
+class MessageHeader(domainresource.DomainResource):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    A resource that describes a message that is exchanged between systems.
+    The header for a message exchange that is either requesting or responding
+    to an action.  The reference(s) that are the subject of the action as well
+    as other information related to the action are typically transmitted in a
+    bundle in which the MessageHeader resource instance is the first resource
+    in the bundle.
+    """
+
+    __resource_type__ = "MessageHeader"
+
+    author: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="author",
+        title="The source of the decision",
+        description=(
+            "The logical author of the message - the person or device that decided "
+            "the described event should happen. When there is more than one "
+            "candidate, pick the most proximal to the MessageHeader. Can provide "
+            "other authors in extensions."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner", "PractitionerRole"],
+        },
+    )
+
+    definition: fhirtypes.CanonicalType | None = Field(
+        default=None,
+        alias="definition",
+        title="Link to the definition for this message",
+        description="Permanent link to the MessageDefinition for this message.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["MessageDefinition"],
+        },
+    )
+    definition__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_definition", title="Extension field for ``definition``."
+    )
+
+    destination: typing.List[fhirtypes.MessageHeaderDestinationType] | None = Field(
+        default=None,
+        alias="destination",
+        title="Message destination application(s)",
+        description="The destination application which the message is intended for.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    enterer: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="enterer",
+        title="The source of the data entry",
+        description=(
+            "The person or device that performed the data entry leading to this "
+            "message. When there is more than one candidate, pick the most proximal"
+            " to the message. Can provide other enterers in extensions."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner", "PractitionerRole"],
+        },
+    )
+
+    eventCoding: fhirtypes.CodingType | None = Field(
+        default=None,
+        alias="eventCoding",
+        title="Code for the event this message represents or link to event definition",
+        description=(
+            "Code that identifies the event this message represents and connects it"
+            " with its definition. Events defined as part of the FHIR specification"
+            ' have the system value "http://terminology.hl7.org/CodeSystem/message-'
+            'events".  Alternatively uri to the EventDefinition.'
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e event[x]
+            "one_of_many": "event",
+            "one_of_many_required": True,
+        },
+    )
+
+    eventUri: fhirtypes.UriType | None = Field(
+        default=None,
+        alias="eventUri",
+        title="Code for the event this message represents or link to event definition",
+        description=(
+            "Code that identifies the event this message represents and connects it"
+            " with its definition. Events defined as part of the FHIR specification"
+            ' have the system value "http://terminology.hl7.org/CodeSystem/message-'
+            'events".  Alternatively uri to the EventDefinition.'
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e event[x]
+            "one_of_many": "event",
+            "one_of_many_required": True,
+        },
+    )
+    eventUri__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_eventUri", title="Extension field for ``eventUri``."
+    )
+
+    focus: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="focus",
+        title="The actual content of the message",
+        description=(
+            "The actual data of the message - a reference to the root/focus class "
+            "of the event."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
+    )
+
+    reason: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="reason",
+        title="Cause of event",
+        description=(
+            "Coded indication of the cause for the event - indicates  a reason for "
+            "the occurrence of the event that is a focus of this message."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    response: fhirtypes.MessageHeaderResponseType | None = Field(
+        default=None,
+        alias="response",
+        title="If this is a reply to prior message",
+        description=(
+            "Information about the message that this message is a response to.  "
+            "Only present if this message is a response."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    responsible: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="responsible",
+        title="Final responsibility for event",
+        description=(
+            "The person or organization that accepts overall responsibility for the"
+            " contents of the message. The implication is that the message event "
+            "happened under the policies of the responsible party."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+            ],
+        },
+    )
+
+    sender: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="sender",
+        title="Real world sender of the message",
+        description=(
+            "Identifies the sending system to allow the use of a trust " "relationship."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+            ],
+        },
+    )
+
+    source: fhirtypes.MessageHeaderSourceType = Field(
+        default=...,
+        alias="source",
+        title="Message source application",
+        description="The source application from which this message originated.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``MessageHeader`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "language",
+            "text",
+            "contained",
+            "extension",
+            "modifierExtension",
+            "eventCoding",
+            "eventUri",
+            "destination",
+            "sender",
+            "enterer",
+            "author",
+            "source",
+            "responsible",
+            "reason",
+            "response",
+            "focus",
+            "definition",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``MessageHeader`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "eventCoding",
+            "eventUri",
+            "destination",
+            "sender",
+            "enterer",
+            "author",
+            "source",
+            "responsible",
+            "reason",
+            "response",
+            "focus",
+            "definition",
+        ]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
+
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {"event": ["eventCoding", "eventUri"]}
+        return one_of_many_fields
+
+
+class MessageHeaderDestination(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Message destination application(s).
+    The destination application which the message is intended for.
+    """
+
+    __resource_type__ = "MessageHeaderDestination"
+
+    endpoint: fhirtypes.UrlType | None = Field(
+        default=None,
+        alias="endpoint",
+        title="Actual destination address or id",
+        description="Indicates where the message should be routed to.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
+    )
+    endpoint__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_endpoint", title="Extension field for ``endpoint``."
+    )
+
+    name: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="name",
+        title="Name of system",
+        description="Human-readable name for the target system.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
+    )
+
+    receiver: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="receiver",
+        title='Intended "real-world" recipient for the data',
+        description=(
+            "Allows data conveyed by a message to be addressed to a particular "
+            "person or department when routing to a specific application isn't "
+            "sufficient."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+            ],
+        },
+    )
+
+    target: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="target",
+        title="Particular delivery destination within the destination",
+        description=(
+            "Identifies the target end system in situations where the initial "
+            "message transmission is to an intermediary system."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Device"],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``MessageHeaderDestination`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "name",
+            "target",
+            "endpoint",
+            "receiver",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``MessageHeaderDestination`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "name", "target", "endpoint", "receiver"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("endpoint", "endpoint__ext")]
+        return required_fields
+
+
+class MessageHeaderResponse(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    If this is a reply to prior message.
+    Information about the message that this message is a response to.  Only
+    present if this message is a response.
+    """
+
+    __resource_type__ = "MessageHeaderResponse"
+
+    code: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="code",
+        title="ok | transient-error | fatal-error",
+        description=(
+            "Code that identifies the type of response to the message - whether it "
+            "was successful or not, and whether it should be resent or not."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["ok", "transient-error", "fatal-error"],
+        },
+    )
+    code__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_code", title="Extension field for ``code``."
+    )
+
+    details: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="details",
+        title="Specific list of hints/warnings/errors",
+        description="Full details of any issues found in the message.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["OperationOutcome"],
+        },
+    )
+
+    identifier: fhirtypes.IdType | None = Field(
+        default=None,
+        alias="identifier",
+        title="Id of original message",
+        description=(
+            "The MessageHeader.id of the message to which this message is a "
+            "response."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
+    )
+    identifier__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_identifier", title="Extension field for ``identifier``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``MessageHeaderResponse`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "identifier", "code", "details"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``MessageHeaderResponse`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "identifier", "code", "details"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("code", "code__ext"), ("identifier", "identifier__ext")]
+        return required_fields
+
+
+class MessageHeaderSource(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Message source application.
+    The source application from which this message originated.
+    """
+
+    __resource_type__ = "MessageHeaderSource"
+
+    contact: fhirtypes.ContactPointType | None = Field(
+        default=None,
+        alias="contact",
+        title="Human contact for problems",
+        description=(
+            "An e-mail, phone, website or other contact point to use to resolve "
+            "issues with message communications."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    endpoint: fhirtypes.UrlType | None = Field(
+        default=None,
+        alias="endpoint",
+        title="Actual message source address or id",
+        description="Identifies the routing target to send acknowledgements to.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+        },
+    )
+    endpoint__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_endpoint", title="Extension field for ``endpoint``."
+    )
+
+    name: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="name",
+        title="Name of system",
+        description="Human-readable name for the source system.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
+    )
+
+    software: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="software",
+        title="Name of software running the system",
+        description="May include configuration or other information useful in debugging.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    software__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_software", title="Extension field for ``software``."
+    )
+
+    version: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="version",
+        title="Version of software running",
+        description=(
+            "Can convey versions of multiple systems in situations where a message "
+            "passes through multiple hands."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    version__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_version", title="Extension field for ``version``."
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``MessageHeaderSource`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "extension",
+            "modifierExtension",
+            "name",
+            "software",
+            "version",
+            "contact",
+            "endpoint",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``MessageHeaderSource`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "modifierExtension",
+            "name",
+            "software",
+            "version",
+            "contact",
+            "endpoint",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("endpoint", "endpoint__ext")]
+        return required_fields

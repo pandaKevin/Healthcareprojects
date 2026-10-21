@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Money
 Release: STU3
@@ -6,7 +5,10 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
-from pydantic import Field
+
+from __future__ import annotations as _annotations
+
+import typing
 
 from . import quantity
 
@@ -19,12 +21,19 @@ class Money(quantity.Quantity):
     An amount of economic utility in some recognized currency.
     """
 
-    resource_type = Field("Money", const=True)
+    __resource_type__ = "Money"
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Money`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Money`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "value", "comparator", "unit", "system", "code"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Money`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["value", "comparator", "unit", "system", "code"]

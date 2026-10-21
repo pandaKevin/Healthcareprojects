@@ -3,7 +3,14 @@
 
 """The setup script."""
 
-from setuptools import setup, find_namespace_packages
+import platform
+
+from setuptools import find_namespace_packages, setup
+
+PY_VERSION_TUPLE = platform.python_version_tuple()
+PY_VERSION_9_OR_EARLIER = PY_VERSION_TUPLE[0] == "3" and int(PY_VERSION_TUPLE[1]) <= 9
+PY_VERSION_10_OR_LATER = PY_VERSION_TUPLE[0] == "3" and int(PY_VERSION_TUPLE[1]) >= 10
+PY_VERSION_11_OR_LATER = PY_VERSION_10_OR_LATER and int(PY_VERSION_TUPLE[1]) >= 11
 
 with open("README.rst") as readme_file:
     readme = readme_file.read()
@@ -11,11 +18,11 @@ with open("README.rst") as readme_file:
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-requirements = ["pydantic[email]>=1.7.2"]
+requirements = ["fhir-core>=1.1.9"]
+if PY_VERSION_9_OR_EARLIER:
+    requirements.append("eval-type-backport")
 
 setup_requirements = ["pytest-runner"]
-
-orjson_requirements = ["orjson>=3.4.3"]
 
 yaml_requirements = ["PyYAML>=5.4.1"]
 
@@ -27,22 +34,31 @@ test_requirements = [
     "coverage",
     "pytest>5.4.0;python_version>='3.6'",
     "pytest-cov>=2.10.0;python_version>='3.6'",
-    "flake8==3.8.3",
-    "flake8-isort==3.0.0",
-    "flake8-bugbear==20.1.4",
-    "requests==2.23.0",
-    "isort==4.3.21",
-    "black",
-    "mypy==0.812",
+    "flake8" + (PY_VERSION_10_OR_LATER and "==7.3.0" or "==5.0.4;python_version<'3.10'"),
+    "flake8-isort"
+    + (PY_VERSION_10_OR_LATER and ">=6.0.0" or "==4.2.0;python_version<'3.10'"),
+    "flake8-bugbear"
+    + (PY_VERSION_10_OR_LATER and ">=22.12.6" or "==20.1.4;python_version<'3.10'"),
+    "requests==2.32.4",
+    "isort" + (PY_VERSION_10_OR_LATER and ">=5.11.4" or "==4.3.21"),
+    "black>=23.0,<24.0; python_version >= '3.7'",
+    "mypy",
+    "types-PyYAML",
+    "types-simplejson",
+    "types-requests",
+    "setuptools==65.6.3;python_version>='3.7'",
 ]
+if PY_VERSION_10_OR_LATER:
+    test_requirements.append("importlib-metadata>=5.2.0")
 
 development_requirements = [
-    "Jinja2==2.11.1",
-    "MarkupSafe==1.1.1",
+    "Jinja2==3.1.6",
+    "MarkupSafe==2.1.5",
     "colorlog==2.10.0",
     "certifi",
-    "fhirspec",
+    "fhirspec>=0.6.0",
     "zest-releaser[recommended]",
+    "twine==6.1.0",
 ]
 setup(
     author="Md Nazrul Islam",
@@ -55,10 +71,13 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Healthcare Industry",
@@ -74,7 +93,6 @@ setup(
     include_package_data=True,
     keywords="fhir, resources, python, hl7, health IT, healthcare",
     name="fhir.resources",
-    namespace_packages=["fhir"],
     packages=find_namespace_packages(
         include=["fhir*"],
         exclude=[
@@ -83,7 +101,7 @@ setup(
             "fhir-parser*",
             "fhir.resources.tests",
             "fhir.resources.STU3.tests",
-            "fhir.resources.DSTU2.tests",
+            "fhir.resources.R4B.tests",
         ],
     ),
     package_data={"fhir.resources": ["py.typed"]},
@@ -91,25 +109,22 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     extras_require={
-        "orjson": orjson_requirements,
         "yaml": yaml_requirements,
         "xml": xml_requirements,
         "test": (
             test_requirements
             + setup_requirements
-            + orjson_requirements
             + yaml_requirements
             + xml_requirements
             + profile_requirements
         ),
-        "profile": profile_requirements,
-        "dev": (test_requirements + development_requirements + profile_requirements),
-        "all": (orjson_requirements + yaml_requirements + xml_requirements),
+
+main
     },
     url="https://github.com/nazrulworld/fhir.resources",
-    version="6.4.1.dev0",
+    version="8.3.1.dev0",
     zip_safe=False,
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     project_urls={
         "CI: Travis": "https://travis-ci.org/github/nazrulworld/fhir.resources",
         "Coverage: codecov": "https://codecov.io/gh/nazrulworld/fhir.resources",

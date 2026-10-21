@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/DeviceUseStatement
 Release: STU3
@@ -6,11 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import domainresource, fhirtypes
 
@@ -25,51 +25,55 @@ class DeviceUseStatement(domainresource.DomainResource):
     of a report from the patient or another clinician.
     """
 
-    resource_type = Field("DeviceUseStatement", const=True)
+    __resource_type__ = "DeviceUseStatement"
 
-    bodySite: fhirtypes.CodeableConceptType = Field(
-        None,
+    bodySite: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="bodySite",
         title="Target body site",
         description=(
             "Indicates the site on the subject's body where the device was used ( "
             "i.e. the target site)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     device: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="device",
         title="Reference to device used",
         description="The details of the device used.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Device"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Device"],
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="External identifier for this record",
         description="An external identifier for this statement such as an IRI.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    indication: typing.List[fhirtypes.CodeableConceptType] = Field(
-        None,
+    indication: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
         alias="indication",
         title="Why device was used",
         description="Reason or justification for the use of the device.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Addition details (comments, instructions)",
         description=(
@@ -78,35 +82,38 @@ class DeviceUseStatement(domainresource.DomainResource):
             "include for example a comment, an instruction, or a note associated "
             "with the statement."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    recordedOn: fhirtypes.DateTime = Field(
-        None,
+    recordedOn: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="recordedOn",
         title="When statement was recorded",
         description="The time at which the statement was made/recorded.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    recordedOn__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_recordedOn", title="Extension field for ``recordedOn``."
+    recordedOn__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_recordedOn", title="Extension field for ``recordedOn``."
     )
 
-    source: fhirtypes.ReferenceType = Field(
-        None,
+    source: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="source",
         title="Who made the statement",
         description="Who reported the device was being used by the patient.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Practitioner", "RelatedPerson"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Practitioner", "RelatedPerson"],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="active | completed | entered-in-error +",
         description=(
@@ -114,81 +121,90 @@ class DeviceUseStatement(domainresource.DomainResource):
             "state of the device used that this statement is about.  Generally this"
             " will be active or completed."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["active", "completed", "entered-in-error", "+"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["active", "completed", "entered-in-error", "+"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     subject: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="subject",
         title="Patient using device",
         description="The patient who used the device.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Group"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "Group"],
+        },
     )
 
-    timingDateTime: fhirtypes.DateTime = Field(
-        None,
+    timingDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="timingDateTime",
         title="How often  the device was used",
         description="How often the device was used.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
-    timingDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_timingDateTime", title="Extension field for ``timingDateTime``."
+    timingDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_timingDateTime",
+        title="Extension field for ``timingDateTime``.",
     )
 
-    timingPeriod: fhirtypes.PeriodType = Field(
-        None,
+    timingPeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="timingPeriod",
         title="How often  the device was used",
         description="How often the device was used.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
 
-    timingTiming: fhirtypes.TimingType = Field(
-        None,
+    timingTiming: fhirtypes.TimingType | None = Field(
+        default=None,
         alias="timingTiming",
         title="How often  the device was used",
         description="How often the device was used.",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
 
-    whenUsed: fhirtypes.PeriodType = Field(
-        None,
+    whenUsed: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="whenUsed",
         title="Period device was used",
         description="The time period over which the device was used.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceUseStatement`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceUseStatement`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -214,10 +230,14 @@ class DeviceUseStatement(domainresource.DomainResource):
             "note",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_2026(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceUseStatement`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "status"]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -226,57 +246,9 @@ class DeviceUseStatement(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("status", "status__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2026(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -292,23 +264,4 @@ class DeviceUseStatement(domainresource.DomainResource):
         one_of_many_fields = {
             "timing": ["timingDateTime", "timingPeriod", "timingTiming"]
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields

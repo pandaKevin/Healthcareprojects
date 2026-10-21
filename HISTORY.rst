@@ -2,10 +2,151 @@
 History
 =======
 
-6.4.1 (unreleased)
+8.3.1 (unreleased)
 ------------------
 
 - Nothing changed yet.
+
+
+8.3.0 (2026-07-03)
+------------------
+
+Breaking
+
+- For the `Extension` class, the `url` field value is now required. Issue #205 (https://github.com/nazrulworld/fhir.resources/issues/205)
+
+- Minimum requirement for ``fhir-core`` version is now ``1.1.9``
+
+8.2.0 (2026-02-02)
+------------------
+
+- Type aliases are added for all types during type checking. [mschoettle]
+- Minimum requirement for ``fhir-core`` version is now ``1.1.5`` which naturally comes with some bug fixes. See here https://github.com/nazrulworld/fhir-core/blob/main/HISTORY.rst#115-2026-01-29
+
+
+8.1.0 (2025-07-10)
+------------------
+
+New features
+
+- Issue #181 ``summary`` (https://www.hl7.org/fhir/search.html#_summary) mode feature added.
+
+Fixes
+
+- Issue #184 pyright struggles with default position args.
+- Issue #186 missing py.typed marker, causing mypy import errors.
+- Issue #183 Pydantic 2.11+ Deprecation Warnings: model_fields Should Be Accessed on Class, Not Instance.
+
+8.0.0 (2024-12-25)
+------------------
+
+- The minimum required version for ``fhir-core`` is ``1.0.0``, which obviously comes with new features and bug fixes. For example xml serialization/deserialization. `See changes log here <https://github.com/nazrulworld/fhir-core/blob/1.0.0/HISTORY.rst#100-2024-12-25>`_
+
+- Issue #168 https://github.com/nazrulworld/fhir.resources/issues/166
+
+8.0.0b4 (2024-10-24)
+--------------------
+
+-  `PR#160 <https://github.com/nazrulworld/fhir.resources/pull/160>`_ switch the type of Element.id from id to string for R4B [cybernop]
+
+
+8.0.0b3 (2024-10-10)
+--------------------
+
+- Minimum version of ``fhir-core`` package have been updated.
+- All of fhir resources are regenerated for to comply with the optionality of fhir model's field. Issue https://github.com/nazrulworld/fhir.resources/issues/164
+
+
+8.0.0b2 (2024-10-02)
+--------------------
+
+- `Issue #164 <https://github.com/nazrulworld/fhir.resources/issues/164>`_ ``get_fhir_model_class`` is now available and can be imported from base package. For example ``from fhir.resources import get_fhir_model_class`` or ``from fhir.resources.STU3 import get_fhir_model_class``
+
+
+8.0.0b1 (2024-08-05)
+--------------------
+
+Breaking
+
+- Drop support for python 3.7
+
+- FHIR DTU2 packages are no longer available.
+
+
+7.1.0 (2023-12-14)
+------------------
+
+New features
+
+See migration guide.
+
+Breaking
+
+- Drop support for python 3.6.
+- Drop support for pydantic v1.
+- The function ``FHIRAbstractModel::add_root_validator`` is no longer available.
+
+Deprecations
+
+Some of functions from ``FHIRAbstractModel`` are deprecated to comply with Pydantic V2. Some are
+
+- ``FHIRAbstractModel::dict``
+
+- ``FHIRAbstractModel::json``
+
+- ``FHIRAbstractModel::parse_obj``
+
+- ``FHIRAbstractModel::parse_raw``: no longer supports xml and yaml data.
+
+- ``FHIRAbstractModel::parse_file``: no longer supports xml and yaml file.
+
+
+
+Improvements
+
+- `Issue 133 <https://github.com/nazrulworld/fhir.resources/issues/133>`_ Pydantic 2.0 migration plan. It's not fully migration though, instead of using of Pydantic V1 API.
+- `Issue 144 <https://github.com/nazrulworld/fhir.resources/issues/144>`_ Parsing XML byte string MESH acknowledgment response.
+
+
+7.0.2 (2023-07-03)
+------------------
+
+-  `Issue 124 <https://github.com/nazrulworld/fhir.resources/issues/134>`_ on the wake of 2.x pydantic release, pydantic's max version restriction added.
+
+
+7.0.1 (2023-05-29)
+------------------
+
+Fixes
+
+- Issue #128 `pkg_resources.declare_namespace deprecation <https://github.com/nazrulworld/fhir.resources/issues/128>`_
+
+- Issue #129 `urn not supported in Url <https://github.com/nazrulworld/fhir.resources/issues/129>`_
+
+7.0.0 (2023-04-08)
+------------------
+
+New Feature
+
+- Support for `FHIR version R5 <https://www.hl7.org/fhir/R5/resourcelist.html>`_ has been added under root package.
+
+
+Breaking
+
+- All root resources (FHIR version R4B) are moved under sub-package ``R4B``. Have a look at the migration guide.
+
+
+6.5.0 (2023-01-01)
+------------------
+
+Breaking
+
+- FHIR R4B release has been overlapped on current R4 as default release. See changes (Release R4B: May 28, 2022) http://hl7.org/fhir/R4B/history.html. More detail at http://hl7.org/fhir/R4B/diff.html
+
+Improvements
+
+- Issue #90 logging level downgraded from warning to debug.
+- Primitive `URL` type is now accepting the relative path without prefix "/".
 
 
 6.4.0 (2022-05-11)

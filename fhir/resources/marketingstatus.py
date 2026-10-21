@@ -1,17 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/MarketingStatus
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
+import typing
+
 from pydantic import Field
 
-from . import backboneelement, fhirtypes
+from . import backbonetype, fhirtypes
 
 
-class MarketingStatus(backboneelement.BackboneElement):
+class MarketingStatus(backbonetype.BackboneType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -21,27 +25,29 @@ class MarketingStatus(backboneelement.BackboneElement):
     available.
     """
 
-    resource_type = Field("MarketingStatus", const=True)
+    __resource_type__ = "MarketingStatus"
 
-    country: fhirtypes.CodeableConceptType = Field(
-        ...,
+    country: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="country",
         title=(
-            "The country in which the marketing authorisation has been granted "
+            "The country in which the marketing authorization has been granted "
             "shall be specified It should be specified using the ISO 3166 \u2011 1 "
             "alpha-2 code elements"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    dateRange: fhirtypes.PeriodType = Field(
-        ...,
+    dateRange: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="dateRange",
         title=(
             "The date when the Medicinal Product is placed on the market by the "
-            "Marketing Authorisation Holder (or where applicable, the "
+            "Marketing Authorization Holder (or where applicable, the "
             "manufacturer/distributor) in a country and/or jurisdiction shall be "
             "provided A complete date consisting of day, month and year shall be "
             "specified using the ISO 8601 date format NOTE \u201cPlaced on the market\u201d "
@@ -49,31 +55,35 @@ class MarketingStatus(backboneelement.BackboneElement):
             "chain"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    jurisdiction: fhirtypes.CodeableConceptType = Field(
-        None,
+    jurisdiction: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="jurisdiction",
         title=(
             "Where a Medicines Regulatory Agency has granted a marketing "
-            "authorisation for which specific provisions within a jurisdiction "
+            "authorization for which specific provisions within a jurisdiction "
             "apply, the jurisdiction can be specified using an appropriate "
             "controlled terminology The controlled term and the controlled term "
             "identifier shall be specified"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    restoreDate: fhirtypes.DateTime = Field(
-        None,
+    restoreDate: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="restoreDate",
         title=(
             "The date when the Medicinal Product is placed on the market by the "
-            "Marketing Authorisation Holder (or where applicable, the "
+            "Marketing Authorization Holder (or where applicable, the "
             "manufacturer/distributor) in a country and/or jurisdiction shall be "
             "provided A complete date consisting of day, month and year shall be "
             "specified using the ISO 8601 date format NOTE \u201cPlaced on the market\u201d "
@@ -81,15 +91,17 @@ class MarketingStatus(backboneelement.BackboneElement):
             "chain"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    restoreDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_restoreDate", title="Extension field for ``restoreDate``."
+    restoreDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_restoreDate", title="Extension field for ``restoreDate``."
     )
 
     status: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="status",
         title=(
             "This attribute provides information on the status of the marketing of "
@@ -97,19 +109,35 @@ class MarketingStatus(backboneelement.BackboneElement):
             "examples"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``MarketingStatus`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``MarketingStatus`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
+            "modifierExtension",
+            "country",
+            "jurisdiction",
+            "status",
+            "dateRange",
+            "restoreDate",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``MarketingStatus`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
             "modifierExtension",
             "country",
             "jurisdiction",

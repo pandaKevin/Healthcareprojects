@@ -1,0 +1,499 @@
+"""
+Profile: http://hl7.org/fhir/StructureDefinition/DiagnosticReport
+Release: R4B
+Version: 4.3.0
+Build ID: c475c22
+Last updated: 2022-05-28T12:47:40.239+10:00
+"""
+
+from __future__ import annotations as _annotations
+
+import typing
+
+from pydantic import Field
+
+from . import backboneelement, domainresource, fhirtypes
+
+
+class DiagnosticReport(domainresource.DomainResource):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    A Diagnostic report - a combination of request information, atomic results,
+    images, interpretation, as well as formatted reports.
+    The findings and interpretation of diagnostic  tests performed on patients,
+    groups of patients, devices, and locations, and/or specimens derived from
+    these. The report includes clinical context such as requesting and provider
+    information, and some mix of atomic results, images, textual and coded
+    interpretations, and formatted representation of diagnostic reports.
+    """
+
+    __resource_type__ = "DiagnosticReport"
+
+    basedOn: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="basedOn",
+        title="What was requested",
+        description="Details concerning a service requested.",
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "CarePlan",
+                "ImmunizationRecommendation",
+                "MedicationRequest",
+                "NutritionOrder",
+                "ServiceRequest",
+            ],
+        },
+    )
+
+    category: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="category",
+        title="Service category",
+        description=(
+            "A code that classifies the clinical discipline, department or "
+            "diagnostic service that created the report (e.g. cardiology, "
+            "biochemistry, hematology, MRI). This is used for searching, sorting "
+            "and display purposes."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    code: fhirtypes.CodeableConceptType = Field(
+        default=...,
+        alias="code",
+        title="Name/Code for this diagnostic report",
+        description="A code or name that describes this diagnostic report.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    conclusion: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="conclusion",
+        title="Clinical conclusion (interpretation) of test results",
+        description=(
+            "Concise and clinically contextualized summary conclusion "
+            "(interpretation/impression) of the diagnostic report."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    conclusion__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_conclusion", title="Extension field for ``conclusion``."
+    )
+
+    conclusionCode: typing.List[fhirtypes.CodeableConceptType] | None = Field(
+        default=None,
+        alias="conclusionCode",
+        title="Codes for the clinical conclusion of test results",
+        description=(
+            "One or more codes that represent the summary conclusion "
+            "(interpretation/impression) of the diagnostic report."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    effectiveDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
+        alias="effectiveDateTime",
+        title="Clinically relevant time/time-period for report",
+        description=(
+            "The time or time-period the observed values are related to. When the "
+            "subject of the report is a patient, this is usually either the time of"
+            " the procedure or of specimen collection(s), but very often the source"
+            " of the date/time is not known, only the date/time itself."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e effective[x]
+            "one_of_many": "effective",
+            "one_of_many_required": False,
+        },
+    )
+    effectiveDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_effectiveDateTime",
+        title="Extension field for ``effectiveDateTime``.",
+    )
+
+    effectivePeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
+        alias="effectivePeriod",
+        title="Clinically relevant time/time-period for report",
+        description=(
+            "The time or time-period the observed values are related to. When the "
+            "subject of the report is a patient, this is usually either the time of"
+            " the procedure or of specimen collection(s), but very often the source"
+            " of the date/time is not known, only the date/time itself."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e effective[x]
+            "one_of_many": "effective",
+            "one_of_many_required": False,
+        },
+    )
+
+    encounter: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="encounter",
+        title="Health care event when test ordered",
+        description=(
+            "The healthcare event  (e.g. a patient and healthcare provider "
+            "interaction) which this DiagnosticReport is about."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter"],
+        },
+    )
+
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
+        alias="identifier",
+        title="Business identifier for report",
+        description="Identifiers assigned to this report by the performer or other systems.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    imagingStudy: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="imagingStudy",
+        title=(
+            "Reference to full details of imaging associated with the diagnostic "
+            "report"
+        ),
+        description=(
+            "One or more links to full details of any imaging performed during the "
+            "diagnostic investigation. Typically, this is imaging performed by "
+            "DICOM enabled modalities, but this is not required. A fully enabled "
+            "PACS viewer can use this information to provide views of the source "
+            "images."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["ImagingStudy"],
+        },
+    )
+
+    issued: fhirtypes.InstantType | None = Field(
+        default=None,
+        alias="issued",
+        title="DateTime this version was made",
+        description=(
+            "The date and time that this version of the report was made available "
+            "to providers, typically after the report was reviewed and verified."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+    issued__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_issued", title="Extension field for ``issued``."
+    )
+
+    media: typing.List[fhirtypes.DiagnosticReportMediaType] | None = Field(
+        default=None,
+        alias="media",
+        title="Key images associated with this report",
+        description=(
+            "A list of key images associated with this report. The images are "
+            "generally created during the diagnostic process, and may be directly "
+            "of the patient, or of treated specimens (i.e. slides of interest)."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    performer: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="performer",
+        title="Responsible Diagnostic Service",
+        description="The diagnostic service that is responsible for issuing the report.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+                "CareTeam",
+            ],
+        },
+    )
+
+    presentedForm: typing.List[fhirtypes.AttachmentType] | None = Field(
+        default=None,
+        alias="presentedForm",
+        title="Entire report as issued",
+        description=(
+            "Rich text representation of the entire result as issued by the "
+            "diagnostic service. Multiple formats are allowed but they SHALL be "
+            "semantically equivalent."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+
+    result: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="result",
+        title="Observations",
+        description=(
+            "[Observations](observation.html)  that are part of this diagnostic "
+            "report."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Observation"],
+        },
+    )
+
+    resultsInterpreter: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="resultsInterpreter",
+        title="Primary result interpreter",
+        description=(
+            "The practitioner or organization that is responsible for the report's "
+            "conclusions and interpretations."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Organization",
+                "CareTeam",
+            ],
+        },
+    )
+
+    specimen: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
+        alias="specimen",
+        title="Specimens this report is based on",
+        description="Details about the specimens on which this diagnostic report is based.",
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Specimen"],
+        },
+    )
+
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
+        alias="status",
+        title="registered | partial | preliminary | final +",
+        description="The status of the diagnostic report.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["registered", "partial", "preliminary", "final", "+"],
+        },
+    )
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
+    )
+
+    subject: fhirtypes.ReferenceType | None = Field(
+        default=None,
+        alias="subject",
+        title="The subject of the report - usually, but not always, the patient",
+        description=(
+            "The subject of the report. Usually, but not always, this is a patient."
+            " However, diagnostic services also perform analyses on specimens "
+            "collected from a variety of other sources."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Patient",
+                "Group",
+                "Device",
+                "Location",
+                "Organization",
+                "Procedure",
+                "Practitioner",
+                "Medication",
+                "Substance",
+            ],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DiagnosticReport`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "language",
+            "text",
+            "contained",
+            "extension",
+            "modifierExtension",
+            "identifier",
+            "basedOn",
+            "status",
+            "category",
+            "code",
+            "subject",
+            "encounter",
+            "effectiveDateTime",
+            "effectivePeriod",
+            "issued",
+            "performer",
+            "resultsInterpreter",
+            "specimen",
+            "result",
+            "imagingStudy",
+            "media",
+            "conclusion",
+            "conclusionCode",
+            "presentedForm",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DiagnosticReport`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "status",
+            "category",
+            "code",
+            "subject",
+            "encounter",
+            "effectiveDateTime",
+            "effectivePeriod",
+            "issued",
+            "performer",
+            "resultsInterpreter",
+            "media",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
+        """https://www.hl7.org/fhir/extensibility.html#Special-Case
+        In some cases, implementers might find that they do not have appropriate data for
+        an element with minimum cardinality = 1. In this case, the element must be present,
+        but unless the resource or a profile on it has made the actual value of the primitive
+        data type mandatory, it is possible to provide an extension that explains why
+        the primitive value is not present.
+        """
+        required_fields = [("status", "status__ext")]
+        return required_fields
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
+        """https://www.hl7.org/fhir/formats.html#choice
+        A few elements have a choice of more than one data type for their content.
+        All such elements have a name that takes the form nnn[x].
+        The "nnn" part of the name is constant, and the "[x]" is replaced with
+        the title-cased name of the type that is actually used.
+        The table view shows each of these names explicitly.
+
+        Elements that have a choice of data type cannot repeat - they must have a
+        maximum cardinality of 1. When constructing an instance of an element with a
+        choice of types, the authoring system must create a single element with a
+        data type chosen from among the list of permitted data types.
+        """
+        one_of_many_fields = {"effective": ["effectiveDateTime", "effectivePeriod"]}
+        return one_of_many_fields
+
+
+class DiagnosticReportMedia(backboneelement.BackboneElement):
+    """Disclaimer: Any field name ends with ``__ext`` doesn't part of
+    Resource StructureDefinition, instead used to enable Extensibility feature
+    for FHIR Primitive Data Types.
+
+    Key images associated with this report.
+    A list of key images associated with this report. The images are generally
+    created during the diagnostic process, and may be directly of the patient,
+    or of treated specimens (i.e. slides of interest).
+    """
+
+    __resource_type__ = "DiagnosticReportMedia"
+
+    comment: fhirtypes.StringType | None = Field(
+        default=None,
+        alias="comment",
+        title="Comment about the image (e.g. explanation)",
+        description=(
+            "A comment about the image. Typically, this is used to provide an "
+            "explanation for why the image is included, or to draw the viewer's "
+            "attention to important features."
+        ),
+        json_schema_extra={
+            "element_property": True,
+        },
+    )
+    comment__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_comment", title="Extension field for ``comment``."
+    )
+
+    link: fhirtypes.ReferenceType = Field(
+        default=...,
+        alias="link",
+        title="Reference to the image source",
+        description=None,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Media"],
+        },
+    )
+
+    @classmethod
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DiagnosticReportMedia`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "extension", "modifierExtension", "comment", "link"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DiagnosticReportMedia`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "link"]

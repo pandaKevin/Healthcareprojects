@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/EligibilityRequest
 Release: STU3
@@ -6,9 +5,12 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
+from pydantic import Field
 
 from . import domainresource, fhirtypes
 
@@ -25,212 +27,231 @@ class EligibilityRequest(domainresource.DomainResource):
     force and optionally to provide the insurance details of the policy.
     """
 
-    resource_type = Field("EligibilityRequest", const=True)
+    __resource_type__ = "EligibilityRequest"
 
-    benefitCategory: fhirtypes.CodeableConceptType = Field(
-        None,
+    benefitCategory: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="benefitCategory",
         title="Type of services covered",
         description="Dental, Vision, Medical, Pharmacy, Rehab etc.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    benefitSubCategory: fhirtypes.CodeableConceptType = Field(
-        None,
+    benefitSubCategory: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="benefitSubCategory",
         title="Detailed services covered within the type",
         description="Dental: basic, major, ortho; Vision exam, glasses, contacts; etc.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    businessArrangement: fhirtypes.String = Field(
-        None,
+    businessArrangement: fhirtypes.StringType | None = Field(
+        default=None,
         alias="businessArrangement",
         title="Business agreement",
         description=(
             "The contract number of a business agreement which describes the terms "
             "and conditions."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    businessArrangement__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    businessArrangement__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_businessArrangement",
         title="Extension field for ``businessArrangement``.",
     )
 
-    coverage: fhirtypes.ReferenceType = Field(
-        None,
+    coverage: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="coverage",
         title="Insurance or medical plan",
         description="Financial instrument by which payment information for health care.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Coverage"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Coverage"],
+        },
     )
 
-    created: fhirtypes.DateTime = Field(
-        None,
+    created: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="created",
         title="Creation date",
         description="The date when this resource was created.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    created__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_created", title="Extension field for ``created``."
+    created__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_created", title="Extension field for ``created``."
     )
 
-    enterer: fhirtypes.ReferenceType = Field(
-        None,
+    enterer: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="enterer",
         title="Author",
         description=(
             "Person who created the invoice/claim/pre-determination or pre-"
             "authorization."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner"],
+        },
     )
 
-    facility: fhirtypes.ReferenceType = Field(
-        None,
+    facility: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="facility",
         title="Servicing Facility",
         description="Facility where the services were provided.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Location"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Location"],
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business Identifier",
         description="The Response business identifier.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    insurer: fhirtypes.ReferenceType = Field(
-        None,
+    insurer: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="insurer",
         title="Target",
         description="The Insurer who is target  of the request.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    organization: fhirtypes.ReferenceType = Field(
-        None,
+    organization: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="organization",
         title="Responsible organization",
         description=(
             "The organization which is responsible for the services rendered to the"
             " patient."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    patient: fhirtypes.ReferenceType = Field(
-        None,
+    patient: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="patient",
         title="The subject of the Products and Services",
         description="Patient Resource.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient"],
+        },
     )
 
-    priority: fhirtypes.CodeableConceptType = Field(
-        None,
+    priority: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="priority",
         title="Desired processing priority",
         description="Immediate (STAT), best effort (NORMAL), deferred (DEFER).",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    provider: fhirtypes.ReferenceType = Field(
-        None,
+    provider: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="provider",
         title="Responsible practitioner",
         description=(
             "The practitioner who is responsible for the services rendered to the "
             "patient."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Practitioner"],
+        },
     )
 
-    servicedDate: fhirtypes.Date = Field(
-        None,
+    servicedDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="servicedDate",
         title="Estimated date or dates of Service",
         description=(
             "The date or dates when the enclosed suite of services were performed "
             "or completed."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e serviced[x]
-        one_of_many="serviced",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e serviced[x]
+            "one_of_many": "serviced",
+            "one_of_many_required": False,
+        },
     )
-    servicedDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_servicedDate", title="Extension field for ``servicedDate``."
+    servicedDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_servicedDate",
+        title="Extension field for ``servicedDate``.",
     )
 
-    servicedPeriod: fhirtypes.PeriodType = Field(
-        None,
+    servicedPeriod: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="servicedPeriod",
         title="Estimated date or dates of Service",
         description=(
             "The date or dates when the enclosed suite of services were performed "
             "or completed."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e serviced[x]
-        one_of_many="serviced",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            # Choice of Data Types. i.e serviced[x]
+            "one_of_many": "serviced",
+            "one_of_many_required": False,
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="active | cancelled | draft | entered-in-error",
         description="The status of the resource instance.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["active", "cancelled", "draft", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["active", "cancelled", "draft", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``EligibilityRequest`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``EligibilityRequest`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -259,10 +280,14 @@ class EligibilityRequest(domainresource.DomainResource):
             "benefitSubCategory",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_2073(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``EligibilityRequest`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["id", "meta", "implicitRules", "status"]
+
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -276,23 +301,4 @@ class EligibilityRequest(domainresource.DomainResource):
         data type chosen from among the list of permitted data types.
         """
         one_of_many_fields = {"serviced": ["servicedDate", "servicedPeriod"]}
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields

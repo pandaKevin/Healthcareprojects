@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/RelatedPerson
 Release: STU3
@@ -6,6 +5,9 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -25,138 +27,158 @@ class RelatedPerson(domainresource.DomainResource):
     care process.
     """
 
-    resource_type = Field("RelatedPerson", const=True)
+    __resource_type__ = "RelatedPerson"
 
-    active: bool = Field(
-        None,
+    active: bool | None = Field(
+        default=None,
         alias="active",
         title="Whether this related person's record is in active use",
         description="Whether this related person record is in active use.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    active__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_active", title="Extension field for ``active``."
+    active__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_active", title="Extension field for ``active``."
     )
 
-    address: typing.List[fhirtypes.AddressType] = Field(
-        None,
+    address: typing.List[fhirtypes.AddressType] | None = Field(
+        default=None,
         alias="address",
         title="Address where the related person can be contacted or visited",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    birthDate: fhirtypes.Date = Field(
-        None,
+    birthDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="birthDate",
         title="The date on which the related person was born",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    birthDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_birthDate", title="Extension field for ``birthDate``."
+    birthDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_birthDate", title="Extension field for ``birthDate``."
     )
 
-    gender: fhirtypes.Code = Field(
-        None,
+    gender: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="gender",
         title="male | female | other | unknown",
         description=(
             "Administrative Gender - the gender that the person is considered to "
             "have for administration and record keeping purposes."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["male", "female", "other", "unknown"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["male", "female", "other", "unknown"],
+        },
     )
-    gender__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_gender", title="Extension field for ``gender``."
+    gender__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_gender", title="Extension field for ``gender``."
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="A human identifier for this person",
         description="Identifier for a person within a particular scope.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    name: typing.List[fhirtypes.HumanNameType] = Field(
-        None,
+    name: typing.List[fhirtypes.HumanNameType] | None = Field(
+        default=None,
         alias="name",
         title="A name associated with the person",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     patient: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="patient",
         title="The patient this person is related to",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient"],
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="Period of time that this relationship is considered valid",
         description=(
             "The period of time that this relationship is considered to be valid. "
             "If there are no dates defined, then the interval is unknown."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    photo: typing.List[fhirtypes.AttachmentType] = Field(
-        None,
+    photo: typing.List[fhirtypes.AttachmentType] | None = Field(
+        default=None,
         alias="photo",
         title="Image of the person",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    relationship: fhirtypes.CodeableConceptType = Field(
-        None,
+    relationship: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="relationship",
         title="The nature of the relationship",
         description=(
             "The nature of the relationship between a patient and the related "
             "person."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    telecom: typing.List[fhirtypes.ContactPointType] = Field(
-        None,
+    telecom: typing.List[fhirtypes.ContactPointType] | None = Field(
+        default=None,
         alias="telecom",
         title="A contact detail for the person",
         description=(
             "A contact detail for the person, e.g. a telephone number or an email "
             "address."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``RelatedPerson`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``RelatedPerson`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -178,4 +200,24 @@ class RelatedPerson(domainresource.DomainResource):
             "address",
             "photo",
             "period",
+        ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``RelatedPerson`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "active",
+            "patient",
+            "relationship",
+            "name",
+            "telecom",
+            "gender",
+            "birthDate",
+            "address",
         ]

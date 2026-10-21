@@ -1,3453 +1,6237 @@
-# _*_ coding: utf-8 _*_
-import datetime
-import decimal
-import re
-from email.utils import formataddr, parseaddr
-from typing import TYPE_CHECKING, Any, Dict, Optional, Pattern, Union
-from uuid import UUID
+from __future__ import annotations as _annotations
 
-from pydantic import AnyUrl
-from pydantic.errors import ConfigError, DateError, DateTimeError, TimeError
-from pydantic.main import load_str_bytes
-from pydantic.networks import validate_email
-from pydantic.types import (
-    ConstrainedBytes,
-    ConstrainedDecimal,
-    ConstrainedInt,
-    ConstrainedStr,
+from typing import TYPE_CHECKING
+
+from fhir_core.types import (
+    Base64BinaryType,
+    BooleanType,
+    CanonicalType,
+    CodeType,
+    DateTimeType,
+    DateType,
+    DecimalType,
+    IdType,
+    InstantType,
+    Integer64Type,
+    IntegerType,
+    MarkdownType,
+    OidType,
+    PositiveIntType,
+    StringType,
+    TimeType,
+    UnsignedIntType,
+    UriType,
+    UrlType,
+    UuidType,
+    XhtmlType,
+    create_fhir_element_or_resource_type,
+    create_fhir_type,
 )
-from pydantic.validators import bool_validator, parse_date, parse_datetime, parse_time
 
-from fhir.resources.core.fhirabstractmodel import FHIRAbstractModel
+__author__ = "Md Nazrul Islam"
+__email__ = "email2nazrul@gmail.com"
 
-from .fhirtypesvalidators import run_validator_for_fhir_type
-
+# The dependency hierarchy is circular due to Extension being referenced in FHIRPrimitiveExtension
+# which itself is referenced in every resource. Extension is also referenced in several resources and refers to several resources.
+# Pydantic fields can not use forward references as this causes the "class not fully defined" error at runtime: https://docs.pydantic.dev/2.12/errors/usage_errors/#class-not-fully-defined
+# To properly allow type checkers to type check, use type aliases during type checking and the create_fhir_type workaround at runtime.
 if TYPE_CHECKING:
-    from pydantic.types import CallableGenerator
-    from pydantic.fields import ModelField
-    from pydantic import BaseConfig
+    from . import (
+        account,
+        activitydefinition,
+        actordefinition,
+        address,
+        administrableproductdefinition,
+        adverseevent,
+        age,
+        allergyintolerance,
+        annotation,
+        appointment,
+        appointmentresponse,
+        artifactassessment,
+        attachment,
+        auditevent,
+        availability,
+        backboneelement,
+        backbonetype,
+        base,
+        basic,
+        binary,
+        biologicallyderivedproduct,
+        biologicallyderivedproductdispense,
+        bodystructure,
+        bundle,
+        canonicalresource,
+        capabilitystatement,
+        careplan,
+        careteam,
+        chargeitem,
+        chargeitemdefinition,
+        citation,
+        claim,
+        claimresponse,
+        clinicalimpression,
+        clinicalusedefinition,
+        codeableconcept,
+        codeablereference,
+        codesystem,
+        coding,
+        communication,
+        communicationrequest,
+        compartmentdefinition,
+        composition,
+        conceptmap,
+        condition,
+        conditiondefinition,
+        consent,
+        contactdetail,
+        contactpoint,
+        contract,
+        contributor,
+        count,
+        coverage,
+        coverageeligibilityrequest,
+        coverageeligibilityresponse,
+        datarequirement,
+        datatype,
+        detectedissue,
+        device,
+        deviceassociation,
+        devicedefinition,
+        devicedispense,
+        devicemetric,
+        devicerequest,
+        deviceusage,
+        diagnosticreport,
+        distance,
+        documentreference,
+        domainresource,
+        dosage,
+        duration,
+        element,
+        elementdefinition,
+        encounter,
+        encounterhistory,
+        endpoint,
+        enrollmentrequest,
+        enrollmentresponse,
+        episodeofcare,
+        eventdefinition,
+        evidence,
+        evidencereport,
+        evidencevariable,
+        examplescenario,
+        explanationofbenefit,
+        expression,
+        extendedcontactdetail,
+        extension,
+        familymemberhistory,
+        flag,
+        formularyitem,
+        genomicstudy,
+        goal,
+        graphdefinition,
+        group,
+        guidanceresponse,
+        healthcareservice,
+        humanname,
+        identifier,
+        imagingselection,
+        imagingstudy,
+        immunization,
+        immunizationevaluation,
+        immunizationrecommendation,
+        implementationguide,
+        ingredient,
+        insuranceplan,
+        inventoryitem,
+        inventoryreport,
+        invoice,
+        library,
+        linkage,
+        list,
+        location,
+        manufactureditemdefinition,
+        marketingstatus,
+        measure,
+        measurereport,
+        medication,
+        medicationadministration,
+        medicationdispense,
+        medicationknowledge,
+        medicationrequest,
+        medicationstatement,
+        medicinalproductdefinition,
+        messagedefinition,
+        messageheader,
+        meta,
+        metadataresource,
+        molecularsequence,
+        monetarycomponent,
+        money,
+        namingsystem,
+        narrative,
+        nutritionintake,
+        nutritionorder,
+        nutritionproduct,
+        observation,
+        observationdefinition,
+        operationdefinition,
+        operationoutcome,
+        organization,
+        organizationaffiliation,
+        packagedproductdefinition,
+        parameterdefinition,
+        parameters,
+        patient,
+        paymentnotice,
+        paymentreconciliation,
+        period,
+        permission,
+        person,
+        plandefinition,
+        practitioner,
+        practitionerrole,
+        primitivetype,
+        procedure,
+        productshelflife,
+        provenance,
+        quantity,
+        questionnaire,
+        questionnaireresponse,
+        range,
+        ratio,
+        ratiorange,
+        reference,
+        regulatedauthorization,
+        relatedartifact,
+        relatedperson,
+        requestorchestration,
+        requirements,
+        researchstudy,
+        researchsubject,
+        resource,
+        riskassessment,
+        sampleddata,
+        schedule,
+        searchparameter,
+        servicerequest,
+        signature,
+        slot,
+        specimen,
+        specimendefinition,
+        structuredefinition,
+        structuremap,
+        subscription,
+        subscriptionstatus,
+        subscriptiontopic,
+        substance,
+        substancedefinition,
+        substancenucleicacid,
+        substancepolymer,
+        substanceprotein,
+        substancereferenceinformation,
+        substancesourcematerial,
+        supplydelivery,
+        supplyrequest,
+        task,
+        terminologycapabilities,
+        testplan,
+        testreport,
+        testscript,
+        timing,
+        transport,
+        triggerdefinition,
+        usagecontext,
+        valueset,
+        verificationresult,
+        virtualservicedetail,
+        visionprescription,
+    )
+    from .fhirprimitiveextension import FHIRPrimitiveExtension
 
-__author__ = "Md Nazrul Islam<email2nazrul@gmail.com>"
+    FHIRPrimitiveExtensionType = FHIRPrimitiveExtension
+    AccountType = account.Account
 
-FHIR_DATE_PARTS = re.compile(r"(?P<year>\d{4})(-(?P<month>\d{2}))?(-(?P<day>\d{2}))?$")
-FHIR_PRIMITIVES = [
-    "boolean",
-    "string",
-    "base64Binary",
-    "code",
-    "id",
-    "decimal",
-    "integer",
-    "unsignedInt",
-    "positiveInt",
-    "uri",
-    "oid",
-    "uuid",
-    "canonical",
-    "url",
-    "markdown",
-    "xhtml",
-    "date",
-    "dateTime",
-    "instant",
-    "time",
-]
+    AccountBalanceType = account.AccountBalance
 
+    AccountCoverageType = account.AccountCoverage
 
-class Primitive:
-    """FHIR Primitive Data Type Base Class"""
+    AccountDiagnosisType = account.AccountDiagnosis
 
-    __fhir_release__: str = "R4"
-    __visit_name__: Optional[str] = None
-    regex: Optional[Pattern[str]] = None
+    AccountGuarantorType = account.AccountGuarantor
 
-    @classmethod
-    def is_primitive(cls) -> bool:
-        """ """
-        return True
+    AccountProcedureType = account.AccountProcedure
 
-    @classmethod
-    def fhir_type_name(cls) -> Optional[str]:
-        """ """
-        return cls.__visit_name__
+    AccountRelatedAccountType = account.AccountRelatedAccount
 
+    ActivityDefinitionType = activitydefinition.ActivityDefinition
 
-if TYPE_CHECKING:
-    Boolean = bool
+    ActivityDefinitionDynamicValueType = (
+        activitydefinition.ActivityDefinitionDynamicValue
+    )
+
+    ActivityDefinitionParticipantType = activitydefinition.ActivityDefinitionParticipant
+
+    ActorDefinitionType = actordefinition.ActorDefinition
+
+    AddressType = address.Address
+
+    AdministrableProductDefinitionType = (
+        administrableproductdefinition.AdministrableProductDefinition
+    )
+
+    AdministrableProductDefinitionPropertyType = (
+        administrableproductdefinition.AdministrableProductDefinitionProperty
+    )
+
+    AdministrableProductDefinitionRouteOfAdministrationType = (
+        administrableproductdefinition.AdministrableProductDefinitionRouteOfAdministration
+    )
+
+    AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesType = (
+        administrableproductdefinition.AdministrableProductDefinitionRouteOfAdministrationTargetSpecies
+    )
+
+    AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesWithdrawalPeriodType = (
+        administrableproductdefinition.AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesWithdrawalPeriod
+    )
+
+    AdverseEventType = adverseevent.AdverseEvent
+
+    AdverseEventContributingFactorType = adverseevent.AdverseEventContributingFactor
+
+    AdverseEventMitigatingActionType = adverseevent.AdverseEventMitigatingAction
+
+    AdverseEventParticipantType = adverseevent.AdverseEventParticipant
+
+    AdverseEventPreventiveActionType = adverseevent.AdverseEventPreventiveAction
+
+    AdverseEventSupportingInfoType = adverseevent.AdverseEventSupportingInfo
+
+    AdverseEventSuspectEntityType = adverseevent.AdverseEventSuspectEntity
+
+    AdverseEventSuspectEntityCausalityType = (
+        adverseevent.AdverseEventSuspectEntityCausality
+    )
+
+    AgeType = age.Age
+
+    AllergyIntoleranceType = allergyintolerance.AllergyIntolerance
+
+    AllergyIntoleranceParticipantType = allergyintolerance.AllergyIntoleranceParticipant
+
+    AllergyIntoleranceReactionType = allergyintolerance.AllergyIntoleranceReaction
+
+    AnnotationType = annotation.Annotation
+
+    AppointmentType = appointment.Appointment
+
+    AppointmentParticipantType = appointment.AppointmentParticipant
+
+    AppointmentRecurrenceTemplateType = appointment.AppointmentRecurrenceTemplate
+
+    AppointmentRecurrenceTemplateMonthlyTemplateType = (
+        appointment.AppointmentRecurrenceTemplateMonthlyTemplate
+    )
+
+    AppointmentRecurrenceTemplateWeeklyTemplateType = (
+        appointment.AppointmentRecurrenceTemplateWeeklyTemplate
+    )
+
+    AppointmentRecurrenceTemplateYearlyTemplateType = (
+        appointment.AppointmentRecurrenceTemplateYearlyTemplate
+    )
+
+    AppointmentResponseType = appointmentresponse.AppointmentResponse
+
+    ArtifactAssessmentType = artifactassessment.ArtifactAssessment
+
+    ArtifactAssessmentContentType = artifactassessment.ArtifactAssessmentContent
+
+    AttachmentType = attachment.Attachment
+
+    AuditEventType = auditevent.AuditEvent
+
+    AuditEventAgentType = auditevent.AuditEventAgent
+
+    AuditEventEntityType = auditevent.AuditEventEntity
+
+    AuditEventEntityDetailType = auditevent.AuditEventEntityDetail
+
+    AuditEventOutcomeType = auditevent.AuditEventOutcome
+
+    AuditEventSourceType = auditevent.AuditEventSource
+
+    AvailabilityType = availability.Availability
+
+    AvailabilityAvailableTimeType = availability.AvailabilityAvailableTime
+
+    AvailabilityNotAvailableTimeType = availability.AvailabilityNotAvailableTime
+
+    BackboneElementType = backboneelement.BackboneElement
+
+    BackboneTypeType = backbonetype.BackboneType
+
+    BaseType = base.Base
+
+    BasicType = basic.Basic
+
+    BinaryType = binary.Binary
+
+    BiologicallyDerivedProductType = (
+        biologicallyderivedproduct.BiologicallyDerivedProduct
+    )
+
+    BiologicallyDerivedProductCollectionType = (
+        biologicallyderivedproduct.BiologicallyDerivedProductCollection
+    )
+
+    BiologicallyDerivedProductDispenseType = (
+        biologicallyderivedproductdispense.BiologicallyDerivedProductDispense
+    )
+
+    BiologicallyDerivedProductDispensePerformerType = (
+        biologicallyderivedproductdispense.BiologicallyDerivedProductDispensePerformer
+    )
+
+    BiologicallyDerivedProductPropertyType = (
+        biologicallyderivedproduct.BiologicallyDerivedProductProperty
+    )
+
+    BodyStructureType = bodystructure.BodyStructure
+
+    BodyStructureIncludedStructureType = bodystructure.BodyStructureIncludedStructure
+
+    BodyStructureIncludedStructureBodyLandmarkOrientationType = (
+        bodystructure.BodyStructureIncludedStructureBodyLandmarkOrientation
+    )
+
+    BodyStructureIncludedStructureBodyLandmarkOrientationDistanceFromLandmarkType = (
+        bodystructure.BodyStructureIncludedStructureBodyLandmarkOrientationDistanceFromLandmark
+    )
+
+    BundleType = bundle.Bundle
+
+    BundleEntryType = bundle.BundleEntry
+
+    BundleEntryRequestType = bundle.BundleEntryRequest
+
+    BundleEntryResponseType = bundle.BundleEntryResponse
+
+    BundleEntrySearchType = bundle.BundleEntrySearch
+
+    BundleLinkType = bundle.BundleLink
+
+    CanonicalResourceType = canonicalresource.CanonicalResource
+
+    CapabilityStatementType = capabilitystatement.CapabilityStatement
+
+    CapabilityStatementDocumentType = capabilitystatement.CapabilityStatementDocument
+
+    CapabilityStatementImplementationType = (
+        capabilitystatement.CapabilityStatementImplementation
+    )
+
+    CapabilityStatementMessagingType = capabilitystatement.CapabilityStatementMessaging
+
+    CapabilityStatementMessagingEndpointType = (
+        capabilitystatement.CapabilityStatementMessagingEndpoint
+    )
+
+    CapabilityStatementMessagingSupportedMessageType = (
+        capabilitystatement.CapabilityStatementMessagingSupportedMessage
+    )
+
+    CapabilityStatementRestType = capabilitystatement.CapabilityStatementRest
+
+    CapabilityStatementRestInteractionType = (
+        capabilitystatement.CapabilityStatementRestInteraction
+    )
+
+    CapabilityStatementRestResourceType = (
+        capabilitystatement.CapabilityStatementRestResource
+    )
+
+    CapabilityStatementRestResourceInteractionType = (
+        capabilitystatement.CapabilityStatementRestResourceInteraction
+    )
+
+    CapabilityStatementRestResourceOperationType = (
+        capabilitystatement.CapabilityStatementRestResourceOperation
+    )
+
+    CapabilityStatementRestResourceSearchParamType = (
+        capabilitystatement.CapabilityStatementRestResourceSearchParam
+    )
+
+    CapabilityStatementRestSecurityType = (
+        capabilitystatement.CapabilityStatementRestSecurity
+    )
+
+    CapabilityStatementSoftwareType = capabilitystatement.CapabilityStatementSoftware
+
+    CarePlanType = careplan.CarePlan
+
+    CarePlanActivityType = careplan.CarePlanActivity
+
+    CareTeamType = careteam.CareTeam
+
+    CareTeamParticipantType = careteam.CareTeamParticipant
+
+    ChargeItemType = chargeitem.ChargeItem
+
+    ChargeItemDefinitionType = chargeitemdefinition.ChargeItemDefinition
+
+    ChargeItemDefinitionApplicabilityType = (
+        chargeitemdefinition.ChargeItemDefinitionApplicability
+    )
+
+    ChargeItemDefinitionPropertyGroupType = (
+        chargeitemdefinition.ChargeItemDefinitionPropertyGroup
+    )
+
+    ChargeItemPerformerType = chargeitem.ChargeItemPerformer
+
+    CitationType = citation.Citation
+
+    CitationCitedArtifactType = citation.CitationCitedArtifact
+
+    CitationCitedArtifactAbstractType = citation.CitationCitedArtifactAbstract
+
+    CitationCitedArtifactClassificationType = (
+        citation.CitationCitedArtifactClassification
+    )
+
+    CitationCitedArtifactContributorshipType = (
+        citation.CitationCitedArtifactContributorship
+    )
+
+    CitationCitedArtifactContributorshipEntryType = (
+        citation.CitationCitedArtifactContributorshipEntry
+    )
+
+    CitationCitedArtifactContributorshipEntryContributionInstanceType = (
+        citation.CitationCitedArtifactContributorshipEntryContributionInstance
+    )
+
+    CitationCitedArtifactContributorshipSummaryType = (
+        citation.CitationCitedArtifactContributorshipSummary
+    )
+
+    CitationCitedArtifactPartType = citation.CitationCitedArtifactPart
+
+    CitationCitedArtifactPublicationFormType = (
+        citation.CitationCitedArtifactPublicationForm
+    )
+
+    CitationCitedArtifactPublicationFormPublishedInType = (
+        citation.CitationCitedArtifactPublicationFormPublishedIn
+    )
+
+    CitationCitedArtifactRelatesToType = citation.CitationCitedArtifactRelatesTo
+
+    CitationCitedArtifactStatusDateType = citation.CitationCitedArtifactStatusDate
+
+    CitationCitedArtifactTitleType = citation.CitationCitedArtifactTitle
+
+    CitationCitedArtifactVersionType = citation.CitationCitedArtifactVersion
+
+    CitationCitedArtifactWebLocationType = citation.CitationCitedArtifactWebLocation
+
+    CitationClassificationType = citation.CitationClassification
+
+    CitationStatusDateType = citation.CitationStatusDate
+
+    CitationSummaryType = citation.CitationSummary
+
+    ClaimType = claim.Claim
+
+    ClaimAccidentType = claim.ClaimAccident
+
+    ClaimCareTeamType = claim.ClaimCareTeam
+
+    ClaimDiagnosisType = claim.ClaimDiagnosis
+
+    ClaimEventType = claim.ClaimEvent
+
+    ClaimInsuranceType = claim.ClaimInsurance
+
+    ClaimItemType = claim.ClaimItem
+
+    ClaimItemBodySiteType = claim.ClaimItemBodySite
+
+    ClaimItemDetailType = claim.ClaimItemDetail
+
+    ClaimItemDetailSubDetailType = claim.ClaimItemDetailSubDetail
+
+    ClaimPayeeType = claim.ClaimPayee
+
+    ClaimProcedureType = claim.ClaimProcedure
+
+    ClaimRelatedType = claim.ClaimRelated
+
+    ClaimResponseType = claimresponse.ClaimResponse
+
+    ClaimResponseAddItemType = claimresponse.ClaimResponseAddItem
+
+    ClaimResponseAddItemBodySiteType = claimresponse.ClaimResponseAddItemBodySite
+
+    ClaimResponseAddItemDetailType = claimresponse.ClaimResponseAddItemDetail
+
+    ClaimResponseAddItemDetailSubDetailType = (
+        claimresponse.ClaimResponseAddItemDetailSubDetail
+    )
+
+    ClaimResponseErrorType = claimresponse.ClaimResponseError
+
+    ClaimResponseEventType = claimresponse.ClaimResponseEvent
+
+    ClaimResponseInsuranceType = claimresponse.ClaimResponseInsurance
+
+    ClaimResponseItemType = claimresponse.ClaimResponseItem
+
+    ClaimResponseItemAdjudicationType = claimresponse.ClaimResponseItemAdjudication
+
+    ClaimResponseItemDetailType = claimresponse.ClaimResponseItemDetail
+
+    ClaimResponseItemDetailSubDetailType = (
+        claimresponse.ClaimResponseItemDetailSubDetail
+    )
+
+    ClaimResponseItemReviewOutcomeType = claimresponse.ClaimResponseItemReviewOutcome
+
+    ClaimResponsePaymentType = claimresponse.ClaimResponsePayment
+
+    ClaimResponseProcessNoteType = claimresponse.ClaimResponseProcessNote
+
+    ClaimResponseTotalType = claimresponse.ClaimResponseTotal
+
+    ClaimSupportingInfoType = claim.ClaimSupportingInfo
+
+    ClinicalImpressionType = clinicalimpression.ClinicalImpression
+
+    ClinicalImpressionFindingType = clinicalimpression.ClinicalImpressionFinding
+
+    ClinicalUseDefinitionType = clinicalusedefinition.ClinicalUseDefinition
+
+    ClinicalUseDefinitionContraindicationType = (
+        clinicalusedefinition.ClinicalUseDefinitionContraindication
+    )
+
+    ClinicalUseDefinitionContraindicationOtherTherapyType = (
+        clinicalusedefinition.ClinicalUseDefinitionContraindicationOtherTherapy
+    )
+
+    ClinicalUseDefinitionIndicationType = (
+        clinicalusedefinition.ClinicalUseDefinitionIndication
+    )
+
+    ClinicalUseDefinitionInteractionType = (
+        clinicalusedefinition.ClinicalUseDefinitionInteraction
+    )
+
+    ClinicalUseDefinitionInteractionInteractantType = (
+        clinicalusedefinition.ClinicalUseDefinitionInteractionInteractant
+    )
+
+    ClinicalUseDefinitionUndesirableEffectType = (
+        clinicalusedefinition.ClinicalUseDefinitionUndesirableEffect
+    )
+
+    ClinicalUseDefinitionWarningType = (
+        clinicalusedefinition.ClinicalUseDefinitionWarning
+    )
+
+    CodeSystemType = codesystem.CodeSystem
+
+    CodeSystemConceptType = codesystem.CodeSystemConcept
+
+    CodeSystemConceptDesignationType = codesystem.CodeSystemConceptDesignation
+
+    CodeSystemConceptPropertyType = codesystem.CodeSystemConceptProperty
+
+    CodeSystemFilterType = codesystem.CodeSystemFilter
+
+    CodeSystemPropertyType = codesystem.CodeSystemProperty
+
+    CodeableConceptType = codeableconcept.CodeableConcept
+
+    CodeableReferenceType = codeablereference.CodeableReference
+
+    CodingType = coding.Coding
+
+    CommunicationType = communication.Communication
+
+    CommunicationPayloadType = communication.CommunicationPayload
+
+    CommunicationRequestType = communicationrequest.CommunicationRequest
+
+    CommunicationRequestPayloadType = communicationrequest.CommunicationRequestPayload
+
+    CompartmentDefinitionType = compartmentdefinition.CompartmentDefinition
+
+    CompartmentDefinitionResourceType = (
+        compartmentdefinition.CompartmentDefinitionResource
+    )
+
+    CompositionType = composition.Composition
+
+    CompositionAttesterType = composition.CompositionAttester
+
+    CompositionEventType = composition.CompositionEvent
+
+    CompositionSectionType = composition.CompositionSection
+
+    ConceptMapType = conceptmap.ConceptMap
+
+    ConceptMapAdditionalAttributeType = conceptmap.ConceptMapAdditionalAttribute
+
+    ConceptMapGroupType = conceptmap.ConceptMapGroup
+
+    ConceptMapGroupElementType = conceptmap.ConceptMapGroupElement
+
+    ConceptMapGroupElementTargetType = conceptmap.ConceptMapGroupElementTarget
+
+    ConceptMapGroupElementTargetDependsOnType = (
+        conceptmap.ConceptMapGroupElementTargetDependsOn
+    )
+
+    ConceptMapGroupElementTargetPropertyType = (
+        conceptmap.ConceptMapGroupElementTargetProperty
+    )
+
+    ConceptMapGroupUnmappedType = conceptmap.ConceptMapGroupUnmapped
+
+    ConceptMapPropertyType = conceptmap.ConceptMapProperty
+
+    ConditionType = condition.Condition
+
+    ConditionDefinitionType = conditiondefinition.ConditionDefinition
+
+    ConditionDefinitionMedicationType = (
+        conditiondefinition.ConditionDefinitionMedication
+    )
+
+    ConditionDefinitionObservationType = (
+        conditiondefinition.ConditionDefinitionObservation
+    )
+
+    ConditionDefinitionPlanType = conditiondefinition.ConditionDefinitionPlan
+
+    ConditionDefinitionPreconditionType = (
+        conditiondefinition.ConditionDefinitionPrecondition
+    )
+
+    ConditionDefinitionQuestionnaireType = (
+        conditiondefinition.ConditionDefinitionQuestionnaire
+    )
+
+    ConditionParticipantType = condition.ConditionParticipant
+
+    ConditionStageType = condition.ConditionStage
+
+    ConsentType = consent.Consent
+
+    ConsentPolicyBasisType = consent.ConsentPolicyBasis
+
+    ConsentProvisionType = consent.ConsentProvision
+
+    ConsentProvisionActorType = consent.ConsentProvisionActor
+
+    ConsentProvisionDataType = consent.ConsentProvisionData
+
+    ConsentVerificationType = consent.ConsentVerification
+
+    ContactDetailType = contactdetail.ContactDetail
+
+    ContactPointType = contactpoint.ContactPoint
+
+    ContractType = contract.Contract
+
+    ContractContentDefinitionType = contract.ContractContentDefinition
+
+    ContractFriendlyType = contract.ContractFriendly
+
+    ContractLegalType = contract.ContractLegal
+
+    ContractRuleType = contract.ContractRule
+
+    ContractSignerType = contract.ContractSigner
+
+    ContractTermType = contract.ContractTerm
+
+    ContractTermActionType = contract.ContractTermAction
+
+    ContractTermActionSubjectType = contract.ContractTermActionSubject
+
+    ContractTermAssetType = contract.ContractTermAsset
+
+    ContractTermAssetContextType = contract.ContractTermAssetContext
+
+    ContractTermAssetValuedItemType = contract.ContractTermAssetValuedItem
+
+    ContractTermOfferType = contract.ContractTermOffer
+
+    ContractTermOfferAnswerType = contract.ContractTermOfferAnswer
+
+    ContractTermOfferPartyType = contract.ContractTermOfferParty
+
+    ContractTermSecurityLabelType = contract.ContractTermSecurityLabel
+
+    ContributorType = contributor.Contributor
+
+    CountType = count.Count
+
+    CoverageType = coverage.Coverage
+
+    CoverageClassType = coverage.CoverageClass
+
+    CoverageCostToBeneficiaryType = coverage.CoverageCostToBeneficiary
+
+    CoverageCostToBeneficiaryExceptionType = coverage.CoverageCostToBeneficiaryException
+
+    CoverageEligibilityRequestType = (
+        coverageeligibilityrequest.CoverageEligibilityRequest
+    )
+
+    CoverageEligibilityRequestEventType = (
+        coverageeligibilityrequest.CoverageEligibilityRequestEvent
+    )
+
+    CoverageEligibilityRequestInsuranceType = (
+        coverageeligibilityrequest.CoverageEligibilityRequestInsurance
+    )
+
+    CoverageEligibilityRequestItemType = (
+        coverageeligibilityrequest.CoverageEligibilityRequestItem
+    )
+
+    CoverageEligibilityRequestItemDiagnosisType = (
+        coverageeligibilityrequest.CoverageEligibilityRequestItemDiagnosis
+    )
+
+    CoverageEligibilityRequestSupportingInfoType = (
+        coverageeligibilityrequest.CoverageEligibilityRequestSupportingInfo
+    )
+
+    CoverageEligibilityResponseType = (
+        coverageeligibilityresponse.CoverageEligibilityResponse
+    )
+
+    CoverageEligibilityResponseErrorType = (
+        coverageeligibilityresponse.CoverageEligibilityResponseError
+    )
+
+    CoverageEligibilityResponseEventType = (
+        coverageeligibilityresponse.CoverageEligibilityResponseEvent
+    )
+
+    CoverageEligibilityResponseInsuranceType = (
+        coverageeligibilityresponse.CoverageEligibilityResponseInsurance
+    )
+
+    CoverageEligibilityResponseInsuranceItemType = (
+        coverageeligibilityresponse.CoverageEligibilityResponseInsuranceItem
+    )
+
+    CoverageEligibilityResponseInsuranceItemBenefitType = (
+        coverageeligibilityresponse.CoverageEligibilityResponseInsuranceItemBenefit
+    )
+
+    CoveragePaymentByType = coverage.CoveragePaymentBy
+
+    DataRequirementType = datarequirement.DataRequirement
+
+    DataRequirementCodeFilterType = datarequirement.DataRequirementCodeFilter
+
+    DataRequirementDateFilterType = datarequirement.DataRequirementDateFilter
+
+    DataRequirementSortType = datarequirement.DataRequirementSort
+
+    DataRequirementValueFilterType = datarequirement.DataRequirementValueFilter
+
+    DataTypeType = datatype.DataType
+
+    DetectedIssueType = detectedissue.DetectedIssue
+
+    DetectedIssueEvidenceType = detectedissue.DetectedIssueEvidence
+
+    DetectedIssueMitigationType = detectedissue.DetectedIssueMitigation
+
+    DeviceType = device.Device
+
+    DeviceAssociationType = deviceassociation.DeviceAssociation
+
+    DeviceAssociationOperationType = deviceassociation.DeviceAssociationOperation
+
+    DeviceConformsToType = device.DeviceConformsTo
+
+    DeviceDefinitionType = devicedefinition.DeviceDefinition
+
+    DeviceDefinitionChargeItemType = devicedefinition.DeviceDefinitionChargeItem
+
+    DeviceDefinitionClassificationType = devicedefinition.DeviceDefinitionClassification
+
+    DeviceDefinitionConformsToType = devicedefinition.DeviceDefinitionConformsTo
+
+    DeviceDefinitionCorrectiveActionType = (
+        devicedefinition.DeviceDefinitionCorrectiveAction
+    )
+
+    DeviceDefinitionDeviceNameType = devicedefinition.DeviceDefinitionDeviceName
+
+    DeviceDefinitionGuidelineType = devicedefinition.DeviceDefinitionGuideline
+
+    DeviceDefinitionHasPartType = devicedefinition.DeviceDefinitionHasPart
+
+    DeviceDefinitionLinkType = devicedefinition.DeviceDefinitionLink
+
+    DeviceDefinitionMaterialType = devicedefinition.DeviceDefinitionMaterial
+
+    DeviceDefinitionPackagingType = devicedefinition.DeviceDefinitionPackaging
+
+    DeviceDefinitionPackagingDistributorType = (
+        devicedefinition.DeviceDefinitionPackagingDistributor
+    )
+
+    DeviceDefinitionPropertyType = devicedefinition.DeviceDefinitionProperty
+
+    DeviceDefinitionRegulatoryIdentifierType = (
+        devicedefinition.DeviceDefinitionRegulatoryIdentifier
+    )
+
+    DeviceDefinitionUdiDeviceIdentifierType = (
+        devicedefinition.DeviceDefinitionUdiDeviceIdentifier
+    )
+
+    DeviceDefinitionUdiDeviceIdentifierMarketDistributionType = (
+        devicedefinition.DeviceDefinitionUdiDeviceIdentifierMarketDistribution
+    )
+
+    DeviceDefinitionVersionType = devicedefinition.DeviceDefinitionVersion
+
+    DeviceDispenseType = devicedispense.DeviceDispense
+
+    DeviceDispensePerformerType = devicedispense.DeviceDispensePerformer
+
+    DeviceMetricType = devicemetric.DeviceMetric
+
+    DeviceMetricCalibrationType = devicemetric.DeviceMetricCalibration
+
+    DeviceNameType = device.DeviceName
+
+    DevicePropertyType = device.DeviceProperty
+
+    DeviceRequestType = devicerequest.DeviceRequest
+
+    DeviceRequestParameterType = devicerequest.DeviceRequestParameter
+
+    DeviceUdiCarrierType = device.DeviceUdiCarrier
+
+    DeviceUsageType = deviceusage.DeviceUsage
+
+    DeviceUsageAdherenceType = deviceusage.DeviceUsageAdherence
+
+    DeviceVersionType = device.DeviceVersion
+
+    DiagnosticReportType = diagnosticreport.DiagnosticReport
+
+    DiagnosticReportMediaType = diagnosticreport.DiagnosticReportMedia
+
+    DiagnosticReportSupportingInfoType = diagnosticreport.DiagnosticReportSupportingInfo
+
+    DistanceType = distance.Distance
+
+    DocumentReferenceType = documentreference.DocumentReference
+
+    DocumentReferenceAttesterType = documentreference.DocumentReferenceAttester
+
+    DocumentReferenceContentType = documentreference.DocumentReferenceContent
+
+    DocumentReferenceContentProfileType = (
+        documentreference.DocumentReferenceContentProfile
+    )
+
+    DocumentReferenceRelatesToType = documentreference.DocumentReferenceRelatesTo
+
+    DomainResourceType = domainresource.DomainResource
+
+    DosageType = dosage.Dosage
+
+    DosageDoseAndRateType = dosage.DosageDoseAndRate
+
+    DurationType = duration.Duration
+
+    ElementType = element.Element
+
+    ElementDefinitionType = elementdefinition.ElementDefinition
+
+    ElementDefinitionBaseType = elementdefinition.ElementDefinitionBase
+
+    ElementDefinitionBindingType = elementdefinition.ElementDefinitionBinding
+
+    ElementDefinitionBindingAdditionalType = (
+        elementdefinition.ElementDefinitionBindingAdditional
+    )
+
+    ElementDefinitionConstraintType = elementdefinition.ElementDefinitionConstraint
+
+    ElementDefinitionExampleType = elementdefinition.ElementDefinitionExample
+
+    ElementDefinitionMappingType = elementdefinition.ElementDefinitionMapping
+
+    ElementDefinitionSlicingType = elementdefinition.ElementDefinitionSlicing
+
+    ElementDefinitionSlicingDiscriminatorType = (
+        elementdefinition.ElementDefinitionSlicingDiscriminator
+    )
+
+    ElementDefinitionTypeType = elementdefinition.ElementDefinitionType
+
+    EncounterType = encounter.Encounter
+
+    EncounterAdmissionType = encounter.EncounterAdmission
+
+    EncounterDiagnosisType = encounter.EncounterDiagnosis
+
+    EncounterHistoryType = encounterhistory.EncounterHistory
+
+    EncounterHistoryLocationType = encounterhistory.EncounterHistoryLocation
+
+    EncounterLocationType = encounter.EncounterLocation
+
+    EncounterParticipantType = encounter.EncounterParticipant
+
+    EncounterReasonType = encounter.EncounterReason
+
+    EndpointType = endpoint.Endpoint
+
+    EndpointPayloadType = endpoint.EndpointPayload
+
+    EnrollmentRequestType = enrollmentrequest.EnrollmentRequest
+
+    EnrollmentResponseType = enrollmentresponse.EnrollmentResponse
+
+    EpisodeOfCareType = episodeofcare.EpisodeOfCare
+
+    EpisodeOfCareDiagnosisType = episodeofcare.EpisodeOfCareDiagnosis
+
+    EpisodeOfCareReasonType = episodeofcare.EpisodeOfCareReason
+
+    EpisodeOfCareStatusHistoryType = episodeofcare.EpisodeOfCareStatusHistory
+
+    EventDefinitionType = eventdefinition.EventDefinition
+
+    EvidenceType = evidence.Evidence
+
+    EvidenceCertaintyType = evidence.EvidenceCertainty
+
+    EvidenceReportType = evidencereport.EvidenceReport
+
+    EvidenceReportRelatesToType = evidencereport.EvidenceReportRelatesTo
+
+    EvidenceReportRelatesToTargetType = evidencereport.EvidenceReportRelatesToTarget
+
+    EvidenceReportSectionType = evidencereport.EvidenceReportSection
+
+    EvidenceReportSubjectType = evidencereport.EvidenceReportSubject
+
+    EvidenceReportSubjectCharacteristicType = (
+        evidencereport.EvidenceReportSubjectCharacteristic
+    )
+
+    EvidenceStatisticType = evidence.EvidenceStatistic
+
+    EvidenceStatisticAttributeEstimateType = evidence.EvidenceStatisticAttributeEstimate
+
+    EvidenceStatisticModelCharacteristicType = (
+        evidence.EvidenceStatisticModelCharacteristic
+    )
+
+    EvidenceStatisticModelCharacteristicVariableType = (
+        evidence.EvidenceStatisticModelCharacteristicVariable
+    )
+
+    EvidenceStatisticSampleSizeType = evidence.EvidenceStatisticSampleSize
+
+    EvidenceVariableType = evidencevariable.EvidenceVariable
+
+    EvidenceVariableCategoryType = evidencevariable.EvidenceVariableCategory
+
+    EvidenceVariableCharacteristicType = evidencevariable.EvidenceVariableCharacteristic
+
+    EvidenceVariableCharacteristicDefinitionByCombinationType = (
+        evidencevariable.EvidenceVariableCharacteristicDefinitionByCombination
+    )
+
+    EvidenceVariableCharacteristicDefinitionByTypeAndValueType = (
+        evidencevariable.EvidenceVariableCharacteristicDefinitionByTypeAndValue
+    )
+
+    EvidenceVariableCharacteristicTimeFromEventType = (
+        evidencevariable.EvidenceVariableCharacteristicTimeFromEvent
+    )
+
+    EvidenceVariableDefinitionType = evidence.EvidenceVariableDefinition
+
+    ExampleScenarioType = examplescenario.ExampleScenario
+
+    ExampleScenarioActorType = examplescenario.ExampleScenarioActor
+
+    ExampleScenarioInstanceType = examplescenario.ExampleScenarioInstance
+
+    ExampleScenarioInstanceContainedInstanceType = (
+        examplescenario.ExampleScenarioInstanceContainedInstance
+    )
+
+    ExampleScenarioInstanceVersionType = examplescenario.ExampleScenarioInstanceVersion
+
+    ExampleScenarioProcessType = examplescenario.ExampleScenarioProcess
+
+    ExampleScenarioProcessStepType = examplescenario.ExampleScenarioProcessStep
+
+    ExampleScenarioProcessStepAlternativeType = (
+        examplescenario.ExampleScenarioProcessStepAlternative
+    )
+
+    ExampleScenarioProcessStepOperationType = (
+        examplescenario.ExampleScenarioProcessStepOperation
+    )
+
+    ExplanationOfBenefitType = explanationofbenefit.ExplanationOfBenefit
+
+    ExplanationOfBenefitAccidentType = explanationofbenefit.ExplanationOfBenefitAccident
+
+    ExplanationOfBenefitAddItemType = explanationofbenefit.ExplanationOfBenefitAddItem
+
+    ExplanationOfBenefitAddItemBodySiteType = (
+        explanationofbenefit.ExplanationOfBenefitAddItemBodySite
+    )
+
+    ExplanationOfBenefitAddItemDetailType = (
+        explanationofbenefit.ExplanationOfBenefitAddItemDetail
+    )
+
+    ExplanationOfBenefitAddItemDetailSubDetailType = (
+        explanationofbenefit.ExplanationOfBenefitAddItemDetailSubDetail
+    )
+
+    ExplanationOfBenefitBenefitBalanceType = (
+        explanationofbenefit.ExplanationOfBenefitBenefitBalance
+    )
+
+    ExplanationOfBenefitBenefitBalanceFinancialType = (
+        explanationofbenefit.ExplanationOfBenefitBenefitBalanceFinancial
+    )
+
+    ExplanationOfBenefitCareTeamType = explanationofbenefit.ExplanationOfBenefitCareTeam
+
+    ExplanationOfBenefitDiagnosisType = (
+        explanationofbenefit.ExplanationOfBenefitDiagnosis
+    )
+
+    ExplanationOfBenefitEventType = explanationofbenefit.ExplanationOfBenefitEvent
+
+    ExplanationOfBenefitInsuranceType = (
+        explanationofbenefit.ExplanationOfBenefitInsurance
+    )
+
+    ExplanationOfBenefitItemType = explanationofbenefit.ExplanationOfBenefitItem
+
+    ExplanationOfBenefitItemAdjudicationType = (
+        explanationofbenefit.ExplanationOfBenefitItemAdjudication
+    )
+
+    ExplanationOfBenefitItemBodySiteType = (
+        explanationofbenefit.ExplanationOfBenefitItemBodySite
+    )
+
+    ExplanationOfBenefitItemDetailType = (
+        explanationofbenefit.ExplanationOfBenefitItemDetail
+    )
+
+    ExplanationOfBenefitItemDetailSubDetailType = (
+        explanationofbenefit.ExplanationOfBenefitItemDetailSubDetail
+    )
+
+    ExplanationOfBenefitItemReviewOutcomeType = (
+        explanationofbenefit.ExplanationOfBenefitItemReviewOutcome
+    )
+
+    ExplanationOfBenefitPayeeType = explanationofbenefit.ExplanationOfBenefitPayee
+
+    ExplanationOfBenefitPaymentType = explanationofbenefit.ExplanationOfBenefitPayment
+
+    ExplanationOfBenefitProcedureType = (
+        explanationofbenefit.ExplanationOfBenefitProcedure
+    )
+
+    ExplanationOfBenefitProcessNoteType = (
+        explanationofbenefit.ExplanationOfBenefitProcessNote
+    )
+
+    ExplanationOfBenefitRelatedType = explanationofbenefit.ExplanationOfBenefitRelated
+
+    ExplanationOfBenefitSupportingInfoType = (
+        explanationofbenefit.ExplanationOfBenefitSupportingInfo
+    )
+
+    ExplanationOfBenefitTotalType = explanationofbenefit.ExplanationOfBenefitTotal
+
+    ExpressionType = expression.Expression
+
+    ExtendedContactDetailType = extendedcontactdetail.ExtendedContactDetail
+
+    ExtensionType = extension.Extension
+
+    FamilyMemberHistoryType = familymemberhistory.FamilyMemberHistory
+
+    FamilyMemberHistoryConditionType = familymemberhistory.FamilyMemberHistoryCondition
+
+    FamilyMemberHistoryParticipantType = (
+        familymemberhistory.FamilyMemberHistoryParticipant
+    )
+
+    FamilyMemberHistoryProcedureType = familymemberhistory.FamilyMemberHistoryProcedure
+
+    FlagType = flag.Flag
+
+    FormularyItemType = formularyitem.FormularyItem
+
+    GenomicStudyType = genomicstudy.GenomicStudy
+
+    GenomicStudyAnalysisType = genomicstudy.GenomicStudyAnalysis
+
+    GenomicStudyAnalysisDeviceType = genomicstudy.GenomicStudyAnalysisDevice
+
+    GenomicStudyAnalysisInputType = genomicstudy.GenomicStudyAnalysisInput
+
+    GenomicStudyAnalysisOutputType = genomicstudy.GenomicStudyAnalysisOutput
+
+    GenomicStudyAnalysisPerformerType = genomicstudy.GenomicStudyAnalysisPerformer
+
+    GoalType = goal.Goal
+
+    GoalTargetType = goal.GoalTarget
+
+    GraphDefinitionType = graphdefinition.GraphDefinition
+
+    GraphDefinitionLinkType = graphdefinition.GraphDefinitionLink
+
+    GraphDefinitionLinkCompartmentType = graphdefinition.GraphDefinitionLinkCompartment
+
+    GraphDefinitionNodeType = graphdefinition.GraphDefinitionNode
+
+    GroupType = group.Group
+
+    GroupCharacteristicType = group.GroupCharacteristic
+
+    GroupMemberType = group.GroupMember
+
+    GuidanceResponseType = guidanceresponse.GuidanceResponse
+
+    HealthcareServiceType = healthcareservice.HealthcareService
+
+    HealthcareServiceEligibilityType = healthcareservice.HealthcareServiceEligibility
+
+    HumanNameType = humanname.HumanName
+
+    IdentifierType = identifier.Identifier
+
+    ImagingSelectionType = imagingselection.ImagingSelection
+
+    ImagingSelectionInstanceType = imagingselection.ImagingSelectionInstance
+
+    ImagingSelectionInstanceImageRegion2DType = (
+        imagingselection.ImagingSelectionInstanceImageRegion2D
+    )
+
+    ImagingSelectionInstanceImageRegion3DType = (
+        imagingselection.ImagingSelectionInstanceImageRegion3D
+    )
+
+    ImagingSelectionPerformerType = imagingselection.ImagingSelectionPerformer
+
+    ImagingStudyType = imagingstudy.ImagingStudy
+
+    ImagingStudySeriesType = imagingstudy.ImagingStudySeries
+
+    ImagingStudySeriesInstanceType = imagingstudy.ImagingStudySeriesInstance
+
+    ImagingStudySeriesPerformerType = imagingstudy.ImagingStudySeriesPerformer
+
+    ImmunizationType = immunization.Immunization
+
+    ImmunizationEvaluationType = immunizationevaluation.ImmunizationEvaluation
+
+    ImmunizationPerformerType = immunization.ImmunizationPerformer
+
+    ImmunizationProgramEligibilityType = immunization.ImmunizationProgramEligibility
+
+    ImmunizationProtocolAppliedType = immunization.ImmunizationProtocolApplied
+
+    ImmunizationReactionType = immunization.ImmunizationReaction
+
+    ImmunizationRecommendationType = (
+        immunizationrecommendation.ImmunizationRecommendation
+    )
+
+    ImmunizationRecommendationRecommendationType = (
+        immunizationrecommendation.ImmunizationRecommendationRecommendation
+    )
+
+    ImmunizationRecommendationRecommendationDateCriterionType = (
+        immunizationrecommendation.ImmunizationRecommendationRecommendationDateCriterion
+    )
+
+    ImplementationGuideType = implementationguide.ImplementationGuide
+
+    ImplementationGuideDefinitionType = (
+        implementationguide.ImplementationGuideDefinition
+    )
+
+    ImplementationGuideDefinitionGroupingType = (
+        implementationguide.ImplementationGuideDefinitionGrouping
+    )
+
+    ImplementationGuideDefinitionPageType = (
+        implementationguide.ImplementationGuideDefinitionPage
+    )
+
+    ImplementationGuideDefinitionParameterType = (
+        implementationguide.ImplementationGuideDefinitionParameter
+    )
+
+    ImplementationGuideDefinitionResourceType = (
+        implementationguide.ImplementationGuideDefinitionResource
+    )
+
+    ImplementationGuideDefinitionTemplateType = (
+        implementationguide.ImplementationGuideDefinitionTemplate
+    )
+
+    ImplementationGuideDependsOnType = implementationguide.ImplementationGuideDependsOn
+
+    ImplementationGuideGlobalType = implementationguide.ImplementationGuideGlobal
+
+    ImplementationGuideManifestType = implementationguide.ImplementationGuideManifest
+
+    ImplementationGuideManifestPageType = (
+        implementationguide.ImplementationGuideManifestPage
+    )
+
+    ImplementationGuideManifestResourceType = (
+        implementationguide.ImplementationGuideManifestResource
+    )
+
+    IngredientType = ingredient.Ingredient
+
+    IngredientManufacturerType = ingredient.IngredientManufacturer
+
+    IngredientSubstanceType = ingredient.IngredientSubstance
+
+    IngredientSubstanceStrengthType = ingredient.IngredientSubstanceStrength
+
+    IngredientSubstanceStrengthReferenceStrengthType = (
+        ingredient.IngredientSubstanceStrengthReferenceStrength
+    )
+
+    InsurancePlanType = insuranceplan.InsurancePlan
+
+    InsurancePlanCoverageType = insuranceplan.InsurancePlanCoverage
+
+    InsurancePlanCoverageBenefitType = insuranceplan.InsurancePlanCoverageBenefit
+
+    InsurancePlanCoverageBenefitLimitType = (
+        insuranceplan.InsurancePlanCoverageBenefitLimit
+    )
+
+    InsurancePlanPlanType = insuranceplan.InsurancePlanPlan
+
+    InsurancePlanPlanGeneralCostType = insuranceplan.InsurancePlanPlanGeneralCost
+
+    InsurancePlanPlanSpecificCostType = insuranceplan.InsurancePlanPlanSpecificCost
+
+    InsurancePlanPlanSpecificCostBenefitType = (
+        insuranceplan.InsurancePlanPlanSpecificCostBenefit
+    )
+
+    InsurancePlanPlanSpecificCostBenefitCostType = (
+        insuranceplan.InsurancePlanPlanSpecificCostBenefitCost
+    )
+
+    InventoryItemType = inventoryitem.InventoryItem
+
+    InventoryItemAssociationType = inventoryitem.InventoryItemAssociation
+
+    InventoryItemCharacteristicType = inventoryitem.InventoryItemCharacteristic
+
+    InventoryItemDescriptionType = inventoryitem.InventoryItemDescription
+
+    InventoryItemInstanceType = inventoryitem.InventoryItemInstance
+
+    InventoryItemNameType = inventoryitem.InventoryItemName
+
+    InventoryItemResponsibleOrganizationType = (
+        inventoryitem.InventoryItemResponsibleOrganization
+    )
+
+    InventoryReportType = inventoryreport.InventoryReport
+
+    InventoryReportInventoryListingType = (
+        inventoryreport.InventoryReportInventoryListing
+    )
+
+    InventoryReportInventoryListingItemType = (
+        inventoryreport.InventoryReportInventoryListingItem
+    )
+
+    InvoiceType = invoice.Invoice
+
+    InvoiceLineItemType = invoice.InvoiceLineItem
+
+    InvoiceParticipantType = invoice.InvoiceParticipant
+
+    LibraryType = library.Library
+
+    LinkageType = linkage.Linkage
+
+    LinkageItemType = linkage.LinkageItem
+
+    ListType = list.List
+
+    ListEntryType = list.ListEntry
+
+    LocationType = location.Location
+
+    LocationPositionType = location.LocationPosition
+
+    ManufacturedItemDefinitionType = (
+        manufactureditemdefinition.ManufacturedItemDefinition
+    )
+
+    ManufacturedItemDefinitionComponentType = (
+        manufactureditemdefinition.ManufacturedItemDefinitionComponent
+    )
+
+    ManufacturedItemDefinitionComponentConstituentType = (
+        manufactureditemdefinition.ManufacturedItemDefinitionComponentConstituent
+    )
+
+    ManufacturedItemDefinitionPropertyType = (
+        manufactureditemdefinition.ManufacturedItemDefinitionProperty
+    )
+
+    MarketingStatusType = marketingstatus.MarketingStatus
+
+    MeasureType = measure.Measure
+
+    MeasureGroupType = measure.MeasureGroup
+
+    MeasureGroupPopulationType = measure.MeasureGroupPopulation
+
+    MeasureGroupStratifierType = measure.MeasureGroupStratifier
+
+    MeasureGroupStratifierComponentType = measure.MeasureGroupStratifierComponent
+
+    MeasureReportType = measurereport.MeasureReport
+
+    MeasureReportGroupType = measurereport.MeasureReportGroup
+
+    MeasureReportGroupPopulationType = measurereport.MeasureReportGroupPopulation
+
+    MeasureReportGroupStratifierType = measurereport.MeasureReportGroupStratifier
+
+    MeasureReportGroupStratifierStratumType = (
+        measurereport.MeasureReportGroupStratifierStratum
+    )
+
+    MeasureReportGroupStratifierStratumComponentType = (
+        measurereport.MeasureReportGroupStratifierStratumComponent
+    )
+
+    MeasureReportGroupStratifierStratumPopulationType = (
+        measurereport.MeasureReportGroupStratifierStratumPopulation
+    )
+
+    MeasureSupplementalDataType = measure.MeasureSupplementalData
+
+    MeasureTermType = measure.MeasureTerm
+
+    MedicationType = medication.Medication
+
+    MedicationAdministrationType = medicationadministration.MedicationAdministration
+
+    MedicationAdministrationDosageType = (
+        medicationadministration.MedicationAdministrationDosage
+    )
+
+    MedicationAdministrationPerformerType = (
+        medicationadministration.MedicationAdministrationPerformer
+    )
+
+    MedicationBatchType = medication.MedicationBatch
+
+    MedicationDispenseType = medicationdispense.MedicationDispense
+
+    MedicationDispensePerformerType = medicationdispense.MedicationDispensePerformer
+
+    MedicationDispenseSubstitutionType = (
+        medicationdispense.MedicationDispenseSubstitution
+    )
+
+    MedicationIngredientType = medication.MedicationIngredient
+
+    MedicationKnowledgeType = medicationknowledge.MedicationKnowledge
+
+    MedicationKnowledgeCostType = medicationknowledge.MedicationKnowledgeCost
+
+    MedicationKnowledgeDefinitionalType = (
+        medicationknowledge.MedicationKnowledgeDefinitional
+    )
+
+    MedicationKnowledgeDefinitionalDrugCharacteristicType = (
+        medicationknowledge.MedicationKnowledgeDefinitionalDrugCharacteristic
+    )
+
+    MedicationKnowledgeDefinitionalIngredientType = (
+        medicationknowledge.MedicationKnowledgeDefinitionalIngredient
+    )
+
+    MedicationKnowledgeIndicationGuidelineType = (
+        medicationknowledge.MedicationKnowledgeIndicationGuideline
+    )
+
+    MedicationKnowledgeIndicationGuidelineDosingGuidelineType = (
+        medicationknowledge.MedicationKnowledgeIndicationGuidelineDosingGuideline
+    )
+
+    MedicationKnowledgeIndicationGuidelineDosingGuidelineDosageType = (
+        medicationknowledge.MedicationKnowledgeIndicationGuidelineDosingGuidelineDosage
+    )
+
+    MedicationKnowledgeIndicationGuidelineDosingGuidelinePatientCharacteristicType = (
+        medicationknowledge.MedicationKnowledgeIndicationGuidelineDosingGuidelinePatientCharacteristic
+    )
+
+    MedicationKnowledgeMedicineClassificationType = (
+        medicationknowledge.MedicationKnowledgeMedicineClassification
+    )
+
+    MedicationKnowledgeMonitoringProgramType = (
+        medicationknowledge.MedicationKnowledgeMonitoringProgram
+    )
+
+    MedicationKnowledgeMonographType = medicationknowledge.MedicationKnowledgeMonograph
+
+    MedicationKnowledgePackagingType = medicationknowledge.MedicationKnowledgePackaging
+
+    MedicationKnowledgeRegulatoryType = (
+        medicationknowledge.MedicationKnowledgeRegulatory
+    )
+
+    MedicationKnowledgeRegulatoryMaxDispenseType = (
+        medicationknowledge.MedicationKnowledgeRegulatoryMaxDispense
+    )
+
+    MedicationKnowledgeRegulatorySubstitutionType = (
+        medicationknowledge.MedicationKnowledgeRegulatorySubstitution
+    )
+
+    MedicationKnowledgeRelatedMedicationKnowledgeType = (
+        medicationknowledge.MedicationKnowledgeRelatedMedicationKnowledge
+    )
+
+    MedicationKnowledgeStorageGuidelineType = (
+        medicationknowledge.MedicationKnowledgeStorageGuideline
+    )
+
+    MedicationKnowledgeStorageGuidelineEnvironmentalSettingType = (
+        medicationknowledge.MedicationKnowledgeStorageGuidelineEnvironmentalSetting
+    )
+
+    MedicationRequestType = medicationrequest.MedicationRequest
+
+    MedicationRequestDispenseRequestType = (
+        medicationrequest.MedicationRequestDispenseRequest
+    )
+
+    MedicationRequestDispenseRequestInitialFillType = (
+        medicationrequest.MedicationRequestDispenseRequestInitialFill
+    )
+
+    MedicationRequestSubstitutionType = medicationrequest.MedicationRequestSubstitution
+
+    MedicationStatementType = medicationstatement.MedicationStatement
+
+    MedicationStatementAdherenceType = medicationstatement.MedicationStatementAdherence
+
+    MedicinalProductDefinitionType = (
+        medicinalproductdefinition.MedicinalProductDefinition
+    )
+
+    MedicinalProductDefinitionCharacteristicType = (
+        medicinalproductdefinition.MedicinalProductDefinitionCharacteristic
+    )
+
+    MedicinalProductDefinitionContactType = (
+        medicinalproductdefinition.MedicinalProductDefinitionContact
+    )
+
+    MedicinalProductDefinitionCrossReferenceType = (
+        medicinalproductdefinition.MedicinalProductDefinitionCrossReference
+    )
+
+    MedicinalProductDefinitionNameType = (
+        medicinalproductdefinition.MedicinalProductDefinitionName
+    )
+
+    MedicinalProductDefinitionNamePartType = (
+        medicinalproductdefinition.MedicinalProductDefinitionNamePart
+    )
+
+    MedicinalProductDefinitionNameUsageType = (
+        medicinalproductdefinition.MedicinalProductDefinitionNameUsage
+    )
+
+    MedicinalProductDefinitionOperationType = (
+        medicinalproductdefinition.MedicinalProductDefinitionOperation
+    )
+
+    MessageDefinitionType = messagedefinition.MessageDefinition
+
+    MessageDefinitionAllowedResponseType = (
+        messagedefinition.MessageDefinitionAllowedResponse
+    )
+
+    MessageDefinitionFocusType = messagedefinition.MessageDefinitionFocus
+
+    MessageHeaderType = messageheader.MessageHeader
+
+    MessageHeaderDestinationType = messageheader.MessageHeaderDestination
+
+    MessageHeaderResponseType = messageheader.MessageHeaderResponse
+
+    MessageHeaderSourceType = messageheader.MessageHeaderSource
+
+    MetaType = meta.Meta
+
+    MetadataResourceType = metadataresource.MetadataResource
+
+    MolecularSequenceType = molecularsequence.MolecularSequence
+
+    MolecularSequenceRelativeType = molecularsequence.MolecularSequenceRelative
+
+    MolecularSequenceRelativeEditType = molecularsequence.MolecularSequenceRelativeEdit
+
+    MolecularSequenceRelativeStartingSequenceType = (
+        molecularsequence.MolecularSequenceRelativeStartingSequence
+    )
+
+    MonetaryComponentType = monetarycomponent.MonetaryComponent
+
+    MoneyType = money.Money
+
+    NamingSystemType = namingsystem.NamingSystem
+
+    NamingSystemUniqueIdType = namingsystem.NamingSystemUniqueId
+
+    NarrativeType = narrative.Narrative
+
+    NutritionIntakeType = nutritionintake.NutritionIntake
+
+    NutritionIntakeConsumedItemType = nutritionintake.NutritionIntakeConsumedItem
+
+    NutritionIntakeIngredientLabelType = nutritionintake.NutritionIntakeIngredientLabel
+
+    NutritionIntakePerformerType = nutritionintake.NutritionIntakePerformer
+
+    NutritionOrderType = nutritionorder.NutritionOrder
+
+    NutritionOrderEnteralFormulaType = nutritionorder.NutritionOrderEnteralFormula
+
+    NutritionOrderEnteralFormulaAdditiveType = (
+        nutritionorder.NutritionOrderEnteralFormulaAdditive
+    )
+
+    NutritionOrderEnteralFormulaAdministrationType = (
+        nutritionorder.NutritionOrderEnteralFormulaAdministration
+    )
+
+    NutritionOrderEnteralFormulaAdministrationScheduleType = (
+        nutritionorder.NutritionOrderEnteralFormulaAdministrationSchedule
+    )
+
+    NutritionOrderOralDietType = nutritionorder.NutritionOrderOralDiet
+
+    NutritionOrderOralDietNutrientType = nutritionorder.NutritionOrderOralDietNutrient
+
+    NutritionOrderOralDietScheduleType = nutritionorder.NutritionOrderOralDietSchedule
+
+    NutritionOrderOralDietTextureType = nutritionorder.NutritionOrderOralDietTexture
+
+    NutritionOrderSupplementType = nutritionorder.NutritionOrderSupplement
+
+    NutritionOrderSupplementScheduleType = (
+        nutritionorder.NutritionOrderSupplementSchedule
+    )
+
+    NutritionProductType = nutritionproduct.NutritionProduct
+
+    NutritionProductCharacteristicType = nutritionproduct.NutritionProductCharacteristic
+
+    NutritionProductIngredientType = nutritionproduct.NutritionProductIngredient
+
+    NutritionProductInstanceType = nutritionproduct.NutritionProductInstance
+
+    NutritionProductNutrientType = nutritionproduct.NutritionProductNutrient
+
+    ObservationType = observation.Observation
+
+    ObservationComponentType = observation.ObservationComponent
+
+    ObservationDefinitionType = observationdefinition.ObservationDefinition
+
+    ObservationDefinitionComponentType = (
+        observationdefinition.ObservationDefinitionComponent
+    )
+
+    ObservationDefinitionQualifiedValueType = (
+        observationdefinition.ObservationDefinitionQualifiedValue
+    )
+
+    ObservationReferenceRangeType = observation.ObservationReferenceRange
+
+    ObservationTriggeredByType = observation.ObservationTriggeredBy
+
+    OperationDefinitionType = operationdefinition.OperationDefinition
+
+    OperationDefinitionOverloadType = operationdefinition.OperationDefinitionOverload
+
+    OperationDefinitionParameterType = operationdefinition.OperationDefinitionParameter
+
+    OperationDefinitionParameterBindingType = (
+        operationdefinition.OperationDefinitionParameterBinding
+    )
+
+    OperationDefinitionParameterReferencedFromType = (
+        operationdefinition.OperationDefinitionParameterReferencedFrom
+    )
+
+    OperationOutcomeType = operationoutcome.OperationOutcome
+
+    OperationOutcomeIssueType = operationoutcome.OperationOutcomeIssue
+
+    OrganizationType = organization.Organization
+
+    OrganizationAffiliationType = organizationaffiliation.OrganizationAffiliation
+
+    OrganizationQualificationType = organization.OrganizationQualification
+
+    PackagedProductDefinitionType = packagedproductdefinition.PackagedProductDefinition
+
+    PackagedProductDefinitionLegalStatusOfSupplyType = (
+        packagedproductdefinition.PackagedProductDefinitionLegalStatusOfSupply
+    )
+
+    PackagedProductDefinitionPackagingType = (
+        packagedproductdefinition.PackagedProductDefinitionPackaging
+    )
+
+    PackagedProductDefinitionPackagingContainedItemType = (
+        packagedproductdefinition.PackagedProductDefinitionPackagingContainedItem
+    )
+
+    PackagedProductDefinitionPackagingPropertyType = (
+        packagedproductdefinition.PackagedProductDefinitionPackagingProperty
+    )
+
+    ParameterDefinitionType = parameterdefinition.ParameterDefinition
+
+    ParametersType = parameters.Parameters
+
+    ParametersParameterType = parameters.ParametersParameter
+
+    PatientType = patient.Patient
+
+    PatientCommunicationType = patient.PatientCommunication
+
+    PatientContactType = patient.PatientContact
+
+    PatientLinkType = patient.PatientLink
+
+    PaymentNoticeType = paymentnotice.PaymentNotice
+
+    PaymentReconciliationType = paymentreconciliation.PaymentReconciliation
+
+    PaymentReconciliationAllocationType = (
+        paymentreconciliation.PaymentReconciliationAllocation
+    )
+
+    PaymentReconciliationProcessNoteType = (
+        paymentreconciliation.PaymentReconciliationProcessNote
+    )
+
+    PeriodType = period.Period
+
+    PermissionType = permission.Permission
+
+    PermissionJustificationType = permission.PermissionJustification
+
+    PermissionRuleType = permission.PermissionRule
+
+    PermissionRuleActivityType = permission.PermissionRuleActivity
+
+    PermissionRuleDataType = permission.PermissionRuleData
+
+    PermissionRuleDataResourceType = permission.PermissionRuleDataResource
+
+    PersonType = person.Person
+
+    PersonCommunicationType = person.PersonCommunication
+
+    PersonLinkType = person.PersonLink
+
+    PlanDefinitionType = plandefinition.PlanDefinition
+
+    PlanDefinitionActionType = plandefinition.PlanDefinitionAction
+
+    PlanDefinitionActionConditionType = plandefinition.PlanDefinitionActionCondition
+
+    PlanDefinitionActionDynamicValueType = (
+        plandefinition.PlanDefinitionActionDynamicValue
+    )
+
+    PlanDefinitionActionInputType = plandefinition.PlanDefinitionActionInput
+
+    PlanDefinitionActionOutputType = plandefinition.PlanDefinitionActionOutput
+
+    PlanDefinitionActionParticipantType = plandefinition.PlanDefinitionActionParticipant
+
+    PlanDefinitionActionRelatedActionType = (
+        plandefinition.PlanDefinitionActionRelatedAction
+    )
+
+    PlanDefinitionActorType = plandefinition.PlanDefinitionActor
+
+    PlanDefinitionActorOptionType = plandefinition.PlanDefinitionActorOption
+
+    PlanDefinitionGoalType = plandefinition.PlanDefinitionGoal
+
+    PlanDefinitionGoalTargetType = plandefinition.PlanDefinitionGoalTarget
+
+    PractitionerType = practitioner.Practitioner
+
+    PractitionerCommunicationType = practitioner.PractitionerCommunication
+
+    PractitionerQualificationType = practitioner.PractitionerQualification
+
+    PractitionerRoleType = practitionerrole.PractitionerRole
+
+    PrimitiveTypeType = primitivetype.PrimitiveType
+
+    ProcedureType = procedure.Procedure
+
+    ProcedureFocalDeviceType = procedure.ProcedureFocalDevice
+
+    ProcedurePerformerType = procedure.ProcedurePerformer
+
+    ProductShelfLifeType = productshelflife.ProductShelfLife
+
+    ProvenanceType = provenance.Provenance
+
+    ProvenanceAgentType = provenance.ProvenanceAgent
+
+    ProvenanceEntityType = provenance.ProvenanceEntity
+
+    QuantityType = quantity.Quantity
+
+    QuestionnaireType = questionnaire.Questionnaire
+
+    QuestionnaireItemType = questionnaire.QuestionnaireItem
+
+    QuestionnaireItemAnswerOptionType = questionnaire.QuestionnaireItemAnswerOption
+
+    QuestionnaireItemEnableWhenType = questionnaire.QuestionnaireItemEnableWhen
+
+    QuestionnaireItemInitialType = questionnaire.QuestionnaireItemInitial
+
+    QuestionnaireResponseType = questionnaireresponse.QuestionnaireResponse
+
+    QuestionnaireResponseItemType = questionnaireresponse.QuestionnaireResponseItem
+
+    QuestionnaireResponseItemAnswerType = (
+        questionnaireresponse.QuestionnaireResponseItemAnswer
+    )
+
+    RangeType = range.Range
+
+    RatioType = ratio.Ratio
+
+    RatioRangeType = ratiorange.RatioRange
+
+    ReferenceType = reference.Reference
+
+    RegulatedAuthorizationType = regulatedauthorization.RegulatedAuthorization
+
+    RegulatedAuthorizationCaseType = regulatedauthorization.RegulatedAuthorizationCase
+
+    RelatedArtifactType = relatedartifact.RelatedArtifact
+
+    RelatedPersonType = relatedperson.RelatedPerson
+
+    RelatedPersonCommunicationType = relatedperson.RelatedPersonCommunication
+
+    RequestOrchestrationType = requestorchestration.RequestOrchestration
+
+    RequestOrchestrationActionType = requestorchestration.RequestOrchestrationAction
+
+    RequestOrchestrationActionConditionType = (
+        requestorchestration.RequestOrchestrationActionCondition
+    )
+
+    RequestOrchestrationActionDynamicValueType = (
+        requestorchestration.RequestOrchestrationActionDynamicValue
+    )
+
+    RequestOrchestrationActionInputType = (
+        requestorchestration.RequestOrchestrationActionInput
+    )
+
+    RequestOrchestrationActionOutputType = (
+        requestorchestration.RequestOrchestrationActionOutput
+    )
+
+    RequestOrchestrationActionParticipantType = (
+        requestorchestration.RequestOrchestrationActionParticipant
+    )
+
+    RequestOrchestrationActionRelatedActionType = (
+        requestorchestration.RequestOrchestrationActionRelatedAction
+    )
+
+    RequirementsType = requirements.Requirements
+
+    RequirementsStatementType = requirements.RequirementsStatement
+
+    ResearchStudyType = researchstudy.ResearchStudy
+
+    ResearchStudyAssociatedPartyType = researchstudy.ResearchStudyAssociatedParty
+
+    ResearchStudyComparisonGroupType = researchstudy.ResearchStudyComparisonGroup
+
+    ResearchStudyLabelType = researchstudy.ResearchStudyLabel
+
+    ResearchStudyObjectiveType = researchstudy.ResearchStudyObjective
+
+    ResearchStudyOutcomeMeasureType = researchstudy.ResearchStudyOutcomeMeasure
+
+    ResearchStudyProgressStatusType = researchstudy.ResearchStudyProgressStatus
+
+    ResearchStudyRecruitmentType = researchstudy.ResearchStudyRecruitment
+
+    ResearchSubjectType = researchsubject.ResearchSubject
+
+    ResearchSubjectProgressType = researchsubject.ResearchSubjectProgress
+
+    ResourceType = resource.Resource
+
+    RiskAssessmentType = riskassessment.RiskAssessment
+
+    RiskAssessmentPredictionType = riskassessment.RiskAssessmentPrediction
+
+    SampledDataType = sampleddata.SampledData
+
+    ScheduleType = schedule.Schedule
+
+    SearchParameterType = searchparameter.SearchParameter
+
+    SearchParameterComponentType = searchparameter.SearchParameterComponent
+
+    ServiceRequestType = servicerequest.ServiceRequest
+
+    ServiceRequestOrderDetailType = servicerequest.ServiceRequestOrderDetail
+
+    ServiceRequestOrderDetailParameterType = (
+        servicerequest.ServiceRequestOrderDetailParameter
+    )
+
+    ServiceRequestPatientInstructionType = (
+        servicerequest.ServiceRequestPatientInstruction
+    )
+
+    SignatureType = signature.Signature
+
+    SlotType = slot.Slot
+
+    SpecimenType = specimen.Specimen
+
+    SpecimenCollectionType = specimen.SpecimenCollection
+
+    SpecimenContainerType = specimen.SpecimenContainer
+
+    SpecimenDefinitionType = specimendefinition.SpecimenDefinition
+
+    SpecimenDefinitionTypeTestedType = specimendefinition.SpecimenDefinitionTypeTested
+
+    SpecimenDefinitionTypeTestedContainerType = (
+        specimendefinition.SpecimenDefinitionTypeTestedContainer
+    )
+
+    SpecimenDefinitionTypeTestedContainerAdditiveType = (
+        specimendefinition.SpecimenDefinitionTypeTestedContainerAdditive
+    )
+
+    SpecimenDefinitionTypeTestedHandlingType = (
+        specimendefinition.SpecimenDefinitionTypeTestedHandling
+    )
+
+    SpecimenFeatureType = specimen.SpecimenFeature
+
+    SpecimenProcessingType = specimen.SpecimenProcessing
+
+    StructureDefinitionType = structuredefinition.StructureDefinition
+
+    StructureDefinitionContextType = structuredefinition.StructureDefinitionContext
+
+    StructureDefinitionDifferentialType = (
+        structuredefinition.StructureDefinitionDifferential
+    )
+
+    StructureDefinitionMappingType = structuredefinition.StructureDefinitionMapping
+
+    StructureDefinitionSnapshotType = structuredefinition.StructureDefinitionSnapshot
+
+    StructureMapType = structuremap.StructureMap
+
+    StructureMapConstType = structuremap.StructureMapConst
+
+    StructureMapGroupType = structuremap.StructureMapGroup
+
+    StructureMapGroupInputType = structuremap.StructureMapGroupInput
+
+    StructureMapGroupRuleType = structuremap.StructureMapGroupRule
+
+    StructureMapGroupRuleDependentType = structuremap.StructureMapGroupRuleDependent
+
+    StructureMapGroupRuleSourceType = structuremap.StructureMapGroupRuleSource
+
+    StructureMapGroupRuleTargetType = structuremap.StructureMapGroupRuleTarget
+
+    StructureMapGroupRuleTargetParameterType = (
+        structuremap.StructureMapGroupRuleTargetParameter
+    )
+
+    StructureMapStructureType = structuremap.StructureMapStructure
+
+    SubscriptionType = subscription.Subscription
+
+    SubscriptionFilterByType = subscription.SubscriptionFilterBy
+
+    SubscriptionParameterType = subscription.SubscriptionParameter
+
+    SubscriptionStatusType = subscriptionstatus.SubscriptionStatus
+
+    SubscriptionStatusNotificationEventType = (
+        subscriptionstatus.SubscriptionStatusNotificationEvent
+    )
+
+    SubscriptionTopicType = subscriptiontopic.SubscriptionTopic
+
+    SubscriptionTopicCanFilterByType = subscriptiontopic.SubscriptionTopicCanFilterBy
+
+    SubscriptionTopicEventTriggerType = subscriptiontopic.SubscriptionTopicEventTrigger
+
+    SubscriptionTopicNotificationShapeType = (
+        subscriptiontopic.SubscriptionTopicNotificationShape
+    )
+
+    SubscriptionTopicResourceTriggerType = (
+        subscriptiontopic.SubscriptionTopicResourceTrigger
+    )
+
+    SubscriptionTopicResourceTriggerQueryCriteriaType = (
+        subscriptiontopic.SubscriptionTopicResourceTriggerQueryCriteria
+    )
+
+    SubstanceType = substance.Substance
+
+    SubstanceDefinitionType = substancedefinition.SubstanceDefinition
+
+    SubstanceDefinitionCharacterizationType = (
+        substancedefinition.SubstanceDefinitionCharacterization
+    )
+
+    SubstanceDefinitionCodeType = substancedefinition.SubstanceDefinitionCode
+
+    SubstanceDefinitionMoietyType = substancedefinition.SubstanceDefinitionMoiety
+
+    SubstanceDefinitionMolecularWeightType = (
+        substancedefinition.SubstanceDefinitionMolecularWeight
+    )
+
+    SubstanceDefinitionNameType = substancedefinition.SubstanceDefinitionName
+
+    SubstanceDefinitionNameOfficialType = (
+        substancedefinition.SubstanceDefinitionNameOfficial
+    )
+
+    SubstanceDefinitionPropertyType = substancedefinition.SubstanceDefinitionProperty
+
+    SubstanceDefinitionRelationshipType = (
+        substancedefinition.SubstanceDefinitionRelationship
+    )
+
+    SubstanceDefinitionSourceMaterialType = (
+        substancedefinition.SubstanceDefinitionSourceMaterial
+    )
+
+    SubstanceDefinitionStructureType = substancedefinition.SubstanceDefinitionStructure
+
+    SubstanceDefinitionStructureRepresentationType = (
+        substancedefinition.SubstanceDefinitionStructureRepresentation
+    )
+
+    SubstanceIngredientType = substance.SubstanceIngredient
+
+    SubstanceNucleicAcidType = substancenucleicacid.SubstanceNucleicAcid
+
+    SubstanceNucleicAcidSubunitType = substancenucleicacid.SubstanceNucleicAcidSubunit
+
+    SubstanceNucleicAcidSubunitLinkageType = (
+        substancenucleicacid.SubstanceNucleicAcidSubunitLinkage
+    )
+
+    SubstanceNucleicAcidSubunitSugarType = (
+        substancenucleicacid.SubstanceNucleicAcidSubunitSugar
+    )
+
+    SubstancePolymerType = substancepolymer.SubstancePolymer
+
+    SubstancePolymerMonomerSetType = substancepolymer.SubstancePolymerMonomerSet
+
+    SubstancePolymerMonomerSetStartingMaterialType = (
+        substancepolymer.SubstancePolymerMonomerSetStartingMaterial
+    )
+
+    SubstancePolymerRepeatType = substancepolymer.SubstancePolymerRepeat
+
+    SubstancePolymerRepeatRepeatUnitType = (
+        substancepolymer.SubstancePolymerRepeatRepeatUnit
+    )
+
+    SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisationType = (
+        substancepolymer.SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisation
+    )
+
+    SubstancePolymerRepeatRepeatUnitStructuralRepresentationType = (
+        substancepolymer.SubstancePolymerRepeatRepeatUnitStructuralRepresentation
+    )
+
+    SubstanceProteinType = substanceprotein.SubstanceProtein
+
+    SubstanceProteinSubunitType = substanceprotein.SubstanceProteinSubunit
+
+    SubstanceReferenceInformationType = (
+        substancereferenceinformation.SubstanceReferenceInformation
+    )
+
+    SubstanceReferenceInformationGeneType = (
+        substancereferenceinformation.SubstanceReferenceInformationGene
+    )
+
+    SubstanceReferenceInformationGeneElementType = (
+        substancereferenceinformation.SubstanceReferenceInformationGeneElement
+    )
+
+    SubstanceReferenceInformationTargetType = (
+        substancereferenceinformation.SubstanceReferenceInformationTarget
+    )
+
+    SubstanceSourceMaterialType = substancesourcematerial.SubstanceSourceMaterial
+
+    SubstanceSourceMaterialFractionDescriptionType = (
+        substancesourcematerial.SubstanceSourceMaterialFractionDescription
+    )
+
+    SubstanceSourceMaterialOrganismType = (
+        substancesourcematerial.SubstanceSourceMaterialOrganism
+    )
+
+    SubstanceSourceMaterialOrganismAuthorType = (
+        substancesourcematerial.SubstanceSourceMaterialOrganismAuthor
+    )
+
+    SubstanceSourceMaterialOrganismHybridType = (
+        substancesourcematerial.SubstanceSourceMaterialOrganismHybrid
+    )
+
+    SubstanceSourceMaterialOrganismOrganismGeneralType = (
+        substancesourcematerial.SubstanceSourceMaterialOrganismOrganismGeneral
+    )
+
+    SubstanceSourceMaterialPartDescriptionType = (
+        substancesourcematerial.SubstanceSourceMaterialPartDescription
+    )
+
+    SupplyDeliveryType = supplydelivery.SupplyDelivery
+
+    SupplyDeliverySuppliedItemType = supplydelivery.SupplyDeliverySuppliedItem
+
+    SupplyRequestType = supplyrequest.SupplyRequest
+
+    SupplyRequestParameterType = supplyrequest.SupplyRequestParameter
+
+    TaskType = task.Task
+
+    TaskInputType = task.TaskInput
+
+    TaskOutputType = task.TaskOutput
+
+    TaskPerformerType = task.TaskPerformer
+
+    TaskRestrictionType = task.TaskRestriction
+
+    TerminologyCapabilitiesType = terminologycapabilities.TerminologyCapabilities
+
+    TerminologyCapabilitiesClosureType = (
+        terminologycapabilities.TerminologyCapabilitiesClosure
+    )
+
+    TerminologyCapabilitiesCodeSystemType = (
+        terminologycapabilities.TerminologyCapabilitiesCodeSystem
+    )
+
+    TerminologyCapabilitiesCodeSystemVersionType = (
+        terminologycapabilities.TerminologyCapabilitiesCodeSystemVersion
+    )
+
+    TerminologyCapabilitiesCodeSystemVersionFilterType = (
+        terminologycapabilities.TerminologyCapabilitiesCodeSystemVersionFilter
+    )
+
+    TerminologyCapabilitiesExpansionType = (
+        terminologycapabilities.TerminologyCapabilitiesExpansion
+    )
+
+    TerminologyCapabilitiesExpansionParameterType = (
+        terminologycapabilities.TerminologyCapabilitiesExpansionParameter
+    )
+
+    TerminologyCapabilitiesImplementationType = (
+        terminologycapabilities.TerminologyCapabilitiesImplementation
+    )
+
+    TerminologyCapabilitiesSoftwareType = (
+        terminologycapabilities.TerminologyCapabilitiesSoftware
+    )
+
+    TerminologyCapabilitiesTranslationType = (
+        terminologycapabilities.TerminologyCapabilitiesTranslation
+    )
+
+    TerminologyCapabilitiesValidateCodeType = (
+        terminologycapabilities.TerminologyCapabilitiesValidateCode
+    )
+
+    TestPlanType = testplan.TestPlan
+
+    TestPlanDependencyType = testplan.TestPlanDependency
+
+    TestPlanTestCaseType = testplan.TestPlanTestCase
+
+    TestPlanTestCaseAssertionType = testplan.TestPlanTestCaseAssertion
+
+    TestPlanTestCaseDependencyType = testplan.TestPlanTestCaseDependency
+
+    TestPlanTestCaseTestDataType = testplan.TestPlanTestCaseTestData
+
+    TestPlanTestCaseTestRunType = testplan.TestPlanTestCaseTestRun
+
+    TestPlanTestCaseTestRunScriptType = testplan.TestPlanTestCaseTestRunScript
+
+    TestReportType = testreport.TestReport
+
+    TestReportParticipantType = testreport.TestReportParticipant
+
+    TestReportSetupType = testreport.TestReportSetup
+
+    TestReportSetupActionType = testreport.TestReportSetupAction
+
+    TestReportSetupActionAssertType = testreport.TestReportSetupActionAssert
+
+    TestReportSetupActionAssertRequirementType = (
+        testreport.TestReportSetupActionAssertRequirement
+    )
+
+    TestReportSetupActionOperationType = testreport.TestReportSetupActionOperation
+
+    TestReportTeardownType = testreport.TestReportTeardown
+
+    TestReportTeardownActionType = testreport.TestReportTeardownAction
+
+    TestReportTestType = testreport.TestReportTest
+
+    TestReportTestActionType = testreport.TestReportTestAction
+
+    TestScriptType = testscript.TestScript
+
+    TestScriptDestinationType = testscript.TestScriptDestination
+
+    TestScriptFixtureType = testscript.TestScriptFixture
+
+    TestScriptMetadataType = testscript.TestScriptMetadata
+
+    TestScriptMetadataCapabilityType = testscript.TestScriptMetadataCapability
+
+    TestScriptMetadataLinkType = testscript.TestScriptMetadataLink
+
+    TestScriptOriginType = testscript.TestScriptOrigin
+
+    TestScriptScopeType = testscript.TestScriptScope
+
+    TestScriptSetupType = testscript.TestScriptSetup
+
+    TestScriptSetupActionType = testscript.TestScriptSetupAction
+
+    TestScriptSetupActionAssertType = testscript.TestScriptSetupActionAssert
+
+    TestScriptSetupActionAssertRequirementType = (
+        testscript.TestScriptSetupActionAssertRequirement
+    )
+
+    TestScriptSetupActionOperationType = testscript.TestScriptSetupActionOperation
+
+    TestScriptSetupActionOperationRequestHeaderType = (
+        testscript.TestScriptSetupActionOperationRequestHeader
+    )
+
+    TestScriptTeardownType = testscript.TestScriptTeardown
+
+    TestScriptTeardownActionType = testscript.TestScriptTeardownAction
+
+    TestScriptTestType = testscript.TestScriptTest
+
+    TestScriptTestActionType = testscript.TestScriptTestAction
+
+    TestScriptVariableType = testscript.TestScriptVariable
+
+    TimingType = timing.Timing
+
+    TimingRepeatType = timing.TimingRepeat
+
+    TransportType = transport.Transport
+
+    TransportInputType = transport.TransportInput
+
+    TransportOutputType = transport.TransportOutput
+
+    TransportRestrictionType = transport.TransportRestriction
+
+    TriggerDefinitionType = triggerdefinition.TriggerDefinition
+
+    UsageContextType = usagecontext.UsageContext
+
+    ValueSetType = valueset.ValueSet
+
+    ValueSetComposeType = valueset.ValueSetCompose
+
+    ValueSetComposeIncludeType = valueset.ValueSetComposeInclude
+
+    ValueSetComposeIncludeConceptType = valueset.ValueSetComposeIncludeConcept
+
+    ValueSetComposeIncludeConceptDesignationType = (
+        valueset.ValueSetComposeIncludeConceptDesignation
+    )
+
+    ValueSetComposeIncludeFilterType = valueset.ValueSetComposeIncludeFilter
+
+    ValueSetExpansionType = valueset.ValueSetExpansion
+
+    ValueSetExpansionContainsType = valueset.ValueSetExpansionContains
+
+    ValueSetExpansionContainsPropertyType = valueset.ValueSetExpansionContainsProperty
+
+    ValueSetExpansionContainsPropertySubPropertyType = (
+        valueset.ValueSetExpansionContainsPropertySubProperty
+    )
+
+    ValueSetExpansionParameterType = valueset.ValueSetExpansionParameter
+
+    ValueSetExpansionPropertyType = valueset.ValueSetExpansionProperty
+
+    ValueSetScopeType = valueset.ValueSetScope
+
+    VerificationResultType = verificationresult.VerificationResult
+
+    VerificationResultAttestationType = verificationresult.VerificationResultAttestation
+
+    VerificationResultPrimarySourceType = (
+        verificationresult.VerificationResultPrimarySource
+    )
+
+    VerificationResultValidatorType = verificationresult.VerificationResultValidator
+
+    VirtualServiceDetailType = virtualservicedetail.VirtualServiceDetail
+
+    VisionPrescriptionType = visionprescription.VisionPrescription
+
+    VisionPrescriptionLensSpecificationType = (
+        visionprescription.VisionPrescriptionLensSpecification
+    )
+
+    VisionPrescriptionLensSpecificationPrismType = (
+        visionprescription.VisionPrescriptionLensSpecificationPrism
+    )
+
 else:
-
-    class Boolean(int, Primitive):
-        """true | false"""
-
-        regex = re.compile("true|false")
-        __visit_name__ = "boolean"
-
-        @classmethod
-        def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
-            field_schema.update(type="boolean")
-
-        @classmethod
-        def __get_validators__(cls) -> "CallableGenerator":
-            yield bool_validator
-
-        @classmethod
-        def to_string(cls, value):
-            """ """
-            assert isinstance(value, bool)
-            return value is True and "true" or "false"
-
-
-class String(ConstrainedStr, Primitive):
-    """A sequence of Unicode characters
-    Note that strings SHALL NOT exceed 1MB (1024*1024 characters) in size.
-    Strings SHOULD not contain Unicode character points below 32, except for
-    u0009 (horizontal tab), u0010 (carriage return) and u0013 (line feed).
-    Leading and Trailing whitespace is allowed, but SHOULD be removed when using
-    the XML format. Note: This means that a string that consists only of whitespace
-    could be trimmed to nothing, which would be treated as an invalid element value.
-    Therefore strings SHOULD always contain non-whitespace content"""
-
-    regex = re.compile(r"[ \r\n\t\S]+")
-    allow_empty_str = False
-    __visit_name__ = "string"
-
-    @classmethod
-    def configure_empty_str(cls, allow: bool = None):
-        """About empty string
-        1. https://bit.ly/3woGnFG
-        2. https://github.com/nazrulworld/fhir.resources/issues/65#issuecomment-856693256
-        There are a lot of valid discussion about accept empty string as String value but
-        it is cleared for us that according to FHIR Specification, empty string is not valid!
-        However in real use cases, we see empty string is coming other (when the task is related
-        to query data from other system)
-
-        It is in your hand now, if you would like to allow empty string! by default
-        empty string is not accepted.
-        """
-        if isinstance(allow, bool):
-            cls.allow_empty_str = allow
-
-    @classmethod
-    def validate(cls, value: Union[str]) -> Union[str]:
-        if cls.allow_empty_str is True and value in ("", ""):
-            return value
-        # do the default things
-        return ConstrainedStr.validate.__func__(cls, value)  # type: ignore
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        elif value is None:
-            value = ""
-        assert isinstance(value, str)
-        return value
-
-
-class Base64Binary(ConstrainedBytes, Primitive):
-    """A stream of bytes, base64 encoded (RFC 4648 )"""
-
-    regex = re.compile(r"^(\s*([0-9a-zA-Z+=]){4}\s*)+$")
-    __visit_name__ = "base64Binary"
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        assert isinstance(value, bytes)
-        return value.decode()
-
-
-class Code(ConstrainedStr, Primitive):
-    """Indicates that the value is taken from a set of controlled
-    strings defined elsewhere (see Using codes for further discussion).
-    Technically, a code is restricted to a string which has at least one
-    character and no leading or trailing whitespace, and where there is
-    no whitespace other than single spaces in the contents"""
-
-    regex = re.compile(r"^[^\s]+(\s[^\s]+)*$")
-    __visit_name__ = "code"
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        assert isinstance(value, str)
-        return value
-
-
-class Id(ConstrainedStr, Primitive):
-    """Any combination of upper- or lower-case ASCII letters
-    ('A'..'Z', and 'a'..'z', numerals ('0'..'9'), '-' and '.',
-    with a length limit of 64 characters.
-    (This might be an integer, an un-prefixed OID, UUID or any other identifier
-    pattern that meets these constraints.)
-
-    But it is possible to change the default behaviour by using configure_constraints()
-    method!
-    """
-
-    regex = re.compile(r"^[A-Za-z0-9\-.]+$")
-    min_length = 1
-    max_length = 64
-    __visit_name__ = "id"
-
-    @classmethod
-    def configure_constraints(
-        cls, min_length: int = None, max_length: int = None, regex: Pattern = None
-    ):
-        """There are a lots of discussion about ``Resource.Id`` length of value.
-            1. https://bit.ly/360HksL
-            2. https://bit.ly/3o1fZgl
-        We see there is some agreement and disagreement, because of that we decide to make
-        it more flexible. Now it is possible configure three types of constraints.
-        """
-        if min_length is not None:
-            if min_length < 1:
-                raise ConfigError("Minimum length must be more than 0.")
-            _max_check = max_length or cls.max_length
-            if min_length > _max_check:
-                raise ConfigError(
-                    "Minimum length value cannot be greater than maximum value."
-                )
-            cls.min_length = min_length
-
-        if max_length is not None:
-            if max_length < 1:
-                raise ConfigError("Maximum length must be more than 0.")
-            _min_check = min_length or cls.min_length
-            if max_length < _min_check:
-                raise ConfigError(
-                    "Maximum length value cannot be less than minimum value."
-                )
-            cls.max_length = max_length
-
-        if regex is not None:
-            cls.regex = regex
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        assert isinstance(value, str)
-        return value
-
-
-class Decimal(ConstrainedDecimal, Primitive):
-    """Rational numbers that have a decimal representation.
-    See below about the precision of the number"""
-
-    regex = re.compile(r"^-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?$")
-    __visit_name__ = "decimal"
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        assert isinstance(value, decimal.Decimal)
-        return str(float(value))
-
-
-class Integer(ConstrainedInt, Primitive):
-    """A signed integer in the range −2,147,483,648..2,147,483,647 (32-bit;
-    for larger values, use decimal)"""
-
-    regex = re.compile(r"^[0]|[-+]?[1-9][0-9]*$")
-    __visit_name__ = "integer"
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        assert isinstance(value, int)
-        return str(value)
-
-
-class UnsignedInt(ConstrainedInt, Primitive):
-    """Any non-negative integer in the range 0..2,147,483,647"""
-
-    regex = re.compile(r"^[0]|([1-9][0-9]*)$")
-    __visit_name__ = "unsignedInt"
-    ge = 0
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        assert isinstance(value, int)
-        return str(value)
-
-
-class PositiveInt(ConstrainedInt, Primitive):
-    """Any positive integer in the range 1..2,147,483,647"""
-
-    regex = re.compile(r"^\+?[1-9][0-9]*$")
-    __visit_name__ = "positiveInt"
-    gt = 0
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        assert isinstance(value, int)
-        return str(value)
-
-
-class Uri(ConstrainedStr, Primitive):
-    """A Uniform Resource Identifier Reference (RFC 3986 ).
-    Note: URIs are case sensitive.
-    For UUID (urn:uuid:53fefa32-fcbb-4ff8-8a92-55ee120877b7)
-    use all lowercase xs:anyURI A JSON string - a URI
-    Regex: \\S* (This regex is very permissive, but URIs must be valid.
-    Implementers are welcome to use more specific regex statements
-    for a URI in specific contexts)
-    URIs can be absolute or relative, and may have an optional fragment identifier
-    This data type can be bound to a ValueSet"""
-
-    __visit_name__ = "uri"
-    regex = re.compile(r"\S*")
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        assert isinstance(value, str)
-        return value
-
-
-class Oid(ConstrainedStr, Primitive):
-    """An OID represented as a URI (RFC 3001 ); e.g. urn:oid:1.2.3.4.5"""
-
-    __visit_name__ = "oid"
-    regex = re.compile(r"^urn:oid:[0-2](\.(0|[1-9][0-9]*))+$")
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        assert isinstance(value, str)
-        return value
-
-
-class Uuid(UUID, Primitive):
-    """A UUID (aka GUID) represented as a URI (RFC 4122 );
-    e.g. urn:uuid:c757873d-ec9a-4326-a141-556f43239520"""
-
-    __visit_name__ = "uuid"
-    regex = None
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, UUID):
-            value = f"urn:uuid:{value}"
-        assert isinstance(value, str)
-        return value
-
-
-class Canonical(Uri):
-    """A URI that refers to a resource by its canonical URL (resources with a url property).
-    The canonical type differs from a uri in that it has special meaning in this specification,
-    and in that it may have a version appended, separated by a vertical bar (|).
-    Note that the type canonical is not used for the actual canonical URLs that are
-    the target of these references, but for the URIs that refer to them, and may have
-    the version suffix in them. Like other URIs, elements of type canonical may also have
-    #fragment references"""
-
-    __visit_name__ = "canonical"
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        assert isinstance(value, str)
-        return value
-
-
-class Url(AnyUrl, Primitive):
-    """A Uniform Resource Locator (RFC 1738 ).
-    Note URLs are accessed directly using the specified protocol.
-    Common URL protocols are http{s}:, ftp:, mailto: and mllp:,
-    though many others are defined"""
-
-    path_regex = re.compile(r"^/(?P<resourceType>[^\s?/]+)(/[^\s?/]+)*")
-    __visit_name__ = "url"
-
-    @classmethod
-    def validate(  # type: ignore
-        cls, value: str, field: "ModelField", config: "BaseConfig"
-    ) -> Union["AnyUrl", str]:
-        """ """
-        if value.startswith("mailto:"):
-            schema = value[0:7]
-            email = value[7:]
-            realname = parseaddr(email)[0]
-            name, email = validate_email(email)
-            if realname:
-                email = formataddr((name, email))
-            return schema + email
-        elif value.startswith("mllp:") or value.startswith("llp:"):
-            # xxx: find validation
-            return value
-        elif value in FHIR_PRIMITIVES:
-            # Extensions may contain a valueUrl for a primitive FHIR type
-            return value
-
-        # we are allowing relative path
-        matched = cls.path_regex.match(value)
-        if matched is not None:
-            # @ToDo: required resource type validation?
-            # fx: resource type = matched.groupdict().get("resourceType")
-            return value
-
-        return AnyUrl.validate(value, field, config)
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        assert isinstance(value, str)
-        return value
-
-
-class Markdown(ConstrainedStr, Primitive):
-    """A FHIR string (see above) that may contain markdown syntax for optional processing
-    by a markdown presentation engine, in the GFM extension of CommonMark format (see below)"""
-
-    __visit_name__ = "markdown"
-    regex = re.compile(r"\s*(\S|\s)*")
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        assert isinstance(value, str)
-        return value
-
-
-class Xhtml(ConstrainedStr, Primitive):
-    __visit_name__ = "xhtml"
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, bytes):
-            value = value.decode()
-        assert isinstance(value, str)
-        return value
-
-
-class Date(datetime.date, Primitive):
-    """A date, or partial date (e.g. just year or year + month)
-    as used in human communication. The format is YYYY, YYYY-MM, or YYYY-MM-DD,
-    e.g. 2018, 1973-06, or 1905-08-23.
-    There SHALL be no time zone. Dates SHALL be valid dates"""
-
-    regex = re.compile(
-        r"([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|"
-        r"[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2]"
-        r"[0-9]|3[0-1]))?)?"
-    )
-    __visit_name__ = "date"
-
-    @classmethod
-    def __get_validators__(cls) -> "CallableGenerator":
-
-        yield cls.validate
-
-    @classmethod
-    def validate(
-        cls, value: Union[datetime.date, str, bytes, int, float]
-    ) -> Union[datetime.date, str]:
-        """ """
-        if not isinstance(value, str):
-            # default handler
-            return parse_date(value)
-
-        match = FHIR_DATE_PARTS.match(value)
-
-        if not match:
-            if not cls.regex.match(value):
-                raise DateError()
-        elif not match.groupdict().get("day"):
-            if match.groupdict().get("month") and int(match.groupdict()["month"]) > 12:
-                raise DateError()
-            # we keep original
-            return value
-        return parse_date(value)
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, (datetime.date, datetime.time, datetime.datetime)):
-            value = value.isoformat()
-        assert isinstance(value, str)
-        return value
-
-
-class DateTime(datetime.datetime, Primitive):
-    """A date, date-time or partial date (e.g. just year or year + month) as used
-    in human communication. The format is YYYY, YYYY-MM, YYYY-MM-DD or
-    YYYY-MM-DDThh:mm:ss+zz:zz, e.g. 2018, 1973-06, 1905-08-23,
-    2015-02-07T13:28:17-05:00 or 2017-01-01T00:00:00.000Z.
-    If hours and minutes are specified, a time zone SHALL be populated.
-    Seconds must be provided due to schema type constraints but may be
-    zero-filled and may be ignored at receiver discretion.
-    Dates SHALL be valid dates. The time "24:00" is not allowed.
-    Leap Seconds are allowed - see below"""
-
-    regex = re.compile(
-        r"([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|"
-        r"[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|"
-        r"3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|"
-        r"60)(\.[0-9]+)?(Z|([+\-])((0[0-9]|"
-        r"1[0-3]):[0-5][0-9]|14:00)))?)?)?"
-    )
-    __visit_name__ = "dateTime"
-
-    @classmethod
-    def __get_validators__(cls) -> "CallableGenerator":
-
-        yield cls.validate
-
-    @classmethod
-    def validate(
-        cls, value: Union[datetime.date, datetime.datetime, str, bytes, int, float]
-    ) -> Union[datetime.datetime, datetime.date, str]:
-        """ """
-        if isinstance(value, datetime.date):
-            return value
-
-        if not isinstance(value, str):
-            # default handler
-            return parse_datetime(value)
-        match = FHIR_DATE_PARTS.match(value)
-        if match:
-            if (
-                match.groupdict().get("year")
-                and match.groupdict().get("month")
-                and match.groupdict().get("day")
-            ):
-                return parse_date(value)
-            elif match.groupdict().get("year") and match.groupdict().get("month"):
-                if int(match.groupdict()["month"]) > 12:
-                    raise DateError()
-            # we don't want to loose actual information, so keep as string
-            return value
-        if not cls.regex.match(value):
-            raise DateTimeError()
-
-        return parse_datetime(value)
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, (datetime.date, datetime.time, datetime.datetime)):
-            value = value.isoformat()
-        assert isinstance(value, str)
-        return value
-
-
-class Instant(datetime.datetime, Primitive):
-    """An instant in time in the format YYYY-MM-DDThh:mm:ss.sss+zz:zz
-    (e.g. 2015-02-07T13:28:17.239+02:00 or 2017-01-01T00:00:00Z).
-    The time SHALL specified at least to the second and SHALL include a time zone.
-    Note: This is intended for when precisely observed times are required
-    (typically system logs etc.), and not human-reported times - for those,
-    use date or dateTime (which can be as precise as instant,
-    but is not required to be). instant is a more constrained dateTime
-
-    Note: This type is for system times, not human times (see date and dateTime below)."""
-
-    regex = re.compile(
-        r"([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|"
-        r"[1-9]000)-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|"
-        r"3[0-1])T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]"
-        r"|60)(\.[0-9]+)?(Z|([+\-])((0[0-9]|"
-        r"1[0-3]):[0-5][0-9]|14:00))"
-    )
-    __visit_name__ = "instant"
-
-    @classmethod
-    def __get_validators__(cls) -> "CallableGenerator":
-
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, value):
-        """ """
-        if isinstance(value, str):
-            if not cls.regex.match(value):
-                raise DateTimeError()
-        return parse_datetime(value)
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, (datetime.date, datetime.time, datetime.datetime)):
-            value = value.isoformat()
-        assert isinstance(value, str)
-        return value
-
-
-class Time(datetime.time, Primitive):
-    """A time during the day, in the format hh:mm:ss.
-    There is no date specified. Seconds must be provided due
-    to schema type constraints but may be zero-filled and may
-    be ignored at receiver discretion.
-    The time "24:00" SHALL NOT be used. A time zone SHALL NOT be present.
-    Times can be converted to a Duration since midnight."""
-
-    regex = re.compile(r"([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\.[0-9]+)?")
-    __visit_name__ = "time"
-
-    @classmethod
-    def __get_validators__(cls) -> "CallableGenerator":
-
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, value):
-        """ """
-        if isinstance(value, str):
-            if not cls.regex.match(value):
-                raise TimeError()
-
-        return parse_time(value)
-
-    @classmethod
-    def to_string(cls, value):
-        """ """
-        if isinstance(value, (datetime.date, datetime.time, datetime.datetime)):
-            value = value.isoformat()
-        assert isinstance(value, str)
-        return value
-
-
-def get_fhir_type_class(model_name):
-    try:
-        return globals()[model_name + "Type"]
-    except KeyError:
-        raise LookupError(f"'{__name__}.{model_name}Type' doesnt found.")
-
-
-class AbstractType(dict):
-    """ """
-
-    __fhir_release__: str = "R4"
-    __resource_type__: str = ...  # type: ignore
-
-    @classmethod
-    def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
-        field_schema.update(type=cls.__resource_type__)
-
-    @classmethod
-    def __get_validators__(cls) -> "CallableGenerator":
-        from . import fhirtypesvalidators
-
-        yield getattr(fhirtypesvalidators, cls.__resource_type__.lower() + "_validator")
-
-    @classmethod
-    def is_primitive(cls) -> bool:
-        """ """
-        return False
-
-    @classmethod
-    def fhir_type_name(cls) -> str:
-        """ """
-        return cls.__resource_type__
-
-
-class FHIRPrimitiveExtensionType(AbstractType):
-    """ """
-
-    __resource_type__ = "FHIRPrimitiveExtension"
-
-
-class AbstractBaseType(dict):
-    """ """
-
-    __fhir_release__: str = "R4"
-    __resource_type__: str = ...  # type: ignore
-
-    @classmethod
-    def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
-        field_schema.update(type=cls.__resource_type__)
-
-    @classmethod
-    def __get_validators__(cls) -> "CallableGenerator":
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v, values, config, field):
-        """ """
-        if isinstance(v, (bytes, str)):
-            input_data = load_str_bytes(v)
-            resource_type = input_data.get("resourceType", None)
-        elif isinstance(v, FHIRAbstractModel):
-            resource_type = v.resource_type
-        else:
-            resource_type = v.get("resourceType", None)
-
-        if resource_type is None or resource_type == cls.__resource_type__:
-            from . import fhirtypesvalidators
-
-            v = getattr(
-                fhirtypesvalidators, cls.__resource_type__.lower() + "_validator"
-            )(v)
-            return v
-
-        type_class = get_fhir_type_class(resource_type)
-        v = run_validator_for_fhir_type(type_class, v, values, config, field)
-        return v
-
-    @classmethod
-    def is_primitive(cls) -> bool:
-        """ """
-        return False
-
-    @classmethod
-    def fhir_type_name(cls) -> str:
-        """ """
-        return cls.__resource_type__
-
-
-class ElementType(AbstractBaseType):
-    """ """
-
-    __resource_type__ = "Element"
-
-
-class ResourceType(AbstractBaseType):
-    """ """
-
-    __resource_type__ = "Resource"
-
-
-class AccountType(AbstractType):
-    __resource_type__ = "Account"
-
-
-class AccountCoverageType(AbstractType):
-    __resource_type__ = "AccountCoverage"
-
-
-class AccountGuarantorType(AbstractType):
-    __resource_type__ = "AccountGuarantor"
-
-
-class ActivityDefinitionType(AbstractType):
-    __resource_type__ = "ActivityDefinition"
-
-
-class ActivityDefinitionDynamicValueType(AbstractType):
-    __resource_type__ = "ActivityDefinitionDynamicValue"
-
-
-class ActivityDefinitionParticipantType(AbstractType):
-    __resource_type__ = "ActivityDefinitionParticipant"
-
-
-class AddressType(AbstractType):
-    __resource_type__ = "Address"
-
-
-class AdverseEventType(AbstractType):
-    __resource_type__ = "AdverseEvent"
-
-
-class AdverseEventSuspectEntityType(AbstractType):
-    __resource_type__ = "AdverseEventSuspectEntity"
-
-
-class AdverseEventSuspectEntityCausalityType(AbstractType):
-    __resource_type__ = "AdverseEventSuspectEntityCausality"
-
-
-class AgeType(AbstractType):
-    __resource_type__ = "Age"
-
-
-class AllergyIntoleranceType(AbstractType):
-    __resource_type__ = "AllergyIntolerance"
-
-
-class AllergyIntoleranceReactionType(AbstractType):
-    __resource_type__ = "AllergyIntoleranceReaction"
-
-
-class AnnotationType(AbstractType):
-    __resource_type__ = "Annotation"
-
-
-class AppointmentType(AbstractType):
-    __resource_type__ = "Appointment"
-
-
-class AppointmentParticipantType(AbstractType):
-    __resource_type__ = "AppointmentParticipant"
-
-
-class AppointmentResponseType(AbstractType):
-    __resource_type__ = "AppointmentResponse"
-
-
-class AttachmentType(AbstractType):
-    __resource_type__ = "Attachment"
-
-
-class AuditEventType(AbstractType):
-    __resource_type__ = "AuditEvent"
-
-
-class AuditEventAgentType(AbstractType):
-    __resource_type__ = "AuditEventAgent"
-
-
-class AuditEventAgentNetworkType(AbstractType):
-    __resource_type__ = "AuditEventAgentNetwork"
-
-
-class AuditEventEntityType(AbstractType):
-    __resource_type__ = "AuditEventEntity"
-
-
-class AuditEventEntityDetailType(AbstractType):
-    __resource_type__ = "AuditEventEntityDetail"
-
-
-class AuditEventSourceType(AbstractType):
-    __resource_type__ = "AuditEventSource"
-
-
-class BackboneElementType(AbstractType):
-    __resource_type__ = "BackboneElement"
-
-
-class BasicType(AbstractType):
-    __resource_type__ = "Basic"
-
-
-class BinaryType(AbstractType):
-    __resource_type__ = "Binary"
-
-
-class BiologicallyDerivedProductType(AbstractType):
-    __resource_type__ = "BiologicallyDerivedProduct"
-
-
-class BiologicallyDerivedProductCollectionType(AbstractType):
-    __resource_type__ = "BiologicallyDerivedProductCollection"
-
-
-class BiologicallyDerivedProductManipulationType(AbstractType):
-    __resource_type__ = "BiologicallyDerivedProductManipulation"
-
-
-class BiologicallyDerivedProductProcessingType(AbstractType):
-    __resource_type__ = "BiologicallyDerivedProductProcessing"
-
-
-class BiologicallyDerivedProductStorageType(AbstractType):
-    __resource_type__ = "BiologicallyDerivedProductStorage"
-
-
-class BodyStructureType(AbstractType):
-    __resource_type__ = "BodyStructure"
-
-
-class BundleType(AbstractType):
-    __resource_type__ = "Bundle"
-
-
-class BundleEntryType(AbstractType):
-    __resource_type__ = "BundleEntry"
-
-
-class BundleEntryRequestType(AbstractType):
-    __resource_type__ = "BundleEntryRequest"
-
-
-class BundleEntryResponseType(AbstractType):
-    __resource_type__ = "BundleEntryResponse"
-
-
-class BundleEntrySearchType(AbstractType):
-    __resource_type__ = "BundleEntrySearch"
-
-
-class BundleLinkType(AbstractType):
-    __resource_type__ = "BundleLink"
-
-
-class CapabilityStatementType(AbstractType):
-    __resource_type__ = "CapabilityStatement"
-
-
-class CapabilityStatementDocumentType(AbstractType):
-    __resource_type__ = "CapabilityStatementDocument"
-
-
-class CapabilityStatementImplementationType(AbstractType):
-    __resource_type__ = "CapabilityStatementImplementation"
-
-
-class CapabilityStatementMessagingType(AbstractType):
-    __resource_type__ = "CapabilityStatementMessaging"
-
-
-class CapabilityStatementMessagingEndpointType(AbstractType):
-    __resource_type__ = "CapabilityStatementMessagingEndpoint"
-
-
-class CapabilityStatementMessagingSupportedMessageType(AbstractType):
-    __resource_type__ = "CapabilityStatementMessagingSupportedMessage"
-
-
-class CapabilityStatementRestType(AbstractType):
-    __resource_type__ = "CapabilityStatementRest"
-
-
-class CapabilityStatementRestInteractionType(AbstractType):
-    __resource_type__ = "CapabilityStatementRestInteraction"
-
-
-class CapabilityStatementRestResourceType(AbstractType):
-    __resource_type__ = "CapabilityStatementRestResource"
-
-
-class CapabilityStatementRestResourceInteractionType(AbstractType):
-    __resource_type__ = "CapabilityStatementRestResourceInteraction"
-
-
-class CapabilityStatementRestResourceOperationType(AbstractType):
-    __resource_type__ = "CapabilityStatementRestResourceOperation"
-
-
-class CapabilityStatementRestResourceSearchParamType(AbstractType):
-    __resource_type__ = "CapabilityStatementRestResourceSearchParam"
-
-
-class CapabilityStatementRestSecurityType(AbstractType):
-    __resource_type__ = "CapabilityStatementRestSecurity"
-
-
-class CapabilityStatementSoftwareType(AbstractType):
-    __resource_type__ = "CapabilityStatementSoftware"
-
-
-class CarePlanType(AbstractType):
-    __resource_type__ = "CarePlan"
-
-
-class CarePlanActivityType(AbstractType):
-    __resource_type__ = "CarePlanActivity"
-
-
-class CarePlanActivityDetailType(AbstractType):
-    __resource_type__ = "CarePlanActivityDetail"
-
-
-class CareTeamType(AbstractType):
-    __resource_type__ = "CareTeam"
-
-
-class CareTeamParticipantType(AbstractType):
-    __resource_type__ = "CareTeamParticipant"
-
-
-class CatalogEntryType(AbstractType):
-    __resource_type__ = "CatalogEntry"
-
-
-class CatalogEntryRelatedEntryType(AbstractType):
-    __resource_type__ = "CatalogEntryRelatedEntry"
-
-
-class ChargeItemType(AbstractType):
-    __resource_type__ = "ChargeItem"
-
-
-class ChargeItemDefinitionType(AbstractType):
-    __resource_type__ = "ChargeItemDefinition"
-
-
-class ChargeItemDefinitionApplicabilityType(AbstractType):
-    __resource_type__ = "ChargeItemDefinitionApplicability"
-
-
-class ChargeItemDefinitionPropertyGroupType(AbstractType):
-    __resource_type__ = "ChargeItemDefinitionPropertyGroup"
-
-
-class ChargeItemDefinitionPropertyGroupPriceComponentType(AbstractType):
-    __resource_type__ = "ChargeItemDefinitionPropertyGroupPriceComponent"
-
-
-class ChargeItemPerformerType(AbstractType):
-    __resource_type__ = "ChargeItemPerformer"
-
-
-class ClaimType(AbstractType):
-    __resource_type__ = "Claim"
-
-
-class ClaimAccidentType(AbstractType):
-    __resource_type__ = "ClaimAccident"
-
-
-class ClaimCareTeamType(AbstractType):
-    __resource_type__ = "ClaimCareTeam"
-
-
-class ClaimDiagnosisType(AbstractType):
-    __resource_type__ = "ClaimDiagnosis"
-
-
-class ClaimInsuranceType(AbstractType):
-    __resource_type__ = "ClaimInsurance"
-
-
-class ClaimItemType(AbstractType):
-    __resource_type__ = "ClaimItem"
-
-
-class ClaimItemDetailType(AbstractType):
-    __resource_type__ = "ClaimItemDetail"
-
-
-class ClaimItemDetailSubDetailType(AbstractType):
-    __resource_type__ = "ClaimItemDetailSubDetail"
-
-
-class ClaimPayeeType(AbstractType):
-    __resource_type__ = "ClaimPayee"
-
-
-class ClaimProcedureType(AbstractType):
-    __resource_type__ = "ClaimProcedure"
-
-
-class ClaimRelatedType(AbstractType):
-    __resource_type__ = "ClaimRelated"
-
-
-class ClaimResponseType(AbstractType):
-    __resource_type__ = "ClaimResponse"
-
-
-class ClaimResponseAddItemType(AbstractType):
-    __resource_type__ = "ClaimResponseAddItem"
-
-
-class ClaimResponseAddItemDetailType(AbstractType):
-    __resource_type__ = "ClaimResponseAddItemDetail"
-
-
-class ClaimResponseAddItemDetailSubDetailType(AbstractType):
-    __resource_type__ = "ClaimResponseAddItemDetailSubDetail"
-
-
-class ClaimResponseErrorType(AbstractType):
-    __resource_type__ = "ClaimResponseError"
-
-
-class ClaimResponseInsuranceType(AbstractType):
-    __resource_type__ = "ClaimResponseInsurance"
-
-
-class ClaimResponseItemType(AbstractType):
-    __resource_type__ = "ClaimResponseItem"
-
-
-class ClaimResponseItemAdjudicationType(AbstractType):
-    __resource_type__ = "ClaimResponseItemAdjudication"
-
-
-class ClaimResponseItemDetailType(AbstractType):
-    __resource_type__ = "ClaimResponseItemDetail"
-
-
-class ClaimResponseItemDetailSubDetailType(AbstractType):
-    __resource_type__ = "ClaimResponseItemDetailSubDetail"
-
-
-class ClaimResponsePaymentType(AbstractType):
-    __resource_type__ = "ClaimResponsePayment"
-
-
-class ClaimResponseProcessNoteType(AbstractType):
-    __resource_type__ = "ClaimResponseProcessNote"
-
-
-class ClaimResponseTotalType(AbstractType):
-    __resource_type__ = "ClaimResponseTotal"
-
-
-class ClaimSupportingInfoType(AbstractType):
-    __resource_type__ = "ClaimSupportingInfo"
-
-
-class ClinicalImpressionType(AbstractType):
-    __resource_type__ = "ClinicalImpression"
-
-
-class ClinicalImpressionFindingType(AbstractType):
-    __resource_type__ = "ClinicalImpressionFinding"
-
-
-class ClinicalImpressionInvestigationType(AbstractType):
-    __resource_type__ = "ClinicalImpressionInvestigation"
-
-
-class CodeSystemType(AbstractType):
-    __resource_type__ = "CodeSystem"
-
-
-class CodeSystemConceptType(AbstractType):
-    __resource_type__ = "CodeSystemConcept"
-
-
-class CodeSystemConceptDesignationType(AbstractType):
-    __resource_type__ = "CodeSystemConceptDesignation"
-
-
-class CodeSystemConceptPropertyType(AbstractType):
-    __resource_type__ = "CodeSystemConceptProperty"
-
-
-class CodeSystemFilterType(AbstractType):
-    __resource_type__ = "CodeSystemFilter"
-
-
-class CodeSystemPropertyType(AbstractType):
-    __resource_type__ = "CodeSystemProperty"
-
-
-class CodeableConceptType(AbstractType):
-    __resource_type__ = "CodeableConcept"
-
-
-class CodingType(AbstractType):
-    __resource_type__ = "Coding"
-
-
-class CommunicationType(AbstractType):
-    __resource_type__ = "Communication"
-
-
-class CommunicationPayloadType(AbstractType):
-    __resource_type__ = "CommunicationPayload"
-
-
-class CommunicationRequestType(AbstractType):
-    __resource_type__ = "CommunicationRequest"
-
-
-class CommunicationRequestPayloadType(AbstractType):
-    __resource_type__ = "CommunicationRequestPayload"
-
-
-class CompartmentDefinitionType(AbstractType):
-    __resource_type__ = "CompartmentDefinition"
-
-
-class CompartmentDefinitionResourceType(AbstractType):
-    __resource_type__ = "CompartmentDefinitionResource"
-
-
-class CompositionType(AbstractType):
-    __resource_type__ = "Composition"
-
-
-class CompositionAttesterType(AbstractType):
-    __resource_type__ = "CompositionAttester"
-
-
-class CompositionEventType(AbstractType):
-    __resource_type__ = "CompositionEvent"
-
-
-class CompositionRelatesToType(AbstractType):
-    __resource_type__ = "CompositionRelatesTo"
-
-
-class CompositionSectionType(AbstractType):
-    __resource_type__ = "CompositionSection"
-
-
-class ConceptMapType(AbstractType):
-    __resource_type__ = "ConceptMap"
-
-
-class ConceptMapGroupType(AbstractType):
-    __resource_type__ = "ConceptMapGroup"
-
-
-class ConceptMapGroupElementType(AbstractType):
-    __resource_type__ = "ConceptMapGroupElement"
-
-
-class ConceptMapGroupElementTargetType(AbstractType):
-    __resource_type__ = "ConceptMapGroupElementTarget"
-
-
-class ConceptMapGroupElementTargetDependsOnType(AbstractType):
-    __resource_type__ = "ConceptMapGroupElementTargetDependsOn"
-
-
-class ConceptMapGroupUnmappedType(AbstractType):
-    __resource_type__ = "ConceptMapGroupUnmapped"
-
-
-class ConditionType(AbstractType):
-    __resource_type__ = "Condition"
-
-
-class ConditionEvidenceType(AbstractType):
-    __resource_type__ = "ConditionEvidence"
-
-
-class ConditionStageType(AbstractType):
-    __resource_type__ = "ConditionStage"
-
-
-class ConsentType(AbstractType):
-    __resource_type__ = "Consent"
-
-
-class ConsentPolicyType(AbstractType):
-    __resource_type__ = "ConsentPolicy"
-
-
-class ConsentProvisionType(AbstractType):
-    __resource_type__ = "ConsentProvision"
-
-
-class ConsentProvisionActorType(AbstractType):
-    __resource_type__ = "ConsentProvisionActor"
-
-
-class ConsentProvisionDataType(AbstractType):
-    __resource_type__ = "ConsentProvisionData"
-
-
-class ConsentVerificationType(AbstractType):
-    __resource_type__ = "ConsentVerification"
-
-
-class ContactDetailType(AbstractType):
-    __resource_type__ = "ContactDetail"
-
-
-class ContactPointType(AbstractType):
-    __resource_type__ = "ContactPoint"
-
-
-class ContractType(AbstractType):
-    __resource_type__ = "Contract"
-
-
-class ContractContentDefinitionType(AbstractType):
-    __resource_type__ = "ContractContentDefinition"
-
-
-class ContractFriendlyType(AbstractType):
-    __resource_type__ = "ContractFriendly"
-
-
-class ContractLegalType(AbstractType):
-    __resource_type__ = "ContractLegal"
-
-
-class ContractRuleType(AbstractType):
-    __resource_type__ = "ContractRule"
-
-
-class ContractSignerType(AbstractType):
-    __resource_type__ = "ContractSigner"
-
-
-class ContractTermType(AbstractType):
-    __resource_type__ = "ContractTerm"
-
-
-class ContractTermActionType(AbstractType):
-    __resource_type__ = "ContractTermAction"
-
-
-class ContractTermActionSubjectType(AbstractType):
-    __resource_type__ = "ContractTermActionSubject"
-
-
-class ContractTermAssetType(AbstractType):
-    __resource_type__ = "ContractTermAsset"
-
-
-class ContractTermAssetContextType(AbstractType):
-    __resource_type__ = "ContractTermAssetContext"
-
-
-class ContractTermAssetValuedItemType(AbstractType):
-    __resource_type__ = "ContractTermAssetValuedItem"
-
-
-class ContractTermOfferType(AbstractType):
-    __resource_type__ = "ContractTermOffer"
-
-
-class ContractTermOfferAnswerType(AbstractType):
-    __resource_type__ = "ContractTermOfferAnswer"
-
-
-class ContractTermOfferPartyType(AbstractType):
-    __resource_type__ = "ContractTermOfferParty"
-
-
-class ContractTermSecurityLabelType(AbstractType):
-    __resource_type__ = "ContractTermSecurityLabel"
-
-
-class ContributorType(AbstractType):
-    __resource_type__ = "Contributor"
-
-
-class CountType(AbstractType):
-    __resource_type__ = "Count"
-
-
-class CoverageType(AbstractType):
-    __resource_type__ = "Coverage"
-
-
-class CoverageClassType(AbstractType):
-    __resource_type__ = "CoverageClass"
-
-
-class CoverageCostToBeneficiaryType(AbstractType):
-    __resource_type__ = "CoverageCostToBeneficiary"
-
-
-class CoverageCostToBeneficiaryExceptionType(AbstractType):
-    __resource_type__ = "CoverageCostToBeneficiaryException"
-
-
-class CoverageEligibilityRequestType(AbstractType):
-    __resource_type__ = "CoverageEligibilityRequest"
-
-
-class CoverageEligibilityRequestInsuranceType(AbstractType):
-    __resource_type__ = "CoverageEligibilityRequestInsurance"
-
-
-class CoverageEligibilityRequestItemType(AbstractType):
-    __resource_type__ = "CoverageEligibilityRequestItem"
-
-
-class CoverageEligibilityRequestItemDiagnosisType(AbstractType):
-    __resource_type__ = "CoverageEligibilityRequestItemDiagnosis"
-
-
-class CoverageEligibilityRequestSupportingInfoType(AbstractType):
-    __resource_type__ = "CoverageEligibilityRequestSupportingInfo"
-
-
-class CoverageEligibilityResponseType(AbstractType):
-    __resource_type__ = "CoverageEligibilityResponse"
-
-
-class CoverageEligibilityResponseErrorType(AbstractType):
-    __resource_type__ = "CoverageEligibilityResponseError"
-
-
-class CoverageEligibilityResponseInsuranceType(AbstractType):
-    __resource_type__ = "CoverageEligibilityResponseInsurance"
-
-
-class CoverageEligibilityResponseInsuranceItemType(AbstractType):
-    __resource_type__ = "CoverageEligibilityResponseInsuranceItem"
-
-
-class CoverageEligibilityResponseInsuranceItemBenefitType(AbstractType):
-    __resource_type__ = "CoverageEligibilityResponseInsuranceItemBenefit"
-
-
-class DataRequirementType(AbstractType):
-    __resource_type__ = "DataRequirement"
-
-
-class DataRequirementCodeFilterType(AbstractType):
-    __resource_type__ = "DataRequirementCodeFilter"
-
-
-class DataRequirementDateFilterType(AbstractType):
-    __resource_type__ = "DataRequirementDateFilter"
-
-
-class DataRequirementSortType(AbstractType):
-    __resource_type__ = "DataRequirementSort"
-
-
-class DetectedIssueType(AbstractType):
-    __resource_type__ = "DetectedIssue"
-
-
-class DetectedIssueEvidenceType(AbstractType):
-    __resource_type__ = "DetectedIssueEvidence"
-
-
-class DetectedIssueMitigationType(AbstractType):
-    __resource_type__ = "DetectedIssueMitigation"
-
-
-class DeviceType(AbstractType):
-    __resource_type__ = "Device"
-
-
-class DeviceDefinitionType(AbstractType):
-    __resource_type__ = "DeviceDefinition"
-
-
-class DeviceDefinitionCapabilityType(AbstractType):
-    __resource_type__ = "DeviceDefinitionCapability"
-
-
-class DeviceDefinitionDeviceNameType(AbstractType):
-    __resource_type__ = "DeviceDefinitionDeviceName"
-
-
-class DeviceDefinitionMaterialType(AbstractType):
-    __resource_type__ = "DeviceDefinitionMaterial"
-
-
-class DeviceDefinitionPropertyType(AbstractType):
-    __resource_type__ = "DeviceDefinitionProperty"
-
-
-class DeviceDefinitionSpecializationType(AbstractType):
-    __resource_type__ = "DeviceDefinitionSpecialization"
-
-
-class DeviceDefinitionUdiDeviceIdentifierType(AbstractType):
-    __resource_type__ = "DeviceDefinitionUdiDeviceIdentifier"
-
-
-class DeviceDeviceNameType(AbstractType):
-    __resource_type__ = "DeviceDeviceName"
-
-
-class DeviceMetricType(AbstractType):
-    __resource_type__ = "DeviceMetric"
-
-
-class DeviceMetricCalibrationType(AbstractType):
-    __resource_type__ = "DeviceMetricCalibration"
-
-
-class DevicePropertyType(AbstractType):
-    __resource_type__ = "DeviceProperty"
-
-
-class DeviceRequestType(AbstractType):
-    __resource_type__ = "DeviceRequest"
-
-
-class DeviceRequestParameterType(AbstractType):
-    __resource_type__ = "DeviceRequestParameter"
-
-
-class DeviceSpecializationType(AbstractType):
-    __resource_type__ = "DeviceSpecialization"
-
-
-class DeviceUdiCarrierType(AbstractType):
-    __resource_type__ = "DeviceUdiCarrier"
-
-
-class DeviceUseStatementType(AbstractType):
-    __resource_type__ = "DeviceUseStatement"
-
-
-class DeviceVersionType(AbstractType):
-    __resource_type__ = "DeviceVersion"
-
-
-class DiagnosticReportType(AbstractType):
-    __resource_type__ = "DiagnosticReport"
-
-
-class DiagnosticReportMediaType(AbstractType):
-    __resource_type__ = "DiagnosticReportMedia"
-
-
-class DistanceType(AbstractType):
-    __resource_type__ = "Distance"
-
-
-class DocumentManifestType(AbstractType):
-    __resource_type__ = "DocumentManifest"
-
-
-class DocumentManifestRelatedType(AbstractType):
-    __resource_type__ = "DocumentManifestRelated"
-
-
-class DocumentReferenceType(AbstractType):
-    __resource_type__ = "DocumentReference"
-
-
-class DocumentReferenceContentType(AbstractType):
-    __resource_type__ = "DocumentReferenceContent"
-
-
-class DocumentReferenceContextType(AbstractType):
-    __resource_type__ = "DocumentReferenceContext"
-
-
-class DocumentReferenceRelatesToType(AbstractType):
-    __resource_type__ = "DocumentReferenceRelatesTo"
-
-
-class DomainResourceType(AbstractType):
-    __resource_type__ = "DomainResource"
-
-
-class DosageType(AbstractType):
-    __resource_type__ = "Dosage"
-
-
-class DosageDoseAndRateType(AbstractType):
-    __resource_type__ = "DosageDoseAndRate"
-
-
-class DurationType(AbstractType):
-    __resource_type__ = "Duration"
-
-
-class EffectEvidenceSynthesisType(AbstractType):
-    __resource_type__ = "EffectEvidenceSynthesis"
-
-
-class EffectEvidenceSynthesisCertaintyType(AbstractType):
-    __resource_type__ = "EffectEvidenceSynthesisCertainty"
-
-
-class EffectEvidenceSynthesisCertaintyCertaintySubcomponentType(AbstractType):
-    __resource_type__ = "EffectEvidenceSynthesisCertaintyCertaintySubcomponent"
-
-
-class EffectEvidenceSynthesisEffectEstimateType(AbstractType):
-    __resource_type__ = "EffectEvidenceSynthesisEffectEstimate"
-
-
-class EffectEvidenceSynthesisEffectEstimatePrecisionEstimateType(AbstractType):
-    __resource_type__ = "EffectEvidenceSynthesisEffectEstimatePrecisionEstimate"
-
-
-class EffectEvidenceSynthesisResultsByExposureType(AbstractType):
-    __resource_type__ = "EffectEvidenceSynthesisResultsByExposure"
-
-
-class EffectEvidenceSynthesisSampleSizeType(AbstractType):
-    __resource_type__ = "EffectEvidenceSynthesisSampleSize"
-
-
-class ElementDefinitionType(AbstractType):
-    __resource_type__ = "ElementDefinition"
-
-
-class ElementDefinitionBaseType(AbstractType):
-    __resource_type__ = "ElementDefinitionBase"
-
-
-class ElementDefinitionBindingType(AbstractType):
-    __resource_type__ = "ElementDefinitionBinding"
-
-
-class ElementDefinitionConstraintType(AbstractType):
-    __resource_type__ = "ElementDefinitionConstraint"
-
-
-class ElementDefinitionExampleType(AbstractType):
-    __resource_type__ = "ElementDefinitionExample"
-
-
-class ElementDefinitionMappingType(AbstractType):
-    __resource_type__ = "ElementDefinitionMapping"
-
-
-class ElementDefinitionSlicingType(AbstractType):
-    __resource_type__ = "ElementDefinitionSlicing"
-
-
-class ElementDefinitionSlicingDiscriminatorType(AbstractType):
-    __resource_type__ = "ElementDefinitionSlicingDiscriminator"
-
-
-class ElementDefinitionTypeType(AbstractType):
-    __resource_type__ = "ElementDefinitionType"
-
-
-class EncounterType(AbstractType):
-    __resource_type__ = "Encounter"
-
-
-class EncounterClassHistoryType(AbstractType):
-    __resource_type__ = "EncounterClassHistory"
-
-
-class EncounterDiagnosisType(AbstractType):
-    __resource_type__ = "EncounterDiagnosis"
-
-
-class EncounterHospitalizationType(AbstractType):
-    __resource_type__ = "EncounterHospitalization"
-
-
-class EncounterLocationType(AbstractType):
-    __resource_type__ = "EncounterLocation"
-
-
-class EncounterParticipantType(AbstractType):
-    __resource_type__ = "EncounterParticipant"
-
-
-class EncounterStatusHistoryType(AbstractType):
-    __resource_type__ = "EncounterStatusHistory"
-
-
-class EndpointType(AbstractType):
-    __resource_type__ = "Endpoint"
-
-
-class EnrollmentRequestType(AbstractType):
-    __resource_type__ = "EnrollmentRequest"
-
-
-class EnrollmentResponseType(AbstractType):
-    __resource_type__ = "EnrollmentResponse"
-
-
-class EpisodeOfCareType(AbstractType):
-    __resource_type__ = "EpisodeOfCare"
-
-
-class EpisodeOfCareDiagnosisType(AbstractType):
-    __resource_type__ = "EpisodeOfCareDiagnosis"
-
-
-class EpisodeOfCareStatusHistoryType(AbstractType):
-    __resource_type__ = "EpisodeOfCareStatusHistory"
-
-
-class EventDefinitionType(AbstractType):
-    __resource_type__ = "EventDefinition"
-
-
-class EvidenceType(AbstractType):
-    __resource_type__ = "Evidence"
-
-
-class EvidenceVariableType(AbstractType):
-    __resource_type__ = "EvidenceVariable"
-
-
-class EvidenceVariableCharacteristicType(AbstractType):
-    __resource_type__ = "EvidenceVariableCharacteristic"
-
-
-class ExampleScenarioType(AbstractType):
-    __resource_type__ = "ExampleScenario"
-
-
-class ExampleScenarioActorType(AbstractType):
-    __resource_type__ = "ExampleScenarioActor"
-
-
-class ExampleScenarioInstanceType(AbstractType):
-    __resource_type__ = "ExampleScenarioInstance"
-
-
-class ExampleScenarioInstanceContainedInstanceType(AbstractType):
-    __resource_type__ = "ExampleScenarioInstanceContainedInstance"
-
-
-class ExampleScenarioInstanceVersionType(AbstractType):
-    __resource_type__ = "ExampleScenarioInstanceVersion"
-
-
-class ExampleScenarioProcessType(AbstractType):
-    __resource_type__ = "ExampleScenarioProcess"
-
-
-class ExampleScenarioProcessStepType(AbstractType):
-    __resource_type__ = "ExampleScenarioProcessStep"
-
-
-class ExampleScenarioProcessStepAlternativeType(AbstractType):
-    __resource_type__ = "ExampleScenarioProcessStepAlternative"
-
-
-class ExampleScenarioProcessStepOperationType(AbstractType):
-    __resource_type__ = "ExampleScenarioProcessStepOperation"
-
-
-class ExplanationOfBenefitType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefit"
-
-
-class ExplanationOfBenefitAccidentType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitAccident"
-
-
-class ExplanationOfBenefitAddItemType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitAddItem"
-
-
-class ExplanationOfBenefitAddItemDetailType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitAddItemDetail"
-
-
-class ExplanationOfBenefitAddItemDetailSubDetailType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitAddItemDetailSubDetail"
-
-
-class ExplanationOfBenefitBenefitBalanceType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitBenefitBalance"
-
-
-class ExplanationOfBenefitBenefitBalanceFinancialType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitBenefitBalanceFinancial"
-
-
-class ExplanationOfBenefitCareTeamType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitCareTeam"
-
-
-class ExplanationOfBenefitDiagnosisType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitDiagnosis"
-
-
-class ExplanationOfBenefitInsuranceType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitInsurance"
-
-
-class ExplanationOfBenefitItemType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitItem"
-
-
-class ExplanationOfBenefitItemAdjudicationType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitItemAdjudication"
-
-
-class ExplanationOfBenefitItemDetailType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitItemDetail"
-
-
-class ExplanationOfBenefitItemDetailSubDetailType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitItemDetailSubDetail"
-
-
-class ExplanationOfBenefitPayeeType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitPayee"
-
-
-class ExplanationOfBenefitPaymentType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitPayment"
-
-
-class ExplanationOfBenefitProcedureType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitProcedure"
-
-
-class ExplanationOfBenefitProcessNoteType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitProcessNote"
-
-
-class ExplanationOfBenefitRelatedType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitRelated"
-
-
-class ExplanationOfBenefitSupportingInfoType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitSupportingInfo"
-
-
-class ExplanationOfBenefitTotalType(AbstractType):
-    __resource_type__ = "ExplanationOfBenefitTotal"
-
-
-class ExpressionType(AbstractType):
-    __resource_type__ = "Expression"
-
-
-class ExtensionType(AbstractType):
-    __resource_type__ = "Extension"
-
-
-class FamilyMemberHistoryType(AbstractType):
-    __resource_type__ = "FamilyMemberHistory"
-
-
-class FamilyMemberHistoryConditionType(AbstractType):
-    __resource_type__ = "FamilyMemberHistoryCondition"
-
-
-class FlagType(AbstractType):
-    __resource_type__ = "Flag"
-
-
-class GoalType(AbstractType):
-    __resource_type__ = "Goal"
-
-
-class GoalTargetType(AbstractType):
-    __resource_type__ = "GoalTarget"
-
-
-class GraphDefinitionType(AbstractType):
-    __resource_type__ = "GraphDefinition"
-
-
-class GraphDefinitionLinkType(AbstractType):
-    __resource_type__ = "GraphDefinitionLink"
-
-
-class GraphDefinitionLinkTargetType(AbstractType):
-    __resource_type__ = "GraphDefinitionLinkTarget"
-
-
-class GraphDefinitionLinkTargetCompartmentType(AbstractType):
-    __resource_type__ = "GraphDefinitionLinkTargetCompartment"
-
-
-class GroupType(AbstractType):
-    __resource_type__ = "Group"
-
-
-class GroupCharacteristicType(AbstractType):
-    __resource_type__ = "GroupCharacteristic"
-
-
-class GroupMemberType(AbstractType):
-    __resource_type__ = "GroupMember"
-
-
-class GuidanceResponseType(AbstractType):
-    __resource_type__ = "GuidanceResponse"
-
-
-class HealthcareServiceType(AbstractType):
-    __resource_type__ = "HealthcareService"
-
-
-class HealthcareServiceAvailableTimeType(AbstractType):
-    __resource_type__ = "HealthcareServiceAvailableTime"
-
-
-class HealthcareServiceEligibilityType(AbstractType):
-    __resource_type__ = "HealthcareServiceEligibility"
-
-
-class HealthcareServiceNotAvailableType(AbstractType):
-    __resource_type__ = "HealthcareServiceNotAvailable"
-
-
-class HumanNameType(AbstractType):
-    __resource_type__ = "HumanName"
-
-
-class IdentifierType(AbstractType):
-    __resource_type__ = "Identifier"
-
-
-class ImagingStudyType(AbstractType):
-    __resource_type__ = "ImagingStudy"
-
-
-class ImagingStudySeriesType(AbstractType):
-    __resource_type__ = "ImagingStudySeries"
-
-
-class ImagingStudySeriesInstanceType(AbstractType):
-    __resource_type__ = "ImagingStudySeriesInstance"
-
-
-class ImagingStudySeriesPerformerType(AbstractType):
-    __resource_type__ = "ImagingStudySeriesPerformer"
-
-
-class ImmunizationType(AbstractType):
-    __resource_type__ = "Immunization"
-
-
-class ImmunizationEducationType(AbstractType):
-    __resource_type__ = "ImmunizationEducation"
-
-
-class ImmunizationEvaluationType(AbstractType):
-    __resource_type__ = "ImmunizationEvaluation"
-
-
-class ImmunizationPerformerType(AbstractType):
-    __resource_type__ = "ImmunizationPerformer"
-
-
-class ImmunizationProtocolAppliedType(AbstractType):
-    __resource_type__ = "ImmunizationProtocolApplied"
-
-
-class ImmunizationReactionType(AbstractType):
-    __resource_type__ = "ImmunizationReaction"
-
-
-class ImmunizationRecommendationType(AbstractType):
-    __resource_type__ = "ImmunizationRecommendation"
-
-
-class ImmunizationRecommendationRecommendationType(AbstractType):
-    __resource_type__ = "ImmunizationRecommendationRecommendation"
-
-
-class ImmunizationRecommendationRecommendationDateCriterionType(AbstractType):
-    __resource_type__ = "ImmunizationRecommendationRecommendationDateCriterion"
-
-
-class ImplementationGuideType(AbstractType):
-    __resource_type__ = "ImplementationGuide"
-
-
-class ImplementationGuideDefinitionType(AbstractType):
-    __resource_type__ = "ImplementationGuideDefinition"
-
-
-class ImplementationGuideDefinitionGroupingType(AbstractType):
-    __resource_type__ = "ImplementationGuideDefinitionGrouping"
-
-
-class ImplementationGuideDefinitionPageType(AbstractType):
-    __resource_type__ = "ImplementationGuideDefinitionPage"
-
-
-class ImplementationGuideDefinitionParameterType(AbstractType):
-    __resource_type__ = "ImplementationGuideDefinitionParameter"
-
-
-class ImplementationGuideDefinitionResourceType(AbstractType):
-    __resource_type__ = "ImplementationGuideDefinitionResource"
-
-
-class ImplementationGuideDefinitionTemplateType(AbstractType):
-    __resource_type__ = "ImplementationGuideDefinitionTemplate"
-
-
-class ImplementationGuideDependsOnType(AbstractType):
-    __resource_type__ = "ImplementationGuideDependsOn"
-
-
-class ImplementationGuideGlobalType(AbstractType):
-    __resource_type__ = "ImplementationGuideGlobal"
-
-
-class ImplementationGuideManifestType(AbstractType):
-    __resource_type__ = "ImplementationGuideManifest"
-
-
-class ImplementationGuideManifestPageType(AbstractType):
-    __resource_type__ = "ImplementationGuideManifestPage"
-
-
-class ImplementationGuideManifestResourceType(AbstractType):
-    __resource_type__ = "ImplementationGuideManifestResource"
-
-
-class InsurancePlanType(AbstractType):
-    __resource_type__ = "InsurancePlan"
-
-
-class InsurancePlanContactType(AbstractType):
-    __resource_type__ = "InsurancePlanContact"
-
-
-class InsurancePlanCoverageType(AbstractType):
-    __resource_type__ = "InsurancePlanCoverage"
-
-
-class InsurancePlanCoverageBenefitType(AbstractType):
-    __resource_type__ = "InsurancePlanCoverageBenefit"
-
-
-class InsurancePlanCoverageBenefitLimitType(AbstractType):
-    __resource_type__ = "InsurancePlanCoverageBenefitLimit"
-
-
-class InsurancePlanPlanType(AbstractType):
-    __resource_type__ = "InsurancePlanPlan"
-
-
-class InsurancePlanPlanGeneralCostType(AbstractType):
-    __resource_type__ = "InsurancePlanPlanGeneralCost"
-
-
-class InsurancePlanPlanSpecificCostType(AbstractType):
-    __resource_type__ = "InsurancePlanPlanSpecificCost"
-
-
-class InsurancePlanPlanSpecificCostBenefitType(AbstractType):
-    __resource_type__ = "InsurancePlanPlanSpecificCostBenefit"
-
-
-class InsurancePlanPlanSpecificCostBenefitCostType(AbstractType):
-    __resource_type__ = "InsurancePlanPlanSpecificCostBenefitCost"
-
-
-class InvoiceType(AbstractType):
-    __resource_type__ = "Invoice"
-
-
-class InvoiceLineItemType(AbstractType):
-    __resource_type__ = "InvoiceLineItem"
-
-
-class InvoiceLineItemPriceComponentType(AbstractType):
-    __resource_type__ = "InvoiceLineItemPriceComponent"
-
-
-class InvoiceParticipantType(AbstractType):
-    __resource_type__ = "InvoiceParticipant"
-
-
-class LibraryType(AbstractType):
-    __resource_type__ = "Library"
-
-
-class LinkageType(AbstractType):
-    __resource_type__ = "Linkage"
-
-
-class LinkageItemType(AbstractType):
-    __resource_type__ = "LinkageItem"
-
-
-class ListType(AbstractType):
-    __resource_type__ = "List"
-
-
-class ListEntryType(AbstractType):
-    __resource_type__ = "ListEntry"
-
-
-class LocationType(AbstractType):
-    __resource_type__ = "Location"
-
-
-class LocationHoursOfOperationType(AbstractType):
-    __resource_type__ = "LocationHoursOfOperation"
-
-
-class LocationPositionType(AbstractType):
-    __resource_type__ = "LocationPosition"
-
-
-class MarketingStatusType(AbstractType):
-    __resource_type__ = "MarketingStatus"
-
-
-class MeasureType(AbstractType):
-    __resource_type__ = "Measure"
-
-
-class MeasureGroupType(AbstractType):
-    __resource_type__ = "MeasureGroup"
-
-
-class MeasureGroupPopulationType(AbstractType):
-    __resource_type__ = "MeasureGroupPopulation"
-
-
-class MeasureGroupStratifierType(AbstractType):
-    __resource_type__ = "MeasureGroupStratifier"
-
-
-class MeasureGroupStratifierComponentType(AbstractType):
-    __resource_type__ = "MeasureGroupStratifierComponent"
-
-
-class MeasureReportType(AbstractType):
-    __resource_type__ = "MeasureReport"
-
-
-class MeasureReportGroupType(AbstractType):
-    __resource_type__ = "MeasureReportGroup"
-
-
-class MeasureReportGroupPopulationType(AbstractType):
-    __resource_type__ = "MeasureReportGroupPopulation"
-
-
-class MeasureReportGroupStratifierType(AbstractType):
-    __resource_type__ = "MeasureReportGroupStratifier"
-
-
-class MeasureReportGroupStratifierStratumType(AbstractType):
-    __resource_type__ = "MeasureReportGroupStratifierStratum"
-
-
-class MeasureReportGroupStratifierStratumComponentType(AbstractType):
-    __resource_type__ = "MeasureReportGroupStratifierStratumComponent"
-
-
-class MeasureReportGroupStratifierStratumPopulationType(AbstractType):
-    __resource_type__ = "MeasureReportGroupStratifierStratumPopulation"
-
-
-class MeasureSupplementalDataType(AbstractType):
-    __resource_type__ = "MeasureSupplementalData"
-
-
-class MediaType(AbstractType):
-    __resource_type__ = "Media"
-
-
-class MedicationType(AbstractType):
-    __resource_type__ = "Medication"
-
-
-class MedicationAdministrationType(AbstractType):
-    __resource_type__ = "MedicationAdministration"
-
-
-class MedicationAdministrationDosageType(AbstractType):
-    __resource_type__ = "MedicationAdministrationDosage"
-
-
-class MedicationAdministrationPerformerType(AbstractType):
-    __resource_type__ = "MedicationAdministrationPerformer"
-
-
-class MedicationBatchType(AbstractType):
-    __resource_type__ = "MedicationBatch"
-
-
-class MedicationDispenseType(AbstractType):
-    __resource_type__ = "MedicationDispense"
-
-
-class MedicationDispensePerformerType(AbstractType):
-    __resource_type__ = "MedicationDispensePerformer"
-
-
-class MedicationDispenseSubstitutionType(AbstractType):
-    __resource_type__ = "MedicationDispenseSubstitution"
-
-
-class MedicationIngredientType(AbstractType):
-    __resource_type__ = "MedicationIngredient"
-
-
-class MedicationKnowledgeType(AbstractType):
-    __resource_type__ = "MedicationKnowledge"
-
-
-class MedicationKnowledgeAdministrationGuidelinesType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeAdministrationGuidelines"
-
-
-class MedicationKnowledgeAdministrationGuidelinesDosageType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeAdministrationGuidelinesDosage"
-
-
-class MedicationKnowledgeAdministrationGuidelinesPatientCharacteristicsType(
-    AbstractType
-):
-    __resource_type__ = (
-        "MedicationKnowledgeAdministrationGuidelinesPatientCharacteristics"
+    FHIRPrimitiveExtensionType = create_fhir_type(
+        "FHIRPrimitiveExtensionType",
+        "fhir.resources.fhirprimitiveextension.FHIRPrimitiveExtension",
     )
 
-
-class MedicationKnowledgeCostType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeCost"
-
-
-class MedicationKnowledgeDrugCharacteristicType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeDrugCharacteristic"
-
-
-class MedicationKnowledgeIngredientType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeIngredient"
-
-
-class MedicationKnowledgeKineticsType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeKinetics"
-
-
-class MedicationKnowledgeMedicineClassificationType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeMedicineClassification"
-
-
-class MedicationKnowledgeMonitoringProgramType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeMonitoringProgram"
-
-
-class MedicationKnowledgeMonographType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeMonograph"
-
-
-class MedicationKnowledgePackagingType(AbstractType):
-    __resource_type__ = "MedicationKnowledgePackaging"
-
-
-class MedicationKnowledgeRegulatoryType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeRegulatory"
-
-
-class MedicationKnowledgeRegulatoryMaxDispenseType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeRegulatoryMaxDispense"
-
-
-class MedicationKnowledgeRegulatoryScheduleType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeRegulatorySchedule"
-
-
-class MedicationKnowledgeRegulatorySubstitutionType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeRegulatorySubstitution"
-
-
-class MedicationKnowledgeRelatedMedicationKnowledgeType(AbstractType):
-    __resource_type__ = "MedicationKnowledgeRelatedMedicationKnowledge"
-
-
-class MedicationRequestType(AbstractType):
-    __resource_type__ = "MedicationRequest"
-
-
-class MedicationRequestDispenseRequestType(AbstractType):
-    __resource_type__ = "MedicationRequestDispenseRequest"
-
-
-class MedicationRequestDispenseRequestInitialFillType(AbstractType):
-    __resource_type__ = "MedicationRequestDispenseRequestInitialFill"
-
-
-class MedicationRequestSubstitutionType(AbstractType):
-    __resource_type__ = "MedicationRequestSubstitution"
-
-
-class MedicationStatementType(AbstractType):
-    __resource_type__ = "MedicationStatement"
-
-
-class MedicinalProductType(AbstractType):
-    __resource_type__ = "MedicinalProduct"
-
-
-class MedicinalProductAuthorizationType(AbstractType):
-    __resource_type__ = "MedicinalProductAuthorization"
-
-
-class MedicinalProductAuthorizationJurisdictionalAuthorizationType(AbstractType):
-    __resource_type__ = "MedicinalProductAuthorizationJurisdictionalAuthorization"
-
-
-class MedicinalProductAuthorizationProcedureType(AbstractType):
-    __resource_type__ = "MedicinalProductAuthorizationProcedure"
-
-
-class MedicinalProductContraindicationType(AbstractType):
-    __resource_type__ = "MedicinalProductContraindication"
-
-
-class MedicinalProductContraindicationOtherTherapyType(AbstractType):
-    __resource_type__ = "MedicinalProductContraindicationOtherTherapy"
-
-
-class MedicinalProductIndicationType(AbstractType):
-    __resource_type__ = "MedicinalProductIndication"
-
-
-class MedicinalProductIndicationOtherTherapyType(AbstractType):
-    __resource_type__ = "MedicinalProductIndicationOtherTherapy"
-
-
-class MedicinalProductIngredientType(AbstractType):
-    __resource_type__ = "MedicinalProductIngredient"
-
-
-class MedicinalProductIngredientSpecifiedSubstanceType(AbstractType):
-    __resource_type__ = "MedicinalProductIngredientSpecifiedSubstance"
-
-
-class MedicinalProductIngredientSpecifiedSubstanceStrengthType(AbstractType):
-    __resource_type__ = "MedicinalProductIngredientSpecifiedSubstanceStrength"
-
-
-class MedicinalProductIngredientSpecifiedSubstanceStrengthReferenceStrengthType(
-    AbstractType
-):
-    __resource_type__ = (
-        "MedicinalProductIngredientSpecifiedSubstanceStrengthReferenceStrength"
+    ElementType = create_fhir_element_or_resource_type(
+        "ElementType", "fhir.resources.element.Element"
     )
 
+    ResourceType = create_fhir_element_or_resource_type(
+        "ResourceType", "fhir.resources.resource.Resource"
+    )
+    AccountType = create_fhir_type("AccountType", "fhir.resources.account.Account")
 
-class MedicinalProductIngredientSubstanceType(AbstractType):
-    __resource_type__ = "MedicinalProductIngredientSubstance"
-
-
-class MedicinalProductInteractionType(AbstractType):
-    __resource_type__ = "MedicinalProductInteraction"
-
-
-class MedicinalProductInteractionInteractantType(AbstractType):
-    __resource_type__ = "MedicinalProductInteractionInteractant"
-
-
-class MedicinalProductManufacturedType(AbstractType):
-    __resource_type__ = "MedicinalProductManufactured"
-
-
-class MedicinalProductManufacturingBusinessOperationType(AbstractType):
-    __resource_type__ = "MedicinalProductManufacturingBusinessOperation"
-
-
-class MedicinalProductNameType(AbstractType):
-    __resource_type__ = "MedicinalProductName"
-
-
-class MedicinalProductNameCountryLanguageType(AbstractType):
-    __resource_type__ = "MedicinalProductNameCountryLanguage"
-
-
-class MedicinalProductNameNamePartType(AbstractType):
-    __resource_type__ = "MedicinalProductNameNamePart"
-
-
-class MedicinalProductPackagedType(AbstractType):
-    __resource_type__ = "MedicinalProductPackaged"
-
-
-class MedicinalProductPackagedBatchIdentifierType(AbstractType):
-    __resource_type__ = "MedicinalProductPackagedBatchIdentifier"
-
-
-class MedicinalProductPackagedPackageItemType(AbstractType):
-    __resource_type__ = "MedicinalProductPackagedPackageItem"
-
-
-class MedicinalProductPharmaceuticalType(AbstractType):
-    __resource_type__ = "MedicinalProductPharmaceutical"
-
-
-class MedicinalProductPharmaceuticalCharacteristicsType(AbstractType):
-    __resource_type__ = "MedicinalProductPharmaceuticalCharacteristics"
-
-
-class MedicinalProductPharmaceuticalRouteOfAdministrationType(AbstractType):
-    __resource_type__ = "MedicinalProductPharmaceuticalRouteOfAdministration"
-
-
-class MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesType(
-    AbstractType
-):
-    __resource_type__ = (
-        "MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpecies"
+    AccountBalanceType = create_fhir_type(
+        "AccountBalanceType", "fhir.resources.account.AccountBalance"
     )
 
-
-class MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesWithdrawalPeriodType(
-    AbstractType
-):
-    __resource_type__ = "MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesWithdrawalPeriod"  # noqa: B950
-
-
-class MedicinalProductSpecialDesignationType(AbstractType):
-    __resource_type__ = "MedicinalProductSpecialDesignation"
-
-
-class MedicinalProductUndesirableEffectType(AbstractType):
-    __resource_type__ = "MedicinalProductUndesirableEffect"
-
-
-class MessageDefinitionType(AbstractType):
-    __resource_type__ = "MessageDefinition"
-
-
-class MessageDefinitionAllowedResponseType(AbstractType):
-    __resource_type__ = "MessageDefinitionAllowedResponse"
-
-
-class MessageDefinitionFocusType(AbstractType):
-    __resource_type__ = "MessageDefinitionFocus"
-
-
-class MessageHeaderType(AbstractType):
-    __resource_type__ = "MessageHeader"
-
-
-class MessageHeaderDestinationType(AbstractType):
-    __resource_type__ = "MessageHeaderDestination"
-
-
-class MessageHeaderResponseType(AbstractType):
-    __resource_type__ = "MessageHeaderResponse"
-
-
-class MessageHeaderSourceType(AbstractType):
-    __resource_type__ = "MessageHeaderSource"
-
-
-class MetaType(AbstractType):
-    __resource_type__ = "Meta"
-
-
-class MetadataResourceType(AbstractType):
-    __resource_type__ = "MetadataResource"
-
-
-class MolecularSequenceType(AbstractType):
-    __resource_type__ = "MolecularSequence"
-
-
-class MolecularSequenceQualityType(AbstractType):
-    __resource_type__ = "MolecularSequenceQuality"
-
-
-class MolecularSequenceQualityRocType(AbstractType):
-    __resource_type__ = "MolecularSequenceQualityRoc"
-
-
-class MolecularSequenceReferenceSeqType(AbstractType):
-    __resource_type__ = "MolecularSequenceReferenceSeq"
-
-
-class MolecularSequenceRepositoryType(AbstractType):
-    __resource_type__ = "MolecularSequenceRepository"
-
-
-class MolecularSequenceStructureVariantType(AbstractType):
-    __resource_type__ = "MolecularSequenceStructureVariant"
-
-
-class MolecularSequenceStructureVariantInnerType(AbstractType):
-    __resource_type__ = "MolecularSequenceStructureVariantInner"
-
-
-class MolecularSequenceStructureVariantOuterType(AbstractType):
-    __resource_type__ = "MolecularSequenceStructureVariantOuter"
-
-
-class MolecularSequenceVariantType(AbstractType):
-    __resource_type__ = "MolecularSequenceVariant"
-
-
-class MoneyType(AbstractType):
-    __resource_type__ = "Money"
-
-
-class NamingSystemType(AbstractType):
-    __resource_type__ = "NamingSystem"
-
-
-class NamingSystemUniqueIdType(AbstractType):
-    __resource_type__ = "NamingSystemUniqueId"
-
-
-class NarrativeType(AbstractType):
-    __resource_type__ = "Narrative"
-
-
-class NutritionOrderType(AbstractType):
-    __resource_type__ = "NutritionOrder"
-
-
-class NutritionOrderEnteralFormulaType(AbstractType):
-    __resource_type__ = "NutritionOrderEnteralFormula"
-
-
-class NutritionOrderEnteralFormulaAdministrationType(AbstractType):
-    __resource_type__ = "NutritionOrderEnteralFormulaAdministration"
-
-
-class NutritionOrderOralDietType(AbstractType):
-    __resource_type__ = "NutritionOrderOralDiet"
-
-
-class NutritionOrderOralDietNutrientType(AbstractType):
-    __resource_type__ = "NutritionOrderOralDietNutrient"
-
-
-class NutritionOrderOralDietTextureType(AbstractType):
-    __resource_type__ = "NutritionOrderOralDietTexture"
-
-
-class NutritionOrderSupplementType(AbstractType):
-    __resource_type__ = "NutritionOrderSupplement"
-
-
-class ObservationType(AbstractType):
-    __resource_type__ = "Observation"
-
-
-class ObservationComponentType(AbstractType):
-    __resource_type__ = "ObservationComponent"
-
-
-class ObservationDefinitionType(AbstractType):
-    __resource_type__ = "ObservationDefinition"
-
-
-class ObservationDefinitionQualifiedIntervalType(AbstractType):
-    __resource_type__ = "ObservationDefinitionQualifiedInterval"
-
-
-class ObservationDefinitionQuantitativeDetailsType(AbstractType):
-    __resource_type__ = "ObservationDefinitionQuantitativeDetails"
-
-
-class ObservationReferenceRangeType(AbstractType):
-    __resource_type__ = "ObservationReferenceRange"
-
-
-class OperationDefinitionType(AbstractType):
-    __resource_type__ = "OperationDefinition"
-
-
-class OperationDefinitionOverloadType(AbstractType):
-    __resource_type__ = "OperationDefinitionOverload"
-
-
-class OperationDefinitionParameterType(AbstractType):
-    __resource_type__ = "OperationDefinitionParameter"
-
-
-class OperationDefinitionParameterBindingType(AbstractType):
-    __resource_type__ = "OperationDefinitionParameterBinding"
-
-
-class OperationDefinitionParameterReferencedFromType(AbstractType):
-    __resource_type__ = "OperationDefinitionParameterReferencedFrom"
-
-
-class OperationOutcomeType(AbstractType):
-    __resource_type__ = "OperationOutcome"
-
-
-class OperationOutcomeIssueType(AbstractType):
-    __resource_type__ = "OperationOutcomeIssue"
-
-
-class OrganizationType(AbstractType):
-    __resource_type__ = "Organization"
-
-
-class OrganizationAffiliationType(AbstractType):
-    __resource_type__ = "OrganizationAffiliation"
-
-
-class OrganizationContactType(AbstractType):
-    __resource_type__ = "OrganizationContact"
-
-
-class ParameterDefinitionType(AbstractType):
-    __resource_type__ = "ParameterDefinition"
-
-
-class ParametersType(AbstractType):
-    __resource_type__ = "Parameters"
-
-
-class ParametersParameterType(AbstractType):
-    __resource_type__ = "ParametersParameter"
-
-
-class PatientType(AbstractType):
-    __resource_type__ = "Patient"
-
-
-class PatientCommunicationType(AbstractType):
-    __resource_type__ = "PatientCommunication"
-
-
-class PatientContactType(AbstractType):
-    __resource_type__ = "PatientContact"
-
-
-class PatientLinkType(AbstractType):
-    __resource_type__ = "PatientLink"
-
-
-class PaymentNoticeType(AbstractType):
-    __resource_type__ = "PaymentNotice"
-
-
-class PaymentReconciliationType(AbstractType):
-    __resource_type__ = "PaymentReconciliation"
-
-
-class PaymentReconciliationDetailType(AbstractType):
-    __resource_type__ = "PaymentReconciliationDetail"
-
-
-class PaymentReconciliationProcessNoteType(AbstractType):
-    __resource_type__ = "PaymentReconciliationProcessNote"
-
-
-class PeriodType(AbstractType):
-    __resource_type__ = "Period"
-
-
-class PersonType(AbstractType):
-    __resource_type__ = "Person"
-
-
-class PersonLinkType(AbstractType):
-    __resource_type__ = "PersonLink"
-
-
-class PlanDefinitionType(AbstractType):
-    __resource_type__ = "PlanDefinition"
-
-
-class PlanDefinitionActionType(AbstractType):
-    __resource_type__ = "PlanDefinitionAction"
-
-
-class PlanDefinitionActionConditionType(AbstractType):
-    __resource_type__ = "PlanDefinitionActionCondition"
-
-
-class PlanDefinitionActionDynamicValueType(AbstractType):
-    __resource_type__ = "PlanDefinitionActionDynamicValue"
-
-
-class PlanDefinitionActionParticipantType(AbstractType):
-    __resource_type__ = "PlanDefinitionActionParticipant"
-
-
-class PlanDefinitionActionRelatedActionType(AbstractType):
-    __resource_type__ = "PlanDefinitionActionRelatedAction"
-
-
-class PlanDefinitionGoalType(AbstractType):
-    __resource_type__ = "PlanDefinitionGoal"
-
-
-class PlanDefinitionGoalTargetType(AbstractType):
-    __resource_type__ = "PlanDefinitionGoalTarget"
-
-
-class PopulationType(AbstractType):
-    __resource_type__ = "Population"
-
-
-class PractitionerType(AbstractType):
-    __resource_type__ = "Practitioner"
-
-
-class PractitionerQualificationType(AbstractType):
-    __resource_type__ = "PractitionerQualification"
-
-
-class PractitionerRoleType(AbstractType):
-    __resource_type__ = "PractitionerRole"
-
-
-class PractitionerRoleAvailableTimeType(AbstractType):
-    __resource_type__ = "PractitionerRoleAvailableTime"
-
-
-class PractitionerRoleNotAvailableType(AbstractType):
-    __resource_type__ = "PractitionerRoleNotAvailable"
-
-
-class ProcedureType(AbstractType):
-    __resource_type__ = "Procedure"
-
-
-class ProcedureFocalDeviceType(AbstractType):
-    __resource_type__ = "ProcedureFocalDevice"
-
-
-class ProcedurePerformerType(AbstractType):
-    __resource_type__ = "ProcedurePerformer"
-
-
-class ProdCharacteristicType(AbstractType):
-    __resource_type__ = "ProdCharacteristic"
-
-
-class ProductShelfLifeType(AbstractType):
-    __resource_type__ = "ProductShelfLife"
-
-
-class ProvenanceType(AbstractType):
-    __resource_type__ = "Provenance"
-
-
-class ProvenanceAgentType(AbstractType):
-    __resource_type__ = "ProvenanceAgent"
-
-
-class ProvenanceEntityType(AbstractType):
-    __resource_type__ = "ProvenanceEntity"
-
-
-class QuantityType(AbstractType):
-    __resource_type__ = "Quantity"
-
-
-class QuestionnaireType(AbstractType):
-    __resource_type__ = "Questionnaire"
-
-
-class QuestionnaireItemType(AbstractType):
-    __resource_type__ = "QuestionnaireItem"
-
-
-class QuestionnaireItemAnswerOptionType(AbstractType):
-    __resource_type__ = "QuestionnaireItemAnswerOption"
-
-
-class QuestionnaireItemEnableWhenType(AbstractType):
-    __resource_type__ = "QuestionnaireItemEnableWhen"
-
-
-class QuestionnaireItemInitialType(AbstractType):
-    __resource_type__ = "QuestionnaireItemInitial"
-
-
-class QuestionnaireResponseType(AbstractType):
-    __resource_type__ = "QuestionnaireResponse"
-
-
-class QuestionnaireResponseItemType(AbstractType):
-    __resource_type__ = "QuestionnaireResponseItem"
-
-
-class QuestionnaireResponseItemAnswerType(AbstractType):
-    __resource_type__ = "QuestionnaireResponseItemAnswer"
-
-
-class RangeType(AbstractType):
-    __resource_type__ = "Range"
-
-
-class RatioType(AbstractType):
-    __resource_type__ = "Ratio"
-
-
-class ReferenceType(AbstractType):
-    __resource_type__ = "Reference"
-
-
-class RelatedArtifactType(AbstractType):
-    __resource_type__ = "RelatedArtifact"
-
-
-class RelatedPersonType(AbstractType):
-    __resource_type__ = "RelatedPerson"
-
-
-class RelatedPersonCommunicationType(AbstractType):
-    __resource_type__ = "RelatedPersonCommunication"
-
-
-class RequestGroupType(AbstractType):
-    __resource_type__ = "RequestGroup"
-
-
-class RequestGroupActionType(AbstractType):
-    __resource_type__ = "RequestGroupAction"
-
-
-class RequestGroupActionConditionType(AbstractType):
-    __resource_type__ = "RequestGroupActionCondition"
-
-
-class RequestGroupActionRelatedActionType(AbstractType):
-    __resource_type__ = "RequestGroupActionRelatedAction"
-
-
-class ResearchDefinitionType(AbstractType):
-    __resource_type__ = "ResearchDefinition"
-
-
-class ResearchElementDefinitionType(AbstractType):
-    __resource_type__ = "ResearchElementDefinition"
-
-
-class ResearchElementDefinitionCharacteristicType(AbstractType):
-    __resource_type__ = "ResearchElementDefinitionCharacteristic"
-
-
-class ResearchStudyType(AbstractType):
-    __resource_type__ = "ResearchStudy"
-
-
-class ResearchStudyArmType(AbstractType):
-    __resource_type__ = "ResearchStudyArm"
-
-
-class ResearchStudyObjectiveType(AbstractType):
-    __resource_type__ = "ResearchStudyObjective"
-
-
-class ResearchSubjectType(AbstractType):
-    __resource_type__ = "ResearchSubject"
-
-
-class RiskAssessmentType(AbstractType):
-    __resource_type__ = "RiskAssessment"
-
-
-class RiskAssessmentPredictionType(AbstractType):
-    __resource_type__ = "RiskAssessmentPrediction"
-
-
-class RiskEvidenceSynthesisType(AbstractType):
-    __resource_type__ = "RiskEvidenceSynthesis"
-
-
-class RiskEvidenceSynthesisCertaintyType(AbstractType):
-    __resource_type__ = "RiskEvidenceSynthesisCertainty"
-
-
-class RiskEvidenceSynthesisCertaintyCertaintySubcomponentType(AbstractType):
-    __resource_type__ = "RiskEvidenceSynthesisCertaintyCertaintySubcomponent"
-
-
-class RiskEvidenceSynthesisRiskEstimateType(AbstractType):
-    __resource_type__ = "RiskEvidenceSynthesisRiskEstimate"
-
-
-class RiskEvidenceSynthesisRiskEstimatePrecisionEstimateType(AbstractType):
-    __resource_type__ = "RiskEvidenceSynthesisRiskEstimatePrecisionEstimate"
-
-
-class RiskEvidenceSynthesisSampleSizeType(AbstractType):
-    __resource_type__ = "RiskEvidenceSynthesisSampleSize"
-
-
-class SampledDataType(AbstractType):
-    __resource_type__ = "SampledData"
-
-
-class ScheduleType(AbstractType):
-    __resource_type__ = "Schedule"
-
-
-class SearchParameterType(AbstractType):
-    __resource_type__ = "SearchParameter"
-
-
-class SearchParameterComponentType(AbstractType):
-    __resource_type__ = "SearchParameterComponent"
-
-
-class ServiceRequestType(AbstractType):
-    __resource_type__ = "ServiceRequest"
-
-
-class SignatureType(AbstractType):
-    __resource_type__ = "Signature"
-
-
-class SlotType(AbstractType):
-    __resource_type__ = "Slot"
-
-
-class SpecimenType(AbstractType):
-    __resource_type__ = "Specimen"
-
-
-class SpecimenCollectionType(AbstractType):
-    __resource_type__ = "SpecimenCollection"
-
-
-class SpecimenContainerType(AbstractType):
-    __resource_type__ = "SpecimenContainer"
-
-
-class SpecimenDefinitionType(AbstractType):
-    __resource_type__ = "SpecimenDefinition"
-
-
-class SpecimenDefinitionTypeTestedType(AbstractType):
-    __resource_type__ = "SpecimenDefinitionTypeTested"
-
-
-class SpecimenDefinitionTypeTestedContainerType(AbstractType):
-    __resource_type__ = "SpecimenDefinitionTypeTestedContainer"
-
-
-class SpecimenDefinitionTypeTestedContainerAdditiveType(AbstractType):
-    __resource_type__ = "SpecimenDefinitionTypeTestedContainerAdditive"
-
-
-class SpecimenDefinitionTypeTestedHandlingType(AbstractType):
-    __resource_type__ = "SpecimenDefinitionTypeTestedHandling"
-
-
-class SpecimenProcessingType(AbstractType):
-    __resource_type__ = "SpecimenProcessing"
-
-
-class StructureDefinitionType(AbstractType):
-    __resource_type__ = "StructureDefinition"
-
-
-class StructureDefinitionContextType(AbstractType):
-    __resource_type__ = "StructureDefinitionContext"
-
-
-class StructureDefinitionDifferentialType(AbstractType):
-    __resource_type__ = "StructureDefinitionDifferential"
-
-
-class StructureDefinitionMappingType(AbstractType):
-    __resource_type__ = "StructureDefinitionMapping"
-
-
-class StructureDefinitionSnapshotType(AbstractType):
-    __resource_type__ = "StructureDefinitionSnapshot"
-
-
-class StructureMapType(AbstractType):
-    __resource_type__ = "StructureMap"
-
-
-class StructureMapGroupType(AbstractType):
-    __resource_type__ = "StructureMapGroup"
-
-
-class StructureMapGroupInputType(AbstractType):
-    __resource_type__ = "StructureMapGroupInput"
-
-
-class StructureMapGroupRuleType(AbstractType):
-    __resource_type__ = "StructureMapGroupRule"
-
-
-class StructureMapGroupRuleDependentType(AbstractType):
-    __resource_type__ = "StructureMapGroupRuleDependent"
-
-
-class StructureMapGroupRuleSourceType(AbstractType):
-    __resource_type__ = "StructureMapGroupRuleSource"
-
-
-class StructureMapGroupRuleTargetType(AbstractType):
-    __resource_type__ = "StructureMapGroupRuleTarget"
-
-
-class StructureMapGroupRuleTargetParameterType(AbstractType):
-    __resource_type__ = "StructureMapGroupRuleTargetParameter"
-
-
-class StructureMapStructureType(AbstractType):
-    __resource_type__ = "StructureMapStructure"
-
-
-class SubscriptionType(AbstractType):
-    __resource_type__ = "Subscription"
-
-
-class SubscriptionChannelType(AbstractType):
-    __resource_type__ = "SubscriptionChannel"
-
-
-class SubstanceType(AbstractType):
-    __resource_type__ = "Substance"
-
-
-class SubstanceAmountType(AbstractType):
-    __resource_type__ = "SubstanceAmount"
-
-
-class SubstanceAmountReferenceRangeType(AbstractType):
-    __resource_type__ = "SubstanceAmountReferenceRange"
-
-
-class SubstanceIngredientType(AbstractType):
-    __resource_type__ = "SubstanceIngredient"
-
-
-class SubstanceInstanceType(AbstractType):
-    __resource_type__ = "SubstanceInstance"
-
-
-class SubstanceNucleicAcidType(AbstractType):
-    __resource_type__ = "SubstanceNucleicAcid"
-
-
-class SubstanceNucleicAcidSubunitType(AbstractType):
-    __resource_type__ = "SubstanceNucleicAcidSubunit"
-
-
-class SubstanceNucleicAcidSubunitLinkageType(AbstractType):
-    __resource_type__ = "SubstanceNucleicAcidSubunitLinkage"
-
-
-class SubstanceNucleicAcidSubunitSugarType(AbstractType):
-    __resource_type__ = "SubstanceNucleicAcidSubunitSugar"
-
-
-class SubstancePolymerType(AbstractType):
-    __resource_type__ = "SubstancePolymer"
-
-
-class SubstancePolymerMonomerSetType(AbstractType):
-    __resource_type__ = "SubstancePolymerMonomerSet"
-
-
-class SubstancePolymerMonomerSetStartingMaterialType(AbstractType):
-    __resource_type__ = "SubstancePolymerMonomerSetStartingMaterial"
-
-
-class SubstancePolymerRepeatType(AbstractType):
-    __resource_type__ = "SubstancePolymerRepeat"
-
-
-class SubstancePolymerRepeatRepeatUnitType(AbstractType):
-    __resource_type__ = "SubstancePolymerRepeatRepeatUnit"
-
-
-class SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisationType(AbstractType):
-    __resource_type__ = "SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisation"
-
-
-class SubstancePolymerRepeatRepeatUnitStructuralRepresentationType(AbstractType):
-    __resource_type__ = "SubstancePolymerRepeatRepeatUnitStructuralRepresentation"
-
-
-class SubstanceProteinType(AbstractType):
-    __resource_type__ = "SubstanceProtein"
-
-
-class SubstanceProteinSubunitType(AbstractType):
-    __resource_type__ = "SubstanceProteinSubunit"
-
-
-class SubstanceReferenceInformationType(AbstractType):
-    __resource_type__ = "SubstanceReferenceInformation"
-
-
-class SubstanceReferenceInformationClassificationType(AbstractType):
-    __resource_type__ = "SubstanceReferenceInformationClassification"
-
-
-class SubstanceReferenceInformationGeneType(AbstractType):
-    __resource_type__ = "SubstanceReferenceInformationGene"
-
-
-class SubstanceReferenceInformationGeneElementType(AbstractType):
-    __resource_type__ = "SubstanceReferenceInformationGeneElement"
-
-
-class SubstanceReferenceInformationTargetType(AbstractType):
-    __resource_type__ = "SubstanceReferenceInformationTarget"
-
-
-class SubstanceSourceMaterialType(AbstractType):
-    __resource_type__ = "SubstanceSourceMaterial"
-
-
-class SubstanceSourceMaterialFractionDescriptionType(AbstractType):
-    __resource_type__ = "SubstanceSourceMaterialFractionDescription"
-
-
-class SubstanceSourceMaterialOrganismType(AbstractType):
-    __resource_type__ = "SubstanceSourceMaterialOrganism"
-
-
-class SubstanceSourceMaterialOrganismAuthorType(AbstractType):
-    __resource_type__ = "SubstanceSourceMaterialOrganismAuthor"
-
-
-class SubstanceSourceMaterialOrganismHybridType(AbstractType):
-    __resource_type__ = "SubstanceSourceMaterialOrganismHybrid"
-
-
-class SubstanceSourceMaterialOrganismOrganismGeneralType(AbstractType):
-    __resource_type__ = "SubstanceSourceMaterialOrganismOrganismGeneral"
-
-
-class SubstanceSourceMaterialPartDescriptionType(AbstractType):
-    __resource_type__ = "SubstanceSourceMaterialPartDescription"
-
-
-class SubstanceSpecificationType(AbstractType):
-    __resource_type__ = "SubstanceSpecification"
-
-
-class SubstanceSpecificationCodeType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationCode"
-
-
-class SubstanceSpecificationMoietyType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationMoiety"
-
-
-class SubstanceSpecificationNameType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationName"
-
-
-class SubstanceSpecificationNameOfficialType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationNameOfficial"
-
-
-class SubstanceSpecificationPropertyType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationProperty"
-
-
-class SubstanceSpecificationRelationshipType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationRelationship"
-
-
-class SubstanceSpecificationStructureType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationStructure"
-
-
-class SubstanceSpecificationStructureIsotopeType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationStructureIsotope"
-
-
-class SubstanceSpecificationStructureIsotopeMolecularWeightType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationStructureIsotopeMolecularWeight"
-
-
-class SubstanceSpecificationStructureRepresentationType(AbstractType):
-    __resource_type__ = "SubstanceSpecificationStructureRepresentation"
-
-
-class SupplyDeliveryType(AbstractType):
-    __resource_type__ = "SupplyDelivery"
-
-
-class SupplyDeliverySuppliedItemType(AbstractType):
-    __resource_type__ = "SupplyDeliverySuppliedItem"
-
-
-class SupplyRequestType(AbstractType):
-    __resource_type__ = "SupplyRequest"
-
-
-class SupplyRequestParameterType(AbstractType):
-    __resource_type__ = "SupplyRequestParameter"
-
-
-class TaskType(AbstractType):
-    __resource_type__ = "Task"
-
-
-class TaskInputType(AbstractType):
-    __resource_type__ = "TaskInput"
-
-
-class TaskOutputType(AbstractType):
-    __resource_type__ = "TaskOutput"
-
-
-class TaskRestrictionType(AbstractType):
-    __resource_type__ = "TaskRestriction"
-
-
-class TerminologyCapabilitiesType(AbstractType):
-    __resource_type__ = "TerminologyCapabilities"
-
-
-class TerminologyCapabilitiesClosureType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesClosure"
-
-
-class TerminologyCapabilitiesCodeSystemType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesCodeSystem"
-
-
-class TerminologyCapabilitiesCodeSystemVersionType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesCodeSystemVersion"
-
-
-class TerminologyCapabilitiesCodeSystemVersionFilterType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesCodeSystemVersionFilter"
-
-
-class TerminologyCapabilitiesExpansionType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesExpansion"
-
-
-class TerminologyCapabilitiesExpansionParameterType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesExpansionParameter"
-
-
-class TerminologyCapabilitiesImplementationType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesImplementation"
-
-
-class TerminologyCapabilitiesSoftwareType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesSoftware"
-
-
-class TerminologyCapabilitiesTranslationType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesTranslation"
-
-
-class TerminologyCapabilitiesValidateCodeType(AbstractType):
-    __resource_type__ = "TerminologyCapabilitiesValidateCode"
-
-
-class TestReportType(AbstractType):
-    __resource_type__ = "TestReport"
-
-
-class TestReportParticipantType(AbstractType):
-    __resource_type__ = "TestReportParticipant"
-
-
-class TestReportSetupType(AbstractType):
-    __resource_type__ = "TestReportSetup"
-
-
-class TestReportSetupActionType(AbstractType):
-    __resource_type__ = "TestReportSetupAction"
-
-
-class TestReportSetupActionAssertType(AbstractType):
-    __resource_type__ = "TestReportSetupActionAssert"
-
-
-class TestReportSetupActionOperationType(AbstractType):
-    __resource_type__ = "TestReportSetupActionOperation"
-
-
-class TestReportTeardownType(AbstractType):
-    __resource_type__ = "TestReportTeardown"
-
-
-class TestReportTeardownActionType(AbstractType):
-    __resource_type__ = "TestReportTeardownAction"
-
-
-class TestReportTestType(AbstractType):
-    __resource_type__ = "TestReportTest"
-
-
-class TestReportTestActionType(AbstractType):
-    __resource_type__ = "TestReportTestAction"
-
-
-class TestScriptType(AbstractType):
-    __resource_type__ = "TestScript"
-
-
-class TestScriptDestinationType(AbstractType):
-    __resource_type__ = "TestScriptDestination"
-
-
-class TestScriptFixtureType(AbstractType):
-    __resource_type__ = "TestScriptFixture"
-
-
-class TestScriptMetadataType(AbstractType):
-    __resource_type__ = "TestScriptMetadata"
-
-
-class TestScriptMetadataCapabilityType(AbstractType):
-    __resource_type__ = "TestScriptMetadataCapability"
-
-
-class TestScriptMetadataLinkType(AbstractType):
-    __resource_type__ = "TestScriptMetadataLink"
-
-
-class TestScriptOriginType(AbstractType):
-    __resource_type__ = "TestScriptOrigin"
-
-
-class TestScriptSetupType(AbstractType):
-    __resource_type__ = "TestScriptSetup"
-
-
-class TestScriptSetupActionType(AbstractType):
-    __resource_type__ = "TestScriptSetupAction"
-
-
-class TestScriptSetupActionAssertType(AbstractType):
-    __resource_type__ = "TestScriptSetupActionAssert"
-
-
-class TestScriptSetupActionOperationType(AbstractType):
-    __resource_type__ = "TestScriptSetupActionOperation"
-
-
-class TestScriptSetupActionOperationRequestHeaderType(AbstractType):
-    __resource_type__ = "TestScriptSetupActionOperationRequestHeader"
-
-
-class TestScriptTeardownType(AbstractType):
-    __resource_type__ = "TestScriptTeardown"
-
-
-class TestScriptTeardownActionType(AbstractType):
-    __resource_type__ = "TestScriptTeardownAction"
-
-
-class TestScriptTestType(AbstractType):
-    __resource_type__ = "TestScriptTest"
-
-
-class TestScriptTestActionType(AbstractType):
-    __resource_type__ = "TestScriptTestAction"
-
-
-class TestScriptVariableType(AbstractType):
-    __resource_type__ = "TestScriptVariable"
-
-
-class TimingType(AbstractType):
-    __resource_type__ = "Timing"
-
-
-class TimingRepeatType(AbstractType):
-    __resource_type__ = "TimingRepeat"
-
-
-class TriggerDefinitionType(AbstractType):
-    __resource_type__ = "TriggerDefinition"
-
-
-class UsageContextType(AbstractType):
-    __resource_type__ = "UsageContext"
-
-
-class ValueSetType(AbstractType):
-    __resource_type__ = "ValueSet"
-
-
-class ValueSetComposeType(AbstractType):
-    __resource_type__ = "ValueSetCompose"
-
-
-class ValueSetComposeIncludeType(AbstractType):
-    __resource_type__ = "ValueSetComposeInclude"
-
-
-class ValueSetComposeIncludeConceptType(AbstractType):
-    __resource_type__ = "ValueSetComposeIncludeConcept"
-
-
-class ValueSetComposeIncludeConceptDesignationType(AbstractType):
-    __resource_type__ = "ValueSetComposeIncludeConceptDesignation"
-
-
-class ValueSetComposeIncludeFilterType(AbstractType):
-    __resource_type__ = "ValueSetComposeIncludeFilter"
-
-
-class ValueSetExpansionType(AbstractType):
-    __resource_type__ = "ValueSetExpansion"
-
-
-class ValueSetExpansionContainsType(AbstractType):
-    __resource_type__ = "ValueSetExpansionContains"
-
-
-class ValueSetExpansionParameterType(AbstractType):
-    __resource_type__ = "ValueSetExpansionParameter"
-
-
-class VerificationResultType(AbstractType):
-    __resource_type__ = "VerificationResult"
-
-
-class VerificationResultAttestationType(AbstractType):
-    __resource_type__ = "VerificationResultAttestation"
-
-
-class VerificationResultPrimarySourceType(AbstractType):
-    __resource_type__ = "VerificationResultPrimarySource"
-
-
-class VerificationResultValidatorType(AbstractType):
-    __resource_type__ = "VerificationResultValidator"
-
-
-class VisionPrescriptionType(AbstractType):
-    __resource_type__ = "VisionPrescription"
-
-
-class VisionPrescriptionLensSpecificationType(AbstractType):
-    __resource_type__ = "VisionPrescriptionLensSpecification"
-
-
-class VisionPrescriptionLensSpecificationPrismType(AbstractType):
-    __resource_type__ = "VisionPrescriptionLensSpecificationPrism"
-
+    AccountCoverageType = create_fhir_type(
+        "AccountCoverageType", "fhir.resources.account.AccountCoverage"
+    )
+
+    AccountDiagnosisType = create_fhir_type(
+        "AccountDiagnosisType", "fhir.resources.account.AccountDiagnosis"
+    )
+
+    AccountGuarantorType = create_fhir_type(
+        "AccountGuarantorType", "fhir.resources.account.AccountGuarantor"
+    )
+
+    AccountProcedureType = create_fhir_type(
+        "AccountProcedureType", "fhir.resources.account.AccountProcedure"
+    )
+
+    AccountRelatedAccountType = create_fhir_type(
+        "AccountRelatedAccountType", "fhir.resources.account.AccountRelatedAccount"
+    )
+
+    ActivityDefinitionType = create_fhir_type(
+        "ActivityDefinitionType", "fhir.resources.activitydefinition.ActivityDefinition"
+    )
+
+    ActivityDefinitionDynamicValueType = create_fhir_type(
+        "ActivityDefinitionDynamicValueType",
+        "fhir.resources.activitydefinition.ActivityDefinitionDynamicValue",
+    )
+
+    ActivityDefinitionParticipantType = create_fhir_type(
+        "ActivityDefinitionParticipantType",
+        "fhir.resources.activitydefinition.ActivityDefinitionParticipant",
+    )
+
+    ActorDefinitionType = create_fhir_type(
+        "ActorDefinitionType", "fhir.resources.actordefinition.ActorDefinition"
+    )
+
+    AddressType = create_fhir_type("AddressType", "fhir.resources.address.Address")
+
+    AdministrableProductDefinitionType = create_fhir_type(
+        "AdministrableProductDefinitionType",
+        "fhir.resources.administrableproductdefinition.AdministrableProductDefinition",
+    )
+
+    AdministrableProductDefinitionPropertyType = create_fhir_type(
+        "AdministrableProductDefinitionPropertyType",
+        "fhir.resources.administrableproductdefinition.AdministrableProductDefinitionProperty",
+    )
+
+    AdministrableProductDefinitionRouteOfAdministrationType = create_fhir_type(
+        "AdministrableProductDefinitionRouteOfAdministrationType",
+        "fhir.resources.administrableproductdefinition.AdministrableProductDefinitionRouteOfAdministration",
+    )
+
+    AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesType = create_fhir_type(
+        "AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesType",
+        "fhir.resources.administrableproductdefinition.AdministrableProductDefinitionRouteOfAdministrationTargetSpecies",
+    )
+
+    AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesWithdrawalPeriodType = create_fhir_type(
+        "AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesWithdrawalPeriodType",
+        "fhir.resources.administrableproductdefinition.AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesWithdrawalPeriod",
+    )
+
+    AdverseEventType = create_fhir_type(
+        "AdverseEventType", "fhir.resources.adverseevent.AdverseEvent"
+    )
+
+    AdverseEventContributingFactorType = create_fhir_type(
+        "AdverseEventContributingFactorType",
+        "fhir.resources.adverseevent.AdverseEventContributingFactor",
+    )
+
+    AdverseEventMitigatingActionType = create_fhir_type(
+        "AdverseEventMitigatingActionType",
+        "fhir.resources.adverseevent.AdverseEventMitigatingAction",
+    )
+
+    AdverseEventParticipantType = create_fhir_type(
+        "AdverseEventParticipantType",
+        "fhir.resources.adverseevent.AdverseEventParticipant",
+    )
+
+    AdverseEventPreventiveActionType = create_fhir_type(
+        "AdverseEventPreventiveActionType",
+        "fhir.resources.adverseevent.AdverseEventPreventiveAction",
+    )
+
+    AdverseEventSupportingInfoType = create_fhir_type(
+        "AdverseEventSupportingInfoType",
+        "fhir.resources.adverseevent.AdverseEventSupportingInfo",
+    )
+
+    AdverseEventSuspectEntityType = create_fhir_type(
+        "AdverseEventSuspectEntityType",
+        "fhir.resources.adverseevent.AdverseEventSuspectEntity",
+    )
+
+    AdverseEventSuspectEntityCausalityType = create_fhir_type(
+        "AdverseEventSuspectEntityCausalityType",
+        "fhir.resources.adverseevent.AdverseEventSuspectEntityCausality",
+    )
+
+    AgeType = create_fhir_type("AgeType", "fhir.resources.age.Age")
+
+    AllergyIntoleranceType = create_fhir_type(
+        "AllergyIntoleranceType", "fhir.resources.allergyintolerance.AllergyIntolerance"
+    )
+
+    AllergyIntoleranceParticipantType = create_fhir_type(
+        "AllergyIntoleranceParticipantType",
+        "fhir.resources.allergyintolerance.AllergyIntoleranceParticipant",
+    )
+
+    AllergyIntoleranceReactionType = create_fhir_type(
+        "AllergyIntoleranceReactionType",
+        "fhir.resources.allergyintolerance.AllergyIntoleranceReaction",
+    )
+
+    AnnotationType = create_fhir_type(
+        "AnnotationType", "fhir.resources.annotation.Annotation"
+    )
+
+    AppointmentType = create_fhir_type(
+        "AppointmentType", "fhir.resources.appointment.Appointment"
+    )
+
+    AppointmentParticipantType = create_fhir_type(
+        "AppointmentParticipantType",
+        "fhir.resources.appointment.AppointmentParticipant",
+    )
+
+    AppointmentRecurrenceTemplateType = create_fhir_type(
+        "AppointmentRecurrenceTemplateType",
+        "fhir.resources.appointment.AppointmentRecurrenceTemplate",
+    )
+
+    AppointmentRecurrenceTemplateMonthlyTemplateType = create_fhir_type(
+        "AppointmentRecurrenceTemplateMonthlyTemplateType",
+        "fhir.resources.appointment.AppointmentRecurrenceTemplateMonthlyTemplate",
+    )
+
+    AppointmentRecurrenceTemplateWeeklyTemplateType = create_fhir_type(
+        "AppointmentRecurrenceTemplateWeeklyTemplateType",
+        "fhir.resources.appointment.AppointmentRecurrenceTemplateWeeklyTemplate",
+    )
+
+    AppointmentRecurrenceTemplateYearlyTemplateType = create_fhir_type(
+        "AppointmentRecurrenceTemplateYearlyTemplateType",
+        "fhir.resources.appointment.AppointmentRecurrenceTemplateYearlyTemplate",
+    )
+
+    AppointmentResponseType = create_fhir_type(
+        "AppointmentResponseType",
+        "fhir.resources.appointmentresponse.AppointmentResponse",
+    )
+
+    ArtifactAssessmentType = create_fhir_type(
+        "ArtifactAssessmentType", "fhir.resources.artifactassessment.ArtifactAssessment"
+    )
+
+    ArtifactAssessmentContentType = create_fhir_type(
+        "ArtifactAssessmentContentType",
+        "fhir.resources.artifactassessment.ArtifactAssessmentContent",
+    )
+
+    AttachmentType = create_fhir_type(
+        "AttachmentType", "fhir.resources.attachment.Attachment"
+    )
+
+    AuditEventType = create_fhir_type(
+        "AuditEventType", "fhir.resources.auditevent.AuditEvent"
+    )
+
+    AuditEventAgentType = create_fhir_type(
+        "AuditEventAgentType", "fhir.resources.auditevent.AuditEventAgent"
+    )
+
+    AuditEventEntityType = create_fhir_type(
+        "AuditEventEntityType", "fhir.resources.auditevent.AuditEventEntity"
+    )
+
+    AuditEventEntityDetailType = create_fhir_type(
+        "AuditEventEntityDetailType", "fhir.resources.auditevent.AuditEventEntityDetail"
+    )
+
+    AuditEventOutcomeType = create_fhir_type(
+        "AuditEventOutcomeType", "fhir.resources.auditevent.AuditEventOutcome"
+    )
+
+    AuditEventSourceType = create_fhir_type(
+        "AuditEventSourceType", "fhir.resources.auditevent.AuditEventSource"
+    )
+
+    AvailabilityType = create_fhir_type(
+        "AvailabilityType", "fhir.resources.availability.Availability"
+    )
+
+    AvailabilityAvailableTimeType = create_fhir_type(
+        "AvailabilityAvailableTimeType",
+        "fhir.resources.availability.AvailabilityAvailableTime",
+    )
+
+    AvailabilityNotAvailableTimeType = create_fhir_type(
+        "AvailabilityNotAvailableTimeType",
+        "fhir.resources.availability.AvailabilityNotAvailableTime",
+    )
+
+    BackboneElementType = create_fhir_type(
+        "BackboneElementType", "fhir.resources.backboneelement.BackboneElement"
+    )
+
+    BackboneTypeType = create_fhir_type(
+        "BackboneTypeType", "fhir.resources.backbonetype.BackboneType"
+    )
+
+    BaseType = create_fhir_type("BaseType", "fhir.resources.base.Base")
+
+    BasicType = create_fhir_type("BasicType", "fhir.resources.basic.Basic")
+
+    BinaryType = create_fhir_type("BinaryType", "fhir.resources.binary.Binary")
+
+    BiologicallyDerivedProductType = create_fhir_type(
+        "BiologicallyDerivedProductType",
+        "fhir.resources.biologicallyderivedproduct.BiologicallyDerivedProduct",
+    )
+
+    BiologicallyDerivedProductCollectionType = create_fhir_type(
+        "BiologicallyDerivedProductCollectionType",
+        "fhir.resources.biologicallyderivedproduct.BiologicallyDerivedProductCollection",
+    )
+
+    BiologicallyDerivedProductDispenseType = create_fhir_type(
+        "BiologicallyDerivedProductDispenseType",
+        "fhir.resources.biologicallyderivedproductdispense.BiologicallyDerivedProductDispense",
+    )
+
+    BiologicallyDerivedProductDispensePerformerType = create_fhir_type(
+        "BiologicallyDerivedProductDispensePerformerType",
+        "fhir.resources.biologicallyderivedproductdispense.BiologicallyDerivedProductDispensePerformer",
+    )
+
+    BiologicallyDerivedProductPropertyType = create_fhir_type(
+        "BiologicallyDerivedProductPropertyType",
+        "fhir.resources.biologicallyderivedproduct.BiologicallyDerivedProductProperty",
+    )
+
+    BodyStructureType = create_fhir_type(
+        "BodyStructureType", "fhir.resources.bodystructure.BodyStructure"
+    )
+
+    BodyStructureIncludedStructureType = create_fhir_type(
+        "BodyStructureIncludedStructureType",
+        "fhir.resources.bodystructure.BodyStructureIncludedStructure",
+    )
+
+    BodyStructureIncludedStructureBodyLandmarkOrientationType = create_fhir_type(
+        "BodyStructureIncludedStructureBodyLandmarkOrientationType",
+        "fhir.resources.bodystructure.BodyStructureIncludedStructureBodyLandmarkOrientation",
+    )
+
+    BodyStructureIncludedStructureBodyLandmarkOrientationDistanceFromLandmarkType = create_fhir_type(
+        "BodyStructureIncludedStructureBodyLandmarkOrientationDistanceFromLandmarkType",
+        "fhir.resources.bodystructure.BodyStructureIncludedStructureBodyLandmarkOrientationDistanceFromLandmark",
+    )
+
+    BundleType = create_fhir_type("BundleType", "fhir.resources.bundle.Bundle")
+
+    BundleEntryType = create_fhir_type(
+        "BundleEntryType", "fhir.resources.bundle.BundleEntry"
+    )
+
+    BundleEntryRequestType = create_fhir_type(
+        "BundleEntryRequestType", "fhir.resources.bundle.BundleEntryRequest"
+    )
+
+    BundleEntryResponseType = create_fhir_type(
+        "BundleEntryResponseType", "fhir.resources.bundle.BundleEntryResponse"
+    )
+
+    BundleEntrySearchType = create_fhir_type(
+        "BundleEntrySearchType", "fhir.resources.bundle.BundleEntrySearch"
+    )
+
+    BundleLinkType = create_fhir_type(
+        "BundleLinkType", "fhir.resources.bundle.BundleLink"
+    )
+
+    CanonicalResourceType = create_fhir_type(
+        "CanonicalResourceType", "fhir.resources.canonicalresource.CanonicalResource"
+    )
+
+    CapabilityStatementType = create_fhir_type(
+        "CapabilityStatementType",
+        "fhir.resources.capabilitystatement.CapabilityStatement",
+    )
+
+    CapabilityStatementDocumentType = create_fhir_type(
+        "CapabilityStatementDocumentType",
+        "fhir.resources.capabilitystatement.CapabilityStatementDocument",
+    )
+
+    CapabilityStatementImplementationType = create_fhir_type(
+        "CapabilityStatementImplementationType",
+        "fhir.resources.capabilitystatement.CapabilityStatementImplementation",
+    )
+
+    CapabilityStatementMessagingType = create_fhir_type(
+        "CapabilityStatementMessagingType",
+        "fhir.resources.capabilitystatement.CapabilityStatementMessaging",
+    )
+
+    CapabilityStatementMessagingEndpointType = create_fhir_type(
+        "CapabilityStatementMessagingEndpointType",
+        "fhir.resources.capabilitystatement.CapabilityStatementMessagingEndpoint",
+    )
+
+    CapabilityStatementMessagingSupportedMessageType = create_fhir_type(
+        "CapabilityStatementMessagingSupportedMessageType",
+        "fhir.resources.capabilitystatement.CapabilityStatementMessagingSupportedMessage",
+    )
+
+    CapabilityStatementRestType = create_fhir_type(
+        "CapabilityStatementRestType",
+        "fhir.resources.capabilitystatement.CapabilityStatementRest",
+    )
+
+    CapabilityStatementRestInteractionType = create_fhir_type(
+        "CapabilityStatementRestInteractionType",
+        "fhir.resources.capabilitystatement.CapabilityStatementRestInteraction",
+    )
+
+    CapabilityStatementRestResourceType = create_fhir_type(
+        "CapabilityStatementRestResourceType",
+        "fhir.resources.capabilitystatement.CapabilityStatementRestResource",
+    )
+
+    CapabilityStatementRestResourceInteractionType = create_fhir_type(
+        "CapabilityStatementRestResourceInteractionType",
+        "fhir.resources.capabilitystatement.CapabilityStatementRestResourceInteraction",
+    )
+
+    CapabilityStatementRestResourceOperationType = create_fhir_type(
+        "CapabilityStatementRestResourceOperationType",
+        "fhir.resources.capabilitystatement.CapabilityStatementRestResourceOperation",
+    )
+
+    CapabilityStatementRestResourceSearchParamType = create_fhir_type(
+        "CapabilityStatementRestResourceSearchParamType",
+        "fhir.resources.capabilitystatement.CapabilityStatementRestResourceSearchParam",
+    )
+
+    CapabilityStatementRestSecurityType = create_fhir_type(
+        "CapabilityStatementRestSecurityType",
+        "fhir.resources.capabilitystatement.CapabilityStatementRestSecurity",
+    )
+
+    CapabilityStatementSoftwareType = create_fhir_type(
+        "CapabilityStatementSoftwareType",
+        "fhir.resources.capabilitystatement.CapabilityStatementSoftware",
+    )
+
+    CarePlanType = create_fhir_type("CarePlanType", "fhir.resources.careplan.CarePlan")
+
+    CarePlanActivityType = create_fhir_type(
+        "CarePlanActivityType", "fhir.resources.careplan.CarePlanActivity"
+    )
+
+    CareTeamType = create_fhir_type("CareTeamType", "fhir.resources.careteam.CareTeam")
+
+    CareTeamParticipantType = create_fhir_type(
+        "CareTeamParticipantType", "fhir.resources.careteam.CareTeamParticipant"
+    )
+
+    ChargeItemType = create_fhir_type(
+        "ChargeItemType", "fhir.resources.chargeitem.ChargeItem"
+    )
+
+    ChargeItemDefinitionType = create_fhir_type(
+        "ChargeItemDefinitionType",
+        "fhir.resources.chargeitemdefinition.ChargeItemDefinition",
+    )
+
+    ChargeItemDefinitionApplicabilityType = create_fhir_type(
+        "ChargeItemDefinitionApplicabilityType",
+        "fhir.resources.chargeitemdefinition.ChargeItemDefinitionApplicability",
+    )
+
+    ChargeItemDefinitionPropertyGroupType = create_fhir_type(
+        "ChargeItemDefinitionPropertyGroupType",
+        "fhir.resources.chargeitemdefinition.ChargeItemDefinitionPropertyGroup",
+    )
+
+    ChargeItemPerformerType = create_fhir_type(
+        "ChargeItemPerformerType", "fhir.resources.chargeitem.ChargeItemPerformer"
+    )
+
+    CitationType = create_fhir_type("CitationType", "fhir.resources.citation.Citation")
+
+    CitationCitedArtifactType = create_fhir_type(
+        "CitationCitedArtifactType", "fhir.resources.citation.CitationCitedArtifact"
+    )
+
+    CitationCitedArtifactAbstractType = create_fhir_type(
+        "CitationCitedArtifactAbstractType",
+        "fhir.resources.citation.CitationCitedArtifactAbstract",
+    )
+
+    CitationCitedArtifactClassificationType = create_fhir_type(
+        "CitationCitedArtifactClassificationType",
+        "fhir.resources.citation.CitationCitedArtifactClassification",
+    )
+
+    CitationCitedArtifactContributorshipType = create_fhir_type(
+        "CitationCitedArtifactContributorshipType",
+        "fhir.resources.citation.CitationCitedArtifactContributorship",
+    )
+
+    CitationCitedArtifactContributorshipEntryType = create_fhir_type(
+        "CitationCitedArtifactContributorshipEntryType",
+        "fhir.resources.citation.CitationCitedArtifactContributorshipEntry",
+    )
+
+    CitationCitedArtifactContributorshipEntryContributionInstanceType = create_fhir_type(
+        "CitationCitedArtifactContributorshipEntryContributionInstanceType",
+        "fhir.resources.citation.CitationCitedArtifactContributorshipEntryContributionInstance",
+    )
+
+    CitationCitedArtifactContributorshipSummaryType = create_fhir_type(
+        "CitationCitedArtifactContributorshipSummaryType",
+        "fhir.resources.citation.CitationCitedArtifactContributorshipSummary",
+    )
+
+    CitationCitedArtifactPartType = create_fhir_type(
+        "CitationCitedArtifactPartType",
+        "fhir.resources.citation.CitationCitedArtifactPart",
+    )
+
+    CitationCitedArtifactPublicationFormType = create_fhir_type(
+        "CitationCitedArtifactPublicationFormType",
+        "fhir.resources.citation.CitationCitedArtifactPublicationForm",
+    )
+
+    CitationCitedArtifactPublicationFormPublishedInType = create_fhir_type(
+        "CitationCitedArtifactPublicationFormPublishedInType",
+        "fhir.resources.citation.CitationCitedArtifactPublicationFormPublishedIn",
+    )
+
+    CitationCitedArtifactRelatesToType = create_fhir_type(
+        "CitationCitedArtifactRelatesToType",
+        "fhir.resources.citation.CitationCitedArtifactRelatesTo",
+    )
+
+    CitationCitedArtifactStatusDateType = create_fhir_type(
+        "CitationCitedArtifactStatusDateType",
+        "fhir.resources.citation.CitationCitedArtifactStatusDate",
+    )
+
+    CitationCitedArtifactTitleType = create_fhir_type(
+        "CitationCitedArtifactTitleType",
+        "fhir.resources.citation.CitationCitedArtifactTitle",
+    )
+
+    CitationCitedArtifactVersionType = create_fhir_type(
+        "CitationCitedArtifactVersionType",
+        "fhir.resources.citation.CitationCitedArtifactVersion",
+    )
+
+    CitationCitedArtifactWebLocationType = create_fhir_type(
+        "CitationCitedArtifactWebLocationType",
+        "fhir.resources.citation.CitationCitedArtifactWebLocation",
+    )
+
+    CitationClassificationType = create_fhir_type(
+        "CitationClassificationType", "fhir.resources.citation.CitationClassification"
+    )
+
+    CitationStatusDateType = create_fhir_type(
+        "CitationStatusDateType", "fhir.resources.citation.CitationStatusDate"
+    )
+
+    CitationSummaryType = create_fhir_type(
+        "CitationSummaryType", "fhir.resources.citation.CitationSummary"
+    )
+
+    ClaimType = create_fhir_type("ClaimType", "fhir.resources.claim.Claim")
+
+    ClaimAccidentType = create_fhir_type(
+        "ClaimAccidentType", "fhir.resources.claim.ClaimAccident"
+    )
+
+    ClaimCareTeamType = create_fhir_type(
+        "ClaimCareTeamType", "fhir.resources.claim.ClaimCareTeam"
+    )
+
+    ClaimDiagnosisType = create_fhir_type(
+        "ClaimDiagnosisType", "fhir.resources.claim.ClaimDiagnosis"
+    )
+
+    ClaimEventType = create_fhir_type(
+        "ClaimEventType", "fhir.resources.claim.ClaimEvent"
+    )
+
+    ClaimInsuranceType = create_fhir_type(
+        "ClaimInsuranceType", "fhir.resources.claim.ClaimInsurance"
+    )
+
+    ClaimItemType = create_fhir_type("ClaimItemType", "fhir.resources.claim.ClaimItem")
+
+    ClaimItemBodySiteType = create_fhir_type(
+        "ClaimItemBodySiteType", "fhir.resources.claim.ClaimItemBodySite"
+    )
+
+    ClaimItemDetailType = create_fhir_type(
+        "ClaimItemDetailType", "fhir.resources.claim.ClaimItemDetail"
+    )
+
+    ClaimItemDetailSubDetailType = create_fhir_type(
+        "ClaimItemDetailSubDetailType", "fhir.resources.claim.ClaimItemDetailSubDetail"
+    )
+
+    ClaimPayeeType = create_fhir_type(
+        "ClaimPayeeType", "fhir.resources.claim.ClaimPayee"
+    )
+
+    ClaimProcedureType = create_fhir_type(
+        "ClaimProcedureType", "fhir.resources.claim.ClaimProcedure"
+    )
+
+    ClaimRelatedType = create_fhir_type(
+        "ClaimRelatedType", "fhir.resources.claim.ClaimRelated"
+    )
+
+    ClaimResponseType = create_fhir_type(
+        "ClaimResponseType", "fhir.resources.claimresponse.ClaimResponse"
+    )
+
+    ClaimResponseAddItemType = create_fhir_type(
+        "ClaimResponseAddItemType", "fhir.resources.claimresponse.ClaimResponseAddItem"
+    )
+
+    ClaimResponseAddItemBodySiteType = create_fhir_type(
+        "ClaimResponseAddItemBodySiteType",
+        "fhir.resources.claimresponse.ClaimResponseAddItemBodySite",
+    )
+
+    ClaimResponseAddItemDetailType = create_fhir_type(
+        "ClaimResponseAddItemDetailType",
+        "fhir.resources.claimresponse.ClaimResponseAddItemDetail",
+    )
+
+    ClaimResponseAddItemDetailSubDetailType = create_fhir_type(
+        "ClaimResponseAddItemDetailSubDetailType",
+        "fhir.resources.claimresponse.ClaimResponseAddItemDetailSubDetail",
+    )
+
+    ClaimResponseErrorType = create_fhir_type(
+        "ClaimResponseErrorType", "fhir.resources.claimresponse.ClaimResponseError"
+    )
+
+    ClaimResponseEventType = create_fhir_type(
+        "ClaimResponseEventType", "fhir.resources.claimresponse.ClaimResponseEvent"
+    )
+
+    ClaimResponseInsuranceType = create_fhir_type(
+        "ClaimResponseInsuranceType",
+        "fhir.resources.claimresponse.ClaimResponseInsurance",
+    )
+
+    ClaimResponseItemType = create_fhir_type(
+        "ClaimResponseItemType", "fhir.resources.claimresponse.ClaimResponseItem"
+    )
+
+    ClaimResponseItemAdjudicationType = create_fhir_type(
+        "ClaimResponseItemAdjudicationType",
+        "fhir.resources.claimresponse.ClaimResponseItemAdjudication",
+    )
+
+    ClaimResponseItemDetailType = create_fhir_type(
+        "ClaimResponseItemDetailType",
+        "fhir.resources.claimresponse.ClaimResponseItemDetail",
+    )
+
+    ClaimResponseItemDetailSubDetailType = create_fhir_type(
+        "ClaimResponseItemDetailSubDetailType",
+        "fhir.resources.claimresponse.ClaimResponseItemDetailSubDetail",
+    )
+
+    ClaimResponseItemReviewOutcomeType = create_fhir_type(
+        "ClaimResponseItemReviewOutcomeType",
+        "fhir.resources.claimresponse.ClaimResponseItemReviewOutcome",
+    )
+
+    ClaimResponsePaymentType = create_fhir_type(
+        "ClaimResponsePaymentType", "fhir.resources.claimresponse.ClaimResponsePayment"
+    )
+
+    ClaimResponseProcessNoteType = create_fhir_type(
+        "ClaimResponseProcessNoteType",
+        "fhir.resources.claimresponse.ClaimResponseProcessNote",
+    )
+
+    ClaimResponseTotalType = create_fhir_type(
+        "ClaimResponseTotalType", "fhir.resources.claimresponse.ClaimResponseTotal"
+    )
+
+    ClaimSupportingInfoType = create_fhir_type(
+        "ClaimSupportingInfoType", "fhir.resources.claim.ClaimSupportingInfo"
+    )
+
+    ClinicalImpressionType = create_fhir_type(
+        "ClinicalImpressionType", "fhir.resources.clinicalimpression.ClinicalImpression"
+    )
+
+    ClinicalImpressionFindingType = create_fhir_type(
+        "ClinicalImpressionFindingType",
+        "fhir.resources.clinicalimpression.ClinicalImpressionFinding",
+    )
+
+    ClinicalUseDefinitionType = create_fhir_type(
+        "ClinicalUseDefinitionType",
+        "fhir.resources.clinicalusedefinition.ClinicalUseDefinition",
+    )
+
+    ClinicalUseDefinitionContraindicationType = create_fhir_type(
+        "ClinicalUseDefinitionContraindicationType",
+        "fhir.resources.clinicalusedefinition.ClinicalUseDefinitionContraindication",
+    )
+
+    ClinicalUseDefinitionContraindicationOtherTherapyType = create_fhir_type(
+        "ClinicalUseDefinitionContraindicationOtherTherapyType",
+        "fhir.resources.clinicalusedefinition.ClinicalUseDefinitionContraindicationOtherTherapy",
+    )
+
+    ClinicalUseDefinitionIndicationType = create_fhir_type(
+        "ClinicalUseDefinitionIndicationType",
+        "fhir.resources.clinicalusedefinition.ClinicalUseDefinitionIndication",
+    )
+
+    ClinicalUseDefinitionInteractionType = create_fhir_type(
+        "ClinicalUseDefinitionInteractionType",
+        "fhir.resources.clinicalusedefinition.ClinicalUseDefinitionInteraction",
+    )
+
+    ClinicalUseDefinitionInteractionInteractantType = create_fhir_type(
+        "ClinicalUseDefinitionInteractionInteractantType",
+        "fhir.resources.clinicalusedefinition.ClinicalUseDefinitionInteractionInteractant",
+    )
+
+    ClinicalUseDefinitionUndesirableEffectType = create_fhir_type(
+        "ClinicalUseDefinitionUndesirableEffectType",
+        "fhir.resources.clinicalusedefinition.ClinicalUseDefinitionUndesirableEffect",
+    )
+
+    ClinicalUseDefinitionWarningType = create_fhir_type(
+        "ClinicalUseDefinitionWarningType",
+        "fhir.resources.clinicalusedefinition.ClinicalUseDefinitionWarning",
+    )
+
+    CodeSystemType = create_fhir_type(
+        "CodeSystemType", "fhir.resources.codesystem.CodeSystem"
+    )
+
+    CodeSystemConceptType = create_fhir_type(
+        "CodeSystemConceptType", "fhir.resources.codesystem.CodeSystemConcept"
+    )
+
+    CodeSystemConceptDesignationType = create_fhir_type(
+        "CodeSystemConceptDesignationType",
+        "fhir.resources.codesystem.CodeSystemConceptDesignation",
+    )
+
+    CodeSystemConceptPropertyType = create_fhir_type(
+        "CodeSystemConceptPropertyType",
+        "fhir.resources.codesystem.CodeSystemConceptProperty",
+    )
+
+    CodeSystemFilterType = create_fhir_type(
+        "CodeSystemFilterType", "fhir.resources.codesystem.CodeSystemFilter"
+    )
+
+    CodeSystemPropertyType = create_fhir_type(
+        "CodeSystemPropertyType", "fhir.resources.codesystem.CodeSystemProperty"
+    )
+
+    CodeableConceptType = create_fhir_type(
+        "CodeableConceptType", "fhir.resources.codeableconcept.CodeableConcept"
+    )
+
+    CodeableReferenceType = create_fhir_type(
+        "CodeableReferenceType", "fhir.resources.codeablereference.CodeableReference"
+    )
+
+    CodingType = create_fhir_type("CodingType", "fhir.resources.coding.Coding")
+
+    CommunicationType = create_fhir_type(
+        "CommunicationType", "fhir.resources.communication.Communication"
+    )
+
+    CommunicationPayloadType = create_fhir_type(
+        "CommunicationPayloadType", "fhir.resources.communication.CommunicationPayload"
+    )
+
+    CommunicationRequestType = create_fhir_type(
+        "CommunicationRequestType",
+        "fhir.resources.communicationrequest.CommunicationRequest",
+    )
+
+    CommunicationRequestPayloadType = create_fhir_type(
+        "CommunicationRequestPayloadType",
+        "fhir.resources.communicationrequest.CommunicationRequestPayload",
+    )
+
+    CompartmentDefinitionType = create_fhir_type(
+        "CompartmentDefinitionType",
+        "fhir.resources.compartmentdefinition.CompartmentDefinition",
+    )
+
+    CompartmentDefinitionResourceType = create_fhir_type(
+        "CompartmentDefinitionResourceType",
+        "fhir.resources.compartmentdefinition.CompartmentDefinitionResource",
+    )
+
+    CompositionType = create_fhir_type(
+        "CompositionType", "fhir.resources.composition.Composition"
+    )
+
+    CompositionAttesterType = create_fhir_type(
+        "CompositionAttesterType", "fhir.resources.composition.CompositionAttester"
+    )
+
+    CompositionEventType = create_fhir_type(
+        "CompositionEventType", "fhir.resources.composition.CompositionEvent"
+    )
+
+    CompositionSectionType = create_fhir_type(
+        "CompositionSectionType", "fhir.resources.composition.CompositionSection"
+    )
+
+    ConceptMapType = create_fhir_type(
+        "ConceptMapType", "fhir.resources.conceptmap.ConceptMap"
+    )
+
+    ConceptMapAdditionalAttributeType = create_fhir_type(
+        "ConceptMapAdditionalAttributeType",
+        "fhir.resources.conceptmap.ConceptMapAdditionalAttribute",
+    )
+
+    ConceptMapGroupType = create_fhir_type(
+        "ConceptMapGroupType", "fhir.resources.conceptmap.ConceptMapGroup"
+    )
+
+    ConceptMapGroupElementType = create_fhir_type(
+        "ConceptMapGroupElementType", "fhir.resources.conceptmap.ConceptMapGroupElement"
+    )
+
+    ConceptMapGroupElementTargetType = create_fhir_type(
+        "ConceptMapGroupElementTargetType",
+        "fhir.resources.conceptmap.ConceptMapGroupElementTarget",
+    )
+
+    ConceptMapGroupElementTargetDependsOnType = create_fhir_type(
+        "ConceptMapGroupElementTargetDependsOnType",
+        "fhir.resources.conceptmap.ConceptMapGroupElementTargetDependsOn",
+    )
+
+    ConceptMapGroupElementTargetPropertyType = create_fhir_type(
+        "ConceptMapGroupElementTargetPropertyType",
+        "fhir.resources.conceptmap.ConceptMapGroupElementTargetProperty",
+    )
+
+    ConceptMapGroupUnmappedType = create_fhir_type(
+        "ConceptMapGroupUnmappedType",
+        "fhir.resources.conceptmap.ConceptMapGroupUnmapped",
+    )
+
+    ConceptMapPropertyType = create_fhir_type(
+        "ConceptMapPropertyType", "fhir.resources.conceptmap.ConceptMapProperty"
+    )
+
+    ConditionType = create_fhir_type(
+        "ConditionType", "fhir.resources.condition.Condition"
+    )
+
+    ConditionDefinitionType = create_fhir_type(
+        "ConditionDefinitionType",
+        "fhir.resources.conditiondefinition.ConditionDefinition",
+    )
+
+    ConditionDefinitionMedicationType = create_fhir_type(
+        "ConditionDefinitionMedicationType",
+        "fhir.resources.conditiondefinition.ConditionDefinitionMedication",
+    )
+
+    ConditionDefinitionObservationType = create_fhir_type(
+        "ConditionDefinitionObservationType",
+        "fhir.resources.conditiondefinition.ConditionDefinitionObservation",
+    )
+
+    ConditionDefinitionPlanType = create_fhir_type(
+        "ConditionDefinitionPlanType",
+        "fhir.resources.conditiondefinition.ConditionDefinitionPlan",
+    )
+
+    ConditionDefinitionPreconditionType = create_fhir_type(
+        "ConditionDefinitionPreconditionType",
+        "fhir.resources.conditiondefinition.ConditionDefinitionPrecondition",
+    )
+
+    ConditionDefinitionQuestionnaireType = create_fhir_type(
+        "ConditionDefinitionQuestionnaireType",
+        "fhir.resources.conditiondefinition.ConditionDefinitionQuestionnaire",
+    )
+
+    ConditionParticipantType = create_fhir_type(
+        "ConditionParticipantType", "fhir.resources.condition.ConditionParticipant"
+    )
+
+    ConditionStageType = create_fhir_type(
+        "ConditionStageType", "fhir.resources.condition.ConditionStage"
+    )
+
+    ConsentType = create_fhir_type("ConsentType", "fhir.resources.consent.Consent")
+
+    ConsentPolicyBasisType = create_fhir_type(
+        "ConsentPolicyBasisType", "fhir.resources.consent.ConsentPolicyBasis"
+    )
+
+    ConsentProvisionType = create_fhir_type(
+        "ConsentProvisionType", "fhir.resources.consent.ConsentProvision"
+    )
+
+    ConsentProvisionActorType = create_fhir_type(
+        "ConsentProvisionActorType", "fhir.resources.consent.ConsentProvisionActor"
+    )
+
+    ConsentProvisionDataType = create_fhir_type(
+        "ConsentProvisionDataType", "fhir.resources.consent.ConsentProvisionData"
+    )
+
+    ConsentVerificationType = create_fhir_type(
+        "ConsentVerificationType", "fhir.resources.consent.ConsentVerification"
+    )
+
+    ContactDetailType = create_fhir_type(
+        "ContactDetailType", "fhir.resources.contactdetail.ContactDetail"
+    )
+
+    ContactPointType = create_fhir_type(
+        "ContactPointType", "fhir.resources.contactpoint.ContactPoint"
+    )
+
+    ContractType = create_fhir_type("ContractType", "fhir.resources.contract.Contract")
+
+    ContractContentDefinitionType = create_fhir_type(
+        "ContractContentDefinitionType",
+        "fhir.resources.contract.ContractContentDefinition",
+    )
+
+    ContractFriendlyType = create_fhir_type(
+        "ContractFriendlyType", "fhir.resources.contract.ContractFriendly"
+    )
+
+    ContractLegalType = create_fhir_type(
+        "ContractLegalType", "fhir.resources.contract.ContractLegal"
+    )
+
+    ContractRuleType = create_fhir_type(
+        "ContractRuleType", "fhir.resources.contract.ContractRule"
+    )
+
+    ContractSignerType = create_fhir_type(
+        "ContractSignerType", "fhir.resources.contract.ContractSigner"
+    )
+
+    ContractTermType = create_fhir_type(
+        "ContractTermType", "fhir.resources.contract.ContractTerm"
+    )
+
+    ContractTermActionType = create_fhir_type(
+        "ContractTermActionType", "fhir.resources.contract.ContractTermAction"
+    )
+
+    ContractTermActionSubjectType = create_fhir_type(
+        "ContractTermActionSubjectType",
+        "fhir.resources.contract.ContractTermActionSubject",
+    )
+
+    ContractTermAssetType = create_fhir_type(
+        "ContractTermAssetType", "fhir.resources.contract.ContractTermAsset"
+    )
+
+    ContractTermAssetContextType = create_fhir_type(
+        "ContractTermAssetContextType",
+        "fhir.resources.contract.ContractTermAssetContext",
+    )
+
+    ContractTermAssetValuedItemType = create_fhir_type(
+        "ContractTermAssetValuedItemType",
+        "fhir.resources.contract.ContractTermAssetValuedItem",
+    )
+
+    ContractTermOfferType = create_fhir_type(
+        "ContractTermOfferType", "fhir.resources.contract.ContractTermOffer"
+    )
+
+    ContractTermOfferAnswerType = create_fhir_type(
+        "ContractTermOfferAnswerType", "fhir.resources.contract.ContractTermOfferAnswer"
+    )
+
+    ContractTermOfferPartyType = create_fhir_type(
+        "ContractTermOfferPartyType", "fhir.resources.contract.ContractTermOfferParty"
+    )
+
+    ContractTermSecurityLabelType = create_fhir_type(
+        "ContractTermSecurityLabelType",
+        "fhir.resources.contract.ContractTermSecurityLabel",
+    )
+
+    ContributorType = create_fhir_type(
+        "ContributorType", "fhir.resources.contributor.Contributor"
+    )
+
+    CountType = create_fhir_type("CountType", "fhir.resources.count.Count")
+
+    CoverageType = create_fhir_type("CoverageType", "fhir.resources.coverage.Coverage")
+
+    CoverageClassType = create_fhir_type(
+        "CoverageClassType", "fhir.resources.coverage.CoverageClass"
+    )
+
+    CoverageCostToBeneficiaryType = create_fhir_type(
+        "CoverageCostToBeneficiaryType",
+        "fhir.resources.coverage.CoverageCostToBeneficiary",
+    )
+
+    CoverageCostToBeneficiaryExceptionType = create_fhir_type(
+        "CoverageCostToBeneficiaryExceptionType",
+        "fhir.resources.coverage.CoverageCostToBeneficiaryException",
+    )
+
+    CoverageEligibilityRequestType = create_fhir_type(
+        "CoverageEligibilityRequestType",
+        "fhir.resources.coverageeligibilityrequest.CoverageEligibilityRequest",
+    )
+
+    CoverageEligibilityRequestEventType = create_fhir_type(
+        "CoverageEligibilityRequestEventType",
+        "fhir.resources.coverageeligibilityrequest.CoverageEligibilityRequestEvent",
+    )
+
+    CoverageEligibilityRequestInsuranceType = create_fhir_type(
+        "CoverageEligibilityRequestInsuranceType",
+        "fhir.resources.coverageeligibilityrequest.CoverageEligibilityRequestInsurance",
+    )
+
+    CoverageEligibilityRequestItemType = create_fhir_type(
+        "CoverageEligibilityRequestItemType",
+        "fhir.resources.coverageeligibilityrequest.CoverageEligibilityRequestItem",
+    )
+
+    CoverageEligibilityRequestItemDiagnosisType = create_fhir_type(
+        "CoverageEligibilityRequestItemDiagnosisType",
+        "fhir.resources.coverageeligibilityrequest.CoverageEligibilityRequestItemDiagnosis",
+    )
+
+    CoverageEligibilityRequestSupportingInfoType = create_fhir_type(
+        "CoverageEligibilityRequestSupportingInfoType",
+        "fhir.resources.coverageeligibilityrequest.CoverageEligibilityRequestSupportingInfo",
+    )
+
+    CoverageEligibilityResponseType = create_fhir_type(
+        "CoverageEligibilityResponseType",
+        "fhir.resources.coverageeligibilityresponse.CoverageEligibilityResponse",
+    )
+
+    CoverageEligibilityResponseErrorType = create_fhir_type(
+        "CoverageEligibilityResponseErrorType",
+        "fhir.resources.coverageeligibilityresponse.CoverageEligibilityResponseError",
+    )
+
+    CoverageEligibilityResponseEventType = create_fhir_type(
+        "CoverageEligibilityResponseEventType",
+        "fhir.resources.coverageeligibilityresponse.CoverageEligibilityResponseEvent",
+    )
+
+    CoverageEligibilityResponseInsuranceType = create_fhir_type(
+        "CoverageEligibilityResponseInsuranceType",
+        "fhir.resources.coverageeligibilityresponse.CoverageEligibilityResponseInsurance",
+    )
+
+    CoverageEligibilityResponseInsuranceItemType = create_fhir_type(
+        "CoverageEligibilityResponseInsuranceItemType",
+        "fhir.resources.coverageeligibilityresponse.CoverageEligibilityResponseInsuranceItem",
+    )
+
+    CoverageEligibilityResponseInsuranceItemBenefitType = create_fhir_type(
+        "CoverageEligibilityResponseInsuranceItemBenefitType",
+        "fhir.resources.coverageeligibilityresponse.CoverageEligibilityResponseInsuranceItemBenefit",
+    )
+
+    CoveragePaymentByType = create_fhir_type(
+        "CoveragePaymentByType", "fhir.resources.coverage.CoveragePaymentBy"
+    )
+
+    DataRequirementType = create_fhir_type(
+        "DataRequirementType", "fhir.resources.datarequirement.DataRequirement"
+    )
+
+    DataRequirementCodeFilterType = create_fhir_type(
+        "DataRequirementCodeFilterType",
+        "fhir.resources.datarequirement.DataRequirementCodeFilter",
+    )
+
+    DataRequirementDateFilterType = create_fhir_type(
+        "DataRequirementDateFilterType",
+        "fhir.resources.datarequirement.DataRequirementDateFilter",
+    )
+
+    DataRequirementSortType = create_fhir_type(
+        "DataRequirementSortType", "fhir.resources.datarequirement.DataRequirementSort"
+    )
+
+    DataRequirementValueFilterType = create_fhir_type(
+        "DataRequirementValueFilterType",
+        "fhir.resources.datarequirement.DataRequirementValueFilter",
+    )
+
+    DataTypeType = create_fhir_type("DataTypeType", "fhir.resources.datatype.DataType")
+
+    DetectedIssueType = create_fhir_type(
+        "DetectedIssueType", "fhir.resources.detectedissue.DetectedIssue"
+    )
+
+    DetectedIssueEvidenceType = create_fhir_type(
+        "DetectedIssueEvidenceType",
+        "fhir.resources.detectedissue.DetectedIssueEvidence",
+    )
+
+    DetectedIssueMitigationType = create_fhir_type(
+        "DetectedIssueMitigationType",
+        "fhir.resources.detectedissue.DetectedIssueMitigation",
+    )
+
+    DeviceType = create_fhir_type("DeviceType", "fhir.resources.device.Device")
+
+    DeviceAssociationType = create_fhir_type(
+        "DeviceAssociationType", "fhir.resources.deviceassociation.DeviceAssociation"
+    )
+
+    DeviceAssociationOperationType = create_fhir_type(
+        "DeviceAssociationOperationType",
+        "fhir.resources.deviceassociation.DeviceAssociationOperation",
+    )
+
+    DeviceConformsToType = create_fhir_type(
+        "DeviceConformsToType", "fhir.resources.device.DeviceConformsTo"
+    )
+
+    DeviceDefinitionType = create_fhir_type(
+        "DeviceDefinitionType", "fhir.resources.devicedefinition.DeviceDefinition"
+    )
+
+    DeviceDefinitionChargeItemType = create_fhir_type(
+        "DeviceDefinitionChargeItemType",
+        "fhir.resources.devicedefinition.DeviceDefinitionChargeItem",
+    )
+
+    DeviceDefinitionClassificationType = create_fhir_type(
+        "DeviceDefinitionClassificationType",
+        "fhir.resources.devicedefinition.DeviceDefinitionClassification",
+    )
+
+    DeviceDefinitionConformsToType = create_fhir_type(
+        "DeviceDefinitionConformsToType",
+        "fhir.resources.devicedefinition.DeviceDefinitionConformsTo",
+    )
+
+    DeviceDefinitionCorrectiveActionType = create_fhir_type(
+        "DeviceDefinitionCorrectiveActionType",
+        "fhir.resources.devicedefinition.DeviceDefinitionCorrectiveAction",
+    )
+
+    DeviceDefinitionDeviceNameType = create_fhir_type(
+        "DeviceDefinitionDeviceNameType",
+        "fhir.resources.devicedefinition.DeviceDefinitionDeviceName",
+    )
+
+    DeviceDefinitionGuidelineType = create_fhir_type(
+        "DeviceDefinitionGuidelineType",
+        "fhir.resources.devicedefinition.DeviceDefinitionGuideline",
+    )
+
+    DeviceDefinitionHasPartType = create_fhir_type(
+        "DeviceDefinitionHasPartType",
+        "fhir.resources.devicedefinition.DeviceDefinitionHasPart",
+    )
+
+    DeviceDefinitionLinkType = create_fhir_type(
+        "DeviceDefinitionLinkType",
+        "fhir.resources.devicedefinition.DeviceDefinitionLink",
+    )
+
+    DeviceDefinitionMaterialType = create_fhir_type(
+        "DeviceDefinitionMaterialType",
+        "fhir.resources.devicedefinition.DeviceDefinitionMaterial",
+    )
+
+    DeviceDefinitionPackagingType = create_fhir_type(
+        "DeviceDefinitionPackagingType",
+        "fhir.resources.devicedefinition.DeviceDefinitionPackaging",
+    )
+
+    DeviceDefinitionPackagingDistributorType = create_fhir_type(
+        "DeviceDefinitionPackagingDistributorType",
+        "fhir.resources.devicedefinition.DeviceDefinitionPackagingDistributor",
+    )
+
+    DeviceDefinitionPropertyType = create_fhir_type(
+        "DeviceDefinitionPropertyType",
+        "fhir.resources.devicedefinition.DeviceDefinitionProperty",
+    )
+
+    DeviceDefinitionRegulatoryIdentifierType = create_fhir_type(
+        "DeviceDefinitionRegulatoryIdentifierType",
+        "fhir.resources.devicedefinition.DeviceDefinitionRegulatoryIdentifier",
+    )
+
+    DeviceDefinitionUdiDeviceIdentifierType = create_fhir_type(
+        "DeviceDefinitionUdiDeviceIdentifierType",
+        "fhir.resources.devicedefinition.DeviceDefinitionUdiDeviceIdentifier",
+    )
+
+    DeviceDefinitionUdiDeviceIdentifierMarketDistributionType = create_fhir_type(
+        "DeviceDefinitionUdiDeviceIdentifierMarketDistributionType",
+        "fhir.resources.devicedefinition.DeviceDefinitionUdiDeviceIdentifierMarketDistribution",
+    )
+
+    DeviceDefinitionVersionType = create_fhir_type(
+        "DeviceDefinitionVersionType",
+        "fhir.resources.devicedefinition.DeviceDefinitionVersion",
+    )
+
+    DeviceDispenseType = create_fhir_type(
+        "DeviceDispenseType", "fhir.resources.devicedispense.DeviceDispense"
+    )
+
+    DeviceDispensePerformerType = create_fhir_type(
+        "DeviceDispensePerformerType",
+        "fhir.resources.devicedispense.DeviceDispensePerformer",
+    )
+
+    DeviceMetricType = create_fhir_type(
+        "DeviceMetricType", "fhir.resources.devicemetric.DeviceMetric"
+    )
+
+    DeviceMetricCalibrationType = create_fhir_type(
+        "DeviceMetricCalibrationType",
+        "fhir.resources.devicemetric.DeviceMetricCalibration",
+    )
+
+    DeviceNameType = create_fhir_type(
+        "DeviceNameType", "fhir.resources.device.DeviceName"
+    )
+
+    DevicePropertyType = create_fhir_type(
+        "DevicePropertyType", "fhir.resources.device.DeviceProperty"
+    )
+
+    DeviceRequestType = create_fhir_type(
+        "DeviceRequestType", "fhir.resources.devicerequest.DeviceRequest"
+    )
+
+    DeviceRequestParameterType = create_fhir_type(
+        "DeviceRequestParameterType",
+        "fhir.resources.devicerequest.DeviceRequestParameter",
+    )
+
+    DeviceUdiCarrierType = create_fhir_type(
+        "DeviceUdiCarrierType", "fhir.resources.device.DeviceUdiCarrier"
+    )
+
+    DeviceUsageType = create_fhir_type(
+        "DeviceUsageType", "fhir.resources.deviceusage.DeviceUsage"
+    )
+
+    DeviceUsageAdherenceType = create_fhir_type(
+        "DeviceUsageAdherenceType", "fhir.resources.deviceusage.DeviceUsageAdherence"
+    )
+
+    DeviceVersionType = create_fhir_type(
+        "DeviceVersionType", "fhir.resources.device.DeviceVersion"
+    )
+
+    DiagnosticReportType = create_fhir_type(
+        "DiagnosticReportType", "fhir.resources.diagnosticreport.DiagnosticReport"
+    )
+
+    DiagnosticReportMediaType = create_fhir_type(
+        "DiagnosticReportMediaType",
+        "fhir.resources.diagnosticreport.DiagnosticReportMedia",
+    )
+
+    DiagnosticReportSupportingInfoType = create_fhir_type(
+        "DiagnosticReportSupportingInfoType",
+        "fhir.resources.diagnosticreport.DiagnosticReportSupportingInfo",
+    )
+
+    DistanceType = create_fhir_type("DistanceType", "fhir.resources.distance.Distance")
+
+    DocumentReferenceType = create_fhir_type(
+        "DocumentReferenceType", "fhir.resources.documentreference.DocumentReference"
+    )
+
+    DocumentReferenceAttesterType = create_fhir_type(
+        "DocumentReferenceAttesterType",
+        "fhir.resources.documentreference.DocumentReferenceAttester",
+    )
+
+    DocumentReferenceContentType = create_fhir_type(
+        "DocumentReferenceContentType",
+        "fhir.resources.documentreference.DocumentReferenceContent",
+    )
+
+    DocumentReferenceContentProfileType = create_fhir_type(
+        "DocumentReferenceContentProfileType",
+        "fhir.resources.documentreference.DocumentReferenceContentProfile",
+    )
+
+    DocumentReferenceRelatesToType = create_fhir_type(
+        "DocumentReferenceRelatesToType",
+        "fhir.resources.documentreference.DocumentReferenceRelatesTo",
+    )
+
+    DomainResourceType = create_fhir_type(
+        "DomainResourceType", "fhir.resources.domainresource.DomainResource"
+    )
+
+    DosageType = create_fhir_type("DosageType", "fhir.resources.dosage.Dosage")
+
+    DosageDoseAndRateType = create_fhir_type(
+        "DosageDoseAndRateType", "fhir.resources.dosage.DosageDoseAndRate"
+    )
+
+    DurationType = create_fhir_type("DurationType", "fhir.resources.duration.Duration")
+
+    ElementDefinitionType = create_fhir_type(
+        "ElementDefinitionType", "fhir.resources.elementdefinition.ElementDefinition"
+    )
+
+    ElementDefinitionBaseType = create_fhir_type(
+        "ElementDefinitionBaseType",
+        "fhir.resources.elementdefinition.ElementDefinitionBase",
+    )
+
+    ElementDefinitionBindingType = create_fhir_type(
+        "ElementDefinitionBindingType",
+        "fhir.resources.elementdefinition.ElementDefinitionBinding",
+    )
+
+    ElementDefinitionBindingAdditionalType = create_fhir_type(
+        "ElementDefinitionBindingAdditionalType",
+        "fhir.resources.elementdefinition.ElementDefinitionBindingAdditional",
+    )
+
+    ElementDefinitionConstraintType = create_fhir_type(
+        "ElementDefinitionConstraintType",
+        "fhir.resources.elementdefinition.ElementDefinitionConstraint",
+    )
+
+    ElementDefinitionExampleType = create_fhir_type(
+        "ElementDefinitionExampleType",
+        "fhir.resources.elementdefinition.ElementDefinitionExample",
+    )
+
+    ElementDefinitionMappingType = create_fhir_type(
+        "ElementDefinitionMappingType",
+        "fhir.resources.elementdefinition.ElementDefinitionMapping",
+    )
+
+    ElementDefinitionSlicingType = create_fhir_type(
+        "ElementDefinitionSlicingType",
+        "fhir.resources.elementdefinition.ElementDefinitionSlicing",
+    )
+
+    ElementDefinitionSlicingDiscriminatorType = create_fhir_type(
+        "ElementDefinitionSlicingDiscriminatorType",
+        "fhir.resources.elementdefinition.ElementDefinitionSlicingDiscriminator",
+    )
+
+    ElementDefinitionTypeType = create_fhir_type(
+        "ElementDefinitionTypeType",
+        "fhir.resources.elementdefinition.ElementDefinitionType",
+    )
+
+    EncounterType = create_fhir_type(
+        "EncounterType", "fhir.resources.encounter.Encounter"
+    )
+
+    EncounterAdmissionType = create_fhir_type(
+        "EncounterAdmissionType", "fhir.resources.encounter.EncounterAdmission"
+    )
+
+    EncounterDiagnosisType = create_fhir_type(
+        "EncounterDiagnosisType", "fhir.resources.encounter.EncounterDiagnosis"
+    )
+
+    EncounterHistoryType = create_fhir_type(
+        "EncounterHistoryType", "fhir.resources.encounterhistory.EncounterHistory"
+    )
+
+    EncounterHistoryLocationType = create_fhir_type(
+        "EncounterHistoryLocationType",
+        "fhir.resources.encounterhistory.EncounterHistoryLocation",
+    )
+
+    EncounterLocationType = create_fhir_type(
+        "EncounterLocationType", "fhir.resources.encounter.EncounterLocation"
+    )
+
+    EncounterParticipantType = create_fhir_type(
+        "EncounterParticipantType", "fhir.resources.encounter.EncounterParticipant"
+    )
+
+    EncounterReasonType = create_fhir_type(
+        "EncounterReasonType", "fhir.resources.encounter.EncounterReason"
+    )
+
+    EndpointType = create_fhir_type("EndpointType", "fhir.resources.endpoint.Endpoint")
+
+    EndpointPayloadType = create_fhir_type(
+        "EndpointPayloadType", "fhir.resources.endpoint.EndpointPayload"
+    )
+
+    EnrollmentRequestType = create_fhir_type(
+        "EnrollmentRequestType", "fhir.resources.enrollmentrequest.EnrollmentRequest"
+    )
+
+    EnrollmentResponseType = create_fhir_type(
+        "EnrollmentResponseType", "fhir.resources.enrollmentresponse.EnrollmentResponse"
+    )
+
+    EpisodeOfCareType = create_fhir_type(
+        "EpisodeOfCareType", "fhir.resources.episodeofcare.EpisodeOfCare"
+    )
+
+    EpisodeOfCareDiagnosisType = create_fhir_type(
+        "EpisodeOfCareDiagnosisType",
+        "fhir.resources.episodeofcare.EpisodeOfCareDiagnosis",
+    )
+
+    EpisodeOfCareReasonType = create_fhir_type(
+        "EpisodeOfCareReasonType", "fhir.resources.episodeofcare.EpisodeOfCareReason"
+    )
+
+    EpisodeOfCareStatusHistoryType = create_fhir_type(
+        "EpisodeOfCareStatusHistoryType",
+        "fhir.resources.episodeofcare.EpisodeOfCareStatusHistory",
+    )
+
+    EventDefinitionType = create_fhir_type(
+        "EventDefinitionType", "fhir.resources.eventdefinition.EventDefinition"
+    )
+
+    EvidenceType = create_fhir_type("EvidenceType", "fhir.resources.evidence.Evidence")
+
+    EvidenceCertaintyType = create_fhir_type(
+        "EvidenceCertaintyType", "fhir.resources.evidence.EvidenceCertainty"
+    )
+
+    EvidenceReportType = create_fhir_type(
+        "EvidenceReportType", "fhir.resources.evidencereport.EvidenceReport"
+    )
+
+    EvidenceReportRelatesToType = create_fhir_type(
+        "EvidenceReportRelatesToType",
+        "fhir.resources.evidencereport.EvidenceReportRelatesTo",
+    )
+
+    EvidenceReportRelatesToTargetType = create_fhir_type(
+        "EvidenceReportRelatesToTargetType",
+        "fhir.resources.evidencereport.EvidenceReportRelatesToTarget",
+    )
+
+    EvidenceReportSectionType = create_fhir_type(
+        "EvidenceReportSectionType",
+        "fhir.resources.evidencereport.EvidenceReportSection",
+    )
+
+    EvidenceReportSubjectType = create_fhir_type(
+        "EvidenceReportSubjectType",
+        "fhir.resources.evidencereport.EvidenceReportSubject",
+    )
+
+    EvidenceReportSubjectCharacteristicType = create_fhir_type(
+        "EvidenceReportSubjectCharacteristicType",
+        "fhir.resources.evidencereport.EvidenceReportSubjectCharacteristic",
+    )
+
+    EvidenceStatisticType = create_fhir_type(
+        "EvidenceStatisticType", "fhir.resources.evidence.EvidenceStatistic"
+    )
+
+    EvidenceStatisticAttributeEstimateType = create_fhir_type(
+        "EvidenceStatisticAttributeEstimateType",
+        "fhir.resources.evidence.EvidenceStatisticAttributeEstimate",
+    )
+
+    EvidenceStatisticModelCharacteristicType = create_fhir_type(
+        "EvidenceStatisticModelCharacteristicType",
+        "fhir.resources.evidence.EvidenceStatisticModelCharacteristic",
+    )
+
+    EvidenceStatisticModelCharacteristicVariableType = create_fhir_type(
+        "EvidenceStatisticModelCharacteristicVariableType",
+        "fhir.resources.evidence.EvidenceStatisticModelCharacteristicVariable",
+    )
+
+    EvidenceStatisticSampleSizeType = create_fhir_type(
+        "EvidenceStatisticSampleSizeType",
+        "fhir.resources.evidence.EvidenceStatisticSampleSize",
+    )
+
+    EvidenceVariableType = create_fhir_type(
+        "EvidenceVariableType", "fhir.resources.evidencevariable.EvidenceVariable"
+    )
+
+    EvidenceVariableCategoryType = create_fhir_type(
+        "EvidenceVariableCategoryType",
+        "fhir.resources.evidencevariable.EvidenceVariableCategory",
+    )
+
+    EvidenceVariableCharacteristicType = create_fhir_type(
+        "EvidenceVariableCharacteristicType",
+        "fhir.resources.evidencevariable.EvidenceVariableCharacteristic",
+    )
+
+    EvidenceVariableCharacteristicDefinitionByCombinationType = create_fhir_type(
+        "EvidenceVariableCharacteristicDefinitionByCombinationType",
+        "fhir.resources.evidencevariable.EvidenceVariableCharacteristicDefinitionByCombination",
+    )
+
+    EvidenceVariableCharacteristicDefinitionByTypeAndValueType = create_fhir_type(
+        "EvidenceVariableCharacteristicDefinitionByTypeAndValueType",
+        "fhir.resources.evidencevariable.EvidenceVariableCharacteristicDefinitionByTypeAndValue",
+    )
+
+    EvidenceVariableCharacteristicTimeFromEventType = create_fhir_type(
+        "EvidenceVariableCharacteristicTimeFromEventType",
+        "fhir.resources.evidencevariable.EvidenceVariableCharacteristicTimeFromEvent",
+    )
+
+    EvidenceVariableDefinitionType = create_fhir_type(
+        "EvidenceVariableDefinitionType",
+        "fhir.resources.evidence.EvidenceVariableDefinition",
+    )
+
+    ExampleScenarioType = create_fhir_type(
+        "ExampleScenarioType", "fhir.resources.examplescenario.ExampleScenario"
+    )
+
+    ExampleScenarioActorType = create_fhir_type(
+        "ExampleScenarioActorType",
+        "fhir.resources.examplescenario.ExampleScenarioActor",
+    )
+
+    ExampleScenarioInstanceType = create_fhir_type(
+        "ExampleScenarioInstanceType",
+        "fhir.resources.examplescenario.ExampleScenarioInstance",
+    )
+
+    ExampleScenarioInstanceContainedInstanceType = create_fhir_type(
+        "ExampleScenarioInstanceContainedInstanceType",
+        "fhir.resources.examplescenario.ExampleScenarioInstanceContainedInstance",
+    )
+
+    ExampleScenarioInstanceVersionType = create_fhir_type(
+        "ExampleScenarioInstanceVersionType",
+        "fhir.resources.examplescenario.ExampleScenarioInstanceVersion",
+    )
+
+    ExampleScenarioProcessType = create_fhir_type(
+        "ExampleScenarioProcessType",
+        "fhir.resources.examplescenario.ExampleScenarioProcess",
+    )
+
+    ExampleScenarioProcessStepType = create_fhir_type(
+        "ExampleScenarioProcessStepType",
+        "fhir.resources.examplescenario.ExampleScenarioProcessStep",
+    )
+
+    ExampleScenarioProcessStepAlternativeType = create_fhir_type(
+        "ExampleScenarioProcessStepAlternativeType",
+        "fhir.resources.examplescenario.ExampleScenarioProcessStepAlternative",
+    )
+
+    ExampleScenarioProcessStepOperationType = create_fhir_type(
+        "ExampleScenarioProcessStepOperationType",
+        "fhir.resources.examplescenario.ExampleScenarioProcessStepOperation",
+    )
+
+    ExplanationOfBenefitType = create_fhir_type(
+        "ExplanationOfBenefitType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefit",
+    )
+
+    ExplanationOfBenefitAccidentType = create_fhir_type(
+        "ExplanationOfBenefitAccidentType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitAccident",
+    )
+
+    ExplanationOfBenefitAddItemType = create_fhir_type(
+        "ExplanationOfBenefitAddItemType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitAddItem",
+    )
+
+    ExplanationOfBenefitAddItemBodySiteType = create_fhir_type(
+        "ExplanationOfBenefitAddItemBodySiteType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitAddItemBodySite",
+    )
+
+    ExplanationOfBenefitAddItemDetailType = create_fhir_type(
+        "ExplanationOfBenefitAddItemDetailType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitAddItemDetail",
+    )
+
+    ExplanationOfBenefitAddItemDetailSubDetailType = create_fhir_type(
+        "ExplanationOfBenefitAddItemDetailSubDetailType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitAddItemDetailSubDetail",
+    )
+
+    ExplanationOfBenefitBenefitBalanceType = create_fhir_type(
+        "ExplanationOfBenefitBenefitBalanceType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitBenefitBalance",
+    )
+
+    ExplanationOfBenefitBenefitBalanceFinancialType = create_fhir_type(
+        "ExplanationOfBenefitBenefitBalanceFinancialType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitBenefitBalanceFinancial",
+    )
+
+    ExplanationOfBenefitCareTeamType = create_fhir_type(
+        "ExplanationOfBenefitCareTeamType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitCareTeam",
+    )
+
+    ExplanationOfBenefitDiagnosisType = create_fhir_type(
+        "ExplanationOfBenefitDiagnosisType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitDiagnosis",
+    )
+
+    ExplanationOfBenefitEventType = create_fhir_type(
+        "ExplanationOfBenefitEventType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitEvent",
+    )
+
+    ExplanationOfBenefitInsuranceType = create_fhir_type(
+        "ExplanationOfBenefitInsuranceType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitInsurance",
+    )
+
+    ExplanationOfBenefitItemType = create_fhir_type(
+        "ExplanationOfBenefitItemType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitItem",
+    )
+
+    ExplanationOfBenefitItemAdjudicationType = create_fhir_type(
+        "ExplanationOfBenefitItemAdjudicationType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitItemAdjudication",
+    )
+
+    ExplanationOfBenefitItemBodySiteType = create_fhir_type(
+        "ExplanationOfBenefitItemBodySiteType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitItemBodySite",
+    )
+
+    ExplanationOfBenefitItemDetailType = create_fhir_type(
+        "ExplanationOfBenefitItemDetailType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitItemDetail",
+    )
+
+    ExplanationOfBenefitItemDetailSubDetailType = create_fhir_type(
+        "ExplanationOfBenefitItemDetailSubDetailType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitItemDetailSubDetail",
+    )
+
+    ExplanationOfBenefitItemReviewOutcomeType = create_fhir_type(
+        "ExplanationOfBenefitItemReviewOutcomeType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitItemReviewOutcome",
+    )
+
+    ExplanationOfBenefitPayeeType = create_fhir_type(
+        "ExplanationOfBenefitPayeeType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitPayee",
+    )
+
+    ExplanationOfBenefitPaymentType = create_fhir_type(
+        "ExplanationOfBenefitPaymentType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitPayment",
+    )
+
+    ExplanationOfBenefitProcedureType = create_fhir_type(
+        "ExplanationOfBenefitProcedureType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitProcedure",
+    )
+
+    ExplanationOfBenefitProcessNoteType = create_fhir_type(
+        "ExplanationOfBenefitProcessNoteType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitProcessNote",
+    )
+
+    ExplanationOfBenefitRelatedType = create_fhir_type(
+        "ExplanationOfBenefitRelatedType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitRelated",
+    )
+
+    ExplanationOfBenefitSupportingInfoType = create_fhir_type(
+        "ExplanationOfBenefitSupportingInfoType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitSupportingInfo",
+    )
+
+    ExplanationOfBenefitTotalType = create_fhir_type(
+        "ExplanationOfBenefitTotalType",
+        "fhir.resources.explanationofbenefit.ExplanationOfBenefitTotal",
+    )
+
+    ExpressionType = create_fhir_type(
+        "ExpressionType", "fhir.resources.expression.Expression"
+    )
+
+    ExtendedContactDetailType = create_fhir_type(
+        "ExtendedContactDetailType",
+        "fhir.resources.extendedcontactdetail.ExtendedContactDetail",
+    )
+
+    ExtensionType = create_fhir_type(
+        "ExtensionType", "fhir.resources.extension.Extension"
+    )
+
+    FamilyMemberHistoryType = create_fhir_type(
+        "FamilyMemberHistoryType",
+        "fhir.resources.familymemberhistory.FamilyMemberHistory",
+    )
+
+    FamilyMemberHistoryConditionType = create_fhir_type(
+        "FamilyMemberHistoryConditionType",
+        "fhir.resources.familymemberhistory.FamilyMemberHistoryCondition",
+    )
+
+    FamilyMemberHistoryParticipantType = create_fhir_type(
+        "FamilyMemberHistoryParticipantType",
+        "fhir.resources.familymemberhistory.FamilyMemberHistoryParticipant",
+    )
+
+    FamilyMemberHistoryProcedureType = create_fhir_type(
+        "FamilyMemberHistoryProcedureType",
+        "fhir.resources.familymemberhistory.FamilyMemberHistoryProcedure",
+    )
+
+    FlagType = create_fhir_type("FlagType", "fhir.resources.flag.Flag")
+
+    FormularyItemType = create_fhir_type(
+        "FormularyItemType", "fhir.resources.formularyitem.FormularyItem"
+    )
+
+    GenomicStudyType = create_fhir_type(
+        "GenomicStudyType", "fhir.resources.genomicstudy.GenomicStudy"
+    )
+
+    GenomicStudyAnalysisType = create_fhir_type(
+        "GenomicStudyAnalysisType", "fhir.resources.genomicstudy.GenomicStudyAnalysis"
+    )
+
+    GenomicStudyAnalysisDeviceType = create_fhir_type(
+        "GenomicStudyAnalysisDeviceType",
+        "fhir.resources.genomicstudy.GenomicStudyAnalysisDevice",
+    )
+
+    GenomicStudyAnalysisInputType = create_fhir_type(
+        "GenomicStudyAnalysisInputType",
+        "fhir.resources.genomicstudy.GenomicStudyAnalysisInput",
+    )
+
+    GenomicStudyAnalysisOutputType = create_fhir_type(
+        "GenomicStudyAnalysisOutputType",
+        "fhir.resources.genomicstudy.GenomicStudyAnalysisOutput",
+    )
+
+    GenomicStudyAnalysisPerformerType = create_fhir_type(
+        "GenomicStudyAnalysisPerformerType",
+        "fhir.resources.genomicstudy.GenomicStudyAnalysisPerformer",
+    )
+
+    GoalType = create_fhir_type("GoalType", "fhir.resources.goal.Goal")
+
+    GoalTargetType = create_fhir_type(
+        "GoalTargetType", "fhir.resources.goal.GoalTarget"
+    )
+
+    GraphDefinitionType = create_fhir_type(
+        "GraphDefinitionType", "fhir.resources.graphdefinition.GraphDefinition"
+    )
+
+    GraphDefinitionLinkType = create_fhir_type(
+        "GraphDefinitionLinkType", "fhir.resources.graphdefinition.GraphDefinitionLink"
+    )
+
+    GraphDefinitionLinkCompartmentType = create_fhir_type(
+        "GraphDefinitionLinkCompartmentType",
+        "fhir.resources.graphdefinition.GraphDefinitionLinkCompartment",
+    )
+
+    GraphDefinitionNodeType = create_fhir_type(
+        "GraphDefinitionNodeType", "fhir.resources.graphdefinition.GraphDefinitionNode"
+    )
+
+    GroupType = create_fhir_type("GroupType", "fhir.resources.group.Group")
+
+    GroupCharacteristicType = create_fhir_type(
+        "GroupCharacteristicType", "fhir.resources.group.GroupCharacteristic"
+    )
+
+    GroupMemberType = create_fhir_type(
+        "GroupMemberType", "fhir.resources.group.GroupMember"
+    )
+
+    GuidanceResponseType = create_fhir_type(
+        "GuidanceResponseType", "fhir.resources.guidanceresponse.GuidanceResponse"
+    )
+
+    HealthcareServiceType = create_fhir_type(
+        "HealthcareServiceType", "fhir.resources.healthcareservice.HealthcareService"
+    )
+
+    HealthcareServiceEligibilityType = create_fhir_type(
+        "HealthcareServiceEligibilityType",
+        "fhir.resources.healthcareservice.HealthcareServiceEligibility",
+    )
+
+    HumanNameType = create_fhir_type(
+        "HumanNameType", "fhir.resources.humanname.HumanName"
+    )
+
+    IdentifierType = create_fhir_type(
+        "IdentifierType", "fhir.resources.identifier.Identifier"
+    )
+
+    ImagingSelectionType = create_fhir_type(
+        "ImagingSelectionType", "fhir.resources.imagingselection.ImagingSelection"
+    )
+
+    ImagingSelectionInstanceType = create_fhir_type(
+        "ImagingSelectionInstanceType",
+        "fhir.resources.imagingselection.ImagingSelectionInstance",
+    )
+
+    ImagingSelectionInstanceImageRegion2DType = create_fhir_type(
+        "ImagingSelectionInstanceImageRegion2DType",
+        "fhir.resources.imagingselection.ImagingSelectionInstanceImageRegion2D",
+    )
+
+    ImagingSelectionInstanceImageRegion3DType = create_fhir_type(
+        "ImagingSelectionInstanceImageRegion3DType",
+        "fhir.resources.imagingselection.ImagingSelectionInstanceImageRegion3D",
+    )
+
+    ImagingSelectionPerformerType = create_fhir_type(
+        "ImagingSelectionPerformerType",
+        "fhir.resources.imagingselection.ImagingSelectionPerformer",
+    )
+
+    ImagingStudyType = create_fhir_type(
+        "ImagingStudyType", "fhir.resources.imagingstudy.ImagingStudy"
+    )
+
+    ImagingStudySeriesType = create_fhir_type(
+        "ImagingStudySeriesType", "fhir.resources.imagingstudy.ImagingStudySeries"
+    )
+
+    ImagingStudySeriesInstanceType = create_fhir_type(
+        "ImagingStudySeriesInstanceType",
+        "fhir.resources.imagingstudy.ImagingStudySeriesInstance",
+    )
+
+    ImagingStudySeriesPerformerType = create_fhir_type(
+        "ImagingStudySeriesPerformerType",
+        "fhir.resources.imagingstudy.ImagingStudySeriesPerformer",
+    )
+
+    ImmunizationType = create_fhir_type(
+        "ImmunizationType", "fhir.resources.immunization.Immunization"
+    )
+
+    ImmunizationEvaluationType = create_fhir_type(
+        "ImmunizationEvaluationType",
+        "fhir.resources.immunizationevaluation.ImmunizationEvaluation",
+    )
+
+    ImmunizationPerformerType = create_fhir_type(
+        "ImmunizationPerformerType", "fhir.resources.immunization.ImmunizationPerformer"
+    )
+
+    ImmunizationProgramEligibilityType = create_fhir_type(
+        "ImmunizationProgramEligibilityType",
+        "fhir.resources.immunization.ImmunizationProgramEligibility",
+    )
+
+    ImmunizationProtocolAppliedType = create_fhir_type(
+        "ImmunizationProtocolAppliedType",
+        "fhir.resources.immunization.ImmunizationProtocolApplied",
+    )
+
+    ImmunizationReactionType = create_fhir_type(
+        "ImmunizationReactionType", "fhir.resources.immunization.ImmunizationReaction"
+    )
+
+    ImmunizationRecommendationType = create_fhir_type(
+        "ImmunizationRecommendationType",
+        "fhir.resources.immunizationrecommendation.ImmunizationRecommendation",
+    )
+
+    ImmunizationRecommendationRecommendationType = create_fhir_type(
+        "ImmunizationRecommendationRecommendationType",
+        "fhir.resources.immunizationrecommendation.ImmunizationRecommendationRecommendation",
+    )
+
+    ImmunizationRecommendationRecommendationDateCriterionType = create_fhir_type(
+        "ImmunizationRecommendationRecommendationDateCriterionType",
+        "fhir.resources.immunizationrecommendation.ImmunizationRecommendationRecommendationDateCriterion",
+    )
+
+    ImplementationGuideType = create_fhir_type(
+        "ImplementationGuideType",
+        "fhir.resources.implementationguide.ImplementationGuide",
+    )
+
+    ImplementationGuideDefinitionType = create_fhir_type(
+        "ImplementationGuideDefinitionType",
+        "fhir.resources.implementationguide.ImplementationGuideDefinition",
+    )
+
+    ImplementationGuideDefinitionGroupingType = create_fhir_type(
+        "ImplementationGuideDefinitionGroupingType",
+        "fhir.resources.implementationguide.ImplementationGuideDefinitionGrouping",
+    )
+
+    ImplementationGuideDefinitionPageType = create_fhir_type(
+        "ImplementationGuideDefinitionPageType",
+        "fhir.resources.implementationguide.ImplementationGuideDefinitionPage",
+    )
+
+    ImplementationGuideDefinitionParameterType = create_fhir_type(
+        "ImplementationGuideDefinitionParameterType",
+        "fhir.resources.implementationguide.ImplementationGuideDefinitionParameter",
+    )
+
+    ImplementationGuideDefinitionResourceType = create_fhir_type(
+        "ImplementationGuideDefinitionResourceType",
+        "fhir.resources.implementationguide.ImplementationGuideDefinitionResource",
+    )
+
+    ImplementationGuideDefinitionTemplateType = create_fhir_type(
+        "ImplementationGuideDefinitionTemplateType",
+        "fhir.resources.implementationguide.ImplementationGuideDefinitionTemplate",
+    )
+
+    ImplementationGuideDependsOnType = create_fhir_type(
+        "ImplementationGuideDependsOnType",
+        "fhir.resources.implementationguide.ImplementationGuideDependsOn",
+    )
+
+    ImplementationGuideGlobalType = create_fhir_type(
+        "ImplementationGuideGlobalType",
+        "fhir.resources.implementationguide.ImplementationGuideGlobal",
+    )
+
+    ImplementationGuideManifestType = create_fhir_type(
+        "ImplementationGuideManifestType",
+        "fhir.resources.implementationguide.ImplementationGuideManifest",
+    )
+
+    ImplementationGuideManifestPageType = create_fhir_type(
+        "ImplementationGuideManifestPageType",
+        "fhir.resources.implementationguide.ImplementationGuideManifestPage",
+    )
+
+    ImplementationGuideManifestResourceType = create_fhir_type(
+        "ImplementationGuideManifestResourceType",
+        "fhir.resources.implementationguide.ImplementationGuideManifestResource",
+    )
+
+    IngredientType = create_fhir_type(
+        "IngredientType", "fhir.resources.ingredient.Ingredient"
+    )
+
+    IngredientManufacturerType = create_fhir_type(
+        "IngredientManufacturerType", "fhir.resources.ingredient.IngredientManufacturer"
+    )
+
+    IngredientSubstanceType = create_fhir_type(
+        "IngredientSubstanceType", "fhir.resources.ingredient.IngredientSubstance"
+    )
+
+    IngredientSubstanceStrengthType = create_fhir_type(
+        "IngredientSubstanceStrengthType",
+        "fhir.resources.ingredient.IngredientSubstanceStrength",
+    )
+
+    IngredientSubstanceStrengthReferenceStrengthType = create_fhir_type(
+        "IngredientSubstanceStrengthReferenceStrengthType",
+        "fhir.resources.ingredient.IngredientSubstanceStrengthReferenceStrength",
+    )
+
+    InsurancePlanType = create_fhir_type(
+        "InsurancePlanType", "fhir.resources.insuranceplan.InsurancePlan"
+    )
+
+    InsurancePlanCoverageType = create_fhir_type(
+        "InsurancePlanCoverageType",
+        "fhir.resources.insuranceplan.InsurancePlanCoverage",
+    )
+
+    InsurancePlanCoverageBenefitType = create_fhir_type(
+        "InsurancePlanCoverageBenefitType",
+        "fhir.resources.insuranceplan.InsurancePlanCoverageBenefit",
+    )
+
+    InsurancePlanCoverageBenefitLimitType = create_fhir_type(
+        "InsurancePlanCoverageBenefitLimitType",
+        "fhir.resources.insuranceplan.InsurancePlanCoverageBenefitLimit",
+    )
+
+    InsurancePlanPlanType = create_fhir_type(
+        "InsurancePlanPlanType", "fhir.resources.insuranceplan.InsurancePlanPlan"
+    )
+
+    InsurancePlanPlanGeneralCostType = create_fhir_type(
+        "InsurancePlanPlanGeneralCostType",
+        "fhir.resources.insuranceplan.InsurancePlanPlanGeneralCost",
+    )
+
+    InsurancePlanPlanSpecificCostType = create_fhir_type(
+        "InsurancePlanPlanSpecificCostType",
+        "fhir.resources.insuranceplan.InsurancePlanPlanSpecificCost",
+    )
+
+    InsurancePlanPlanSpecificCostBenefitType = create_fhir_type(
+        "InsurancePlanPlanSpecificCostBenefitType",
+        "fhir.resources.insuranceplan.InsurancePlanPlanSpecificCostBenefit",
+    )
+
+    InsurancePlanPlanSpecificCostBenefitCostType = create_fhir_type(
+        "InsurancePlanPlanSpecificCostBenefitCostType",
+        "fhir.resources.insuranceplan.InsurancePlanPlanSpecificCostBenefitCost",
+    )
+
+    InventoryItemType = create_fhir_type(
+        "InventoryItemType", "fhir.resources.inventoryitem.InventoryItem"
+    )
+
+    InventoryItemAssociationType = create_fhir_type(
+        "InventoryItemAssociationType",
+        "fhir.resources.inventoryitem.InventoryItemAssociation",
+    )
+
+    InventoryItemCharacteristicType = create_fhir_type(
+        "InventoryItemCharacteristicType",
+        "fhir.resources.inventoryitem.InventoryItemCharacteristic",
+    )
+
+    InventoryItemDescriptionType = create_fhir_type(
+        "InventoryItemDescriptionType",
+        "fhir.resources.inventoryitem.InventoryItemDescription",
+    )
+
+    InventoryItemInstanceType = create_fhir_type(
+        "InventoryItemInstanceType",
+        "fhir.resources.inventoryitem.InventoryItemInstance",
+    )
+
+    InventoryItemNameType = create_fhir_type(
+        "InventoryItemNameType", "fhir.resources.inventoryitem.InventoryItemName"
+    )
+
+    InventoryItemResponsibleOrganizationType = create_fhir_type(
+        "InventoryItemResponsibleOrganizationType",
+        "fhir.resources.inventoryitem.InventoryItemResponsibleOrganization",
+    )
+
+    InventoryReportType = create_fhir_type(
+        "InventoryReportType", "fhir.resources.inventoryreport.InventoryReport"
+    )
+
+    InventoryReportInventoryListingType = create_fhir_type(
+        "InventoryReportInventoryListingType",
+        "fhir.resources.inventoryreport.InventoryReportInventoryListing",
+    )
+
+    InventoryReportInventoryListingItemType = create_fhir_type(
+        "InventoryReportInventoryListingItemType",
+        "fhir.resources.inventoryreport.InventoryReportInventoryListingItem",
+    )
+
+    InvoiceType = create_fhir_type("InvoiceType", "fhir.resources.invoice.Invoice")
+
+    InvoiceLineItemType = create_fhir_type(
+        "InvoiceLineItemType", "fhir.resources.invoice.InvoiceLineItem"
+    )
+
+    InvoiceParticipantType = create_fhir_type(
+        "InvoiceParticipantType", "fhir.resources.invoice.InvoiceParticipant"
+    )
+
+    LibraryType = create_fhir_type("LibraryType", "fhir.resources.library.Library")
+
+    LinkageType = create_fhir_type("LinkageType", "fhir.resources.linkage.Linkage")
+
+    LinkageItemType = create_fhir_type(
+        "LinkageItemType", "fhir.resources.linkage.LinkageItem"
+    )
+
+    ListType = create_fhir_type("ListType", "fhir.resources.list.List")
+
+    ListEntryType = create_fhir_type("ListEntryType", "fhir.resources.list.ListEntry")
+
+    LocationType = create_fhir_type("LocationType", "fhir.resources.location.Location")
+
+    LocationPositionType = create_fhir_type(
+        "LocationPositionType", "fhir.resources.location.LocationPosition"
+    )
+
+    ManufacturedItemDefinitionType = create_fhir_type(
+        "ManufacturedItemDefinitionType",
+        "fhir.resources.manufactureditemdefinition.ManufacturedItemDefinition",
+    )
+
+    ManufacturedItemDefinitionComponentType = create_fhir_type(
+        "ManufacturedItemDefinitionComponentType",
+        "fhir.resources.manufactureditemdefinition.ManufacturedItemDefinitionComponent",
+    )
+
+    ManufacturedItemDefinitionComponentConstituentType = create_fhir_type(
+        "ManufacturedItemDefinitionComponentConstituentType",
+        "fhir.resources.manufactureditemdefinition.ManufacturedItemDefinitionComponentConstituent",
+    )
+
+    ManufacturedItemDefinitionPropertyType = create_fhir_type(
+        "ManufacturedItemDefinitionPropertyType",
+        "fhir.resources.manufactureditemdefinition.ManufacturedItemDefinitionProperty",
+    )
+
+    MarketingStatusType = create_fhir_type(
+        "MarketingStatusType", "fhir.resources.marketingstatus.MarketingStatus"
+    )
+
+    MeasureType = create_fhir_type("MeasureType", "fhir.resources.measure.Measure")
+
+    MeasureGroupType = create_fhir_type(
+        "MeasureGroupType", "fhir.resources.measure.MeasureGroup"
+    )
+
+    MeasureGroupPopulationType = create_fhir_type(
+        "MeasureGroupPopulationType", "fhir.resources.measure.MeasureGroupPopulation"
+    )
+
+    MeasureGroupStratifierType = create_fhir_type(
+        "MeasureGroupStratifierType", "fhir.resources.measure.MeasureGroupStratifier"
+    )
+
+    MeasureGroupStratifierComponentType = create_fhir_type(
+        "MeasureGroupStratifierComponentType",
+        "fhir.resources.measure.MeasureGroupStratifierComponent",
+    )
+
+    MeasureReportType = create_fhir_type(
+        "MeasureReportType", "fhir.resources.measurereport.MeasureReport"
+    )
+
+    MeasureReportGroupType = create_fhir_type(
+        "MeasureReportGroupType", "fhir.resources.measurereport.MeasureReportGroup"
+    )
+
+    MeasureReportGroupPopulationType = create_fhir_type(
+        "MeasureReportGroupPopulationType",
+        "fhir.resources.measurereport.MeasureReportGroupPopulation",
+    )
+
+    MeasureReportGroupStratifierType = create_fhir_type(
+        "MeasureReportGroupStratifierType",
+        "fhir.resources.measurereport.MeasureReportGroupStratifier",
+    )
+
+    MeasureReportGroupStratifierStratumType = create_fhir_type(
+        "MeasureReportGroupStratifierStratumType",
+        "fhir.resources.measurereport.MeasureReportGroupStratifierStratum",
+    )
+
+    MeasureReportGroupStratifierStratumComponentType = create_fhir_type(
+        "MeasureReportGroupStratifierStratumComponentType",
+        "fhir.resources.measurereport.MeasureReportGroupStratifierStratumComponent",
+    )
+
+    MeasureReportGroupStratifierStratumPopulationType = create_fhir_type(
+        "MeasureReportGroupStratifierStratumPopulationType",
+        "fhir.resources.measurereport.MeasureReportGroupStratifierStratumPopulation",
+    )
+
+    MeasureSupplementalDataType = create_fhir_type(
+        "MeasureSupplementalDataType", "fhir.resources.measure.MeasureSupplementalData"
+    )
+
+    MeasureTermType = create_fhir_type(
+        "MeasureTermType", "fhir.resources.measure.MeasureTerm"
+    )
+
+    MedicationType = create_fhir_type(
+        "MedicationType", "fhir.resources.medication.Medication"
+    )
+
+    MedicationAdministrationType = create_fhir_type(
+        "MedicationAdministrationType",
+        "fhir.resources.medicationadministration.MedicationAdministration",
+    )
+
+    MedicationAdministrationDosageType = create_fhir_type(
+        "MedicationAdministrationDosageType",
+        "fhir.resources.medicationadministration.MedicationAdministrationDosage",
+    )
+
+    MedicationAdministrationPerformerType = create_fhir_type(
+        "MedicationAdministrationPerformerType",
+        "fhir.resources.medicationadministration.MedicationAdministrationPerformer",
+    )
+
+    MedicationBatchType = create_fhir_type(
+        "MedicationBatchType", "fhir.resources.medication.MedicationBatch"
+    )
+
+    MedicationDispenseType = create_fhir_type(
+        "MedicationDispenseType", "fhir.resources.medicationdispense.MedicationDispense"
+    )
+
+    MedicationDispensePerformerType = create_fhir_type(
+        "MedicationDispensePerformerType",
+        "fhir.resources.medicationdispense.MedicationDispensePerformer",
+    )
+
+    MedicationDispenseSubstitutionType = create_fhir_type(
+        "MedicationDispenseSubstitutionType",
+        "fhir.resources.medicationdispense.MedicationDispenseSubstitution",
+    )
+
+    MedicationIngredientType = create_fhir_type(
+        "MedicationIngredientType", "fhir.resources.medication.MedicationIngredient"
+    )
+
+    MedicationKnowledgeType = create_fhir_type(
+        "MedicationKnowledgeType",
+        "fhir.resources.medicationknowledge.MedicationKnowledge",
+    )
+
+    MedicationKnowledgeCostType = create_fhir_type(
+        "MedicationKnowledgeCostType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeCost",
+    )
+
+    MedicationKnowledgeDefinitionalType = create_fhir_type(
+        "MedicationKnowledgeDefinitionalType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeDefinitional",
+    )
+
+    MedicationKnowledgeDefinitionalDrugCharacteristicType = create_fhir_type(
+        "MedicationKnowledgeDefinitionalDrugCharacteristicType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeDefinitionalDrugCharacteristic",
+    )
+
+    MedicationKnowledgeDefinitionalIngredientType = create_fhir_type(
+        "MedicationKnowledgeDefinitionalIngredientType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeDefinitionalIngredient",
+    )
+
+    MedicationKnowledgeIndicationGuidelineType = create_fhir_type(
+        "MedicationKnowledgeIndicationGuidelineType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeIndicationGuideline",
+    )
+
+    MedicationKnowledgeIndicationGuidelineDosingGuidelineType = create_fhir_type(
+        "MedicationKnowledgeIndicationGuidelineDosingGuidelineType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeIndicationGuidelineDosingGuideline",
+    )
+
+    MedicationKnowledgeIndicationGuidelineDosingGuidelineDosageType = create_fhir_type(
+        "MedicationKnowledgeIndicationGuidelineDosingGuidelineDosageType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeIndicationGuidelineDosingGuidelineDosage",
+    )
+
+    MedicationKnowledgeIndicationGuidelineDosingGuidelinePatientCharacteristicType = create_fhir_type(
+        "MedicationKnowledgeIndicationGuidelineDosingGuidelinePatientCharacteristicType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeIndicationGuidelineDosingGuidelinePatientCharacteristic",
+    )
+
+    MedicationKnowledgeMedicineClassificationType = create_fhir_type(
+        "MedicationKnowledgeMedicineClassificationType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeMedicineClassification",
+    )
+
+    MedicationKnowledgeMonitoringProgramType = create_fhir_type(
+        "MedicationKnowledgeMonitoringProgramType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeMonitoringProgram",
+    )
+
+    MedicationKnowledgeMonographType = create_fhir_type(
+        "MedicationKnowledgeMonographType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeMonograph",
+    )
+
+    MedicationKnowledgePackagingType = create_fhir_type(
+        "MedicationKnowledgePackagingType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgePackaging",
+    )
+
+    MedicationKnowledgeRegulatoryType = create_fhir_type(
+        "MedicationKnowledgeRegulatoryType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeRegulatory",
+    )
+
+    MedicationKnowledgeRegulatoryMaxDispenseType = create_fhir_type(
+        "MedicationKnowledgeRegulatoryMaxDispenseType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeRegulatoryMaxDispense",
+    )
+
+    MedicationKnowledgeRegulatorySubstitutionType = create_fhir_type(
+        "MedicationKnowledgeRegulatorySubstitutionType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeRegulatorySubstitution",
+    )
+
+    MedicationKnowledgeRelatedMedicationKnowledgeType = create_fhir_type(
+        "MedicationKnowledgeRelatedMedicationKnowledgeType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeRelatedMedicationKnowledge",
+    )
+
+    MedicationKnowledgeStorageGuidelineType = create_fhir_type(
+        "MedicationKnowledgeStorageGuidelineType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeStorageGuideline",
+    )
+
+    MedicationKnowledgeStorageGuidelineEnvironmentalSettingType = create_fhir_type(
+        "MedicationKnowledgeStorageGuidelineEnvironmentalSettingType",
+        "fhir.resources.medicationknowledge.MedicationKnowledgeStorageGuidelineEnvironmentalSetting",
+    )
+
+    MedicationRequestType = create_fhir_type(
+        "MedicationRequestType", "fhir.resources.medicationrequest.MedicationRequest"
+    )
+
+    MedicationRequestDispenseRequestType = create_fhir_type(
+        "MedicationRequestDispenseRequestType",
+        "fhir.resources.medicationrequest.MedicationRequestDispenseRequest",
+    )
+
+    MedicationRequestDispenseRequestInitialFillType = create_fhir_type(
+        "MedicationRequestDispenseRequestInitialFillType",
+        "fhir.resources.medicationrequest.MedicationRequestDispenseRequestInitialFill",
+    )
+
+    MedicationRequestSubstitutionType = create_fhir_type(
+        "MedicationRequestSubstitutionType",
+        "fhir.resources.medicationrequest.MedicationRequestSubstitution",
+    )
+
+    MedicationStatementType = create_fhir_type(
+        "MedicationStatementType",
+        "fhir.resources.medicationstatement.MedicationStatement",
+    )
+
+    MedicationStatementAdherenceType = create_fhir_type(
+        "MedicationStatementAdherenceType",
+        "fhir.resources.medicationstatement.MedicationStatementAdherence",
+    )
+
+    MedicinalProductDefinitionType = create_fhir_type(
+        "MedicinalProductDefinitionType",
+        "fhir.resources.medicinalproductdefinition.MedicinalProductDefinition",
+    )
+
+    MedicinalProductDefinitionCharacteristicType = create_fhir_type(
+        "MedicinalProductDefinitionCharacteristicType",
+        "fhir.resources.medicinalproductdefinition.MedicinalProductDefinitionCharacteristic",
+    )
+
+    MedicinalProductDefinitionContactType = create_fhir_type(
+        "MedicinalProductDefinitionContactType",
+        "fhir.resources.medicinalproductdefinition.MedicinalProductDefinitionContact",
+    )
+
+    MedicinalProductDefinitionCrossReferenceType = create_fhir_type(
+        "MedicinalProductDefinitionCrossReferenceType",
+        "fhir.resources.medicinalproductdefinition.MedicinalProductDefinitionCrossReference",
+    )
+
+    MedicinalProductDefinitionNameType = create_fhir_type(
+        "MedicinalProductDefinitionNameType",
+        "fhir.resources.medicinalproductdefinition.MedicinalProductDefinitionName",
+    )
+
+    MedicinalProductDefinitionNamePartType = create_fhir_type(
+        "MedicinalProductDefinitionNamePartType",
+        "fhir.resources.medicinalproductdefinition.MedicinalProductDefinitionNamePart",
+    )
+
+    MedicinalProductDefinitionNameUsageType = create_fhir_type(
+        "MedicinalProductDefinitionNameUsageType",
+        "fhir.resources.medicinalproductdefinition.MedicinalProductDefinitionNameUsage",
+    )
+
+    MedicinalProductDefinitionOperationType = create_fhir_type(
+        "MedicinalProductDefinitionOperationType",
+        "fhir.resources.medicinalproductdefinition.MedicinalProductDefinitionOperation",
+    )
+
+    MessageDefinitionType = create_fhir_type(
+        "MessageDefinitionType", "fhir.resources.messagedefinition.MessageDefinition"
+    )
+
+    MessageDefinitionAllowedResponseType = create_fhir_type(
+        "MessageDefinitionAllowedResponseType",
+        "fhir.resources.messagedefinition.MessageDefinitionAllowedResponse",
+    )
+
+    MessageDefinitionFocusType = create_fhir_type(
+        "MessageDefinitionFocusType",
+        "fhir.resources.messagedefinition.MessageDefinitionFocus",
+    )
+
+    MessageHeaderType = create_fhir_type(
+        "MessageHeaderType", "fhir.resources.messageheader.MessageHeader"
+    )
+
+    MessageHeaderDestinationType = create_fhir_type(
+        "MessageHeaderDestinationType",
+        "fhir.resources.messageheader.MessageHeaderDestination",
+    )
+
+    MessageHeaderResponseType = create_fhir_type(
+        "MessageHeaderResponseType",
+        "fhir.resources.messageheader.MessageHeaderResponse",
+    )
+
+    MessageHeaderSourceType = create_fhir_type(
+        "MessageHeaderSourceType", "fhir.resources.messageheader.MessageHeaderSource"
+    )
+
+    MetaType = create_fhir_type("MetaType", "fhir.resources.meta.Meta")
+
+    MetadataResourceType = create_fhir_type(
+        "MetadataResourceType", "fhir.resources.metadataresource.MetadataResource"
+    )
+
+    MolecularSequenceType = create_fhir_type(
+        "MolecularSequenceType", "fhir.resources.molecularsequence.MolecularSequence"
+    )
+
+    MolecularSequenceRelativeType = create_fhir_type(
+        "MolecularSequenceRelativeType",
+        "fhir.resources.molecularsequence.MolecularSequenceRelative",
+    )
+
+    MolecularSequenceRelativeEditType = create_fhir_type(
+        "MolecularSequenceRelativeEditType",
+        "fhir.resources.molecularsequence.MolecularSequenceRelativeEdit",
+    )
+
+    MolecularSequenceRelativeStartingSequenceType = create_fhir_type(
+        "MolecularSequenceRelativeStartingSequenceType",
+        "fhir.resources.molecularsequence.MolecularSequenceRelativeStartingSequence",
+    )
+
+    MonetaryComponentType = create_fhir_type(
+        "MonetaryComponentType", "fhir.resources.monetarycomponent.MonetaryComponent"
+    )
+
+    MoneyType = create_fhir_type("MoneyType", "fhir.resources.money.Money")
+
+    NamingSystemType = create_fhir_type(
+        "NamingSystemType", "fhir.resources.namingsystem.NamingSystem"
+    )
+
+    NamingSystemUniqueIdType = create_fhir_type(
+        "NamingSystemUniqueIdType", "fhir.resources.namingsystem.NamingSystemUniqueId"
+    )
+
+    NarrativeType = create_fhir_type(
+        "NarrativeType", "fhir.resources.narrative.Narrative"
+    )
+
+    NutritionIntakeType = create_fhir_type(
+        "NutritionIntakeType", "fhir.resources.nutritionintake.NutritionIntake"
+    )
+
+    NutritionIntakeConsumedItemType = create_fhir_type(
+        "NutritionIntakeConsumedItemType",
+        "fhir.resources.nutritionintake.NutritionIntakeConsumedItem",
+    )
+
+    NutritionIntakeIngredientLabelType = create_fhir_type(
+        "NutritionIntakeIngredientLabelType",
+        "fhir.resources.nutritionintake.NutritionIntakeIngredientLabel",
+    )
+
+    NutritionIntakePerformerType = create_fhir_type(
+        "NutritionIntakePerformerType",
+        "fhir.resources.nutritionintake.NutritionIntakePerformer",
+    )
+
+    NutritionOrderType = create_fhir_type(
+        "NutritionOrderType", "fhir.resources.nutritionorder.NutritionOrder"
+    )
+
+    NutritionOrderEnteralFormulaType = create_fhir_type(
+        "NutritionOrderEnteralFormulaType",
+        "fhir.resources.nutritionorder.NutritionOrderEnteralFormula",
+    )
+
+    NutritionOrderEnteralFormulaAdditiveType = create_fhir_type(
+        "NutritionOrderEnteralFormulaAdditiveType",
+        "fhir.resources.nutritionorder.NutritionOrderEnteralFormulaAdditive",
+    )
+
+    NutritionOrderEnteralFormulaAdministrationType = create_fhir_type(
+        "NutritionOrderEnteralFormulaAdministrationType",
+        "fhir.resources.nutritionorder.NutritionOrderEnteralFormulaAdministration",
+    )
+
+    NutritionOrderEnteralFormulaAdministrationScheduleType = create_fhir_type(
+        "NutritionOrderEnteralFormulaAdministrationScheduleType",
+        "fhir.resources.nutritionorder.NutritionOrderEnteralFormulaAdministrationSchedule",
+    )
+
+    NutritionOrderOralDietType = create_fhir_type(
+        "NutritionOrderOralDietType",
+        "fhir.resources.nutritionorder.NutritionOrderOralDiet",
+    )
+
+    NutritionOrderOralDietNutrientType = create_fhir_type(
+        "NutritionOrderOralDietNutrientType",
+        "fhir.resources.nutritionorder.NutritionOrderOralDietNutrient",
+    )
+
+    NutritionOrderOralDietScheduleType = create_fhir_type(
+        "NutritionOrderOralDietScheduleType",
+        "fhir.resources.nutritionorder.NutritionOrderOralDietSchedule",
+    )
+
+    NutritionOrderOralDietTextureType = create_fhir_type(
+        "NutritionOrderOralDietTextureType",
+        "fhir.resources.nutritionorder.NutritionOrderOralDietTexture",
+    )
+
+    NutritionOrderSupplementType = create_fhir_type(
+        "NutritionOrderSupplementType",
+        "fhir.resources.nutritionorder.NutritionOrderSupplement",
+    )
+
+    NutritionOrderSupplementScheduleType = create_fhir_type(
+        "NutritionOrderSupplementScheduleType",
+        "fhir.resources.nutritionorder.NutritionOrderSupplementSchedule",
+    )
+
+    NutritionProductType = create_fhir_type(
+        "NutritionProductType", "fhir.resources.nutritionproduct.NutritionProduct"
+    )
+
+    NutritionProductCharacteristicType = create_fhir_type(
+        "NutritionProductCharacteristicType",
+        "fhir.resources.nutritionproduct.NutritionProductCharacteristic",
+    )
+
+    NutritionProductIngredientType = create_fhir_type(
+        "NutritionProductIngredientType",
+        "fhir.resources.nutritionproduct.NutritionProductIngredient",
+    )
+
+    NutritionProductInstanceType = create_fhir_type(
+        "NutritionProductInstanceType",
+        "fhir.resources.nutritionproduct.NutritionProductInstance",
+    )
+
+    NutritionProductNutrientType = create_fhir_type(
+        "NutritionProductNutrientType",
+        "fhir.resources.nutritionproduct.NutritionProductNutrient",
+    )
+
+    ObservationType = create_fhir_type(
+        "ObservationType", "fhir.resources.observation.Observation"
+    )
+
+    ObservationComponentType = create_fhir_type(
+        "ObservationComponentType", "fhir.resources.observation.ObservationComponent"
+    )
+
+    ObservationDefinitionType = create_fhir_type(
+        "ObservationDefinitionType",
+        "fhir.resources.observationdefinition.ObservationDefinition",
+    )
+
+    ObservationDefinitionComponentType = create_fhir_type(
+        "ObservationDefinitionComponentType",
+        "fhir.resources.observationdefinition.ObservationDefinitionComponent",
+    )
+
+    ObservationDefinitionQualifiedValueType = create_fhir_type(
+        "ObservationDefinitionQualifiedValueType",
+        "fhir.resources.observationdefinition.ObservationDefinitionQualifiedValue",
+    )
+
+    ObservationReferenceRangeType = create_fhir_type(
+        "ObservationReferenceRangeType",
+        "fhir.resources.observation.ObservationReferenceRange",
+    )
+
+    ObservationTriggeredByType = create_fhir_type(
+        "ObservationTriggeredByType",
+        "fhir.resources.observation.ObservationTriggeredBy",
+    )
+
+    OperationDefinitionType = create_fhir_type(
+        "OperationDefinitionType",
+        "fhir.resources.operationdefinition.OperationDefinition",
+    )
+
+    OperationDefinitionOverloadType = create_fhir_type(
+        "OperationDefinitionOverloadType",
+        "fhir.resources.operationdefinition.OperationDefinitionOverload",
+    )
+
+    OperationDefinitionParameterType = create_fhir_type(
+        "OperationDefinitionParameterType",
+        "fhir.resources.operationdefinition.OperationDefinitionParameter",
+    )
+
+    OperationDefinitionParameterBindingType = create_fhir_type(
+        "OperationDefinitionParameterBindingType",
+        "fhir.resources.operationdefinition.OperationDefinitionParameterBinding",
+    )
+
+    OperationDefinitionParameterReferencedFromType = create_fhir_type(
+        "OperationDefinitionParameterReferencedFromType",
+        "fhir.resources.operationdefinition.OperationDefinitionParameterReferencedFrom",
+    )
+
+    OperationOutcomeType = create_fhir_type(
+        "OperationOutcomeType", "fhir.resources.operationoutcome.OperationOutcome"
+    )
+
+    OperationOutcomeIssueType = create_fhir_type(
+        "OperationOutcomeIssueType",
+        "fhir.resources.operationoutcome.OperationOutcomeIssue",
+    )
+
+    OrganizationType = create_fhir_type(
+        "OrganizationType", "fhir.resources.organization.Organization"
+    )
+
+    OrganizationAffiliationType = create_fhir_type(
+        "OrganizationAffiliationType",
+        "fhir.resources.organizationaffiliation.OrganizationAffiliation",
+    )
+
+    OrganizationQualificationType = create_fhir_type(
+        "OrganizationQualificationType",
+        "fhir.resources.organization.OrganizationQualification",
+    )
+
+    PackagedProductDefinitionType = create_fhir_type(
+        "PackagedProductDefinitionType",
+        "fhir.resources.packagedproductdefinition.PackagedProductDefinition",
+    )
+
+    PackagedProductDefinitionLegalStatusOfSupplyType = create_fhir_type(
+        "PackagedProductDefinitionLegalStatusOfSupplyType",
+        "fhir.resources.packagedproductdefinition.PackagedProductDefinitionLegalStatusOfSupply",
+    )
+
+    PackagedProductDefinitionPackagingType = create_fhir_type(
+        "PackagedProductDefinitionPackagingType",
+        "fhir.resources.packagedproductdefinition.PackagedProductDefinitionPackaging",
+    )
+
+    PackagedProductDefinitionPackagingContainedItemType = create_fhir_type(
+        "PackagedProductDefinitionPackagingContainedItemType",
+        "fhir.resources.packagedproductdefinition.PackagedProductDefinitionPackagingContainedItem",
+    )
+
+    PackagedProductDefinitionPackagingPropertyType = create_fhir_type(
+        "PackagedProductDefinitionPackagingPropertyType",
+        "fhir.resources.packagedproductdefinition.PackagedProductDefinitionPackagingProperty",
+    )
+
+    ParameterDefinitionType = create_fhir_type(
+        "ParameterDefinitionType",
+        "fhir.resources.parameterdefinition.ParameterDefinition",
+    )
+
+    ParametersType = create_fhir_type(
+        "ParametersType", "fhir.resources.parameters.Parameters"
+    )
+
+    ParametersParameterType = create_fhir_type(
+        "ParametersParameterType", "fhir.resources.parameters.ParametersParameter"
+    )
+
+    PatientType = create_fhir_type("PatientType", "fhir.resources.patient.Patient")
+
+    PatientCommunicationType = create_fhir_type(
+        "PatientCommunicationType", "fhir.resources.patient.PatientCommunication"
+    )
+
+    PatientContactType = create_fhir_type(
+        "PatientContactType", "fhir.resources.patient.PatientContact"
+    )
+
+    PatientLinkType = create_fhir_type(
+        "PatientLinkType", "fhir.resources.patient.PatientLink"
+    )
+
+    PaymentNoticeType = create_fhir_type(
+        "PaymentNoticeType", "fhir.resources.paymentnotice.PaymentNotice"
+    )
+
+    PaymentReconciliationType = create_fhir_type(
+        "PaymentReconciliationType",
+        "fhir.resources.paymentreconciliation.PaymentReconciliation",
+    )
+
+    PaymentReconciliationAllocationType = create_fhir_type(
+        "PaymentReconciliationAllocationType",
+        "fhir.resources.paymentreconciliation.PaymentReconciliationAllocation",
+    )
+
+    PaymentReconciliationProcessNoteType = create_fhir_type(
+        "PaymentReconciliationProcessNoteType",
+        "fhir.resources.paymentreconciliation.PaymentReconciliationProcessNote",
+    )
+
+    PeriodType = create_fhir_type("PeriodType", "fhir.resources.period.Period")
+
+    PermissionType = create_fhir_type(
+        "PermissionType", "fhir.resources.permission.Permission"
+    )
+
+    PermissionJustificationType = create_fhir_type(
+        "PermissionJustificationType",
+        "fhir.resources.permission.PermissionJustification",
+    )
+
+    PermissionRuleType = create_fhir_type(
+        "PermissionRuleType", "fhir.resources.permission.PermissionRule"
+    )
+
+    PermissionRuleActivityType = create_fhir_type(
+        "PermissionRuleActivityType", "fhir.resources.permission.PermissionRuleActivity"
+    )
+
+    PermissionRuleDataType = create_fhir_type(
+        "PermissionRuleDataType", "fhir.resources.permission.PermissionRuleData"
+    )
+
+    PermissionRuleDataResourceType = create_fhir_type(
+        "PermissionRuleDataResourceType",
+        "fhir.resources.permission.PermissionRuleDataResource",
+    )
+
+    PersonType = create_fhir_type("PersonType", "fhir.resources.person.Person")
+
+    PersonCommunicationType = create_fhir_type(
+        "PersonCommunicationType", "fhir.resources.person.PersonCommunication"
+    )
+
+    PersonLinkType = create_fhir_type(
+        "PersonLinkType", "fhir.resources.person.PersonLink"
+    )
+
+    PlanDefinitionType = create_fhir_type(
+        "PlanDefinitionType", "fhir.resources.plandefinition.PlanDefinition"
+    )
+
+    PlanDefinitionActionType = create_fhir_type(
+        "PlanDefinitionActionType", "fhir.resources.plandefinition.PlanDefinitionAction"
+    )
+
+    PlanDefinitionActionConditionType = create_fhir_type(
+        "PlanDefinitionActionConditionType",
+        "fhir.resources.plandefinition.PlanDefinitionActionCondition",
+    )
+
+    PlanDefinitionActionDynamicValueType = create_fhir_type(
+        "PlanDefinitionActionDynamicValueType",
+        "fhir.resources.plandefinition.PlanDefinitionActionDynamicValue",
+    )
+
+    PlanDefinitionActionInputType = create_fhir_type(
+        "PlanDefinitionActionInputType",
+        "fhir.resources.plandefinition.PlanDefinitionActionInput",
+    )
+
+    PlanDefinitionActionOutputType = create_fhir_type(
+        "PlanDefinitionActionOutputType",
+        "fhir.resources.plandefinition.PlanDefinitionActionOutput",
+    )
+
+    PlanDefinitionActionParticipantType = create_fhir_type(
+        "PlanDefinitionActionParticipantType",
+        "fhir.resources.plandefinition.PlanDefinitionActionParticipant",
+    )
+
+    PlanDefinitionActionRelatedActionType = create_fhir_type(
+        "PlanDefinitionActionRelatedActionType",
+        "fhir.resources.plandefinition.PlanDefinitionActionRelatedAction",
+    )
+
+    PlanDefinitionActorType = create_fhir_type(
+        "PlanDefinitionActorType", "fhir.resources.plandefinition.PlanDefinitionActor"
+    )
+
+    PlanDefinitionActorOptionType = create_fhir_type(
+        "PlanDefinitionActorOptionType",
+        "fhir.resources.plandefinition.PlanDefinitionActorOption",
+    )
+
+    PlanDefinitionGoalType = create_fhir_type(
+        "PlanDefinitionGoalType", "fhir.resources.plandefinition.PlanDefinitionGoal"
+    )
+
+    PlanDefinitionGoalTargetType = create_fhir_type(
+        "PlanDefinitionGoalTargetType",
+        "fhir.resources.plandefinition.PlanDefinitionGoalTarget",
+    )
+
+    PractitionerType = create_fhir_type(
+        "PractitionerType", "fhir.resources.practitioner.Practitioner"
+    )
+
+    PractitionerCommunicationType = create_fhir_type(
+        "PractitionerCommunicationType",
+        "fhir.resources.practitioner.PractitionerCommunication",
+    )
+
+    PractitionerQualificationType = create_fhir_type(
+        "PractitionerQualificationType",
+        "fhir.resources.practitioner.PractitionerQualification",
+    )
+
+    PractitionerRoleType = create_fhir_type(
+        "PractitionerRoleType", "fhir.resources.practitionerrole.PractitionerRole"
+    )
+
+    PrimitiveTypeType = create_fhir_type(
+        "PrimitiveTypeType", "fhir.resources.primitivetype.PrimitiveType"
+    )
+
+    ProcedureType = create_fhir_type(
+        "ProcedureType", "fhir.resources.procedure.Procedure"
+    )
+
+    ProcedureFocalDeviceType = create_fhir_type(
+        "ProcedureFocalDeviceType", "fhir.resources.procedure.ProcedureFocalDevice"
+    )
+
+    ProcedurePerformerType = create_fhir_type(
+        "ProcedurePerformerType", "fhir.resources.procedure.ProcedurePerformer"
+    )
+
+    ProductShelfLifeType = create_fhir_type(
+        "ProductShelfLifeType", "fhir.resources.productshelflife.ProductShelfLife"
+    )
+
+    ProvenanceType = create_fhir_type(
+        "ProvenanceType", "fhir.resources.provenance.Provenance"
+    )
+
+    ProvenanceAgentType = create_fhir_type(
+        "ProvenanceAgentType", "fhir.resources.provenance.ProvenanceAgent"
+    )
+
+    ProvenanceEntityType = create_fhir_type(
+        "ProvenanceEntityType", "fhir.resources.provenance.ProvenanceEntity"
+    )
+
+    QuantityType = create_fhir_type("QuantityType", "fhir.resources.quantity.Quantity")
+
+    QuestionnaireType = create_fhir_type(
+        "QuestionnaireType", "fhir.resources.questionnaire.Questionnaire"
+    )
+
+    QuestionnaireItemType = create_fhir_type(
+        "QuestionnaireItemType", "fhir.resources.questionnaire.QuestionnaireItem"
+    )
+
+    QuestionnaireItemAnswerOptionType = create_fhir_type(
+        "QuestionnaireItemAnswerOptionType",
+        "fhir.resources.questionnaire.QuestionnaireItemAnswerOption",
+    )
+
+    QuestionnaireItemEnableWhenType = create_fhir_type(
+        "QuestionnaireItemEnableWhenType",
+        "fhir.resources.questionnaire.QuestionnaireItemEnableWhen",
+    )
+
+    QuestionnaireItemInitialType = create_fhir_type(
+        "QuestionnaireItemInitialType",
+        "fhir.resources.questionnaire.QuestionnaireItemInitial",
+    )
+
+    QuestionnaireResponseType = create_fhir_type(
+        "QuestionnaireResponseType",
+        "fhir.resources.questionnaireresponse.QuestionnaireResponse",
+    )
+
+    QuestionnaireResponseItemType = create_fhir_type(
+        "QuestionnaireResponseItemType",
+        "fhir.resources.questionnaireresponse.QuestionnaireResponseItem",
+    )
+
+    QuestionnaireResponseItemAnswerType = create_fhir_type(
+        "QuestionnaireResponseItemAnswerType",
+        "fhir.resources.questionnaireresponse.QuestionnaireResponseItemAnswer",
+    )
+
+    RangeType = create_fhir_type("RangeType", "fhir.resources.range.Range")
+
+    RatioType = create_fhir_type("RatioType", "fhir.resources.ratio.Ratio")
+
+    RatioRangeType = create_fhir_type(
+        "RatioRangeType", "fhir.resources.ratiorange.RatioRange"
+    )
+
+    ReferenceType = create_fhir_type(
+        "ReferenceType", "fhir.resources.reference.Reference"
+    )
+
+    RegulatedAuthorizationType = create_fhir_type(
+        "RegulatedAuthorizationType",
+        "fhir.resources.regulatedauthorization.RegulatedAuthorization",
+    )
+
+    RegulatedAuthorizationCaseType = create_fhir_type(
+        "RegulatedAuthorizationCaseType",
+        "fhir.resources.regulatedauthorization.RegulatedAuthorizationCase",
+    )
+
+    RelatedArtifactType = create_fhir_type(
+        "RelatedArtifactType", "fhir.resources.relatedartifact.RelatedArtifact"
+    )
+
+    RelatedPersonType = create_fhir_type(
+        "RelatedPersonType", "fhir.resources.relatedperson.RelatedPerson"
+    )
+
+    RelatedPersonCommunicationType = create_fhir_type(
+        "RelatedPersonCommunicationType",
+        "fhir.resources.relatedperson.RelatedPersonCommunication",
+    )
+
+    RequestOrchestrationType = create_fhir_type(
+        "RequestOrchestrationType",
+        "fhir.resources.requestorchestration.RequestOrchestration",
+    )
+
+    RequestOrchestrationActionType = create_fhir_type(
+        "RequestOrchestrationActionType",
+        "fhir.resources.requestorchestration.RequestOrchestrationAction",
+    )
+
+    RequestOrchestrationActionConditionType = create_fhir_type(
+        "RequestOrchestrationActionConditionType",
+        "fhir.resources.requestorchestration.RequestOrchestrationActionCondition",
+    )
+
+    RequestOrchestrationActionDynamicValueType = create_fhir_type(
+        "RequestOrchestrationActionDynamicValueType",
+        "fhir.resources.requestorchestration.RequestOrchestrationActionDynamicValue",
+    )
+
+    RequestOrchestrationActionInputType = create_fhir_type(
+        "RequestOrchestrationActionInputType",
+        "fhir.resources.requestorchestration.RequestOrchestrationActionInput",
+    )
+
+    RequestOrchestrationActionOutputType = create_fhir_type(
+        "RequestOrchestrationActionOutputType",
+        "fhir.resources.requestorchestration.RequestOrchestrationActionOutput",
+    )
+
+    RequestOrchestrationActionParticipantType = create_fhir_type(
+        "RequestOrchestrationActionParticipantType",
+        "fhir.resources.requestorchestration.RequestOrchestrationActionParticipant",
+    )
+
+    RequestOrchestrationActionRelatedActionType = create_fhir_type(
+        "RequestOrchestrationActionRelatedActionType",
+        "fhir.resources.requestorchestration.RequestOrchestrationActionRelatedAction",
+    )
+
+    RequirementsType = create_fhir_type(
+        "RequirementsType", "fhir.resources.requirements.Requirements"
+    )
+
+    RequirementsStatementType = create_fhir_type(
+        "RequirementsStatementType", "fhir.resources.requirements.RequirementsStatement"
+    )
+
+    ResearchStudyType = create_fhir_type(
+        "ResearchStudyType", "fhir.resources.researchstudy.ResearchStudy"
+    )
+
+    ResearchStudyAssociatedPartyType = create_fhir_type(
+        "ResearchStudyAssociatedPartyType",
+        "fhir.resources.researchstudy.ResearchStudyAssociatedParty",
+    )
+
+    ResearchStudyComparisonGroupType = create_fhir_type(
+        "ResearchStudyComparisonGroupType",
+        "fhir.resources.researchstudy.ResearchStudyComparisonGroup",
+    )
+
+    ResearchStudyLabelType = create_fhir_type(
+        "ResearchStudyLabelType", "fhir.resources.researchstudy.ResearchStudyLabel"
+    )
+
+    ResearchStudyObjectiveType = create_fhir_type(
+        "ResearchStudyObjectiveType",
+        "fhir.resources.researchstudy.ResearchStudyObjective",
+    )
+
+    ResearchStudyOutcomeMeasureType = create_fhir_type(
+        "ResearchStudyOutcomeMeasureType",
+        "fhir.resources.researchstudy.ResearchStudyOutcomeMeasure",
+    )
+
+    ResearchStudyProgressStatusType = create_fhir_type(
+        "ResearchStudyProgressStatusType",
+        "fhir.resources.researchstudy.ResearchStudyProgressStatus",
+    )
+
+    ResearchStudyRecruitmentType = create_fhir_type(
+        "ResearchStudyRecruitmentType",
+        "fhir.resources.researchstudy.ResearchStudyRecruitment",
+    )
+
+    ResearchSubjectType = create_fhir_type(
+        "ResearchSubjectType", "fhir.resources.researchsubject.ResearchSubject"
+    )
+
+    ResearchSubjectProgressType = create_fhir_type(
+        "ResearchSubjectProgressType",
+        "fhir.resources.researchsubject.ResearchSubjectProgress",
+    )
+
+    RiskAssessmentType = create_fhir_type(
+        "RiskAssessmentType", "fhir.resources.riskassessment.RiskAssessment"
+    )
+
+    RiskAssessmentPredictionType = create_fhir_type(
+        "RiskAssessmentPredictionType",
+        "fhir.resources.riskassessment.RiskAssessmentPrediction",
+    )
+
+    SampledDataType = create_fhir_type(
+        "SampledDataType", "fhir.resources.sampleddata.SampledData"
+    )
+
+    ScheduleType = create_fhir_type("ScheduleType", "fhir.resources.schedule.Schedule")
+
+    SearchParameterType = create_fhir_type(
+        "SearchParameterType", "fhir.resources.searchparameter.SearchParameter"
+    )
+
+    SearchParameterComponentType = create_fhir_type(
+        "SearchParameterComponentType",
+        "fhir.resources.searchparameter.SearchParameterComponent",
+    )
+
+    ServiceRequestType = create_fhir_type(
+        "ServiceRequestType", "fhir.resources.servicerequest.ServiceRequest"
+    )
+
+    ServiceRequestOrderDetailType = create_fhir_type(
+        "ServiceRequestOrderDetailType",
+        "fhir.resources.servicerequest.ServiceRequestOrderDetail",
+    )
+
+    ServiceRequestOrderDetailParameterType = create_fhir_type(
+        "ServiceRequestOrderDetailParameterType",
+        "fhir.resources.servicerequest.ServiceRequestOrderDetailParameter",
+    )
+
+    ServiceRequestPatientInstructionType = create_fhir_type(
+        "ServiceRequestPatientInstructionType",
+        "fhir.resources.servicerequest.ServiceRequestPatientInstruction",
+    )
+
+    SignatureType = create_fhir_type(
+        "SignatureType", "fhir.resources.signature.Signature"
+    )
+
+    SlotType = create_fhir_type("SlotType", "fhir.resources.slot.Slot")
+
+    SpecimenType = create_fhir_type("SpecimenType", "fhir.resources.specimen.Specimen")
+
+    SpecimenCollectionType = create_fhir_type(
+        "SpecimenCollectionType", "fhir.resources.specimen.SpecimenCollection"
+    )
+
+    SpecimenContainerType = create_fhir_type(
+        "SpecimenContainerType", "fhir.resources.specimen.SpecimenContainer"
+    )
+
+    SpecimenDefinitionType = create_fhir_type(
+        "SpecimenDefinitionType", "fhir.resources.specimendefinition.SpecimenDefinition"
+    )
+
+    SpecimenDefinitionTypeTestedType = create_fhir_type(
+        "SpecimenDefinitionTypeTestedType",
+        "fhir.resources.specimendefinition.SpecimenDefinitionTypeTested",
+    )
+
+    SpecimenDefinitionTypeTestedContainerType = create_fhir_type(
+        "SpecimenDefinitionTypeTestedContainerType",
+        "fhir.resources.specimendefinition.SpecimenDefinitionTypeTestedContainer",
+    )
+
+    SpecimenDefinitionTypeTestedContainerAdditiveType = create_fhir_type(
+        "SpecimenDefinitionTypeTestedContainerAdditiveType",
+        "fhir.resources.specimendefinition.SpecimenDefinitionTypeTestedContainerAdditive",
+    )
+
+    SpecimenDefinitionTypeTestedHandlingType = create_fhir_type(
+        "SpecimenDefinitionTypeTestedHandlingType",
+        "fhir.resources.specimendefinition.SpecimenDefinitionTypeTestedHandling",
+    )
+
+    SpecimenFeatureType = create_fhir_type(
+        "SpecimenFeatureType", "fhir.resources.specimen.SpecimenFeature"
+    )
+
+    SpecimenProcessingType = create_fhir_type(
+        "SpecimenProcessingType", "fhir.resources.specimen.SpecimenProcessing"
+    )
+
+    StructureDefinitionType = create_fhir_type(
+        "StructureDefinitionType",
+        "fhir.resources.structuredefinition.StructureDefinition",
+    )
+
+    StructureDefinitionContextType = create_fhir_type(
+        "StructureDefinitionContextType",
+        "fhir.resources.structuredefinition.StructureDefinitionContext",
+    )
+
+    StructureDefinitionDifferentialType = create_fhir_type(
+        "StructureDefinitionDifferentialType",
+        "fhir.resources.structuredefinition.StructureDefinitionDifferential",
+    )
+
+    StructureDefinitionMappingType = create_fhir_type(
+        "StructureDefinitionMappingType",
+        "fhir.resources.structuredefinition.StructureDefinitionMapping",
+    )
+
+    StructureDefinitionSnapshotType = create_fhir_type(
+        "StructureDefinitionSnapshotType",
+        "fhir.resources.structuredefinition.StructureDefinitionSnapshot",
+    )
+
+    StructureMapType = create_fhir_type(
+        "StructureMapType", "fhir.resources.structuremap.StructureMap"
+    )
+
+    StructureMapConstType = create_fhir_type(
+        "StructureMapConstType", "fhir.resources.structuremap.StructureMapConst"
+    )
+
+    StructureMapGroupType = create_fhir_type(
+        "StructureMapGroupType", "fhir.resources.structuremap.StructureMapGroup"
+    )
+
+    StructureMapGroupInputType = create_fhir_type(
+        "StructureMapGroupInputType",
+        "fhir.resources.structuremap.StructureMapGroupInput",
+    )
+
+    StructureMapGroupRuleType = create_fhir_type(
+        "StructureMapGroupRuleType", "fhir.resources.structuremap.StructureMapGroupRule"
+    )
+
+    StructureMapGroupRuleDependentType = create_fhir_type(
+        "StructureMapGroupRuleDependentType",
+        "fhir.resources.structuremap.StructureMapGroupRuleDependent",
+    )
+
+    StructureMapGroupRuleSourceType = create_fhir_type(
+        "StructureMapGroupRuleSourceType",
+        "fhir.resources.structuremap.StructureMapGroupRuleSource",
+    )
+
+    StructureMapGroupRuleTargetType = create_fhir_type(
+        "StructureMapGroupRuleTargetType",
+        "fhir.resources.structuremap.StructureMapGroupRuleTarget",
+    )
+
+    StructureMapGroupRuleTargetParameterType = create_fhir_type(
+        "StructureMapGroupRuleTargetParameterType",
+        "fhir.resources.structuremap.StructureMapGroupRuleTargetParameter",
+    )
+
+    StructureMapStructureType = create_fhir_type(
+        "StructureMapStructureType", "fhir.resources.structuremap.StructureMapStructure"
+    )
+
+    SubscriptionType = create_fhir_type(
+        "SubscriptionType", "fhir.resources.subscription.Subscription"
+    )
+
+    SubscriptionFilterByType = create_fhir_type(
+        "SubscriptionFilterByType", "fhir.resources.subscription.SubscriptionFilterBy"
+    )
+
+    SubscriptionParameterType = create_fhir_type(
+        "SubscriptionParameterType", "fhir.resources.subscription.SubscriptionParameter"
+    )
+
+    SubscriptionStatusType = create_fhir_type(
+        "SubscriptionStatusType", "fhir.resources.subscriptionstatus.SubscriptionStatus"
+    )
+
+    SubscriptionStatusNotificationEventType = create_fhir_type(
+        "SubscriptionStatusNotificationEventType",
+        "fhir.resources.subscriptionstatus.SubscriptionStatusNotificationEvent",
+    )
+
+    SubscriptionTopicType = create_fhir_type(
+        "SubscriptionTopicType", "fhir.resources.subscriptiontopic.SubscriptionTopic"
+    )
+
+    SubscriptionTopicCanFilterByType = create_fhir_type(
+        "SubscriptionTopicCanFilterByType",
+        "fhir.resources.subscriptiontopic.SubscriptionTopicCanFilterBy",
+    )
+
+    SubscriptionTopicEventTriggerType = create_fhir_type(
+        "SubscriptionTopicEventTriggerType",
+        "fhir.resources.subscriptiontopic.SubscriptionTopicEventTrigger",
+    )
+
+    SubscriptionTopicNotificationShapeType = create_fhir_type(
+        "SubscriptionTopicNotificationShapeType",
+        "fhir.resources.subscriptiontopic.SubscriptionTopicNotificationShape",
+    )
+
+    SubscriptionTopicResourceTriggerType = create_fhir_type(
+        "SubscriptionTopicResourceTriggerType",
+        "fhir.resources.subscriptiontopic.SubscriptionTopicResourceTrigger",
+    )
+
+    SubscriptionTopicResourceTriggerQueryCriteriaType = create_fhir_type(
+        "SubscriptionTopicResourceTriggerQueryCriteriaType",
+        "fhir.resources.subscriptiontopic.SubscriptionTopicResourceTriggerQueryCriteria",
+    )
+
+    SubstanceType = create_fhir_type(
+        "SubstanceType", "fhir.resources.substance.Substance"
+    )
+
+    SubstanceDefinitionType = create_fhir_type(
+        "SubstanceDefinitionType",
+        "fhir.resources.substancedefinition.SubstanceDefinition",
+    )
+
+    SubstanceDefinitionCharacterizationType = create_fhir_type(
+        "SubstanceDefinitionCharacterizationType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionCharacterization",
+    )
+
+    SubstanceDefinitionCodeType = create_fhir_type(
+        "SubstanceDefinitionCodeType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionCode",
+    )
+
+    SubstanceDefinitionMoietyType = create_fhir_type(
+        "SubstanceDefinitionMoietyType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionMoiety",
+    )
+
+    SubstanceDefinitionMolecularWeightType = create_fhir_type(
+        "SubstanceDefinitionMolecularWeightType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionMolecularWeight",
+    )
+
+    SubstanceDefinitionNameType = create_fhir_type(
+        "SubstanceDefinitionNameType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionName",
+    )
+
+    SubstanceDefinitionNameOfficialType = create_fhir_type(
+        "SubstanceDefinitionNameOfficialType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionNameOfficial",
+    )
+
+    SubstanceDefinitionPropertyType = create_fhir_type(
+        "SubstanceDefinitionPropertyType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionProperty",
+    )
+
+    SubstanceDefinitionRelationshipType = create_fhir_type(
+        "SubstanceDefinitionRelationshipType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionRelationship",
+    )
+
+    SubstanceDefinitionSourceMaterialType = create_fhir_type(
+        "SubstanceDefinitionSourceMaterialType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionSourceMaterial",
+    )
+
+    SubstanceDefinitionStructureType = create_fhir_type(
+        "SubstanceDefinitionStructureType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionStructure",
+    )
+
+    SubstanceDefinitionStructureRepresentationType = create_fhir_type(
+        "SubstanceDefinitionStructureRepresentationType",
+        "fhir.resources.substancedefinition.SubstanceDefinitionStructureRepresentation",
+    )
+
+    SubstanceIngredientType = create_fhir_type(
+        "SubstanceIngredientType", "fhir.resources.substance.SubstanceIngredient"
+    )
+
+    SubstanceNucleicAcidType = create_fhir_type(
+        "SubstanceNucleicAcidType",
+        "fhir.resources.substancenucleicacid.SubstanceNucleicAcid",
+    )
+
+    SubstanceNucleicAcidSubunitType = create_fhir_type(
+        "SubstanceNucleicAcidSubunitType",
+        "fhir.resources.substancenucleicacid.SubstanceNucleicAcidSubunit",
+    )
+
+    SubstanceNucleicAcidSubunitLinkageType = create_fhir_type(
+        "SubstanceNucleicAcidSubunitLinkageType",
+        "fhir.resources.substancenucleicacid.SubstanceNucleicAcidSubunitLinkage",
+    )
+
+    SubstanceNucleicAcidSubunitSugarType = create_fhir_type(
+        "SubstanceNucleicAcidSubunitSugarType",
+        "fhir.resources.substancenucleicacid.SubstanceNucleicAcidSubunitSugar",
+    )
+
+    SubstancePolymerType = create_fhir_type(
+        "SubstancePolymerType", "fhir.resources.substancepolymer.SubstancePolymer"
+    )
+
+    SubstancePolymerMonomerSetType = create_fhir_type(
+        "SubstancePolymerMonomerSetType",
+        "fhir.resources.substancepolymer.SubstancePolymerMonomerSet",
+    )
+
+    SubstancePolymerMonomerSetStartingMaterialType = create_fhir_type(
+        "SubstancePolymerMonomerSetStartingMaterialType",
+        "fhir.resources.substancepolymer.SubstancePolymerMonomerSetStartingMaterial",
+    )
+
+    SubstancePolymerRepeatType = create_fhir_type(
+        "SubstancePolymerRepeatType",
+        "fhir.resources.substancepolymer.SubstancePolymerRepeat",
+    )
+
+    SubstancePolymerRepeatRepeatUnitType = create_fhir_type(
+        "SubstancePolymerRepeatRepeatUnitType",
+        "fhir.resources.substancepolymer.SubstancePolymerRepeatRepeatUnit",
+    )
+
+    SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisationType = create_fhir_type(
+        "SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisationType",
+        "fhir.resources.substancepolymer.SubstancePolymerRepeatRepeatUnitDegreeOfPolymerisation",
+    )
+
+    SubstancePolymerRepeatRepeatUnitStructuralRepresentationType = create_fhir_type(
+        "SubstancePolymerRepeatRepeatUnitStructuralRepresentationType",
+        "fhir.resources.substancepolymer.SubstancePolymerRepeatRepeatUnitStructuralRepresentation",
+    )
+
+    SubstanceProteinType = create_fhir_type(
+        "SubstanceProteinType", "fhir.resources.substanceprotein.SubstanceProtein"
+    )
+
+    SubstanceProteinSubunitType = create_fhir_type(
+        "SubstanceProteinSubunitType",
+        "fhir.resources.substanceprotein.SubstanceProteinSubunit",
+    )
+
+    SubstanceReferenceInformationType = create_fhir_type(
+        "SubstanceReferenceInformationType",
+        "fhir.resources.substancereferenceinformation.SubstanceReferenceInformation",
+    )
+
+    SubstanceReferenceInformationGeneType = create_fhir_type(
+        "SubstanceReferenceInformationGeneType",
+        "fhir.resources.substancereferenceinformation.SubstanceReferenceInformationGene",
+    )
+
+    SubstanceReferenceInformationGeneElementType = create_fhir_type(
+        "SubstanceReferenceInformationGeneElementType",
+        "fhir.resources.substancereferenceinformation.SubstanceReferenceInformationGeneElement",
+    )
+
+    SubstanceReferenceInformationTargetType = create_fhir_type(
+        "SubstanceReferenceInformationTargetType",
+        "fhir.resources.substancereferenceinformation.SubstanceReferenceInformationTarget",
+    )
+
+    SubstanceSourceMaterialType = create_fhir_type(
+        "SubstanceSourceMaterialType",
+        "fhir.resources.substancesourcematerial.SubstanceSourceMaterial",
+    )
+
+    SubstanceSourceMaterialFractionDescriptionType = create_fhir_type(
+        "SubstanceSourceMaterialFractionDescriptionType",
+        "fhir.resources.substancesourcematerial.SubstanceSourceMaterialFractionDescription",
+    )
+
+    SubstanceSourceMaterialOrganismType = create_fhir_type(
+        "SubstanceSourceMaterialOrganismType",
+        "fhir.resources.substancesourcematerial.SubstanceSourceMaterialOrganism",
+    )
+
+    SubstanceSourceMaterialOrganismAuthorType = create_fhir_type(
+        "SubstanceSourceMaterialOrganismAuthorType",
+        "fhir.resources.substancesourcematerial.SubstanceSourceMaterialOrganismAuthor",
+    )
+
+    SubstanceSourceMaterialOrganismHybridType = create_fhir_type(
+        "SubstanceSourceMaterialOrganismHybridType",
+        "fhir.resources.substancesourcematerial.SubstanceSourceMaterialOrganismHybrid",
+    )
+
+    SubstanceSourceMaterialOrganismOrganismGeneralType = create_fhir_type(
+        "SubstanceSourceMaterialOrganismOrganismGeneralType",
+        "fhir.resources.substancesourcematerial.SubstanceSourceMaterialOrganismOrganismGeneral",
+    )
+
+    SubstanceSourceMaterialPartDescriptionType = create_fhir_type(
+        "SubstanceSourceMaterialPartDescriptionType",
+        "fhir.resources.substancesourcematerial.SubstanceSourceMaterialPartDescription",
+    )
+
+    SupplyDeliveryType = create_fhir_type(
+        "SupplyDeliveryType", "fhir.resources.supplydelivery.SupplyDelivery"
+    )
+
+    SupplyDeliverySuppliedItemType = create_fhir_type(
+        "SupplyDeliverySuppliedItemType",
+        "fhir.resources.supplydelivery.SupplyDeliverySuppliedItem",
+    )
+
+    SupplyRequestType = create_fhir_type(
+        "SupplyRequestType", "fhir.resources.supplyrequest.SupplyRequest"
+    )
+
+    SupplyRequestParameterType = create_fhir_type(
+        "SupplyRequestParameterType",
+        "fhir.resources.supplyrequest.SupplyRequestParameter",
+    )
+
+    TaskType = create_fhir_type("TaskType", "fhir.resources.task.Task")
+
+    TaskInputType = create_fhir_type("TaskInputType", "fhir.resources.task.TaskInput")
+
+    TaskOutputType = create_fhir_type(
+        "TaskOutputType", "fhir.resources.task.TaskOutput"
+    )
+
+    TaskPerformerType = create_fhir_type(
+        "TaskPerformerType", "fhir.resources.task.TaskPerformer"
+    )
+
+    TaskRestrictionType = create_fhir_type(
+        "TaskRestrictionType", "fhir.resources.task.TaskRestriction"
+    )
+
+    TerminologyCapabilitiesType = create_fhir_type(
+        "TerminologyCapabilitiesType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilities",
+    )
+
+    TerminologyCapabilitiesClosureType = create_fhir_type(
+        "TerminologyCapabilitiesClosureType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesClosure",
+    )
+
+    TerminologyCapabilitiesCodeSystemType = create_fhir_type(
+        "TerminologyCapabilitiesCodeSystemType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesCodeSystem",
+    )
+
+    TerminologyCapabilitiesCodeSystemVersionType = create_fhir_type(
+        "TerminologyCapabilitiesCodeSystemVersionType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesCodeSystemVersion",
+    )
+
+    TerminologyCapabilitiesCodeSystemVersionFilterType = create_fhir_type(
+        "TerminologyCapabilitiesCodeSystemVersionFilterType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesCodeSystemVersionFilter",
+    )
+
+    TerminologyCapabilitiesExpansionType = create_fhir_type(
+        "TerminologyCapabilitiesExpansionType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesExpansion",
+    )
+
+    TerminologyCapabilitiesExpansionParameterType = create_fhir_type(
+        "TerminologyCapabilitiesExpansionParameterType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesExpansionParameter",
+    )
+
+    TerminologyCapabilitiesImplementationType = create_fhir_type(
+        "TerminologyCapabilitiesImplementationType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesImplementation",
+    )
+
+    TerminologyCapabilitiesSoftwareType = create_fhir_type(
+        "TerminologyCapabilitiesSoftwareType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesSoftware",
+    )
+
+    TerminologyCapabilitiesTranslationType = create_fhir_type(
+        "TerminologyCapabilitiesTranslationType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesTranslation",
+    )
+
+    TerminologyCapabilitiesValidateCodeType = create_fhir_type(
+        "TerminologyCapabilitiesValidateCodeType",
+        "fhir.resources.terminologycapabilities.TerminologyCapabilitiesValidateCode",
+    )
+
+    TestPlanType = create_fhir_type("TestPlanType", "fhir.resources.testplan.TestPlan")
+
+    TestPlanDependencyType = create_fhir_type(
+        "TestPlanDependencyType", "fhir.resources.testplan.TestPlanDependency"
+    )
+
+    TestPlanTestCaseType = create_fhir_type(
+        "TestPlanTestCaseType", "fhir.resources.testplan.TestPlanTestCase"
+    )
+
+    TestPlanTestCaseAssertionType = create_fhir_type(
+        "TestPlanTestCaseAssertionType",
+        "fhir.resources.testplan.TestPlanTestCaseAssertion",
+    )
+
+    TestPlanTestCaseDependencyType = create_fhir_type(
+        "TestPlanTestCaseDependencyType",
+        "fhir.resources.testplan.TestPlanTestCaseDependency",
+    )
+
+    TestPlanTestCaseTestDataType = create_fhir_type(
+        "TestPlanTestCaseTestDataType",
+        "fhir.resources.testplan.TestPlanTestCaseTestData",
+    )
+
+    TestPlanTestCaseTestRunType = create_fhir_type(
+        "TestPlanTestCaseTestRunType", "fhir.resources.testplan.TestPlanTestCaseTestRun"
+    )
+
+    TestPlanTestCaseTestRunScriptType = create_fhir_type(
+        "TestPlanTestCaseTestRunScriptType",
+        "fhir.resources.testplan.TestPlanTestCaseTestRunScript",
+    )
+
+    TestReportType = create_fhir_type(
+        "TestReportType", "fhir.resources.testreport.TestReport"
+    )
+
+    TestReportParticipantType = create_fhir_type(
+        "TestReportParticipantType", "fhir.resources.testreport.TestReportParticipant"
+    )
+
+    TestReportSetupType = create_fhir_type(
+        "TestReportSetupType", "fhir.resources.testreport.TestReportSetup"
+    )
+
+    TestReportSetupActionType = create_fhir_type(
+        "TestReportSetupActionType", "fhir.resources.testreport.TestReportSetupAction"
+    )
+
+    TestReportSetupActionAssertType = create_fhir_type(
+        "TestReportSetupActionAssertType",
+        "fhir.resources.testreport.TestReportSetupActionAssert",
+    )
+
+    TestReportSetupActionAssertRequirementType = create_fhir_type(
+        "TestReportSetupActionAssertRequirementType",
+        "fhir.resources.testreport.TestReportSetupActionAssertRequirement",
+    )
+
+    TestReportSetupActionOperationType = create_fhir_type(
+        "TestReportSetupActionOperationType",
+        "fhir.resources.testreport.TestReportSetupActionOperation",
+    )
+
+    TestReportTeardownType = create_fhir_type(
+        "TestReportTeardownType", "fhir.resources.testreport.TestReportTeardown"
+    )
+
+    TestReportTeardownActionType = create_fhir_type(
+        "TestReportTeardownActionType",
+        "fhir.resources.testreport.TestReportTeardownAction",
+    )
+
+    TestReportTestType = create_fhir_type(
+        "TestReportTestType", "fhir.resources.testreport.TestReportTest"
+    )
+
+    TestReportTestActionType = create_fhir_type(
+        "TestReportTestActionType", "fhir.resources.testreport.TestReportTestAction"
+    )
+
+    TestScriptType = create_fhir_type(
+        "TestScriptType", "fhir.resources.testscript.TestScript"
+    )
+
+    TestScriptDestinationType = create_fhir_type(
+        "TestScriptDestinationType", "fhir.resources.testscript.TestScriptDestination"
+    )
+
+    TestScriptFixtureType = create_fhir_type(
+        "TestScriptFixtureType", "fhir.resources.testscript.TestScriptFixture"
+    )
+
+    TestScriptMetadataType = create_fhir_type(
+        "TestScriptMetadataType", "fhir.resources.testscript.TestScriptMetadata"
+    )
+
+    TestScriptMetadataCapabilityType = create_fhir_type(
+        "TestScriptMetadataCapabilityType",
+        "fhir.resources.testscript.TestScriptMetadataCapability",
+    )
+
+    TestScriptMetadataLinkType = create_fhir_type(
+        "TestScriptMetadataLinkType", "fhir.resources.testscript.TestScriptMetadataLink"
+    )
+
+    TestScriptOriginType = create_fhir_type(
+        "TestScriptOriginType", "fhir.resources.testscript.TestScriptOrigin"
+    )
+
+    TestScriptScopeType = create_fhir_type(
+        "TestScriptScopeType", "fhir.resources.testscript.TestScriptScope"
+    )
+
+    TestScriptSetupType = create_fhir_type(
+        "TestScriptSetupType", "fhir.resources.testscript.TestScriptSetup"
+    )
+
+    TestScriptSetupActionType = create_fhir_type(
+        "TestScriptSetupActionType", "fhir.resources.testscript.TestScriptSetupAction"
+    )
+
+    TestScriptSetupActionAssertType = create_fhir_type(
+        "TestScriptSetupActionAssertType",
+        "fhir.resources.testscript.TestScriptSetupActionAssert",
+    )
+
+    TestScriptSetupActionAssertRequirementType = create_fhir_type(
+        "TestScriptSetupActionAssertRequirementType",
+        "fhir.resources.testscript.TestScriptSetupActionAssertRequirement",
+    )
+
+    TestScriptSetupActionOperationType = create_fhir_type(
+        "TestScriptSetupActionOperationType",
+        "fhir.resources.testscript.TestScriptSetupActionOperation",
+    )
+
+    TestScriptSetupActionOperationRequestHeaderType = create_fhir_type(
+        "TestScriptSetupActionOperationRequestHeaderType",
+        "fhir.resources.testscript.TestScriptSetupActionOperationRequestHeader",
+    )
+
+    TestScriptTeardownType = create_fhir_type(
+        "TestScriptTeardownType", "fhir.resources.testscript.TestScriptTeardown"
+    )
+
+    TestScriptTeardownActionType = create_fhir_type(
+        "TestScriptTeardownActionType",
+        "fhir.resources.testscript.TestScriptTeardownAction",
+    )
+
+    TestScriptTestType = create_fhir_type(
+        "TestScriptTestType", "fhir.resources.testscript.TestScriptTest"
+    )
+
+    TestScriptTestActionType = create_fhir_type(
+        "TestScriptTestActionType", "fhir.resources.testscript.TestScriptTestAction"
+    )
+
+    TestScriptVariableType = create_fhir_type(
+        "TestScriptVariableType", "fhir.resources.testscript.TestScriptVariable"
+    )
+
+    TimingType = create_fhir_type("TimingType", "fhir.resources.timing.Timing")
+
+    TimingRepeatType = create_fhir_type(
+        "TimingRepeatType", "fhir.resources.timing.TimingRepeat"
+    )
+
+    TransportType = create_fhir_type(
+        "TransportType", "fhir.resources.transport.Transport"
+    )
+
+    TransportInputType = create_fhir_type(
+        "TransportInputType", "fhir.resources.transport.TransportInput"
+    )
+
+    TransportOutputType = create_fhir_type(
+        "TransportOutputType", "fhir.resources.transport.TransportOutput"
+    )
+
+    TransportRestrictionType = create_fhir_type(
+        "TransportRestrictionType", "fhir.resources.transport.TransportRestriction"
+    )
+
+    TriggerDefinitionType = create_fhir_type(
+        "TriggerDefinitionType", "fhir.resources.triggerdefinition.TriggerDefinition"
+    )
+
+    UsageContextType = create_fhir_type(
+        "UsageContextType", "fhir.resources.usagecontext.UsageContext"
+    )
+
+    ValueSetType = create_fhir_type("ValueSetType", "fhir.resources.valueset.ValueSet")
+
+    ValueSetComposeType = create_fhir_type(
+        "ValueSetComposeType", "fhir.resources.valueset.ValueSetCompose"
+    )
+
+    ValueSetComposeIncludeType = create_fhir_type(
+        "ValueSetComposeIncludeType", "fhir.resources.valueset.ValueSetComposeInclude"
+    )
+
+    ValueSetComposeIncludeConceptType = create_fhir_type(
+        "ValueSetComposeIncludeConceptType",
+        "fhir.resources.valueset.ValueSetComposeIncludeConcept",
+    )
+
+    ValueSetComposeIncludeConceptDesignationType = create_fhir_type(
+        "ValueSetComposeIncludeConceptDesignationType",
+        "fhir.resources.valueset.ValueSetComposeIncludeConceptDesignation",
+    )
+
+    ValueSetComposeIncludeFilterType = create_fhir_type(
+        "ValueSetComposeIncludeFilterType",
+        "fhir.resources.valueset.ValueSetComposeIncludeFilter",
+    )
+
+    ValueSetExpansionType = create_fhir_type(
+        "ValueSetExpansionType", "fhir.resources.valueset.ValueSetExpansion"
+    )
+
+    ValueSetExpansionContainsType = create_fhir_type(
+        "ValueSetExpansionContainsType",
+        "fhir.resources.valueset.ValueSetExpansionContains",
+    )
+
+    ValueSetExpansionContainsPropertyType = create_fhir_type(
+        "ValueSetExpansionContainsPropertyType",
+        "fhir.resources.valueset.ValueSetExpansionContainsProperty",
+    )
+
+    ValueSetExpansionContainsPropertySubPropertyType = create_fhir_type(
+        "ValueSetExpansionContainsPropertySubPropertyType",
+        "fhir.resources.valueset.ValueSetExpansionContainsPropertySubProperty",
+    )
+
+    ValueSetExpansionParameterType = create_fhir_type(
+        "ValueSetExpansionParameterType",
+        "fhir.resources.valueset.ValueSetExpansionParameter",
+    )
+
+    ValueSetExpansionPropertyType = create_fhir_type(
+        "ValueSetExpansionPropertyType",
+        "fhir.resources.valueset.ValueSetExpansionProperty",
+    )
+
+    ValueSetScopeType = create_fhir_type(
+        "ValueSetScopeType", "fhir.resources.valueset.ValueSetScope"
+    )
+
+    VerificationResultType = create_fhir_type(
+        "VerificationResultType", "fhir.resources.verificationresult.VerificationResult"
+    )
+
+    VerificationResultAttestationType = create_fhir_type(
+        "VerificationResultAttestationType",
+        "fhir.resources.verificationresult.VerificationResultAttestation",
+    )
+
+    VerificationResultPrimarySourceType = create_fhir_type(
+        "VerificationResultPrimarySourceType",
+        "fhir.resources.verificationresult.VerificationResultPrimarySource",
+    )
+
+    VerificationResultValidatorType = create_fhir_type(
+        "VerificationResultValidatorType",
+        "fhir.resources.verificationresult.VerificationResultValidator",
+    )
+
+    VirtualServiceDetailType = create_fhir_type(
+        "VirtualServiceDetailType",
+        "fhir.resources.virtualservicedetail.VirtualServiceDetail",
+    )
+
+    VisionPrescriptionType = create_fhir_type(
+        "VisionPrescriptionType", "fhir.resources.visionprescription.VisionPrescription"
+    )
+
+    VisionPrescriptionLensSpecificationType = create_fhir_type(
+        "VisionPrescriptionLensSpecificationType",
+        "fhir.resources.visionprescription.VisionPrescriptionLensSpecification",
+    )
+
+    VisionPrescriptionLensSpecificationPrismType = create_fhir_type(
+        "VisionPrescriptionLensSpecificationPrismType",
+        "fhir.resources.visionprescription.VisionPrescriptionLensSpecificationPrism",
+    )
 
 __all__ = [
-    "Boolean",
-    "String",
-    "Base64Binary",
-    "Code",
-    "Id",
-    "Decimal",
-    "Integer",
-    "UnsignedInt",
-    "PositiveInt",
-    "Uri",
-    "Oid",
-    "Uuid",
-    "Canonical",
-    "Url",
-    "Markdown",
-    "Xhtml",
-    "Date",
-    "DateTime",
-    "Instant",
-    "Time",
+    "BooleanType",
+    "StringType",
+    "Base64BinaryType",
+    "CodeType",
+    "IdType",
+    "IntegerType",
+    "Integer64Type",
+    "DecimalType",
+    "UnsignedIntType",
+    "PositiveIntType",
+    "CanonicalType",
+    "UriType",
+    "OidType",
+    "UuidType",
+    "UrlType",
+    "MarkdownType",
+    "XhtmlType",
+    "DateType",
+    "DateTimeType",
+    "InstantType",
+    "TimeType",
     "FHIRPrimitiveExtensionType",
-    "ElementType",
-    "ResourceType",
     "AccountType",
+    "AccountBalanceType",
     "AccountCoverageType",
+    "AccountDiagnosisType",
     "AccountGuarantorType",
+    "AccountProcedureType",
+    "AccountRelatedAccountType",
     "ActivityDefinitionType",
     "ActivityDefinitionDynamicValueType",
     "ActivityDefinitionParticipantType",
+    "ActorDefinitionType",
     "AddressType",
+    "AdministrableProductDefinitionType",
+    "AdministrableProductDefinitionPropertyType",
+    "AdministrableProductDefinitionRouteOfAdministrationType",
+    "AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesType",
+    "AdministrableProductDefinitionRouteOfAdministrationTargetSpeciesWithdrawalPeriodType",
     "AdverseEventType",
+    "AdverseEventContributingFactorType",
+    "AdverseEventMitigatingActionType",
+    "AdverseEventParticipantType",
+    "AdverseEventPreventiveActionType",
+    "AdverseEventSupportingInfoType",
     "AdverseEventSuspectEntityType",
     "AdverseEventSuspectEntityCausalityType",
     "AgeType",
     "AllergyIntoleranceType",
+    "AllergyIntoleranceParticipantType",
     "AllergyIntoleranceReactionType",
     "AnnotationType",
     "AppointmentType",
     "AppointmentParticipantType",
+    "AppointmentRecurrenceTemplateType",
+    "AppointmentRecurrenceTemplateMonthlyTemplateType",
+    "AppointmentRecurrenceTemplateWeeklyTemplateType",
+    "AppointmentRecurrenceTemplateYearlyTemplateType",
     "AppointmentResponseType",
+    "ArtifactAssessmentType",
+    "ArtifactAssessmentContentType",
     "AttachmentType",
     "AuditEventType",
     "AuditEventAgentType",
-    "AuditEventAgentNetworkType",
     "AuditEventEntityType",
     "AuditEventEntityDetailType",
+    "AuditEventOutcomeType",
     "AuditEventSourceType",
+    "AvailabilityType",
+    "AvailabilityAvailableTimeType",
+    "AvailabilityNotAvailableTimeType",
     "BackboneElementType",
+    "BackboneTypeType",
+    "BaseType",
     "BasicType",
     "BinaryType",
     "BiologicallyDerivedProductType",
     "BiologicallyDerivedProductCollectionType",
-    "BiologicallyDerivedProductManipulationType",
-    "BiologicallyDerivedProductProcessingType",
-    "BiologicallyDerivedProductStorageType",
+    "BiologicallyDerivedProductDispenseType",
+    "BiologicallyDerivedProductDispensePerformerType",
+    "BiologicallyDerivedProductPropertyType",
     "BodyStructureType",
+    "BodyStructureIncludedStructureType",
+    "BodyStructureIncludedStructureBodyLandmarkOrientationType",
+    "BodyStructureIncludedStructureBodyLandmarkOrientationDistanceFromLandmarkType",
     "BundleType",
     "BundleEntryType",
     "BundleEntryRequestType",
     "BundleEntryResponseType",
     "BundleEntrySearchType",
     "BundleLinkType",
+    "CanonicalResourceType",
     "CapabilityStatementType",
     "CapabilityStatementDocumentType",
     "CapabilityStatementImplementationType",
@@ -3464,23 +6248,40 @@ __all__ = [
     "CapabilityStatementSoftwareType",
     "CarePlanType",
     "CarePlanActivityType",
-    "CarePlanActivityDetailType",
     "CareTeamType",
     "CareTeamParticipantType",
-    "CatalogEntryType",
-    "CatalogEntryRelatedEntryType",
     "ChargeItemType",
     "ChargeItemDefinitionType",
     "ChargeItemDefinitionApplicabilityType",
     "ChargeItemDefinitionPropertyGroupType",
-    "ChargeItemDefinitionPropertyGroupPriceComponentType",
     "ChargeItemPerformerType",
+    "CitationType",
+    "CitationCitedArtifactType",
+    "CitationCitedArtifactAbstractType",
+    "CitationCitedArtifactClassificationType",
+    "CitationCitedArtifactContributorshipType",
+    "CitationCitedArtifactContributorshipEntryType",
+    "CitationCitedArtifactContributorshipEntryContributionInstanceType",
+    "CitationCitedArtifactContributorshipSummaryType",
+    "CitationCitedArtifactPartType",
+    "CitationCitedArtifactPublicationFormType",
+    "CitationCitedArtifactPublicationFormPublishedInType",
+    "CitationCitedArtifactRelatesToType",
+    "CitationCitedArtifactStatusDateType",
+    "CitationCitedArtifactTitleType",
+    "CitationCitedArtifactVersionType",
+    "CitationCitedArtifactWebLocationType",
+    "CitationClassificationType",
+    "CitationStatusDateType",
+    "CitationSummaryType",
     "ClaimType",
     "ClaimAccidentType",
     "ClaimCareTeamType",
     "ClaimDiagnosisType",
+    "ClaimEventType",
     "ClaimInsuranceType",
     "ClaimItemType",
+    "ClaimItemBodySiteType",
     "ClaimItemDetailType",
     "ClaimItemDetailSubDetailType",
     "ClaimPayeeType",
@@ -3488,21 +6289,31 @@ __all__ = [
     "ClaimRelatedType",
     "ClaimResponseType",
     "ClaimResponseAddItemType",
+    "ClaimResponseAddItemBodySiteType",
     "ClaimResponseAddItemDetailType",
     "ClaimResponseAddItemDetailSubDetailType",
     "ClaimResponseErrorType",
+    "ClaimResponseEventType",
     "ClaimResponseInsuranceType",
     "ClaimResponseItemType",
     "ClaimResponseItemAdjudicationType",
     "ClaimResponseItemDetailType",
     "ClaimResponseItemDetailSubDetailType",
+    "ClaimResponseItemReviewOutcomeType",
     "ClaimResponsePaymentType",
     "ClaimResponseProcessNoteType",
     "ClaimResponseTotalType",
     "ClaimSupportingInfoType",
     "ClinicalImpressionType",
     "ClinicalImpressionFindingType",
-    "ClinicalImpressionInvestigationType",
+    "ClinicalUseDefinitionType",
+    "ClinicalUseDefinitionContraindicationType",
+    "ClinicalUseDefinitionContraindicationOtherTherapyType",
+    "ClinicalUseDefinitionIndicationType",
+    "ClinicalUseDefinitionInteractionType",
+    "ClinicalUseDefinitionInteractionInteractantType",
+    "ClinicalUseDefinitionUndesirableEffectType",
+    "ClinicalUseDefinitionWarningType",
     "CodeSystemType",
     "CodeSystemConceptType",
     "CodeSystemConceptDesignationType",
@@ -3510,6 +6321,7 @@ __all__ = [
     "CodeSystemFilterType",
     "CodeSystemPropertyType",
     "CodeableConceptType",
+    "CodeableReferenceType",
     "CodingType",
     "CommunicationType",
     "CommunicationPayloadType",
@@ -3520,19 +6332,27 @@ __all__ = [
     "CompositionType",
     "CompositionAttesterType",
     "CompositionEventType",
-    "CompositionRelatesToType",
     "CompositionSectionType",
     "ConceptMapType",
+    "ConceptMapAdditionalAttributeType",
     "ConceptMapGroupType",
     "ConceptMapGroupElementType",
     "ConceptMapGroupElementTargetType",
     "ConceptMapGroupElementTargetDependsOnType",
+    "ConceptMapGroupElementTargetPropertyType",
     "ConceptMapGroupUnmappedType",
+    "ConceptMapPropertyType",
     "ConditionType",
-    "ConditionEvidenceType",
+    "ConditionDefinitionType",
+    "ConditionDefinitionMedicationType",
+    "ConditionDefinitionObservationType",
+    "ConditionDefinitionPlanType",
+    "ConditionDefinitionPreconditionType",
+    "ConditionDefinitionQuestionnaireType",
+    "ConditionParticipantType",
     "ConditionStageType",
     "ConsentType",
-    "ConsentPolicyType",
+    "ConsentPolicyBasisType",
     "ConsentProvisionType",
     "ConsentProvisionActorType",
     "ConsentProvisionDataType",
@@ -3562,63 +6382,78 @@ __all__ = [
     "CoverageCostToBeneficiaryType",
     "CoverageCostToBeneficiaryExceptionType",
     "CoverageEligibilityRequestType",
+    "CoverageEligibilityRequestEventType",
     "CoverageEligibilityRequestInsuranceType",
     "CoverageEligibilityRequestItemType",
     "CoverageEligibilityRequestItemDiagnosisType",
     "CoverageEligibilityRequestSupportingInfoType",
     "CoverageEligibilityResponseType",
     "CoverageEligibilityResponseErrorType",
+    "CoverageEligibilityResponseEventType",
     "CoverageEligibilityResponseInsuranceType",
     "CoverageEligibilityResponseInsuranceItemType",
     "CoverageEligibilityResponseInsuranceItemBenefitType",
+    "CoveragePaymentByType",
     "DataRequirementType",
     "DataRequirementCodeFilterType",
     "DataRequirementDateFilterType",
     "DataRequirementSortType",
+    "DataRequirementValueFilterType",
+    "DataTypeType",
     "DetectedIssueType",
     "DetectedIssueEvidenceType",
     "DetectedIssueMitigationType",
     "DeviceType",
+    "DeviceAssociationType",
+    "DeviceAssociationOperationType",
+    "DeviceConformsToType",
     "DeviceDefinitionType",
-    "DeviceDefinitionCapabilityType",
+    "DeviceDefinitionChargeItemType",
+    "DeviceDefinitionClassificationType",
+    "DeviceDefinitionConformsToType",
+    "DeviceDefinitionCorrectiveActionType",
     "DeviceDefinitionDeviceNameType",
+    "DeviceDefinitionGuidelineType",
+    "DeviceDefinitionHasPartType",
+    "DeviceDefinitionLinkType",
     "DeviceDefinitionMaterialType",
+    "DeviceDefinitionPackagingType",
+    "DeviceDefinitionPackagingDistributorType",
     "DeviceDefinitionPropertyType",
-    "DeviceDefinitionSpecializationType",
+    "DeviceDefinitionRegulatoryIdentifierType",
     "DeviceDefinitionUdiDeviceIdentifierType",
-    "DeviceDeviceNameType",
+    "DeviceDefinitionUdiDeviceIdentifierMarketDistributionType",
+    "DeviceDefinitionVersionType",
+    "DeviceDispenseType",
+    "DeviceDispensePerformerType",
     "DeviceMetricType",
     "DeviceMetricCalibrationType",
+    "DeviceNameType",
     "DevicePropertyType",
     "DeviceRequestType",
     "DeviceRequestParameterType",
-    "DeviceSpecializationType",
     "DeviceUdiCarrierType",
-    "DeviceUseStatementType",
+    "DeviceUsageType",
+    "DeviceUsageAdherenceType",
     "DeviceVersionType",
     "DiagnosticReportType",
     "DiagnosticReportMediaType",
+    "DiagnosticReportSupportingInfoType",
     "DistanceType",
-    "DocumentManifestType",
-    "DocumentManifestRelatedType",
     "DocumentReferenceType",
+    "DocumentReferenceAttesterType",
     "DocumentReferenceContentType",
-    "DocumentReferenceContextType",
+    "DocumentReferenceContentProfileType",
     "DocumentReferenceRelatesToType",
     "DomainResourceType",
     "DosageType",
     "DosageDoseAndRateType",
     "DurationType",
-    "EffectEvidenceSynthesisType",
-    "EffectEvidenceSynthesisCertaintyType",
-    "EffectEvidenceSynthesisCertaintyCertaintySubcomponentType",
-    "EffectEvidenceSynthesisEffectEstimateType",
-    "EffectEvidenceSynthesisEffectEstimatePrecisionEstimateType",
-    "EffectEvidenceSynthesisResultsByExposureType",
-    "EffectEvidenceSynthesisSampleSizeType",
+    "ElementType",
     "ElementDefinitionType",
     "ElementDefinitionBaseType",
     "ElementDefinitionBindingType",
+    "ElementDefinitionBindingAdditionalType",
     "ElementDefinitionConstraintType",
     "ElementDefinitionExampleType",
     "ElementDefinitionMappingType",
@@ -3626,22 +6461,42 @@ __all__ = [
     "ElementDefinitionSlicingDiscriminatorType",
     "ElementDefinitionTypeType",
     "EncounterType",
-    "EncounterClassHistoryType",
+    "EncounterAdmissionType",
     "EncounterDiagnosisType",
-    "EncounterHospitalizationType",
+    "EncounterHistoryType",
+    "EncounterHistoryLocationType",
     "EncounterLocationType",
     "EncounterParticipantType",
-    "EncounterStatusHistoryType",
+    "EncounterReasonType",
     "EndpointType",
+    "EndpointPayloadType",
     "EnrollmentRequestType",
     "EnrollmentResponseType",
     "EpisodeOfCareType",
     "EpisodeOfCareDiagnosisType",
+    "EpisodeOfCareReasonType",
     "EpisodeOfCareStatusHistoryType",
     "EventDefinitionType",
     "EvidenceType",
+    "EvidenceCertaintyType",
+    "EvidenceReportType",
+    "EvidenceReportRelatesToType",
+    "EvidenceReportRelatesToTargetType",
+    "EvidenceReportSectionType",
+    "EvidenceReportSubjectType",
+    "EvidenceReportSubjectCharacteristicType",
+    "EvidenceStatisticType",
+    "EvidenceStatisticAttributeEstimateType",
+    "EvidenceStatisticModelCharacteristicType",
+    "EvidenceStatisticModelCharacteristicVariableType",
+    "EvidenceStatisticSampleSizeType",
     "EvidenceVariableType",
+    "EvidenceVariableCategoryType",
     "EvidenceVariableCharacteristicType",
+    "EvidenceVariableCharacteristicDefinitionByCombinationType",
+    "EvidenceVariableCharacteristicDefinitionByTypeAndValueType",
+    "EvidenceVariableCharacteristicTimeFromEventType",
+    "EvidenceVariableDefinitionType",
     "ExampleScenarioType",
     "ExampleScenarioActorType",
     "ExampleScenarioInstanceType",
@@ -3654,17 +6509,21 @@ __all__ = [
     "ExplanationOfBenefitType",
     "ExplanationOfBenefitAccidentType",
     "ExplanationOfBenefitAddItemType",
+    "ExplanationOfBenefitAddItemBodySiteType",
     "ExplanationOfBenefitAddItemDetailType",
     "ExplanationOfBenefitAddItemDetailSubDetailType",
     "ExplanationOfBenefitBenefitBalanceType",
     "ExplanationOfBenefitBenefitBalanceFinancialType",
     "ExplanationOfBenefitCareTeamType",
     "ExplanationOfBenefitDiagnosisType",
+    "ExplanationOfBenefitEventType",
     "ExplanationOfBenefitInsuranceType",
     "ExplanationOfBenefitItemType",
     "ExplanationOfBenefitItemAdjudicationType",
+    "ExplanationOfBenefitItemBodySiteType",
     "ExplanationOfBenefitItemDetailType",
     "ExplanationOfBenefitItemDetailSubDetailType",
+    "ExplanationOfBenefitItemReviewOutcomeType",
     "ExplanationOfBenefitPayeeType",
     "ExplanationOfBenefitPaymentType",
     "ExplanationOfBenefitProcedureType",
@@ -3673,34 +6532,47 @@ __all__ = [
     "ExplanationOfBenefitSupportingInfoType",
     "ExplanationOfBenefitTotalType",
     "ExpressionType",
+    "ExtendedContactDetailType",
     "ExtensionType",
     "FamilyMemberHistoryType",
     "FamilyMemberHistoryConditionType",
+    "FamilyMemberHistoryParticipantType",
+    "FamilyMemberHistoryProcedureType",
     "FlagType",
+    "FormularyItemType",
+    "GenomicStudyType",
+    "GenomicStudyAnalysisType",
+    "GenomicStudyAnalysisDeviceType",
+    "GenomicStudyAnalysisInputType",
+    "GenomicStudyAnalysisOutputType",
+    "GenomicStudyAnalysisPerformerType",
     "GoalType",
     "GoalTargetType",
     "GraphDefinitionType",
     "GraphDefinitionLinkType",
-    "GraphDefinitionLinkTargetType",
-    "GraphDefinitionLinkTargetCompartmentType",
+    "GraphDefinitionLinkCompartmentType",
+    "GraphDefinitionNodeType",
     "GroupType",
     "GroupCharacteristicType",
     "GroupMemberType",
     "GuidanceResponseType",
     "HealthcareServiceType",
-    "HealthcareServiceAvailableTimeType",
     "HealthcareServiceEligibilityType",
-    "HealthcareServiceNotAvailableType",
     "HumanNameType",
     "IdentifierType",
+    "ImagingSelectionType",
+    "ImagingSelectionInstanceType",
+    "ImagingSelectionInstanceImageRegion2DType",
+    "ImagingSelectionInstanceImageRegion3DType",
+    "ImagingSelectionPerformerType",
     "ImagingStudyType",
     "ImagingStudySeriesType",
     "ImagingStudySeriesInstanceType",
     "ImagingStudySeriesPerformerType",
     "ImmunizationType",
-    "ImmunizationEducationType",
     "ImmunizationEvaluationType",
     "ImmunizationPerformerType",
+    "ImmunizationProgramEligibilityType",
     "ImmunizationProtocolAppliedType",
     "ImmunizationReactionType",
     "ImmunizationRecommendationType",
@@ -3718,8 +6590,12 @@ __all__ = [
     "ImplementationGuideManifestType",
     "ImplementationGuideManifestPageType",
     "ImplementationGuideManifestResourceType",
+    "IngredientType",
+    "IngredientManufacturerType",
+    "IngredientSubstanceType",
+    "IngredientSubstanceStrengthType",
+    "IngredientSubstanceStrengthReferenceStrengthType",
     "InsurancePlanType",
-    "InsurancePlanContactType",
     "InsurancePlanCoverageType",
     "InsurancePlanCoverageBenefitType",
     "InsurancePlanCoverageBenefitLimitType",
@@ -3728,9 +6604,18 @@ __all__ = [
     "InsurancePlanPlanSpecificCostType",
     "InsurancePlanPlanSpecificCostBenefitType",
     "InsurancePlanPlanSpecificCostBenefitCostType",
+    "InventoryItemType",
+    "InventoryItemAssociationType",
+    "InventoryItemCharacteristicType",
+    "InventoryItemDescriptionType",
+    "InventoryItemInstanceType",
+    "InventoryItemNameType",
+    "InventoryItemResponsibleOrganizationType",
+    "InventoryReportType",
+    "InventoryReportInventoryListingType",
+    "InventoryReportInventoryListingItemType",
     "InvoiceType",
     "InvoiceLineItemType",
-    "InvoiceLineItemPriceComponentType",
     "InvoiceParticipantType",
     "LibraryType",
     "LinkageType",
@@ -3738,8 +6623,11 @@ __all__ = [
     "ListType",
     "ListEntryType",
     "LocationType",
-    "LocationHoursOfOperationType",
     "LocationPositionType",
+    "ManufacturedItemDefinitionType",
+    "ManufacturedItemDefinitionComponentType",
+    "ManufacturedItemDefinitionComponentConstituentType",
+    "ManufacturedItemDefinitionPropertyType",
     "MarketingStatusType",
     "MeasureType",
     "MeasureGroupType",
@@ -3754,7 +6642,7 @@ __all__ = [
     "MeasureReportGroupStratifierStratumComponentType",
     "MeasureReportGroupStratifierStratumPopulationType",
     "MeasureSupplementalDataType",
-    "MediaType",
+    "MeasureTermType",
     "MedicationType",
     "MedicationAdministrationType",
     "MedicationAdministrationDosageType",
@@ -3765,57 +6653,38 @@ __all__ = [
     "MedicationDispenseSubstitutionType",
     "MedicationIngredientType",
     "MedicationKnowledgeType",
-    "MedicationKnowledgeAdministrationGuidelinesType",
-    "MedicationKnowledgeAdministrationGuidelinesDosageType",
-    "MedicationKnowledgeAdministrationGuidelinesPatientCharacteristicsType",
     "MedicationKnowledgeCostType",
-    "MedicationKnowledgeDrugCharacteristicType",
-    "MedicationKnowledgeIngredientType",
-    "MedicationKnowledgeKineticsType",
+    "MedicationKnowledgeDefinitionalType",
+    "MedicationKnowledgeDefinitionalDrugCharacteristicType",
+    "MedicationKnowledgeDefinitionalIngredientType",
+    "MedicationKnowledgeIndicationGuidelineType",
+    "MedicationKnowledgeIndicationGuidelineDosingGuidelineType",
+    "MedicationKnowledgeIndicationGuidelineDosingGuidelineDosageType",
+    "MedicationKnowledgeIndicationGuidelineDosingGuidelinePatientCharacteristicType",
     "MedicationKnowledgeMedicineClassificationType",
     "MedicationKnowledgeMonitoringProgramType",
     "MedicationKnowledgeMonographType",
     "MedicationKnowledgePackagingType",
     "MedicationKnowledgeRegulatoryType",
     "MedicationKnowledgeRegulatoryMaxDispenseType",
-    "MedicationKnowledgeRegulatoryScheduleType",
     "MedicationKnowledgeRegulatorySubstitutionType",
     "MedicationKnowledgeRelatedMedicationKnowledgeType",
+    "MedicationKnowledgeStorageGuidelineType",
+    "MedicationKnowledgeStorageGuidelineEnvironmentalSettingType",
     "MedicationRequestType",
     "MedicationRequestDispenseRequestType",
     "MedicationRequestDispenseRequestInitialFillType",
     "MedicationRequestSubstitutionType",
     "MedicationStatementType",
-    "MedicinalProductType",
-    "MedicinalProductAuthorizationType",
-    "MedicinalProductAuthorizationJurisdictionalAuthorizationType",
-    "MedicinalProductAuthorizationProcedureType",
-    "MedicinalProductContraindicationType",
-    "MedicinalProductContraindicationOtherTherapyType",
-    "MedicinalProductIndicationType",
-    "MedicinalProductIndicationOtherTherapyType",
-    "MedicinalProductIngredientType",
-    "MedicinalProductIngredientSpecifiedSubstanceType",
-    "MedicinalProductIngredientSpecifiedSubstanceStrengthType",
-    "MedicinalProductIngredientSpecifiedSubstanceStrengthReferenceStrengthType",
-    "MedicinalProductIngredientSubstanceType",
-    "MedicinalProductInteractionType",
-    "MedicinalProductInteractionInteractantType",
-    "MedicinalProductManufacturedType",
-    "MedicinalProductManufacturingBusinessOperationType",
-    "MedicinalProductNameType",
-    "MedicinalProductNameCountryLanguageType",
-    "MedicinalProductNameNamePartType",
-    "MedicinalProductPackagedType",
-    "MedicinalProductPackagedBatchIdentifierType",
-    "MedicinalProductPackagedPackageItemType",
-    "MedicinalProductPharmaceuticalType",
-    "MedicinalProductPharmaceuticalCharacteristicsType",
-    "MedicinalProductPharmaceuticalRouteOfAdministrationType",
-    "MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesType",
-    "MedicinalProductPharmaceuticalRouteOfAdministrationTargetSpeciesWithdrawalPeriodType",
-    "MedicinalProductSpecialDesignationType",
-    "MedicinalProductUndesirableEffectType",
+    "MedicationStatementAdherenceType",
+    "MedicinalProductDefinitionType",
+    "MedicinalProductDefinitionCharacteristicType",
+    "MedicinalProductDefinitionContactType",
+    "MedicinalProductDefinitionCrossReferenceType",
+    "MedicinalProductDefinitionNameType",
+    "MedicinalProductDefinitionNamePartType",
+    "MedicinalProductDefinitionNameUsageType",
+    "MedicinalProductDefinitionOperationType",
     "MessageDefinitionType",
     "MessageDefinitionAllowedResponseType",
     "MessageDefinitionFocusType",
@@ -3826,31 +6695,41 @@ __all__ = [
     "MetaType",
     "MetadataResourceType",
     "MolecularSequenceType",
-    "MolecularSequenceQualityType",
-    "MolecularSequenceQualityRocType",
-    "MolecularSequenceReferenceSeqType",
-    "MolecularSequenceRepositoryType",
-    "MolecularSequenceStructureVariantType",
-    "MolecularSequenceStructureVariantInnerType",
-    "MolecularSequenceStructureVariantOuterType",
-    "MolecularSequenceVariantType",
+    "MolecularSequenceRelativeType",
+    "MolecularSequenceRelativeEditType",
+    "MolecularSequenceRelativeStartingSequenceType",
+    "MonetaryComponentType",
     "MoneyType",
     "NamingSystemType",
     "NamingSystemUniqueIdType",
     "NarrativeType",
+    "NutritionIntakeType",
+    "NutritionIntakeConsumedItemType",
+    "NutritionIntakeIngredientLabelType",
+    "NutritionIntakePerformerType",
     "NutritionOrderType",
     "NutritionOrderEnteralFormulaType",
+    "NutritionOrderEnteralFormulaAdditiveType",
     "NutritionOrderEnteralFormulaAdministrationType",
+    "NutritionOrderEnteralFormulaAdministrationScheduleType",
     "NutritionOrderOralDietType",
     "NutritionOrderOralDietNutrientType",
+    "NutritionOrderOralDietScheduleType",
     "NutritionOrderOralDietTextureType",
     "NutritionOrderSupplementType",
+    "NutritionOrderSupplementScheduleType",
+    "NutritionProductType",
+    "NutritionProductCharacteristicType",
+    "NutritionProductIngredientType",
+    "NutritionProductInstanceType",
+    "NutritionProductNutrientType",
     "ObservationType",
     "ObservationComponentType",
     "ObservationDefinitionType",
-    "ObservationDefinitionQualifiedIntervalType",
-    "ObservationDefinitionQuantitativeDetailsType",
+    "ObservationDefinitionComponentType",
+    "ObservationDefinitionQualifiedValueType",
     "ObservationReferenceRangeType",
+    "ObservationTriggeredByType",
     "OperationDefinitionType",
     "OperationDefinitionOverloadType",
     "OperationDefinitionParameterType",
@@ -3860,7 +6739,12 @@ __all__ = [
     "OperationOutcomeIssueType",
     "OrganizationType",
     "OrganizationAffiliationType",
-    "OrganizationContactType",
+    "OrganizationQualificationType",
+    "PackagedProductDefinitionType",
+    "PackagedProductDefinitionLegalStatusOfSupplyType",
+    "PackagedProductDefinitionPackagingType",
+    "PackagedProductDefinitionPackagingContainedItemType",
+    "PackagedProductDefinitionPackagingPropertyType",
     "ParameterDefinitionType",
     "ParametersType",
     "ParametersParameterType",
@@ -3870,29 +6754,38 @@ __all__ = [
     "PatientLinkType",
     "PaymentNoticeType",
     "PaymentReconciliationType",
-    "PaymentReconciliationDetailType",
+    "PaymentReconciliationAllocationType",
     "PaymentReconciliationProcessNoteType",
     "PeriodType",
+    "PermissionType",
+    "PermissionJustificationType",
+    "PermissionRuleType",
+    "PermissionRuleActivityType",
+    "PermissionRuleDataType",
+    "PermissionRuleDataResourceType",
     "PersonType",
+    "PersonCommunicationType",
     "PersonLinkType",
     "PlanDefinitionType",
     "PlanDefinitionActionType",
     "PlanDefinitionActionConditionType",
     "PlanDefinitionActionDynamicValueType",
+    "PlanDefinitionActionInputType",
+    "PlanDefinitionActionOutputType",
     "PlanDefinitionActionParticipantType",
     "PlanDefinitionActionRelatedActionType",
+    "PlanDefinitionActorType",
+    "PlanDefinitionActorOptionType",
     "PlanDefinitionGoalType",
     "PlanDefinitionGoalTargetType",
-    "PopulationType",
     "PractitionerType",
+    "PractitionerCommunicationType",
     "PractitionerQualificationType",
     "PractitionerRoleType",
-    "PractitionerRoleAvailableTimeType",
-    "PractitionerRoleNotAvailableType",
+    "PrimitiveTypeType",
     "ProcedureType",
     "ProcedureFocalDeviceType",
     "ProcedurePerformerType",
-    "ProdCharacteristicType",
     "ProductShelfLifeType",
     "ProvenanceType",
     "ProvenanceAgentType",
@@ -3908,34 +6801,44 @@ __all__ = [
     "QuestionnaireResponseItemAnswerType",
     "RangeType",
     "RatioType",
+    "RatioRangeType",
     "ReferenceType",
+    "RegulatedAuthorizationType",
+    "RegulatedAuthorizationCaseType",
     "RelatedArtifactType",
     "RelatedPersonType",
     "RelatedPersonCommunicationType",
-    "RequestGroupType",
-    "RequestGroupActionType",
-    "RequestGroupActionConditionType",
-    "RequestGroupActionRelatedActionType",
-    "ResearchDefinitionType",
-    "ResearchElementDefinitionType",
-    "ResearchElementDefinitionCharacteristicType",
+    "RequestOrchestrationType",
+    "RequestOrchestrationActionType",
+    "RequestOrchestrationActionConditionType",
+    "RequestOrchestrationActionDynamicValueType",
+    "RequestOrchestrationActionInputType",
+    "RequestOrchestrationActionOutputType",
+    "RequestOrchestrationActionParticipantType",
+    "RequestOrchestrationActionRelatedActionType",
+    "RequirementsType",
+    "RequirementsStatementType",
     "ResearchStudyType",
-    "ResearchStudyArmType",
+    "ResearchStudyAssociatedPartyType",
+    "ResearchStudyComparisonGroupType",
+    "ResearchStudyLabelType",
     "ResearchStudyObjectiveType",
+    "ResearchStudyOutcomeMeasureType",
+    "ResearchStudyProgressStatusType",
+    "ResearchStudyRecruitmentType",
     "ResearchSubjectType",
+    "ResearchSubjectProgressType",
+    "ResourceType",
     "RiskAssessmentType",
     "RiskAssessmentPredictionType",
-    "RiskEvidenceSynthesisType",
-    "RiskEvidenceSynthesisCertaintyType",
-    "RiskEvidenceSynthesisCertaintyCertaintySubcomponentType",
-    "RiskEvidenceSynthesisRiskEstimateType",
-    "RiskEvidenceSynthesisRiskEstimatePrecisionEstimateType",
-    "RiskEvidenceSynthesisSampleSizeType",
     "SampledDataType",
     "ScheduleType",
     "SearchParameterType",
     "SearchParameterComponentType",
     "ServiceRequestType",
+    "ServiceRequestOrderDetailType",
+    "ServiceRequestOrderDetailParameterType",
+    "ServiceRequestPatientInstructionType",
     "SignatureType",
     "SlotType",
     "SpecimenType",
@@ -3946,6 +6849,7 @@ __all__ = [
     "SpecimenDefinitionTypeTestedContainerType",
     "SpecimenDefinitionTypeTestedContainerAdditiveType",
     "SpecimenDefinitionTypeTestedHandlingType",
+    "SpecimenFeatureType",
     "SpecimenProcessingType",
     "StructureDefinitionType",
     "StructureDefinitionContextType",
@@ -3953,6 +6857,7 @@ __all__ = [
     "StructureDefinitionMappingType",
     "StructureDefinitionSnapshotType",
     "StructureMapType",
+    "StructureMapConstType",
     "StructureMapGroupType",
     "StructureMapGroupInputType",
     "StructureMapGroupRuleType",
@@ -3962,12 +6867,30 @@ __all__ = [
     "StructureMapGroupRuleTargetParameterType",
     "StructureMapStructureType",
     "SubscriptionType",
-    "SubscriptionChannelType",
+    "SubscriptionFilterByType",
+    "SubscriptionParameterType",
+    "SubscriptionStatusType",
+    "SubscriptionStatusNotificationEventType",
+    "SubscriptionTopicType",
+    "SubscriptionTopicCanFilterByType",
+    "SubscriptionTopicEventTriggerType",
+    "SubscriptionTopicNotificationShapeType",
+    "SubscriptionTopicResourceTriggerType",
+    "SubscriptionTopicResourceTriggerQueryCriteriaType",
     "SubstanceType",
-    "SubstanceAmountType",
-    "SubstanceAmountReferenceRangeType",
+    "SubstanceDefinitionType",
+    "SubstanceDefinitionCharacterizationType",
+    "SubstanceDefinitionCodeType",
+    "SubstanceDefinitionMoietyType",
+    "SubstanceDefinitionMolecularWeightType",
+    "SubstanceDefinitionNameType",
+    "SubstanceDefinitionNameOfficialType",
+    "SubstanceDefinitionPropertyType",
+    "SubstanceDefinitionRelationshipType",
+    "SubstanceDefinitionSourceMaterialType",
+    "SubstanceDefinitionStructureType",
+    "SubstanceDefinitionStructureRepresentationType",
     "SubstanceIngredientType",
-    "SubstanceInstanceType",
     "SubstanceNucleicAcidType",
     "SubstanceNucleicAcidSubunitType",
     "SubstanceNucleicAcidSubunitLinkageType",
@@ -3982,7 +6905,6 @@ __all__ = [
     "SubstanceProteinType",
     "SubstanceProteinSubunitType",
     "SubstanceReferenceInformationType",
-    "SubstanceReferenceInformationClassificationType",
     "SubstanceReferenceInformationGeneType",
     "SubstanceReferenceInformationGeneElementType",
     "SubstanceReferenceInformationTargetType",
@@ -3993,17 +6915,6 @@ __all__ = [
     "SubstanceSourceMaterialOrganismHybridType",
     "SubstanceSourceMaterialOrganismOrganismGeneralType",
     "SubstanceSourceMaterialPartDescriptionType",
-    "SubstanceSpecificationType",
-    "SubstanceSpecificationCodeType",
-    "SubstanceSpecificationMoietyType",
-    "SubstanceSpecificationNameType",
-    "SubstanceSpecificationNameOfficialType",
-    "SubstanceSpecificationPropertyType",
-    "SubstanceSpecificationRelationshipType",
-    "SubstanceSpecificationStructureType",
-    "SubstanceSpecificationStructureIsotopeType",
-    "SubstanceSpecificationStructureIsotopeMolecularWeightType",
-    "SubstanceSpecificationStructureRepresentationType",
     "SupplyDeliveryType",
     "SupplyDeliverySuppliedItemType",
     "SupplyRequestType",
@@ -4011,6 +6922,7 @@ __all__ = [
     "TaskType",
     "TaskInputType",
     "TaskOutputType",
+    "TaskPerformerType",
     "TaskRestrictionType",
     "TerminologyCapabilitiesType",
     "TerminologyCapabilitiesClosureType",
@@ -4023,11 +6935,20 @@ __all__ = [
     "TerminologyCapabilitiesSoftwareType",
     "TerminologyCapabilitiesTranslationType",
     "TerminologyCapabilitiesValidateCodeType",
+    "TestPlanType",
+    "TestPlanDependencyType",
+    "TestPlanTestCaseType",
+    "TestPlanTestCaseAssertionType",
+    "TestPlanTestCaseDependencyType",
+    "TestPlanTestCaseTestDataType",
+    "TestPlanTestCaseTestRunType",
+    "TestPlanTestCaseTestRunScriptType",
     "TestReportType",
     "TestReportParticipantType",
     "TestReportSetupType",
     "TestReportSetupActionType",
     "TestReportSetupActionAssertType",
+    "TestReportSetupActionAssertRequirementType",
     "TestReportSetupActionOperationType",
     "TestReportTeardownType",
     "TestReportTeardownActionType",
@@ -4040,9 +6961,11 @@ __all__ = [
     "TestScriptMetadataCapabilityType",
     "TestScriptMetadataLinkType",
     "TestScriptOriginType",
+    "TestScriptScopeType",
     "TestScriptSetupType",
     "TestScriptSetupActionType",
     "TestScriptSetupActionAssertType",
+    "TestScriptSetupActionAssertRequirementType",
     "TestScriptSetupActionOperationType",
     "TestScriptSetupActionOperationRequestHeaderType",
     "TestScriptTeardownType",
@@ -4052,6 +6975,10 @@ __all__ = [
     "TestScriptVariableType",
     "TimingType",
     "TimingRepeatType",
+    "TransportType",
+    "TransportInputType",
+    "TransportOutputType",
+    "TransportRestrictionType",
     "TriggerDefinitionType",
     "UsageContextType",
     "ValueSetType",
@@ -4062,11 +6989,16 @@ __all__ = [
     "ValueSetComposeIncludeFilterType",
     "ValueSetExpansionType",
     "ValueSetExpansionContainsType",
+    "ValueSetExpansionContainsPropertyType",
+    "ValueSetExpansionContainsPropertySubPropertyType",
     "ValueSetExpansionParameterType",
+    "ValueSetExpansionPropertyType",
+    "ValueSetScopeType",
     "VerificationResultType",
     "VerificationResultAttestationType",
     "VerificationResultPrimarySourceType",
     "VerificationResultValidatorType",
+    "VirtualServiceDetailType",
     "VisionPrescriptionType",
     "VisionPrescriptionLensSpecificationType",
     "VisionPrescriptionLensSpecificationPrismType",

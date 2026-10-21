@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/List
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -21,74 +21,84 @@ class List(domainresource.DomainResource):
     for FHIR Primitive Data Types.
 
     A list is a curated collection of resources.
+    A List is a curated collection of resources, for things such as problem
+    lists, allergy lists, facility list, organization list, etc.
     """
 
-    resource_type = Field("List", const=True)
+    __resource_type__ = "List"
 
-    code: fhirtypes.CodeableConceptType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="code",
         title="What the purpose of this list is",
         description="This code defines the purpose of the list - why it was created.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="When the list was prepared",
-        description="The date that the list was prepared.",
-        # if property is element of this resource.
-        element_property=True,
+        description="Date list was last reviewed/revised and determined to be 'current'.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    emptyReason: fhirtypes.CodeableConceptType = Field(
-        None,
+    emptyReason: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="emptyReason",
         title="Why list is empty",
         description="If the list is empty, why the list is empty.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    encounter: fhirtypes.ReferenceType = Field(
-        None,
+    encounter: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="encounter",
         title="Context in which list created",
         description="The encounter that is the context in which this list was created.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Encounter"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Encounter"],
+        },
     )
 
-    entry: typing.List[fhirtypes.ListEntryType] = Field(
-        None,
+    entry: typing.List[fhirtypes.ListEntryType] | None = Field(
+        default=None,
         alias="entry",
         title="Entries in the list",
         description="Entries in this list.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Business identifier",
         description=(
             "Identifier for the List assigned for business purposes outside the "
             "context of FHIR."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    mode: fhirtypes.Code = Field(
-        None,
+    mode: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="mode",
         title="working | snapshot | changes",
         description=(
@@ -98,37 +108,41 @@ class List(domainresource.DomainResource):
             " prepared list where items may be marked as added, modified or "
             "deleted."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["working", "snapshot", "changes"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["working", "snapshot", "changes"],
+        },
     )
-    mode__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_mode", title="Extension field for ``mode``."
+    mode__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_mode", title="Extension field for ``mode``."
     )
 
-    note: typing.List[fhirtypes.AnnotationType] = Field(
-        None,
+    note: typing.List[fhirtypes.AnnotationType] | None = Field(
+        default=None,
         alias="note",
         title="Comments about the list",
         description="Comments that apply to the overall list.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    orderedBy: fhirtypes.CodeableConceptType = Field(
-        None,
+    orderedBy: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="orderedBy",
         title="What order the list has",
         description="What order applies to the items in the list.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    source: fhirtypes.ReferenceType = Field(
-        None,
+    source: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="source",
         title="Who and/or what defined the list contents (aka Author)",
         description=(
@@ -136,59 +150,75 @@ class List(domainresource.DomainResource):
             "were. Where the list was created by a human, this is the same as the "
             "author of the list."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Practitioner", "PractitionerRole", "Patient", "Device"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Practitioner",
+                "PractitionerRole",
+                "Patient",
+                "Device",
+                "Organization",
+                "RelatedPerson",
+                "CareTeam",
+            ],
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="current | retired | entered-in-error",
         description="Indicates the current state of this list.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["current", "retired", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["current", "retired", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    subject: fhirtypes.ReferenceType = Field(
-        None,
+    subject: typing.List[fhirtypes.ReferenceType] | None = Field(
+        default=None,
         alias="subject",
-        title="If all resources have the same subject",
+        title="If all resources have the same subject(s)",
         description=(
-            "The common subject (or patient) of the resources that are in the list "
-            "if there is one."
+            "The common subject(s) (or patient(s)) of the resources that are in the"
+            " list if there is one (or a set of subjects)."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "Group", "Device", "Location"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
-    title: fhirtypes.String = Field(
-        None,
+    title: fhirtypes.StringType | None = Field(
+        default=None,
         alias="title",
         title="Descriptive name for the list",
         description="A label for the list assigned by the author.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    title__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_title", title="Extension field for ``title``."
+    title__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_title", title="Extension field for ``title``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``List`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``List`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -214,10 +244,26 @@ class List(domainresource.DomainResource):
             "emptyReason",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_604(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``List`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "status",
+            "mode",
+            "title",
+            "code",
+            "subject",
+            "date",
+            "source",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -226,52 +272,7 @@ class List(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("mode", "mode__ext"), ("status", "status__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class ListEntry(backboneelement.BackboneElement):
@@ -283,60 +284,64 @@ class ListEntry(backboneelement.BackboneElement):
     Entries in this list.
     """
 
-    resource_type = Field("ListEntry", const=True)
+    __resource_type__ = "ListEntry"
 
-    date: fhirtypes.DateTime = Field(
-        None,
+    date: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="date",
         title="When item added to list",
         description="When this item was added to the list.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    date__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_date", title="Extension field for ``date``."
+    date__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_date", title="Extension field for ``date``."
     )
 
-    deleted: bool = Field(
-        None,
+    deleted: bool | None = Field(
+        default=None,
         alias="deleted",
         title="If this item is actually marked as deleted",
         description="True if this item is marked as deleted in the list.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    deleted__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_deleted", title="Extension field for ``deleted``."
+    deleted__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_deleted", title="Extension field for ``deleted``."
     )
 
-    flag: fhirtypes.CodeableConceptType = Field(
-        None,
+    flag: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="flag",
         title="Status/Workflow information about this item",
         description=(
             "The flag allows the system constructing the list to indicate the role "
             "and significance of the item in the list."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     item: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="item",
         title="Actual entry",
         description="A reference to the actual resource from which data was derived.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Resource"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Resource"],
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``ListEntry`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``ListEntry`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -347,3 +352,10 @@ class ListEntry(backboneelement.BackboneElement):
             "date",
             "item",
         ]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``ListEntry`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

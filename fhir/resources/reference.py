@@ -1,17 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Reference
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
+import typing
+
 from pydantic import Field
 
-from . import element, fhirtypes
+from . import datatype, fhirtypes
 
 
-class Reference(element.Element):
+class Reference(datatype.DataType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -19,25 +23,27 @@ class Reference(element.Element):
     A reference from one resource to another.
     """
 
-    resource_type = Field("Reference", const=True)
+    __resource_type__ = "Reference"
 
-    display: fhirtypes.String = Field(
-        None,
+    display: fhirtypes.StringType | None = Field(
+        default=None,
         alias="display",
         title="Text alternative for the resource",
         description=(
             "Plain text narrative that identifies the resource in addition to the "
             "resource reference."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    display__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_display", title="Extension field for ``display``."
+    display__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_display", title="Extension field for ``display``."
     )
 
-    identifier: fhirtypes.IdentifierType = Field(
-        None,
+    identifier: fhirtypes.IdentifierType | None = Field(
+        default=None,
         alias="identifier",
         title="Logical reference, when literal reference is not known",
         description=(
@@ -51,12 +57,14 @@ class Reference(element.Element):
             " expected to be exposed as a FHIR instance, and that instance would "
             "need to be of a FHIR resource type allowed by the reference."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    reference: fhirtypes.String = Field(
-        None,
+    reference: fhirtypes.StringType | None = Field(
+        default=None,
         alias="reference",
         title="Literal reference, Relative, internal or absolute URL",
         description=(
@@ -68,17 +76,22 @@ class Reference(element.Element):
             "then it should be assumed to be version specific. Internal fragment "
             "references (start with '#') refer to contained resources."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    reference__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_reference", title="Extension field for ``reference``."
+    reference__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_reference", title="Extension field for ``reference``."
     )
 
-    type: fhirtypes.Uri = Field(
-        None,
+    type: fhirtypes.UriType | None = Field(
+        default=None,
         alias="type",
-        title='Type the reference refers to (e.g. "Patient")',
+        title=(
+            'Type the reference refers to (e.g. "Patient") - must be a resource in '
+            "resources"
+        ),
         description=(
             "The expected type of the target of the reference. If both "
             "Reference.type and Reference.reference are populated and "
@@ -90,17 +103,26 @@ class Reference(element.Element):
             " only allowed for logical models (and can only be used in references "
             "in logical models, not resources)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Reference`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Reference`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "reference", "type", "identifier", "display"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Reference`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["reference", "type", "identifier", "display"]

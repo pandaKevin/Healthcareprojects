@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/BackboneElement
 Release: STU3
@@ -6,6 +5,9 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -23,10 +25,10 @@ class BackboneElement(element.Element):
     not those in a data type.
     """
 
-    resource_type = Field("BackboneElement", const=True)
+    __resource_type__ = "BackboneElement"
 
-    modifierExtension: typing.List[fhirtypes.ExtensionType] = Field(
-        None,
+    modifierExtension: typing.List[fhirtypes.ExtensionType] | None = Field(
+        default=None,
         alias="modifierExtension",
         title="Extensions that cannot be ignored",
         description=(
@@ -41,14 +43,23 @@ class BackboneElement(element.Element):
             "extension. Applications processing a resource are required to check "
             "for modifier extensions."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``BackboneElement`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``BackboneElement`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``BackboneElement`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

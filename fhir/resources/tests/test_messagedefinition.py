@@ -1,26 +1,42 @@
 # -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/MessageDefinition
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
-from pydantic.validators import bytes_validator  # noqa: F401
-
-from .. import fhirtypes  # noqa: F401
 from .. import messagedefinition
+from .conftest import ExternalValidatorModel
 
 
 def impl_messagedefinition_1(inst):
     assert inst.category == "notification"
     assert inst.contact[0].telecom[0].system == "url"
     assert inst.contact[0].telecom[0].value == "http://hl7.org"
-    assert inst.date == fhirtypes.DateTime.validate("2016-11-09T11:15:33+10:00")
+    assert (
+        inst.date
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2016-11-09"}
+        ).valueDateTime
+    )
+    assert inst.description == "Message definition base example"
     assert inst.eventCoding.code == "admin-notify"
-    assert inst.eventCoding.system == "http://example.org/fhir/message-events"
+    assert (
+        inst.eventCoding.system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://example.org/fhir/message-events"}
+        ).valueUri
+    )
     assert inst.experimental is True
     assert inst.id == "example"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:ietf:rfc:3986"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "urn:oid:2.16.840.1.113883.4.642.15.3"
     assert inst.name == "EXAMPLE"
     assert inst.publisher == "Health Level Seven, Int'l"
     assert inst.purpose == (
@@ -33,7 +49,12 @@ def impl_messagedefinition_1(inst):
     )
     assert inst.text.status == "generated"
     assert inst.title == "Message definition base example"
-    assert inst.url == "http://hl7.org/fhir/MessageDefinition/example"
+    assert (
+        inst.url
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://hl7.org/fhir/MessageDefinition/example"}
+        ).valueUri
+    )
 
 
 def test_messagedefinition_1(base_settings):
@@ -41,15 +62,15 @@ def test_messagedefinition_1(base_settings):
     Test File: messagedefinition-example.json
     """
     filename = base_settings["unittest_data_dir"] / "messagedefinition-example.json"
-    inst = messagedefinition.MessageDefinition.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
+    inst = messagedefinition.MessageDefinition.model_validate_json(
+        filename.read_bytes()
     )
-    assert "MessageDefinition" == inst.resource_type
+    assert "MessageDefinition" == inst.get_resource_type()
 
     impl_messagedefinition_1(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "MessageDefinition" == data["resourceType"]
 
     inst2 = messagedefinition.MessageDefinition(**data)
@@ -57,34 +78,57 @@ def test_messagedefinition_1(base_settings):
 
 
 def impl_messagedefinition_2(inst):
-    assert inst.allowedResponse[0].message == "MessageDefinition/patient-link-response"
+    assert (
+        inst.allowedResponse[0].message
+        == "http://hl7.org/fhir/MessageDefinition/patient-link-response"
+    )
     assert inst.allowedResponse[0].situation == (
         "Optional response message that may provide additional " "information"
     )
-    assert inst.base == "MessageDefinition/example"
+    assert inst.base == "http://hl7.org/fhir/MessageDefinition/example"
     assert inst.category == "notification"
     assert inst.contact[0].telecom[0].system == "url"
     assert inst.contact[0].telecom[0].value == "http://hl7.org"
     assert inst.copyright == "� HL7.org 2011+"
-    assert inst.date == fhirtypes.DateTime.validate("2017-02-03T11:15:33+10:00")
+    assert (
+        inst.date
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2017-02-03"}
+        ).valueDateTime
+    )
     assert inst.description == (
         "Notification of two patient records that represent the same "
         "individual that require an established linkage."
     )
     assert inst.eventCoding.code == "admin-notify"
-    assert inst.eventCoding.system == "http://example.org/fhir/message-events"
+    assert (
+        inst.eventCoding.system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://example.org/fhir/message-events"}
+        ).valueUri
+    )
     assert inst.experimental is True
     assert inst.focus[0].code == "Patient"
     assert inst.focus[0].max == "2"
     assert inst.focus[0].min == 2
-    assert inst.focus[0].profile == "StructureDefinition/example"
+    assert inst.focus[0].profile == "http://hl7.org/fhir/StructureDefinition/example"
     assert inst.id == "patient-link-notification"
-    assert inst.identifier[0].system == "urn:ietf:rfc:3986"
-    assert inst.identifier[0].value == "urn:oid:1.3.6.1.4.1.21367.2005.3.7.9878"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:ietf:rfc:3986"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "urn:oid:2.16.840.1.113883.4.642.15.2"
     assert inst.jurisdiction[0].coding[0].code == "US"
     assert inst.jurisdiction[0].coding[0].display == "United States of America (the)"
-    assert inst.jurisdiction[0].coding[0].system == "urn:iso:std:iso:3166"
-    assert inst.name == "PATIENT-LINK-NOTIFICATION"
+    assert (
+        inst.jurisdiction[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:iso:std:iso:3166"}
+        ).valueUri
+    )
+    assert inst.name == "PATIENTLINKNOTIFICATION"
     assert inst.publisher == "Health Level Seven, Int'l"
     assert inst.purpose == (
         "Notifies recipient systems that two patients have been "
@@ -96,18 +140,27 @@ def impl_messagedefinition_2(inst):
     )
     assert inst.text.status == "generated"
     assert inst.title == "Link Patients Notification"
-    assert inst.url == (
-        "http://hl7.org/fhir/MessageDefinition/patient-link-" "notification"
+    assert (
+        inst.url
+        == ExternalValidatorModel.model_validate(
+            {
+                "valueUri": "http://hl7.org/fhir/MessageDefinition/patient-link-notification"
+            }
+        ).valueUri
     )
     assert inst.useContext[0].code.code == "focus"
     assert (
         inst.useContext[0].code.system
-        == "http://terminology.hl7.org/CodeSystem/usage-context-type"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/usage-context-type"}
+        ).valueUri
     )
     assert inst.useContext[0].valueCodeableConcept.coding[0].code == "positive"
     assert (
         inst.useContext[0].valueCodeableConcept.coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/variant-state"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/variant-state"}
+        ).valueUri
     )
     assert inst.version == "1"
 
@@ -120,15 +173,15 @@ def test_messagedefinition_2(base_settings):
         base_settings["unittest_data_dir"]
         / "messagedefinition-patient-link-notification.json"
     )
-    inst = messagedefinition.MessageDefinition.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
+    inst = messagedefinition.MessageDefinition.model_validate_json(
+        filename.read_bytes()
     )
-    assert "MessageDefinition" == inst.resource_type
+    assert "MessageDefinition" == inst.get_resource_type()
 
     impl_messagedefinition_2(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "MessageDefinition" == data["resourceType"]
 
     inst2 = messagedefinition.MessageDefinition(**data)
@@ -136,27 +189,47 @@ def test_messagedefinition_2(base_settings):
 
 
 def impl_messagedefinition_3(inst):
-    assert inst.base == "MessageDefinition/example"
+    assert inst.base == "http://hl7.org/fhir/MessageDefinition/example"
     assert inst.category == "consequence"
     assert inst.contact[0].telecom[0].system == "url"
     assert inst.contact[0].telecom[0].value == "http://hl7.org"
     assert inst.copyright == "� HL7.org 2011+"
-    assert inst.date == fhirtypes.DateTime.validate("2017-02-03T11:15:33+10:00")
+    assert (
+        inst.date
+        == ExternalValidatorModel.model_validate(
+            {"valueDateTime": "2017-02-03"}
+        ).valueDateTime
+    )
     assert inst.description == "Optional response to a patient link notification."
     assert inst.eventCoding.code == "admin-notify"
-    assert inst.eventCoding.system == "http://example.org/fhir/message-events"
+    assert (
+        inst.eventCoding.system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://example.org/fhir/message-events"}
+        ).valueUri
+    )
     assert inst.experimental is True
     assert inst.focus[0].code == "Patient"
     assert inst.focus[0].max == "2"
     assert inst.focus[0].min == 2
-    assert inst.focus[0].profile == "StructureDefinition/example"
+    assert inst.focus[0].profile == "http://hl7.org/fhir/StructureDefinition/example"
     assert inst.id == "patient-link-response"
-    assert inst.identifier[0].system == "urn:ietf:rfc:3986"
-    assert inst.identifier[0].value == "urn:oid:1.3.6.1.4.1.21367.2005.3.7.9879"
+    assert (
+        inst.identifier[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:ietf:rfc:3986"}
+        ).valueUri
+    )
+    assert inst.identifier[0].value == "urn:oid:2.16.840.1.113883.4.642.15.1"
     assert inst.jurisdiction[0].coding[0].code == "US"
     assert inst.jurisdiction[0].coding[0].display == "United States of America (the)"
-    assert inst.jurisdiction[0].coding[0].system == "urn:iso:std:iso:3166"
-    assert inst.name == "PATIENT-LINK-RESPONSE"
+    assert (
+        inst.jurisdiction[0].coding[0].system
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "urn:iso:std:iso:3166"}
+        ).valueUri
+    )
+    assert inst.name == "PATIENTLINKRESPONSE"
     assert inst.publisher == "Health Level Seven, Int'l"
     assert inst.purpose == (
         "Optional response message that may provide additional "
@@ -168,16 +241,25 @@ def impl_messagedefinition_3(inst):
     )
     assert inst.text.status == "generated"
     assert inst.title == "Link Patients Response"
-    assert inst.url == "http://hl7.org/fhir/MessageDefinition/patient-link-response"
+    assert (
+        inst.url
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://hl7.org/fhir/MessageDefinition/patient-link-response"}
+        ).valueUri
+    )
     assert inst.useContext[0].code.code == "focus"
     assert (
         inst.useContext[0].code.system
-        == "http://terminology.hl7.org/CodeSystem/usage-context-type"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/usage-context-type"}
+        ).valueUri
     )
     assert inst.useContext[0].valueCodeableConcept.coding[0].code == "positive"
     assert (
         inst.useContext[0].valueCodeableConcept.coding[0].system
-        == "http://terminology.hl7.org/CodeSystem/variant-state"
+        == ExternalValidatorModel.model_validate(
+            {"valueUri": "http://terminology.hl7.org/CodeSystem/variant-state"}
+        ).valueUri
     )
     assert inst.version == "1"
 
@@ -190,15 +272,15 @@ def test_messagedefinition_3(base_settings):
         base_settings["unittest_data_dir"]
         / "messagedefinition-patient-link-response.json"
     )
-    inst = messagedefinition.MessageDefinition.parse_file(
-        filename, content_type="application/json", encoding="utf-8"
+    inst = messagedefinition.MessageDefinition.model_validate_json(
+        filename.read_bytes()
     )
-    assert "MessageDefinition" == inst.resource_type
+    assert "MessageDefinition" == inst.get_resource_type()
 
     impl_messagedefinition_3(inst)
 
     # testing reverse by generating data from itself and create again.
-    data = inst.dict()
+    data = inst.model_dump()
     assert "MessageDefinition" == data["resourceType"]
 
     inst2 = messagedefinition.MessageDefinition(**data)

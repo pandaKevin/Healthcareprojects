@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/TriggerDefinition
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
-from . import element, fhirtypes
+from . import datatype, fhirtypes
 
 
-class TriggerDefinition(element.Element):
+class TriggerDefinition(datatype.DataType):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
     Resource StructureDefinition, instead used to enable Extensibility feature
     for FHIR Primitive Data Types.
@@ -25,10 +25,21 @@ class TriggerDefinition(element.Element):
     data events, or periodic, as determined by the type element.
     """
 
-    resource_type = Field("TriggerDefinition", const=True)
+    __resource_type__ = "TriggerDefinition"
 
-    condition: fhirtypes.ExpressionType = Field(
-        None,
+    code: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
+        alias="code",
+        title="Coded definition of the event",
+        description="A code that identifies the event.",
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
+    )
+
+    condition: fhirtypes.ExpressionType | None = Field(
+        default=None,
         alias="condition",
         title="Whether the event triggers (boolean expression)",
         description=(
@@ -36,12 +47,14 @@ class TriggerDefinition(element.Element):
             "container of the trigger definition and returns whether or not the "
             "trigger fires."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    data: typing.List[fhirtypes.DataRequirementType] = Field(
-        None,
+    data: typing.List[fhirtypes.DataRequirementType] | None = Field(
+        default=None,
         alias="data",
         title="Triggering data of the event (multiple = 'and')",
         description=(
@@ -49,12 +62,14 @@ class TriggerDefinition(element.Element):
             "than one data is requirement is specified, then all the data "
             "requirements must be true."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Name or URI that identifies the event",
         description=(
@@ -62,108 +77,146 @@ class TriggerDefinition(element.Element):
             "identifies the event formally (e.g. from a trigger registry), or a "
             "simple relative URI that identifies the event in a local context."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    timingDate: fhirtypes.Date = Field(
-        None,
+    subscriptionTopic: fhirtypes.CanonicalType | None = Field(
+        default=None,
+        alias="subscriptionTopic",
+        title="What event",
+        description=(
+            "A reference to a SubscriptionTopic resource that defines the event. If"
+            " this element is provided, no other information about the trigger "
+            "definition may be supplied."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["SubscriptionTopic"],
+        },
+    )
+    subscriptionTopic__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_subscriptionTopic",
+        title="Extension field for ``subscriptionTopic``.",
+    )
+
+    timingDate: fhirtypes.DateType | None = Field(
+        default=None,
         alias="timingDate",
         title="Timing of the event",
         description="The timing of the event (if this is a periodic trigger).",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
-    timingDate__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_timingDate", title="Extension field for ``timingDate``."
+    timingDate__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_timingDate", title="Extension field for ``timingDate``."
     )
 
-    timingDateTime: fhirtypes.DateTime = Field(
-        None,
+    timingDateTime: fhirtypes.DateTimeType | None = Field(
+        default=None,
         alias="timingDateTime",
         title="Timing of the event",
         description="The timing of the event (if this is a periodic trigger).",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
-    timingDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_timingDateTime", title="Extension field for ``timingDateTime``."
+    timingDateTime__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
+        alias="_timingDateTime",
+        title="Extension field for ``timingDateTime``.",
     )
 
-    timingReference: fhirtypes.ReferenceType = Field(
-        None,
+    timingReference: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="timingReference",
         title="Timing of the event",
         description="The timing of the event (if this is a periodic trigger).",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Schedule"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Schedule"],
+        },
     )
 
-    timingTiming: fhirtypes.TimingType = Field(
-        None,
+    timingTiming: fhirtypes.TimingType | None = Field(
+        default=None,
         alias="timingTiming",
         title="Timing of the event",
         description="The timing of the event (if this is a periodic trigger).",
-        # if property is element of this resource.
-        element_property=True,
-        # Choice of Data Types. i.e timing[x]
-        one_of_many="timing",
-        one_of_many_required=False,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # Choice of Data Types. i.e timing[x]
+            "one_of_many": "timing",
+            "one_of_many_required": False,
+        },
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title=(
             "named-event | periodic | data-changed | data-added | data-modified | "
             "data-removed | data-accessed | data-access-ended"
         ),
         description="The type of triggering event.",
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "named-event",
-            "periodic",
-            "data-changed",
-            "data-added",
-            "data-modified",
-            "data-removed",
-            "data-accessed",
-            "data-access-ended",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "named-event",
+                "periodic",
+                "data-changed",
+                "data-added",
+                "data-modified",
+                "data-removed",
+                "data-accessed",
+                "data-access-ended",
+            ],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``TriggerDefinition`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``TriggerDefinition`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
             "extension",
             "type",
             "name",
+            "code",
+            "subscriptionTopic",
             "timingTiming",
             "timingReference",
             "timingDate",
@@ -172,10 +225,25 @@ class TriggerDefinition(element.Element):
             "condition",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1951(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``TriggerDefinition`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "type",
+            "name",
+            "code",
+            "subscriptionTopic",
+            "timingTiming",
+            "timingReference",
+            "timingDate",
+            "timingDateTime",
+            "data",
+            "condition",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -184,57 +252,9 @@ class TriggerDefinition(element.Element):
         the primitive value is not present.
         """
         required_fields = [("type", "type__ext")]
-        _missing = object()
+        return required_fields
 
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
-
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_one_of_many_1951(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    def get_one_of_many_fields(self) -> typing.Dict[str, typing.List[str]]:
         """https://www.hl7.org/fhir/formats.html#choice
         A few elements have a choice of more than one data type for their content.
         All such elements have a name that takes the form nnn[x].
@@ -255,23 +275,4 @@ class TriggerDefinition(element.Element):
                 "timingTiming",
             ]
         }
-        for prefix, fields in one_of_many_fields.items():
-            assert cls.__fields__[fields[0]].field_info.extra["one_of_many"] == prefix
-            required = (
-                cls.__fields__[fields[0]].field_info.extra["one_of_many_required"]
-                is True
-            )
-            found = False
-            for field in fields:
-                if field in values and values[field] is not None:
-                    if found is True:
-                        raise ValueError(
-                            "Any of one field value is expected from "
-                            f"this list {fields}, but got multiple!"
-                        )
-                    else:
-                        found = True
-            if required is True and found is False:
-                raise ValueError(f"Expect any of field value from this list {fields}.")
-
-        return values
+        return one_of_many_fields

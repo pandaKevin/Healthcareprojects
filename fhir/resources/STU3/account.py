@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/Account
 Release: STU3
@@ -6,6 +5,9 @@ Version: 3.0.2
 Revision: 11917
 Last updated: 2019-10-24T11:53:00+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
 from pydantic import Field
@@ -24,10 +26,10 @@ class Account(domainresource.DomainResource):
     etc.
     """
 
-    resource_type = Field("Account", const=True)
+    __resource_type__ = "Account"
 
-    active: fhirtypes.PeriodType = Field(
-        None,
+    active: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="active",
         title="Time window that transactions may be posted to this account",
         description=(
@@ -35,160 +37,182 @@ class Account(domainresource.DomainResource):
             " transactions posted to it. This period may be different to the "
             "coveragePeriod which is the duration of time that services may occur."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    balance: fhirtypes.MoneyType = Field(
-        None,
+    balance: fhirtypes.MoneyType | None = Field(
+        default=None,
         alias="balance",
         title="How much is in account?",
         description=(
             "Represents the sum of all credits less all debits associated with the "
             "account.  Might be positive, zero or negative."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    coverage: typing.List[fhirtypes.AccountCoverageType] = Field(
-        None,
+    coverage: typing.List[fhirtypes.AccountCoverageType] | None = Field(
+        default=None,
         alias="coverage",
         title=(
             "The party(s) that are responsible for covering the payment of this "
             "account, and what order should they be applied to the account"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    description: fhirtypes.String = Field(
-        None,
+    description: fhirtypes.StringType | None = Field(
+        default=None,
         alias="description",
         title="Explanation of purpose/use",
         description=(
             "Provides additional information about what the account tracks and how "
             "it is used."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    description__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_description", title="Extension field for ``description``."
+    description__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_description", title="Extension field for ``description``."
     )
 
-    guarantor: typing.List[fhirtypes.AccountGuarantorType] = Field(
-        None,
+    guarantor: typing.List[fhirtypes.AccountGuarantorType] | None = Field(
+        default=None,
         alias="guarantor",
         title="Responsible for the account",
         description="Parties financially responsible for the account.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Account number",
         description=(
             "Unique identifier used to reference the account.  May or may not be "
             "intended for human use (e.g. credit card number)."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    name: fhirtypes.String = Field(
-        None,
+    name: fhirtypes.StringType | None = Field(
+        default=None,
         alias="name",
         title="Human-readable label",
         description=(
             "Name used for the account when displaying it to humans in reports, " "etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    name__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_name", title="Extension field for ``name``."
+    name__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_name", title="Extension field for ``name``."
     )
 
-    owner: fhirtypes.ReferenceType = Field(
-        None,
+    owner: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="owner",
         title="Who is responsible?",
         description=(
             "Indicates the organization, department, etc. with responsibility for "
             "the account."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Organization"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Organization"],
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="Transaction window",
         description=(
             "Identifies the period of time the account applies to; e.g. accounts "
             "created per fiscal year, quarter, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    status: fhirtypes.Code = Field(
-        None,
+    status: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="status",
         title="active | inactive | entered-in-error",
         description="Indicates whether the account is presently used/usable or not.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["active", "inactive", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["active", "inactive", "entered-in-error"],
+        },
     )
-    status__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_status", title="Extension field for ``status``."
+    status__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_status", title="Extension field for ``status``."
     )
 
-    subject: fhirtypes.ReferenceType = Field(
-        None,
+    subject: fhirtypes.ReferenceType | None = Field(
+        default=None,
         alias="subject",
         title="What is account tied to?",
         description=(
             "Identifies the patient, device, practitioner, location or other object"
             " the account is associated with."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=[
-            "Patient",
-            "Device",
-            "Practitioner",
-            "Location",
-            "HealthcareService",
-            "Organization",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": [
+                "Patient",
+                "Device",
+                "Practitioner",
+                "Location",
+                "HealthcareService",
+                "Organization",
+            ],
+        },
     )
 
-    type: fhirtypes.CodeableConceptType = Field(
-        None,
+    type: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="type",
         title="E.g. patient, expense, depreciation",
         description="Categorizes the account for reporting and searching purposes.",
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``Account`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``Account`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -213,6 +237,27 @@ class Account(domainresource.DomainResource):
             "guarantor",
         ]
 
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``Account`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "identifier",
+            "status",
+            "type",
+            "name",
+            "subject",
+            "period",
+            "active",
+            "coverage",
+            "owner",
+            "description",
+        ]
+
 
 class AccountCoverage(backboneelement.BackboneElement):
     """Disclaimer: Any field name ends with ``__ext`` doesn't part of
@@ -223,10 +268,10 @@ class AccountCoverage(backboneelement.BackboneElement):
     and what order should they be applied to the account.
     """
 
-    resource_type = Field("AccountCoverage", const=True)
+    __resource_type__ = "AccountCoverage"
 
     coverage: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="coverage",
         title=(
             "The party(s) that are responsible for covering the payment of this "
@@ -238,31 +283,42 @@ class AccountCoverage(backboneelement.BackboneElement):
             "resposible for specific types of charges, and the sequence of the "
             "coverages in the account could be important when processing billing."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Coverage"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Coverage"],
+        },
     )
 
-    priority: fhirtypes.PositiveInt = Field(
-        None,
+    priority: fhirtypes.PositiveIntType | None = Field(
+        default=None,
         alias="priority",
         title="The priority of the coverage in the context of this account",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
-    priority__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_priority", title="Extension field for ``priority``."
+    priority__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_priority", title="Extension field for ``priority``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AccountCoverage`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AccountCoverage`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "coverage", "priority"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AccountCoverage`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension", "coverage", "priority"]
 
 
 class AccountGuarantor(backboneelement.BackboneElement):
@@ -274,50 +330,60 @@ class AccountGuarantor(backboneelement.BackboneElement):
     Parties financially responsible for the account.
     """
 
-    resource_type = Field("AccountGuarantor", const=True)
+    __resource_type__ = "AccountGuarantor"
 
-    onHold: bool = Field(
-        None,
+    onHold: bool | None = Field(
+        default=None,
         alias="onHold",
         title="Credit or other hold applied",
         description=(
             "A guarantor may be placed on credit hold or otherwise have their role "
             "temporarily suspended."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    onHold__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_onHold", title="Extension field for ``onHold``."
+    onHold__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_onHold", title="Extension field for ``onHold``."
     )
 
     party: fhirtypes.ReferenceType = Field(
-        ...,
+        default=...,
         alias="party",
         title="Responsible entity",
         description="The entity who is responsible.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Patient", "RelatedPerson", "Organization"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Patient", "RelatedPerson", "Organization"],
+        },
     )
 
-    period: fhirtypes.PeriodType = Field(
-        None,
+    period: fhirtypes.PeriodType | None = Field(
+        default=None,
         alias="period",
         title="Guarrantee account during",
         description=(
             "The timeframe during which the guarantor accepts responsibility for "
             "the account."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``AccountGuarantor`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``AccountGuarantor`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "party", "onHold", "period"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``AccountGuarantor`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]

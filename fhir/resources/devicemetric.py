@@ -1,16 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Profile: http://hl7.org/fhir/StructureDefinition/DeviceMetric
-Release: R4
-Version: 4.0.1
-Build ID: 9346c8cc45
-Last updated: 2019-11-01T09:29:23.356+11:00
+Release: R5
+Version: 5.0.0
+Build ID: 2aecd53
+Last updated: 2023-03-26T15:21:02.749+11:00
 """
+
+from __future__ import annotations as _annotations
+
 import typing
 
-from pydantic import Field, root_validator
-from pydantic.error_wrappers import ErrorWrapper, ValidationError
-from pydantic.errors import MissingError, NoneIsNotAllowedError
+from pydantic import Field
 
 from . import backboneelement, domainresource, fhirtypes
 
@@ -21,26 +21,26 @@ class DeviceMetric(domainresource.DomainResource):
     for FHIR Primitive Data Types.
 
     Measurement, calculation or setting capability of a medical device.
-    Describes a measurement, calculation or setting capability of a medical
-    device.
+    Describes a measurement, calculation or setting capability of a device.
     """
 
-    resource_type = Field("DeviceMetric", const=True)
+    __resource_type__ = "DeviceMetric"
 
-    calibration: typing.List[fhirtypes.DeviceMetricCalibrationType] = Field(
-        None,
+    calibration: typing.List[fhirtypes.DeviceMetricCalibrationType] | None = Field(
+        default=None,
         alias="calibration",
         title=(
             "Describes the calibrations that have been performed or that are "
             "required to be performed"
         ),
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    category: fhirtypes.Code = Field(
-        None,
+    category: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="category",
         title="measurement | setting | calculation | unspecified",
         description=(
@@ -48,161 +48,144 @@ class DeviceMetric(domainresource.DomainResource):
             "DeviceMetric can be for example a setting, measurement, or "
             "calculation."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        element_required=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["measurement", "setting", "calculation", "unspecified"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            "element_required": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["measurement", "setting", "calculation", "unspecified"],
+        },
     )
-    category__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_category", title="Extension field for ``category``."
+    category__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_category", title="Extension field for ``category``."
     )
 
-    color: fhirtypes.Code = Field(
-        None,
+    color: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="color",
-        title="black | red | green | yellow | blue | magenta | cyan | white",
+        title="Color name (from CSS4) or #RRGGBB code",
         description=(
-            "Describes the color representation for the metric. This is often used "
-            "to aid clinicians to track and identify parameter types by color. In "
-            "practice, consider a Patient Monitor that has ECG/HR and Pleth for "
-            "example; the parameters are displayed in different characteristic "
-            "colors, such as HR-blue, BP-green, and PR and SpO2- magenta."
+            "The preferred color associated with the metric (e.g., display color). "
+            "This is often used to aid clinicians to track and identify parameter "
+            "types by color. In practice, consider a Patient Monitor that has "
+            "ECG/HR and Pleth; the metrics are displayed in different "
+            "characteristic colors, such as HR in blue, BP in green, and PR and "
+            "SpO2 in magenta."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white",
-        ],
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    color__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_color", title="Extension field for ``color``."
+    color__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_color", title="Extension field for ``color``."
     )
 
-    identifier: typing.List[fhirtypes.IdentifierType] = Field(
-        None,
+    device: fhirtypes.ReferenceType = Field(
+        default=...,
+        alias="device",
+        title="Describes the link to the Device",
+        description=(
+            "Describes the link to the Device.  This is also known as a channel "
+            "device."
+        ),
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Listed Resource Type(s) should be allowed as Reference.
+            "enum_reference_types": ["Device"],
+        },
+    )
+
+    identifier: typing.List[fhirtypes.IdentifierType] | None = Field(
+        default=None,
         alias="identifier",
         title="Instance identifier",
         description=(
-            "Unique instance identifiers assigned to a device by the device or "
-            "gateway software, manufacturers, other organizations or owners. For "
-            "example: handle ID."
+            "Instance identifiers assigned to a device, by the device or gateway "
+            "software, manufacturers, other organizations or owners. For example, "
+            "handle ID."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    measurementPeriod: fhirtypes.TimingType = Field(
-        None,
-        alias="measurementPeriod",
-        title="Describes the measurement repetition time",
+    measurementFrequency: fhirtypes.QuantityType | None = Field(
+        default=None,
+        alias="measurementFrequency",
+        title="Indicates how often the metric is taken or recorded",
         description=(
-            "Describes the measurement repetition time. This is not necessarily the"
-            " same as the update period. The measurement repetition time can range "
-            "from milliseconds up to hours. An example for a measurement repetition"
-            " time in the range of milliseconds is the sampling rate of an ECG. An "
-            "example for a measurement repetition time in the range of hours is a "
-            "NIBP that is triggered automatically every hour. The update period may"
-            " be different than the measurement repetition time, if the device does"
-            " not update the published observed value with the same frequency as it"
-            " was measured."
+            "The frequency at which the metric is taken or recorded. Devices "
+            "measure metrics at a wide range of frequencies; for example, an ECG "
+            "might sample measurements in the millisecond range, while an NIBP "
+            "might trigger only once an hour. Less often, the measurementFrequency "
+            "may be based on a unit other than time, such as distance (e.g. for a "
+            "measuring wheel). The update period may be different than the "
+            "measurement frequency, if the device does not update the published "
+            "observed value with the same frequency as it was measured."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
 
-    operationalStatus: fhirtypes.Code = Field(
-        None,
+    operationalStatus: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="operationalStatus",
         title="on | off | standby | entered-in-error",
         description=(
             "Indicates current operational state of the device. For example: On, "
             "Off, Standby, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["on", "off", "standby", "entered-in-error"],
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["on", "off", "standby", "entered-in-error"],
+        },
     )
-    operationalStatus__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None,
+    operationalStatus__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None,
         alias="_operationalStatus",
         title="Extension field for ``operationalStatus``.",
     )
 
-    parent: fhirtypes.ReferenceType = Field(
-        None,
-        alias="parent",
-        title="Describes the link to the parent Device",
-        description=(
-            "Describes the link to the  Device that this DeviceMetric belongs to "
-            "and that provide information about the location of this DeviceMetric "
-            "in the containment structure of the parent Device. An example would be"
-            " a Device that represents a Channel. This reference can be used by a "
-            "client application to distinguish DeviceMetrics that have the same "
-            "type, but should be interpreted based on their containment location."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Device"],
-    )
-
-    source: fhirtypes.ReferenceType = Field(
-        None,
-        alias="source",
-        title="Describes the link to the source Device",
-        description=(
-            "Describes the link to the  Device that this DeviceMetric belongs to "
-            "and that contains administrative device information such as "
-            "manufacturer, serial number, etc."
-        ),
-        # if property is element of this resource.
-        element_property=True,
-        # note: Listed Resource Type(s) should be allowed as Reference.
-        enum_reference_types=["Device"],
-    )
-
     type: fhirtypes.CodeableConceptType = Field(
-        ...,
+        default=...,
         alias="type",
         title="Identity of metric, for example Heart Rate or PEEP Setting",
         description=(
             "Describes the type of the metric. For example: Heart Rate, PEEP "
             "Setting, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
-    unit: fhirtypes.CodeableConceptType = Field(
-        None,
+    unit: fhirtypes.CodeableConceptType | None = Field(
+        default=None,
         alias="unit",
         title="Unit of Measure for the Metric",
         description=(
             "Describes the unit that an observed value determined for this metric "
             "will have. For example: Percent, Seconds, etc."
         ),
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+            "summary_element_property": True,
+        },
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceMetric`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceMetric`` according to specification,
+        with preserving the original sequence order.
         """
         return [
             "id",
@@ -216,19 +199,33 @@ class DeviceMetric(domainresource.DomainResource):
             "identifier",
             "type",
             "unit",
-            "source",
-            "parent",
+            "device",
             "operationalStatus",
             "color",
             "category",
-            "measurementPeriod",
+            "measurementFrequency",
             "calibration",
         ]
 
-    @root_validator(pre=True, allow_reuse=True)
-    def validate_required_primitive_elements_1371(
-        cls, values: typing.Dict[str, typing.Any]
-    ) -> typing.Dict[str, typing.Any]:
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceMetric`` according to specification,
+        with preserving the original sequence order.
+        """
+        return [
+            "id",
+            "meta",
+            "implicitRules",
+            "modifierExtension",
+            "identifier",
+            "type",
+            "unit",
+            "device",
+            "operationalStatus",
+            "category",
+        ]
+
+    def get_required_fields(self) -> typing.List[typing.Tuple[str, str]]:
         """https://www.hl7.org/fhir/extensibility.html#Special-Case
         In some cases, implementers might find that they do not have appropriate data for
         an element with minimum cardinality = 1. In this case, the element must be present,
@@ -237,52 +234,7 @@ class DeviceMetric(domainresource.DomainResource):
         the primitive value is not present.
         """
         required_fields = [("category", "category__ext")]
-        _missing = object()
-
-        def _fallback():
-            return ""
-
-        errors: typing.List["ErrorWrapper"] = []
-        for name, ext in required_fields:
-            field = cls.__fields__[name]
-            ext_field = cls.__fields__[ext]
-            value = values.get(field.alias, _missing)
-            if value not in (_missing, None):
-                continue
-            ext_value = values.get(ext_field.alias, _missing)
-            missing_ext = True
-            if ext_value not in (_missing, None):
-                if isinstance(ext_value, dict):
-                    missing_ext = len(ext_value.get("extension", [])) == 0
-                elif (
-                    getattr(ext_value.__class__, "get_resource_type", _fallback)()
-                    == "FHIRPrimitiveExtension"
-                ):
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-                else:
-                    validate_pass = True
-                    for validator in ext_field.type_.__get_validators__():
-                        try:
-                            ext_value = validator(v=ext_value)
-                        except ValidationError as exc:
-                            errors.append(ErrorWrapper(exc, loc=ext_field.alias))
-                            validate_pass = False
-                    if not validate_pass:
-                        continue
-                    if ext_value.extension and len(ext_value.extension) > 0:
-                        missing_ext = False
-            if missing_ext:
-                if value is _missing:
-                    errors.append(ErrorWrapper(MissingError(), loc=field.alias))
-                else:
-                    errors.append(
-                        ErrorWrapper(NoneIsNotAllowedError(), loc=field.alias)
-                    )
-        if len(errors) > 0:
-            raise ValidationError(errors, cls)  # type: ignore
-
-        return values
+        return required_fields
 
 
 class DeviceMetricCalibration(backboneelement.BackboneElement):
@@ -294,59 +246,69 @@ class DeviceMetricCalibration(backboneelement.BackboneElement):
     be performed.
     """
 
-    resource_type = Field("DeviceMetricCalibration", const=True)
+    __resource_type__ = "DeviceMetricCalibration"
 
-    state: fhirtypes.Code = Field(
-        None,
+    state: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="state",
         title="not-calibrated | calibration-required | calibrated | unspecified",
         description="Describes the state of the calibration.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=[
-            "not-calibrated",
-            "calibration-required",
-            "calibrated",
-            "unspecified",
-        ],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": [
+                "not-calibrated",
+                "calibration-required",
+                "calibrated",
+                "unspecified",
+            ],
+        },
     )
-    state__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_state", title="Extension field for ``state``."
+    state__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_state", title="Extension field for ``state``."
     )
 
-    time: fhirtypes.Instant = Field(
-        None,
+    time: fhirtypes.InstantType | None = Field(
+        default=None,
         alias="time",
         title="Describes the time last calibration has been performed",
         description=None,
-        # if property is element of this resource.
-        element_property=True,
+        json_schema_extra={
+            "element_property": True,
+        },
     )
-    time__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_time", title="Extension field for ``time``."
+    time__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_time", title="Extension field for ``time``."
     )
 
-    type: fhirtypes.Code = Field(
-        None,
+    type: fhirtypes.CodeType | None = Field(
+        default=None,
         alias="type",
         title="unspecified | offset | gain | two-point",
         description="Describes the type of the calibration method.",
-        # if property is element of this resource.
-        element_property=True,
-        # note: Enum values can be used in validation,
-        # but use in your own responsibilities, read official FHIR documentation.
-        enum_values=["unspecified", "offset", "gain", "two-point"],
+        json_schema_extra={
+            "element_property": True,
+            # note: Enum values can be used in validation,
+            # but use in your own responsibilities, read official FHIR documentation.
+            "enum_values": ["unspecified", "offset", "gain", "two-point"],
+        },
     )
-    type__ext: fhirtypes.FHIRPrimitiveExtensionType = Field(
-        None, alias="_type", title="Extension field for ``type``."
+    type__ext: fhirtypes.FHIRPrimitiveExtensionType | None = Field(
+        default=None, alias="_type", title="Extension field for ``type``."
     )
 
     @classmethod
-    def elements_sequence(cls):
-        """returning all elements names from
-        ``DeviceMetricCalibration`` according specification,
-        with preserving original sequence order.
+    def elements_sequence(cls) -> typing.List[str]:
+        """returning all element names from
+        ``DeviceMetricCalibration`` according to specification,
+        with preserving the original sequence order.
         """
         return ["id", "extension", "modifierExtension", "type", "state", "time"]
+
+    @classmethod
+    def summary_elements_sequence(cls) -> typing.List[str]:
+        """returning all element names (those have summary mode are enabled) from ``DeviceMetricCalibration`` according to specification,
+        with preserving the original sequence order.
+        """
+        return ["modifierExtension"]
