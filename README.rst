@@ -64,13 +64,6 @@ From ``fhir.resources`` version 7.0.0; there is no FHIR ``R4`` instead of ``R4B`
 * ``R4B`` (4.3.0)
 * ``STU3`` (3.0.2)
 
-Installation
-------------
-
-Just a simple ``pip install fhir.resources`` is enough. But if you want development
-version, just clone from https://github.com/nazrulworld/fhir.resources and ``pip install -e .[dev]``.
-
-
 Usages
 ------
 
@@ -170,8 +163,7 @@ Usages
 
 .. note::
     Please note that due to the way the validation works, you will run into issues if you are using ``model_construct()`` to create
-    resources that have more than one mandatory field. See `this comment in issue#56 <https://github.com/nazrulworld/fhir.resources/issues/56#issuecomment-784520234>`_ for details.
-
+    resources that have more than one mandatory field. See `this comment in issue#56 
 
 **Example: 5**: Auto validation while providing wrong datatype::
 
@@ -809,7 +801,7 @@ Unlike previous statement (below), releasing now is not dependent on FHIR®.
 Credits
 -------
 
-All FHIR® Resources (python classes) are generated using fhir-parser_ which is forked from https://github.com/smart-on-fhir/fhir-parser.git.
+
 
 
 This package skeleton was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
